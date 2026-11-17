@@ -1,0 +1,174 @@
+{
+  "tipo": "esempio illustrativo del dominio",
+  "nota": "Identificatori, fonti, file e attività sono fittizi. Non è un contratto API né una sessione reale.",
+  "versione_esempio": 1,
+  "corso": {
+    "id": "corso-demo",
+    "nome": "Sistemi distribuiti",
+    "percorso": "lezione_per_lezione",
+    "moduli": [
+      {
+        "id": "modulo-demo",
+        "titolo": "Tempo e ordinamento",
+        "lezioni": [
+          {
+            "id": "lezione-demo",
+            "titolo": "Orologi logici",
+            "unita_ids": ["unita-lamport"]
+          }
+        ]
+      }
+    ]
+  },
+  "fonti": [
+    {
+      "id": "fonte-demo",
+      "corso_id": "corso-demo",
+      "versione": "fonte-v1",
+      "nome": "Slide dimostrative non allegate.pdf",
+      "natura": "materiale_docente_fittizio",
+      "stato": "estratto",
+      "passaggi": [
+        {
+          "id": "passaggio-14",
+          "posizione": {
+            "tipo": "pagina_pdf",
+            "indice_fisico_da_zero": 13,
+            "etichetta_visualizzata": "14"
+          },
+          "testo": "Se A happened-before B, C(A) < C(B). Il confronto tra timestamp non dimostra da solo una relazione causale."
+        }
+      ]
+    }
+  ],
+  "concetti": [
+    {
+      "id": "concetto-causalita",
+      "nome": "Causalità e timestamp di Lamport",
+      "prerequisito_ids": []
+    }
+  ],
+  "unita": {
+    "id": "unita-lamport",
+    "corso_id": "corso-demo",
+    "concetto_ids": ["concetto-causalita"],
+    "obiettivo": "Distinguere ordinamento dei timestamp e relazione causale.",
+    "spiegazione": {
+      "id": "spiegazione-1",
+      "versione": 1,
+      "testo": "La relazione happened-before implica C(A) < C(B); l'implicazione inversa non vale in generale.",
+      "citazioni": [
+        {
+          "fonte_id": "fonte-demo",
+          "fonte_versione": "fonte-v1",
+          "passaggio_id": "passaggio-14"
+        }
+      ]
+    }
+  },
+  "appunto": {
+    "id": "appunto-1",
+    "unita_ids": ["unita-lamport"],
+    "revisione_corrente_id": "nota-r2",
+    "revisioni": [
+      {
+        "id": "nota-r1",
+        "origine": "studente",
+        "testo_markdown": "# Orologi logici\n\n## Relazione causale\n\nSe C(A) < C(B), allora A ha causato B.\n",
+        "blocchi": [
+          {
+            "id": "blocco-errore",
+            "testo": "Se C(A) < C(B), allora A ha causato B."
+          }
+        ]
+      },
+      {
+        "id": "nota-r2",
+        "precedente_id": "nota-r1",
+        "origine": "proposta_ai_accettata_dallo_studente",
+        "patch_id": "patch-1",
+        "testo_markdown": "# Orologi logici\n\n## Relazione causale\n\nSe A happened-before B, allora C(A) < C(B); dai soli timestamp non posso concludere che A abbia causato B.\n"
+      }
+    ]
+  },
+  "revisione_didattica": {
+    "id": "feedback-1",
+    "base_revisione_id": "nota-r1",
+    "domande": [
+      {
+        "id": "domanda-1",
+        "concetto_ids": ["concetto-causalita"],
+        "ancoraggio": {
+          "appunto_id": "appunto-1",
+          "revisione_id": "nota-r1",
+          "blocco_id": "blocco-errore",
+          "citazione_esatta": "Se C(A) < C(B), allora A ha causato B.",
+          "contesto_precedente": "## Relazione causale\n\n"
+        },
+        "testo": "Se A e B non hanno alcun percorso causale che li collega, C(A) < C(B) basta a stabilire che A abbia causato B?",
+        "risposta_studente": "No. Il valore dei timestamp non basta a provare una relazione causale.",
+        "aiuti_usati": ["controesempio_proposto_dal_tutor"]
+      }
+    ]
+  },
+  "proposte_modifica": [
+    {
+      "id": "patch-1",
+      "appunto_id": "appunto-1",
+      "base_revisione_id": "nota-r1",
+      "domanda_id": "domanda-1",
+      "testo_precedente": "Se C(A) < C(B), allora A ha causato B.",
+      "testo_proposto": "Se A happened-before B, allora C(A) < C(B); dai soli timestamp non posso concludere che A abbia causato B.",
+      "motivo": "Corregge l'inversione dell'implicazione emersa nella risposta, conservando il titolo della sezione.",
+      "citazioni": [
+        {
+          "fonte_id": "fonte-demo",
+          "fonte_versione": "fonte-v1",
+          "passaggio_id": "passaggio-14"
+        }
+      ],
+      "decisione": "accettata",
+      "revisione_risultante_id": "nota-r2"
+    }
+  ],
+  "evidenze": [
+    {
+      "id": "evidenza-guidata-1",
+      "concetto_ids": ["concetto-causalita"],
+      "domanda_id": "domanda-1",
+      "condizione": "revisione_guidata",
+      "aiuti_usati": ["controesempio_proposto_dal_tutor"],
+      "valutazione": "correzione_concettuale_con_aiuto",
+      "valida_come_dimostrazione_senza_aiuti": false
+    }
+  ],
+  "progresso": [
+    {
+      "concetto_id": "concetto-causalita",
+      "stato": "studiato_da_verificare",
+      "evidenza_ids": ["evidenza-guidata-1"],
+      "lacuna": "Inversione dell'implicazione tra causalità e timestamp"
+    }
+  ],
+  "attivita_ripasso": [
+    {
+      "id": "ripasso-1",
+      "concetto_ids": ["concetto-causalita"],
+      "origine_feedback_id": "feedback-1",
+      "tipo": "risposta_aperta",
+      "condizione_prevista": "senza_aiuti_nell_app",
+      "domanda": "Spiega il rapporto tra happened-before e timestamp di Lamport e costruisci un caso in cui l'implicazione inversa non permette di concludere una relazione causale.",
+      "stato": "da_pianificare",
+      "risposta_studente": null
+    }
+  ],
+  "sessione": {
+    "id": "sessione-demo",
+    "corso_id": "corso-demo",
+    "unita_id": "unita-lamport",
+    "appunto_id": "appunto-1",
+    "fase": "studio",
+    "stato_salvataggio": "salvato",
+    "prossima_azione": "pianificare_verifica_senza_aiuti"
+  }
+}

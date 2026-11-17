@@ -1,0 +1,42 @@
+# Copie locali e materiale personale
+/.local-backup/
+/data/
+/uploads/
+/storage/
+/private/
+
+# Configurazione locale e credenziali
+.env
+.env.*
+!.env.example
+!.env.sample
+.codex/
+.aws/
+
+# Dipendenze e risultati di build
+node_modules/
+dist/
+build/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# File locali e sistema operativo
+*.log
+*.sqlite
+*.sqlite3
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
