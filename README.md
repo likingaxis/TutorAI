@@ -31,11 +31,12 @@ Per iniziare, leggere **Specifica** e **Architettura**. Gli altri documenti appr
 
 | Documento | Contenuto |
 | --- | --- |
-| [Specifica di prodotto](docs/SPECIFICA.md) | Utenti, percorsi, requisiti F01–F17 e perimetro dell'MVP |
+| [Specifica di prodotto](docs/SPECIFICA.md) | Requisiti F01–F17 e progetto operativo di RAG, modelli/API, slide, figure e Android |
 | [Architettura e harness](docs/ARCHITETTURA.md) | Quattro ambiti: tecnologie, dati, contesto/API, strumenti per ritagli e SVG |
 | [Interfaccia](docs/INTERFACCIA.md) | Layout, interazioni, accessibilità e limiti del mockup |
 | [Contratti e dati](docs/CONTRATTI_E_DATI.md) | Documento canonico, salvataggi, ancoraggi, patch, API ed evidenze |
 | [Piano di sviluppo](docs/PIANO.md) | Fasi, prove tecniche e scenari AC01–AC18 |
+| [Domande per il team](docs/domande.md) | Scelte per la valutazione e condizioni del pilota |
 | [Riferimenti](docs/RIFERIMENTI.md) | Presentazione, illustrazioni e origine delle scelte |
 
 ## Stack proposto
@@ -46,10 +47,10 @@ Per iniziare, leggere **Specifica** e **Architettura**. Gli altri documenti appr
 | Appunti | Tiptap/ProseMirror, documento JSON versionato, export Markdown |
 | Backend | Fastify e worker Node |
 | Dati e file | PostgreSQL, autenticazione e storage privato; Supabase come candidato gestito |
-| Materiali e schemi | PDF.js, specifiche JSON controllate e Mermaid per gli SVG iniziali |
+| Materiali e schemi | PDF.js, ritagli di fonte, SVG validati e componenti scientifici interattivi |
 | Tutor | Provider API configurabile, contesto composto per attività e strumenti autorizzati |
 
-Sono proposte da validare. Python/Docling, ricerca vettoriale e renderer personalizzati entrano quando le prove ne dimostrano l'utilità. L'architettura descrive anche le alternative per vincoli di offline o competenze diverse del team.
+Sono proposte da validare. Il pilota confronta ricerca testuale e ibrida con pgvector, estrazione PDF.js e Docling, figure originali e schemi generati. L'architettura descrive anche le alternative per vincoli di offline o competenze diverse del team.
 
 ## Struttura del repository
 

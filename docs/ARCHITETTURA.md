@@ -6,10 +6,10 @@ Leggere [Specifica](SPECIFICA.md), [Contratti e dati](CONTRATTI_E_DATI.md) e [Pi
 
 | Ambito | Scelta iniziale | Cosa introdurre soltanto se serve |
 | --- | --- | --- |
-| 1 Applicazione e stack | Web per desktop, React/TypeScript, Tiptap, Fastify e worker Node | Desktop locale se offline è vincolante; Python se migliora davvero la pipeline documentale |
-| 2 Dati | PostgreSQL e storage privato, revisioni e provenienza esplicite | Ricerca vettoriale dopo confronto con riferimenti diretti e ricerca testuale |
+| 1 Applicazione e stack | PWA per desktop, tablet Android e telefono, React/TypeScript, Tiptap, Fastify e worker Node | Desktop locale se offline è vincolante; Python se migliora davvero la pipeline documentale |
+| 2 Dati | PostgreSQL, ricerca ibrida pgvector e storage privato | Indice vettoriale dedicato soltanto dopo misure di scala |
 | 3 Contesto e API | Context composer per attività, budget, un provider e consumo osservabile | Più modelli, contesti più grandi o retrieval più complesso dopo misure |
-| 4 Harness e visuali | Workflow applicativo, strumenti tipizzati, ritagli da PDF, JSON controllato → Mermaid → SVG | ELK e renderer proprio per limiti concreti di Mermaid; grammatiche scientifiche specializzate |
+| 4 Harness e visuali | Workflow applicativo, ritagli PDF, SVG validati e componenti scientifici interattivi | OpenUI per comporre pannelli e Mermaid per i flussi dove risultano adeguati |
 
 ## 1 Tecnologie e distribuzione
 
@@ -47,7 +47,7 @@ Le citazioni collegano corso, fonte, versione, pagina fisica/etichetta e passagg
 
 ### Ricerca e consistenza
 
-Per la prima unità partire dai materiali già collegati alla lezione, da riferimenti espliciti e dalla ricerca testuale PostgreSQL. Confrontare questa baseline con una variante semantica; introdurre pgvector soltanto se migliora recupero e qualità su domande reali. Se adottato, ogni vettore porta modello, dimensione e versione dell'indice. Gli embedding restano quindi un'aggiunta da giustificare con il confronto sul corpus.
+Per la prima unità partire dai materiali già collegati alla lezione, da riferimenti espliciti e dalla ricerca testuale PostgreSQL. Confrontare questa baseline con una variante semantica; progettare il ramo pgvector della ricerca ibrida e misurarne il contributo su domande reali. Se adottato, ogni vettore porta modello, dimensione e versione dell'indice. Gli embedding restano quindi un'aggiunta da giustificare con il confronto sul corpus.
 
 Salvataggi e decisioni passano dal server, con autorizzazione per utente/corso. Le revisioni sono immutabili; gli ACK identificano la precisa modifica salvata. Una patch controlla revisione, blocco e precondizioni e fallisce con un conflitto quando il bersaglio è cambiato. Una formula si modifica nella sua rappresentazione matematica canonica, non nel markup renderizzato. Copie locali di recupero, backup di database e backup dei file hanno scopi distinti.
 
@@ -141,33 +141,14 @@ Distinguere l'immagine nativa incorporata nel PDF dal ritaglio di una regione co
 
 ### Come generare schemi SVG
 
-Per il primo rilascio scegliere **un solo percorso**:
-
-```text
-Obiettivo e fonti → DiagramSpec JSON → validazione → compilatore Mermaid
-                → rendering SVG → controllo finale → asset versionato
-```
-
-La specifica ammette inizialmente diagrammi di flusso e relazioni etichettate: tipo, nodi, archi, testi e riferimenti. Il compilatore assegna ID, escape dei testi e sintassi; il modello non fornisce codice Mermaid, direttive di configurazione, HTML o SVG liberi. Mermaid produce SVG dai suoi diagrammi; per asset salvati/esportati il worker può usare la CLI ufficiale, oltre all'anteprima nell'app. [Uso Mermaid](https://mermaid.js.org/config/usage), [Mermaid CLI](https://github.com/mermaid-js/mermaid-cli).
-
-Il rendering CLI richiede il relativo ambiente browser/Puppeteer: va isolato e misurato nel job, con font e versioni fissati, timeout e rete disabilitata dopo il provisioning. La generazione non deve bloccare l'editor. Non si aggiunge un servizio AI di grafica: si renderizza una specifica già validata.
-
-Per il sottoinsieme iniziale usare etichette testuali, `securityLevel: strict` e `htmlLabels: false`; configurazione fissata dall'applicazione, nessuna direttiva dai contenuti. Controllare l'SVG finale, escludendo script, handler e riferimenti esterni. Configurazione e sanitizzazione non provano correttezza scientifica. [Configurazione ufficiale Mermaid](https://mermaid.js.org/config/schema-docs/config.html).
-
-Nel diagramma semplice si possono usare simboli e notazione testuale; le formule complesse restano accanto, renderizzate con KaTeX nell'ambiente di studio. Mermaid dispone anche di supporto matematico basato su KaTeX, ma non lo rendiamo un requisito dell'export SVG iniziale. [Matematica in Mermaid](https://mermaid.js.org/config/math.html).
-
-**Quando passare a ELK e renderer proprio:** quando un requisito verificato richiede composizioni precise, port, interazioni stabili per elemento o formule vettoriali che il percorso iniziale non soddisfa. ELK calcola il layout e non disegna il diagramma; bisogna misurare le etichette e realizzare il renderer. La licenza del progetto è EPL 2.0, da includere nella valutazione delle dipendenze. [ELK.js](https://github.com/kieler/elkjs), [licenza](https://github.com/kieler/elkjs/blob/master/LICENSE.md).
-
-Per formule vettoriali nel percorso avanzato MathJax offre conversione TeX → SVG anche in Node. Conservare sorgente e macro consentite, verificare il sottoinsieme comune con KaTeX e rendere visibili i casi non supportati. Non introdurre due renderer matematici senza questa prova. [MathJax in Node](https://docs.mathjax.org/en/latest/server/components.html), [SVG autonomi](https://docs.mathjax.org/en/latest/web/convert.html).
-
-Per grafici numerici, circuiti o strutture chimiche servono grammatiche e strumenti specifici: un diagramma a nodi non li sostituisce. In ogni caso distinguere schema generato, dati del docente e ipotesi del tutor. Conservare specifica, fonti, versione del generatore e dell'asset; una figura bella non è una prova che la relazione rappresentata sia corretta.
+Per la proposta di rendering attuale leggere la sezione 11.5 della [specifica](SPECIFICA.md). Il renderer supporta ritagli annotati, SVG composti dal modello con validazione e componenti scientifici a dati tipizzati. Per semplici relazioni si può compilare il DiagramSpec di esempio in Mermaid. Il catalogo delle figure conserva separatamente dati dell’esempio, provenienza, descrizione accessibile e asset visualizzato.
 
 ## Prove che decidono le adozioni
 
 | Prova | Cosa confrontare | Conseguenza |
 | --- | --- | --- |
-| Materiali e visuali | Stessi PDF STEM difficili: pipeline semplice e strutturata; regioni, formule, rotazioni, crop e diagrammi standard | Decide Docling/Python, perimetro dei formati e sufficienza di Mermaid |
+| Materiali e visuali | Stessi PDF STEM difficili: pipeline semplice e strutturata; regioni, formule, rotazioni, crop e diagrammi standard | Decide Docling/Python, perimetro dei formati e scelta tra ritaglio, SVG generato e componente scientifico |
 | Integrità dello studio | Revisione mentre testo/formule cambiano, rete interrotta, riapertura e patch concorrenti | Nessuna modifica al punto sbagliato o perdita di testo salvato; chiarimenti su nodi atomici verificati |
 | Costo e qualità didattica | Stessi compiti con riferimenti/FTS e variante semantica, diversi budget e modelli | Decide embedding, budget e modello; controllare errori e fonti, non soltanto il prezzo medio |
 
-La prima dimostrazione comprende un PDF reale, un ritaglio citabile, uno schema semplice, scrittura persistente, domanda sulla bozza, diff approvato e verifica separata. PPTX nativo, scansioni estese e diagrammi specialistici entrano quando il campione ne giustifica il costo. Le capacità descritte sono da implementare e provare; non sono test già superati dal mockup.
+La prima dimostrazione comprende slide PDF, una trascrizione, due Markdown, un ritaglio citabile e una figura didattica interattiva, scrittura persistente, domanda sulla bozza, diff approvato e verifica separata. PPTX nativo, scansioni estese e diagrammi specialistici entrano quando il campione ne giustifica il costo. Le capacità descritte sono da implementare e provare; non sono test già superati dal mockup.

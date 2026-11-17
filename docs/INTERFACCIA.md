@@ -157,7 +157,7 @@ Le note, i corsi e alcune risposte iniziali sono dati dimostrativi. Il timer del
 
 ### Decisioni di interfaccia ancora aperte
 
-- Ingombro dell'indice laterale, priorità mobile e scelta dei temi.
+- Ingombro dell'indice laterale e scelta dei temi. La proposta per tablet e telefono, con editing touch, ripresa e limiti offline, è nella sezione 11.6 della [specifica](SPECIFICA.md).
 - Profondità delle spiegazioni, numero di osservazioni e granularità delle modifiche.
 - Editing e selezione di formule, codice e figure senza perdita di struttura.
 - Avvisi sui prerequisiti: i blocchi rigidi mostrati nella demo non diventano automaticamente requisiti.

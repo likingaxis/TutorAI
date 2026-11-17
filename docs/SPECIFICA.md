@@ -86,7 +86,7 @@ Gli ID servono a collegare progettazione, sviluppo e scenari di accettazione.
 
 **P/A.** Per il primo rilascio si propone PDF con testo selezionabile, slide esportate in PDF, TXT/Markdown e testo incollato. Il team deve decidere se il PPTX nativo entra subito, esplicitando il costo della scelta. Scansioni con OCR, registrazioni audio e video sono estensioni da valutare; non dichiararle supportate attraverso una semplice estensione di file.
 
-**V/C.** La spiegazione può incorporare ritagli delle slide, figure originali e schemi. La generazione automatica di schemi avanzati è successiva al nucleo del prodotto. Visualizzare codice e formule non richiede esecuzione arbitraria del codice o compilazione di progetti LaTeX.
+**V/C.** La spiegazione può incorporare ritagli delle slide, figure originali e schemi. La sezione 11.5 propone di provare già nella prima lezione una figura generata e un'interazione scientifica circoscritta. Visualizzare codice e formule non richiede esecuzione arbitraria del codice o compilazione di progetti LaTeX.
 
 ## 6 Fonti e comportamento del tutor
 
@@ -154,12 +154,98 @@ Il formato in `esempi/sessione_lamport.json` illustra i collegamenti, senza impo
 
 **C.** L'MVP completo comprende entrambi i percorsi, importazione di più fonti, struttura navigabile, spiegazioni con provenienza, spazio a due pannelli, salvataggio e ripresa, revisione mirata, diff approvato dallo studente, progresso per concetto, verifica senza aiuti e un piano/ripasso di base.
 
-**P.** La prima dimostrazione integrata può concentrarsi su una lezione e un errore concettuale: importa un PDF, spiega, lascia scrivere, interroga la bozza, propone una correzione e registra un richiamo successivo. Questa tappa non sostituisce l'MVP a due percorsi.
+**P.** La prima dimostrazione integrata può concentrarsi su una lezione e un errore concettuale: incrocia slide PDF, trascrizione e Markdown, spiega con un ritaglio citato, lascia scrivere, interroga la bozza, propone una correzione e registra un richiamo successivo. Questa tappa non sostituisce l'MVP a due percorsi.
 
-Successivamente: OCR esteso, audio/video, simulazione orale completa, sincronizzazione dei calendari, ottimizzazione FSRS, collaborazione tra studenti, generazione avanzata di diagrammi e personalizzazione delle pause basata sul comportamento. Pagamenti, portale docenti, voti ufficiali e addestramento di un modello dedicato non sono necessari per validare il ciclo iniziale.
+Successivamente: OCR esteso, audio/video, simulazione orale completa, sincronizzazione dei calendari, ottimizzazione FSRS, collaborazione tra studenti, ampi cataloghi di diagrammi scientifici specialistici e personalizzazione delle pause basata sul comportamento. Pagamenti, portale docenti, voti ufficiali e addestramento di un modello dedicato non sono necessari per validare il ciclo iniziale.
 
 ## 10 Qualità e scelte ancora aperte
 
 Il prodotto conserva le bozze durante gli errori, rende leggibili le formule, permette di controllare le fonti e non richiede una tassonomia di feedback da imparare. Le proposte tecniche di accessibilità, prestazioni e recupero sono nel documento di interfaccia e nel piano di verifica.
 
 Restano **A**: distribuzione web/desktop/locale, modello dei dati e autenticazione, elaborazione locale o cloud, fornitori e modelli AI, editor e formato canonico, formati iniziali di importazione, budget e scala, soglie di valutazione dell'apprendimento. Le proposte di architettura e i contratti del repository descrivono motivazioni e condizioni che farebbero cambiare scelta.
+
+## 11 Progetto tecnico proposto per la valutazione
+
+**P.** La configurazione candidata è una web app installabile, con client React/TypeScript, editor Tiptap, API Fastify, PostgreSQL con pgvector, storage privato degli originali e worker per i lavori persistenti. Il client serve desktop, tablet Android e telefono. Il server custodisce le credenziali AI e decide accesso alle fonti, condizioni della prova e applicazione delle patch. Il prototipo dovrà dimostrare una lezione completa con slide, trascrizione e due Markdown con ruoli diversi. Le decisioni da approvare sono in [domande.md](domande.md).
+
+### 11.1 Dal caricamento al materiale citabile
+
+1. Lo studente assegna al file un ruolo correggibile (slide, trascrizione, dispensa, appunti personali, esercizi o soluzioni). Il ruolo didattico e il formato sono campi distinti. L'API verifica accesso al corso, tipo effettivo, dimensione e integrità dell'upload. Registra originale privato, hash, versione e job. Un duplicato nello stesso corso può riusare l'estrazione mantenendo l'associazione alla lezione.
+2. Il worker PDF.js legge pagine, etichette, testo e geometria. Per pagine complesse il worker documentale candidato usa Docling per ordine di lettura, tabelle e figure. Sulle scansioni si registra la necessità di OCR e si conserva la pagina consultabile. Un testo matematico sospetto rimanda al ritaglio originale. L'interfaccia espone per file lo stato ricevuto, in elaborazione, pronto, parziale o fallito e le pagine coinvolte. [PDF.js](https://mozilla.github.io/pdf.js/examples/) · [Estrazione di figure con Docling](https://docling-project.github.io/docling/_generated/examples/export_figures/)
+3. Il parser Markdown lavora sull'albero del documento e conserva percorso, titoli, codice e formule. Risolve immagini e link relativi soltanto tra gli asset importati nel corso. Il parser delle trascrizioni conserva ordine e testo dei segmenti, parlante e intervallo temporale se presenti. Una trascrizione ricevuta in PDF mantiene anche i riferimenti di pagina. La produzione della trascrizione da audio è un job distinto, subordinato alla decisione sui formati.
+4. Ogni passaggio conserva corso, versione, ID, ordine, sezione superiore, ruolo e posizione. La posizione è una pagina con eventuale rettangolo, un blocco Markdown oppure un segmento con tempi facoltativi. Figure e didascalie hanno collegamenti espliciti. Il chunk per la ricerca punta a uno o più passaggi contigui. Una dimostrazione spezzata mantiene il riferimento all'intera sezione. Le associazioni tra trascrizione e slide distinguono riferimento esplicito, abbinamento inferito e conferma dello studente.
+5. Il worker costruisce indice lessicale ed embedding per i blocchi cambiati. Registra hash del contenuto indicizzato, versione del parser, modello e dimensione dei vettori. Pubblica il manifest con i suoi indici in modo coerente. Un fallimento di indicizzazione semantica lascia disponibile la ricerca testuale con stato degradato. Una sostituzione crea una nuova versione, mentre le citazioni storiche aprono quella già mostrata finché è conservata. Alla cancellazione si revocano accessi e si eliminano anche indici e derivati.
+
+### 11.2 Recupero del contesto su più fonti
+
+Il RAG recupera evidenze dal corso per una singola attività. Il server applica prima i vincoli di utente, corso, versioni autorizzate e fase della sessione. Una selezione o un richiamo esplicito alla slide apre direttamente il passaggio. Per una domanda libera, il worker combina ricerca testuale PostgreSQL (titoli, lessico del corso e termini esatti) e similarità pgvector (parafrasi, anche tra registro orale e formale). Simboli e identificatori di codice hanno anche un campo letterale ricercabile. Per la prima prova si possono prendere venti candidati per ramo, fonderne le posizioni con reciprocal rank fusion, deduplicare i passaggi e ampliare i vicini solo dove servono premesse, didascalie o definizioni. Le quantità sono parametri del benchmark. [Ricerca ibrida in pgvector](https://github.com/pgvector/pgvector#hybrid-search)
+
+Una spiegazione generale campiona le sezioni collegate agli obiettivi. Un chiarimento parte dal blocco selezionato. Una revisione confronta bozza e obiettivi per trovare anche omissioni. I materiali del docente e gli appunti personali sono presentati con il loro ruolo. In caso di disaccordo il tutor collega le due affermazioni alle rispettive fonti. Se il contesto è insufficiente, l'operazione può chiedere un recupero aggiuntivo entro il budget, quindi espone il limite. In verifica senza aiuti il backend respinge chiarimenti e accesso alle soluzioni attraverso i comandi dell'app durante il tentativo.
+
+### 11.3 Esempio completo: mostrare la figura della slide indicata
+
+Nel mockup la finestra della fonte riceve nome e numero, e la scheda Slide costruisce il contenuto da esempi locali. Nel prodotto la navigazione trasporta l'identità della fonte. Anche la pillola nella spiegazione e il riferimento nel diff usano la stessa risoluzione. [Mockup](../index.html) · [Contratto illustrativo delle regioni](../esempi/harness_visuale.json)
+
+| Passo | Responsabilità e dati |
+| --- | --- |
+| Catalogazione | Nell'esempio fittizio la versione `fonte-v1` ha indice fisico 13 da zero ed etichetta “14”. Il passaggio `passaggio-14` e la regione `regione-demo-14` rimandano a quella pagina. Il rettangolo normalizzato si riferisce alla pagina visibile orientata e include la didascalia pertinente. La pagina intera ha un riferimento anche se manca una regione. |
+| Richiesta “mostrami la slide 14” | L'app risolve documento attivo ed etichetta nel manifest. Con più documenti o numerazioni ambigue offre le corrispondenze con titolo e miniatura. L'apertura della pagina è deterministica e costa zero chiamate al modello. Un PDF con più slide per foglio richiede regioni identificate per distinguere la singola slide. |
+| Contesto per una spiegazione | Il server prepara un catalogo breve con ID, titolo, testo, pagina e regioni disponibili. Se la domanda riguarda frecce, assi o colori, il worker renderizza il ritaglio e invia i pixel come input immagine associato all'ID. L'ID da solo permette di richiedere o mostrare una figura. Per interpretarne dettagli visivi il modello deve ricevere l'immagine leggibile. [Input visivi](https://developers.openai.com/api/docs/guides/images-vision) |
+| Risposta | Il modello produce blocchi ordinati secondo schema, come nell'esempio sotto. Il backend risolve gli ID attraverso il catalogo di quella operazione, controlla appartenenza, versioni, abbinamento tra passaggio e regione e autorizzazioni, poi assegna gli ID persistenti dei blocchi. Un riferimento sconosciuto richiede correzione entro budget o esito incompleto. La validazione degli ID garantisce la destinazione della citazione. L'aderenza dell'affermazione alla fonte si valuta separatamente. |
+| Figura nella spiegazione | Il client riceve dal server metadati e riferimento al derivato autorizzato. Mostra un'immagine con didascalia, origine e azione “Apri pagina originale”. Se manca un ritaglio valido, mostra esplicitamente la pagina intera. A risorsa indisponibile espone l'errore sul blocco interessato. |
+| Apertura e ritorno | PDF.js apre la versione autorizzata con `getPage(pageIndex + 1)`, usa il viewport orientato e sovrappone la regione tenendo conto dello zoom. File e immagini sono serviti previa autorizzazione o con URL a breve scadenza, rinnovabile dopo controllo. Il client conserva blocco di provenienza, posizione di lettura e bozza. |
+
+Esempio di output applicativo proposto, con identificatori illustrativi:
+
+```json
+{
+  "blocks": [
+    {"kind":"paragraph","text":"La relazione causale implica un ordine dei timestamp. Dai soli timestamp non si ricava il percorso causale.","citationIds":["passaggio-14"]},
+    {"kind":"sourceFigure","regionId":"regione-demo-14","citationIds":["passaggio-14"],"caption":"Passaggio della slide sugli orologi logici."}
+  ]
+}
+```
+
+Il server associa i riferimenti temporanei del modello a citazioni persistenti della specifica versione della spiegazione. Titolo reale, pagina, posizione, URL e attributo di provenienza arrivano dal database. Un blocco di tipo `aiIllustration` conserva invece la specifica o l'SVG generato, le evidenze di supporto, la descrizione accessibile e la versione dell'asset.
+
+### 11.4 Harness, modelli e chiamate API
+
+Il backend possiede il workflow. Ogni operazione lega identità, attività, snapshot, fonti, versione di prompt/schema, modello effettivo, limiti di spesa ed esito. Candidato per il primo adattatore: SDK TypeScript ufficiale OpenAI e Responses API con output strutturati e input visivi. Prevedere un profilo economico per chiarimenti locali, uno multimodale con ragionamento per figure e revisioni difficili, e un modello di embedding versionato per l'indice. Per il benchmark del 17 novembre 2026 proporre gpt-6-luna sui chiarimenti e gpt-6.2-sol come confronto comune su chiarimenti, figure e revisioni. Valutare gpt-6.2-astra sul sottoinsieme di dimostrazioni difficili per quantificare il beneficio marginale. Più profili possono puntare allo stesso modello. Selezionare gli ID disponibili nell'account con una prova comparativa, fissarli nel deployment e registrare ogni cambio. Il confronto usa gli stessi materiali e domande. [Catalogo modelli](https://developers.openai.com/api/docs/models) · [Output strutturati](https://developers.openai.com/api/docs/guides/structured-outputs)
+
+| Azione | Ingresso e risultato persistito | Chiamate di generazione previste |
+| --- | --- | --- |
+| Preparare il corso | Programma e titoli delle fonti → proposta di struttura con concetti, prerequisiti e riferimenti. Lo studente può modificarla. | Una per proposta o per modulo esplicitamente delimitato. Embedding contabilizzati a parte. |
+| Spiegare o chiarire | Obiettivo, passaggi e immagini necessarie, selezione versionata per un chiarimento → blocchi citati. | Una nel percorso ordinario. Riapertura e consultazione delle fonti non richiedono generazione. |
+| Rivedere la bozza | Snapshot salvato, obiettivi e materiali → domande ancorate ai blocchi o omissioni ancorate alla sezione. | Una per sezione dichiarata. Dopo la risposta dello studente una seconda operazione propone la patch mirata. |
+| Verificare e ripassare | Compito, rubrica, risposta immutabile e condizioni registrate → giudizio motivato per concetto. | Una per valutare una risposta aperta. Il server calcola stato e priorità di ripasso dalle evidenze. |
+| Produrre un visuale originale | Obiettivo, dati del problema e fonti → figura con versione e testo alternativo. | Budget distinto per generazione, eventuale ispezione visiva e correzione. Zoom e interazione successiva sono locali. |
+
+Flusso API proposto: `POST /api/v1/units/:id/explanations` riceve obiettivo e chiave di idempotenza e restituisce HTTP 202 con `operationId`. Il worker carica il contesto, invoca il provider e tratta esplicitamente timeout, risposta incompleta e rifiuto. Lo streaming può mostrare stato e testo provvisorio. Solo un risultato completo e validato diventa una revisione consultabile. Alla riconnessione il client legge `GET /api/v1/operations/:id`. La lettura della spiegazione restituisce blocchi e riferimenti. `GET /api/v1/citations/:id` risolve una posizione salvata e `GET /api/v1/regions/:id/image` consegna il derivato o lo stato del job. Entrambe verificano i permessi. Il merge usa la transazione separata descritta nei [contratti](CONTRATTI_E_DATI.md).
+
+Il context composer colloca istruzioni e schema stabili all'inizio, poi obiettivo, snapshot, passaggi e immagini selezionati. Per il benchmark valgono i tetti per attività dell'[architettura](ARCHITETTURA.md), con una variante compatta entro 2 mila token di input per i chiarimenti locali. Si contano schemi, tool, testo, immagini e riserva per output/ragionamento. Se la revisione eccede il tetto, si salva la copertura per sezione. Il modello può chiedere un approfondimento mirato. Proposta iniziale: al massimo un passaggio supplementare per attività ordinaria, condiviso fra recupero, riparazione e retry. Interruzioni transitorie usano backoff nel budget residuo. Un cambio di modello è una scelta registrata con costo massimo, mai un ciclo aperto.
+
+Per ogni tentativo registrare uso restituito dal provider, separando input ordinario, cache e output secondo il tariffario versionato, senza contare due volte ragionamento o immagini già inclusi. Sommare anche embedding, OCR eventuale, rendering e storage con le loro unità. Confrontare costo per lezione completata, latenza p50/p95, richieste fallite e costo per revisione corretta. Per il RAG misurare la presenza dei passaggi attesi nei primi risultati e la correttezza delle citazioni finali. Il riuso di spiegazioni riguarda la versione vista dallo studente. I derivati grafici sono riutilizzabili per fonte, regione e parametri nel perimetro autorizzato.
+
+### 11.5 Figure originali e interazione
+
+L'harness espone tre risultati: ritaglio annotabile del docente, SVG originale composto dal modello, componente scientifico interattivo controllato dall'app. Per un disegno originale il worker riceve obiettivo, relazione da illustrare, vincoli di lettura e stile. Analizza l'SVG con parser XML, ammette soltanto elementi e attributi grafici previsti, impone limiti a dimensioni e complessità ed esclude script, eventi, HTML incorporato e risorse esterne. Renderizza in isolamento, verifica ritagli e leggibilità a larghezza tablet e telefono, consente una correzione entro il budget e salva asset e descrizione. Se il visuale fallisce, la spiegazione indica il limite e resta leggibile con testo e fonti. Per la figura statica il client usa un'immagine. Le interazioni risiedono in componenti React con azioni tipizzate. [SVG come immagine](https://developer.mozilla.org/en-US/docs/Web/SVG/Guides/SVG_as_an_image)
+
+Esempio: per Lamport il modello propone processi, eventi ordinati e messaggi. Il componente valida riferimenti, ordine locale, direzione invio/ricezione e assenza di cicli, calcola gli orologi e la raggiungibilità sul grafo, poi disegna le linee temporali. Lo studente tocca due eventi per evidenziare un cammino causale o leggere perché sono concorrenti. Per una curva numerica il componente calcola coordinate, scala e valori a partire da un'espressione matematica ammessa. Per una spiegazione illustrativa libera l'accuratezza richiede valutazione didattica su esempi annotati. Mermaid resta un backend facoltativo per diagrammi di flusso. OpenUI può comporre un pannello usando componenti consentiti: confrontarlo con blocchi React tipizzati su identico contenuto, includendo token del catalogo e tempi di resa. Editor, prove, citazioni e comandi di merge rimangono componenti applicativi.
+
+### 11.6 Tablet, telefono e continuità del lavoro
+
+Il tablet è una postazione di studio completa. Due pannelli si affiancano quando consentono lettura e scrittura anche con tastiera aperta. Su una superficie stretta si passa tra spiegazione, fonte e appunti conservando blocco, cursore e scorrimento per vista. Su telefono il diff è verticale, una figura si apre a tutto schermo e i comandi contestuali sono disponibili con tocco sul blocco oltre alla selezione. Durante la rotazione una domanda in bozza e una patch pendente conservano identità.
+
+La PWA scarica su scelta una lezione con manifest di versioni, spiegazioni e asset selezionati. Service worker per shell e risorse scaricate, IndexedDB per snapshot locali e coda delle modifiche con ID di mutazione. Separare i dati per account. Prima del logout, segnalare bozze in attesa e consentire sincronizzazione o esportazione. Eliminare le copie gestite dopo la risoluzione delle modifiche pendenti. Esporre spazio insufficiente e stato della sincronizzazione. Offline sono disponibili materiali scaricati e scrittura. Le attività AI richiedono rete. Al ritorno online l'ACK del server identifica l'ultima modifica sincronizzata. Su una base divergente si conserva la bozza e si apre un confronto. Il secondo dispositivo riprende dall'ultima revisione confermata. La verifica senza aiuti è avviabile online con stato condiviso fra dispositivi. [Quote e persistenza locale](https://developer.mozilla.org/en-US/docs/Web/API/Storage_API/Storage_quotas_and_eviction_criteria)
+
+### 11.7 Prova di accettazione integrata
+
+Usare materiali autorizzati con risposte attese annotate: un PDF con copertina e numeri stampati diversi dagli indici, una trascrizione, un Markdown di esercizi e uno di appunti personali. Ripetere con una pagina ruotata, due documenti aventi la stessa etichetta “14” e una domanda cui i materiali non rispondono.
+
+| Azione osservabile | Evidenza richiesta in valutazione |
+| --- | --- |
+| Spiegare un passaggio che richiede slide e trascrizione | Passaggi attesi recuperati e ruoli visibili. Un revisore controlla che entrambi sostengano effettivamente la spiegazione. |
+| Chiedere la figura e aprire la pagina dal testo e dal diff | Lo stesso ID risolve versione, pagina e regione corrette a ogni zoom e rotazione. Sostituire il PDF conserva la destinazione storica. Un ID di altro corso è rifiutato. |
+| Toccare due eventi e poi confrontare la figura con la fonte | Risultato coerente con l'ordine causale, etichette leggibili, origine della figura esplicita. Registrare tempi e costo di produzione. |
+| Scrivere sul tablet con tastiera aperta, interrompere la rete, ruotare e riprendere da telefono | La bozza locale sopravvive alla riapertura. Dopo l'ACK, il telefono recupera la versione confermata. Una modifica concorrente e una patch obsoleta producono confronto. Eseguire anche su hardware Android reale. |
+| Interrompere una generazione e ritentare | Editor utilizzabile, un solo risultato applicativo persistito, tentativi e consumo osservabili. Riaprire figura, fonte o spiegazione salvata produce zero chiamate di generazione. |

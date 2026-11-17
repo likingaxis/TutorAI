@@ -11,7 +11,7 @@ Le prime attività dovrebbero produrre prove piccole e complete:
 - Editor con formule, selezioni, salvataggio e conflitto fra revisioni.
 - Importazione di un PDF reale con citazione e ritaglio della pagina corretta.
 - Una spiegazione e una revisione AI misurate per qualità, costo e attesa.
-- Uno schema semplice da JSON controllato, senza codice libero generato dal modello.
+- Una figura di fonte e uno schema SVG validato o un componente scientifico interattivo, verificati su tablet e telefono.
 
 ## Branch e pull request
 

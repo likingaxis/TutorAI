@@ -7,7 +7,7 @@ Sequenza proposta da aggiornare con le prove tecniche e i vincoli del team. Temp
 | Fase | Risultato | Condizione per procedere |
 | --- | --- | --- |
 | 0 Decisione e prove | Scelta T01–T12 e prove sui rischi di editor, fonti e merge | Assunzioni esplicite e principali rischi dimostrati o circoscritti |
-| 1 Ciclo integrato di una lezione | Fonte reale, spiegazione citata, appunti, revisione, diff, ripresa e prima verifica | Il flusso completo funziona con persistenza e AI reale; eventuali componenti simulati sono dichiarati |
+| 1 Ciclo integrato di una lezione | Slide, trascrizione, due Markdown, spiegazione citata, appunti, revisione, diff, ripresa e prima verifica | Il flusso completo funziona con persistenza e AI reale; eventuali componenti simulati sono dichiarati |
 | 2 MVP a due percorsi | Ingresso rapido e ingresso esame, diagnosi, piano, più fonti, ripasso e progresso | Scenari essenziali sotto completati anche in caso di errore |
 | 3 Pilota | Uso di studenti e materiali di più corsi con osservazione dei problemi | Feedback di usabilità e risultati di prove senza aiuti, senza promesse premature di efficacia |
 | 4 Estensioni motivate | Formati avanzati, calendario, orale, scheduler evoluto o diagrammi | Priorità giustificate dalle evidenze del pilota |
@@ -40,6 +40,8 @@ Gli scenari sono criteri di comportamento da realizzare e verificare. Non sono t
 | AC18 | F07, F11–F12 | Una richiesta viene ritentata dopo un errore di rete o una risposta duplicata. Non si creano doppie patch applicate o doppie evidenze; lo stato finale resta comprensibile |
 
 Per AC16, in un servizio con account verificare anche che un utente non possa recuperare passaggi, file o revisioni di un altro. In una distribuzione locale verificare i confini equivalenti stabiliti dall'architettura.
+
+Per la prima lezione integrare AC03, AC08, AC10, AC11 e AC15 con le prove multifonte, di rendering e di continuità su Android in [Specifica, sezione 11.7](SPECIFICA.md). Usare lo stesso corso per confrontare costo, correttezza delle fonti e recupero della bozza.
 
 ## 3 Esempio concreto delle slide
 

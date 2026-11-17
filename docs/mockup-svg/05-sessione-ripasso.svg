@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="session-title session-desc"><title id="session-title">TutorAI · Sessione di ripasso</title><desc id="session-desc">Sessione focalizzata senza aiuti con selettore modalità Scelta rapida | Risposta scritta, diagramma P1/P2 con 0 messaggi e opzioni A/B/C.</desc><style>text{font-family:'Segoe UI',Inter,system-ui,sans-serif}a{text-decoration:none}a:hover{cursor:pointer}</style><defs>
+      <linearGradient id="session-rail-grad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#13213c"/>
+        <stop offset="48%" stop-color="#172b4f"/>
+        <stop offset="100%" stop-color="#0e1729"/>
+      </linearGradient>
+      <linearGradient id="session-hero-grad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#1b2842"/>
+        <stop offset="100%" stop-color="#151f33"/>
+      </linearGradient>
+      <clipPath id="session-rail-clip">
+        <rect x="0" y="0" width="88" height="1000"/>
+      </clipPath>
+      <pattern id="session-note-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+        <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#222a39" stroke-width="0.75"/>
+        <circle cx="12" cy="12" r="0.85" fill="#2c374b"/>
+      </pattern>
+    </defs>
+<rect x="0" y="0" width="1600" height="1000" rx="0" fill="#0f131b" />
+<a href="04-ripasso.svg" aria-label="Esci dalla sessione">
+<rect x="48" y="26" width="108" height="40" rx="10" fill="#181f2c" stroke="#2b3548" />
+<g transform="translate(62 36) scale(0.75)" fill="none" stroke="#a6b1c6" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12H5m5-5-5 5 5 5"/></g>
+<text x="92" y="51" fill="#f2f5fc" font-size="14" font-weight="550" >Esci</text>
+</a>
+<text x="800" y="52" fill="#a6b1c6" font-size="15" font-weight="600" text-anchor="middle">Sistemi Distribuiti  ·  1.2 Relazione happened-before</text>
+<rect x="1396" y="26" width="156" height="40" rx="20" fill="#1d3933" stroke="#2f6354" />
+<g transform="translate(1414 36) scale(0.75)" fill="none" stroke="#7ee0b8" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></g>
+<text x="1442" y="51" fill="#7ee0b8" font-size="13.5" font-weight="650" >Senza aiuti</text>
+<line x1="48" y1="84" x2="1552" y2="84" stroke="#2b3548" stroke-width="1" />
+<text x="312" y="134" fill="#92aaff" font-size="11" font-weight="650" letter-spacing="1.6">DOMANDA 1 DI 3</text>
+<rect x="312" y="150" width="172" height="6" rx="3" fill="#92aaff" />
+<rect x="496" y="150" width="172" height="6" rx="3" fill="#273246" />
+<rect x="680" y="150" width="172" height="6" rx="3" fill="#273246" />
+<rect x="968" y="118" width="320" height="40" rx="12" fill="#141a26" stroke="#2b3548" />
+<rect x="972" y="122" width="154" height="32" rx="9" fill="#25385e" />
+<text x="1049" y="143" fill="#f8faff" font-size="13" font-weight="650" text-anchor="middle">Scelta rapida</text>
+<text x="1206" y="143" fill="#a6b1c6" font-size="13" font-weight="500" text-anchor="middle">Risposta scritta</text>
+<text x="312" y="218" fill="#f2f5fc" font-size="30" font-weight="650" >I timestamp bastano per stabilire causalità?</text>
+<text x="312" y="252" fill="#a6b1c6" font-size="16" font-weight="400" >Osserva gli eventi A e B registrati sui processi P₁ e P₂:</text>
+<rect x="312" y="276" width="976" height="196" rx="16" fill="#181f2c" stroke="#2b3548" />
+<text x="348" y="330" fill="#f2f5fc" font-size="16" font-weight="650" >P₁</text>
+<text x="348" y="424" fill="#f2f5fc" font-size="16" font-weight="650" >P₂</text>
+<line x1="396" y1="324" x2="1236" y2="324" stroke="#4c5c78" stroke-width="2.2" />
+<line x1="396" y1="418" x2="1236" y2="418" stroke="#4c5c78" stroke-width="2.2" />
+<rect x="688" y="353" width="224" height="36" rx="18" fill="#121824" stroke="#384764" />
+<text x="800" y="376" fill="#f0c475" font-size="13" font-weight="650" text-anchor="middle">0 messaggi scambiati</text>
+<circle cx="560" cy="324" r="15" fill="#92aaff" />
+<text x="560" y="329" fill="#0e172a" font-size="13" font-weight="700" text-anchor="middle">A</text>
+<rect x="586" y="308" width="92" height="30" rx="8" fill="#1e2c47" />
+<text x="632" y="328" fill="#92aaff" font-size="14" font-weight="650" text-anchor="middle">C(A) = 3</text>
+<circle cx="1010" cy="418" r="15" fill="#dce4f5" />
+<text x="1010" y="423" fill="#0e172a" font-size="13" font-weight="700" text-anchor="middle">B</text>
+<rect x="1036" y="402" width="92" height="30" rx="8" fill="#222b3d" />
+<text x="1082" y="422" fill="#dce4f5" font-size="14" font-weight="650" text-anchor="middle">C(B) = 5</text>
+<text x="312" y="518" fill="#f2f5fc" font-size="18.5" font-weight="600" >Quale affermazione è corretta?</text>
+<rect x="312" y="540" width="976" height="66" rx="13" fill="#161c27" stroke="#2b3548" />
+<circle cx="348" cy="573" r="12" fill="none" stroke="#596780" stroke-width="1.8" />
+<text x="348" y="578" fill="#a6b1c6" font-size="13" font-weight="700" text-anchor="middle">A</text>
+<text x="384" y="579" fill="#f2f5fc" font-size="16.5" font-weight="400" >A ha causato B, perché il suo timestamp è minore (3 &lt; 5).</text>
+<rect x="312" y="622" width="976" height="66" rx="13" fill="#213252" stroke="#92aaff" />
+<circle cx="348" cy="655" r="12" fill="#92aaff" stroke="#92aaff" stroke-width="1.8" />
+<text x="348" y="660" fill="#0e172a" font-size="13" font-weight="700" text-anchor="middle">B</text>
+<text x="384" y="661" fill="#f2f5fc" font-size="16.5" font-weight="600" >A e B sono concorrenti: non esiste una relazione causale tra loro.</text>
+<rect x="312" y="704" width="976" height="66" rx="13" fill="#161c27" stroke="#2b3548" />
+<circle cx="348" cy="737" r="12" fill="none" stroke="#596780" stroke-width="1.8" />
+<text x="348" y="742" fill="#a6b1c6" font-size="13" font-weight="700" text-anchor="middle">C</text>
+<text x="384" y="743" fill="#f2f5fc" font-size="16.5" font-weight="400" >B ha causato A, perché il suo timestamp è maggiore (5 &gt; 3).</text>
+<line x1="312" y1="814" x2="1288" y2="814" stroke="#2b3548" stroke-width="1" />
+<rect x="312" y="844" width="184" height="28" rx="8" fill="#243454" />
+<text x="404" y="862.5" fill="#92aaff" font-size="12.5" font-weight="600" text-anchor="middle">Risposta B selezionata</text>
+<a href="10-esito-ripasso.svg" aria-label="Conferma →">
+<rect x="1064" y="836" width="224" height="48" rx="11" fill="#92aaff" />
+<text x="1176" y="865" fill="#0e172a" font-size="14" font-weight="600" text-anchor="middle">Conferma →</text>
+</a></svg>
