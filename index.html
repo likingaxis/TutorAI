@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="auth.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous" onload="if(window.renderAllMathSafe)window.renderAllMathSafe()"></script>
 <style>
@@ -288,7 +289,14 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .rb:hover { background: var(--rail-hover); color: #ffffff; }
 .rb.on { background: transparent; color: var(--rail-pill-ink); font-weight: 700; }
 .rb.on:hover { background: transparent; color: var(--rail-pill-ink); }
-.rb svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 1.85; stroke-linecap: round; stroke-linejoin: round; }
+.rb svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 1.85; stroke-linecap: round; stroke-linejoin: round; transition: transform .26s cubic-bezier(.2,.8,.25,1.3); }
+.rb:hover svg { transform: translateY(-2px) scale(1.09); }
+.rb.on svg { transform: scale(1.06); }
+.rb[data-view="corso"]:hover svg rect:first-child { transform: translate(-1px,-1px); }
+.rb[data-view="corso"] svg rect, .rb[data-view="studio"] svg path, .rb[data-view="ripasso"] svg path { transition: transform .24s cubic-bezier(.2,.8,.25,1.25); }
+.rb[data-view="ripasso"]:hover svg { transform: rotate(-7deg) scale(1.08); }
+.tslider button svg { transition: transform .28s cubic-bezier(.2,.8,.25,1.3); }
+.tslider button:hover svg { transform: rotate(16deg) scale(1.12); }
 .rb-dot {
   position: absolute;
   top: 7px; right: 10px;
@@ -816,6 +824,8 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .course-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; justify-content: space-between; }
 .course-meta span { font-size: 12px; color: var(--mut); }
 .course-meta .course-recall { color: var(--amber-i); font-weight: 650; }
+.course-progress { width: 100%; height: 5px; border-radius: 999px; background: color-mix(in srgb, var(--course-accent) 14%, var(--sunken)); overflow: hidden; }
+.course-progress > i { display: block; height: 100%; border-radius: inherit; background: var(--course-accent); transition: width .45s cubic-bezier(.2,.8,.25,1); }
 .course-badge-art { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; flex: none; }
 
 /* Course and file finder */
@@ -850,6 +860,19 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
   display: flex; align-items: center; gap: 11px; min-height: 60px;
   transition: background-color .18s, box-shadow .18s;
 }
+.unit-row-wrap { display: flex; align-items: center; gap: 8px; }
+.unit-row-wrap .unit-row { flex: 1; min-width: 0; }
+.unit-quick-quiz {
+  flex: none; height: 30px; padding: 0 11px; border-radius: 999px; font-size: 11.5px; font-weight: 700;
+  color: var(--amber-i); background: var(--amber-s); border: 1px solid color-mix(in srgb, var(--amber) 34%, transparent);
+  white-space: nowrap; transition: transform .18s, filter .18s;
+}
+.unit-quick-quiz:hover { filter: brightness(.97); transform: translateY(-1px); }
+.detail-ocr-pill {
+  display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 11px; border-radius: 999px;
+  font-size: 11.5px; font-weight: 650; color: var(--amber-i); background: var(--amber-s);
+  border: 1px solid color-mix(in srgb, var(--amber) 35%, transparent);
+}
 .unit-row:is(:hover, :focus-visible) { background: var(--card); }
 .unit-row.cur {
   background: linear-gradient(105deg, color-mix(in srgb, var(--course-accent) 13%, var(--card)), var(--card));
@@ -871,18 +894,33 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .unit-row:is(:hover, :focus-visible) .unit-chevron { transform: translateX(3px); }
 
 .file-finder {
-  padding: 0; width: min(840px, calc(100vw - 28px)); max-width: none;
+  padding: 0; width: min(860px, calc(100vw - 28px)); max-width: none;
   max-height: calc(100dvh - 28px); color: var(--ink); background: var(--card);
-  border: 1px solid var(--line); border-radius: 22px; box-shadow: var(--sh-l); overflow: auto;
+  border: 1px solid color-mix(in srgb, var(--blue) 28%, var(--line)); border-radius: 22px; box-shadow: var(--sh-l); overflow: auto;
 }
 .file-finder[open] { animation: finder-enter .22s ease both; }
-.file-finder::backdrop { background: rgb(14 21 36 / .38); backdrop-filter: blur(3px); }
+.file-finder::backdrop { background: rgb(12 18 36 / .48); backdrop-filter: blur(4px); }
 @keyframes finder-enter { from { opacity: 0; transform: translateY(8px) scale(.985); } to { opacity: 1; transform: none; } }
 .finder-top {
-  display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  padding: 14px 19px; border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  padding: 15px 20px; color: #eef5ff;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, .14) 1px, transparent 1px) 0 0 / 15px 15px,
+    radial-gradient(circle at 86% 18%, rgba(98, 237, 255, .26), transparent 48%),
+    linear-gradient(135deg, #0b46bf, #1565f2 62%, #093595);
+  border-bottom: 1px solid rgba(175, 215, 255, .24);
 }
-.finder-top h2 { margin: 0; font-size: 20px; letter-spacing: -.034em; }
+.finder-title-group { display: grid; gap: 2px; min-width: 0; }
+.finder-kicker { font-size: 10px; font-weight: 750; letter-spacing: .07em; text-transform: uppercase; color: rgba(215, 235, 255, .86); }
+.finder-top-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.finder-search { width: clamp(170px, 26vw, 250px); height: 34px; background: rgba(255, 255, 255, .15); border-color: rgba(255, 255, 255, .28); color: #ffffff; }
+.finder-search:focus-within { background: rgba(255, 255, 255, .22); border-color: rgba(255, 255, 255, .6); }
+.finder-search input { color: #ffffff; }
+.finder-search input::placeholder { color: rgba(235, 245, 255, .75); }
+.finder-search .ic { color: rgba(235, 245, 255, .9); }
+.finder-top .btn { background: rgba(255, 255, 255, .16); border: 1px solid rgba(255, 255, 255, .28); color: #ffffff; }
+.finder-top .btn:hover { background: rgba(255, 255, 255, .26); }
+.finder-top h2 { margin: 0; font-size: 20px; letter-spacing: -.034em; color: #ffffff; }
 .finder-grid { display: grid; grid-template-columns: minmax(160px, 1fr) minmax(0, 3fr); min-height: 344px; }
 .finder-nav { background: var(--surface); padding: 13px 10px; display: grid; align-content: start; gap: 4px; }
 .finder-nav button {
@@ -955,6 +993,9 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .finder-preview pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 36dvh; overflow: auto; }
 .finder-preview iframe { display: block; width: 100%; height: 36dvh; border: 1px solid var(--line); border-radius: 8px; margin: 10px 0; }
 .finder-preview .btn { margin-top: 6px; }
+.finder-preview-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
+.finder-preview-list { margin: 10px 0 14px; padding-left: 18px; color: var(--ink-2); font: 15.5px/1.6 Georgia, serif; }
+.finder-preview-list li + li { margin-top: 5px; }
 .finder-empty { margin: 18px 0; color: var(--mut); font-size: 13px; }
 @media (max-width: 640px) {
   .course-heading { min-height: 150px; }
@@ -1248,6 +1289,8 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .studio-position { font-size: 11.5px; font-weight: 650; color: var(--mut); white-space: nowrap; }
 #view-studio {
   --study-reading: Georgia, "Times New Roman", serif;
+  --study-font-size: 16.5px;
+  --note-font: Georgia, "Times New Roman", serif;
   --dock-bg: #1b2333;
   --dock-ink: #f8f9ff;
   --dock-line: #46516a;
@@ -1308,6 +1351,16 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .depth-pop button:hover, .depth-pop button[aria-pressed="true"] { background: var(--blue-s); color: var(--blue-i); }
 .depth-pop button[aria-pressed="true"] { font-weight: 700; }
 .study-source-option { border-top: 1px solid var(--line); margin-top: 4px; padding-top: 4px; }
+.depth-size-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 6px;
+  padding: 5px 8px; border-top: 1px solid var(--line); margin-top: 4px; font-size: 11.5px; font-weight: 650; color: var(--mut);
+}
+.depth-size-ctrls { display: inline-flex; align-items: center; gap: 3px; }
+.depth-size-ctrls button {
+  width: 24px; height: 24px; padding: 0; display: grid; place-items: center; text-align: center;
+  border: 1px solid var(--line); border-radius: 6px; background: var(--surface); font-weight: 700; color: var(--ink);
+}
+.depth-size-ctrls span { min-width: 34px; text-align: center; font-family: var(--mono); font-size: 11px; color: var(--ink); }
 .study-transfer[draggable="true"] { cursor: grab; }
 .study-transfer[draggable="true"]:active { cursor: grabbing; }
 .study-transfer-actions { display: flex; justify-content: flex-end; margin-bottom: 3px; }
@@ -1325,10 +1378,16 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .study-style-steps ol { margin: 4px 0; padding-left: 23px; }
 .study-style-example h2 { margin: 0 0 4px; font-size: 14px; }
 .study-style-example p { margin: 0; }
-.studio-style-dialog { width: min(430px, calc(100vw - 24px)); padding: 20px; border: 1px solid var(--line); border-radius: 17px; background: var(--card); color: var(--ink); box-shadow: var(--sh-l); }
-.studio-style-dialog::backdrop { background: rgb(18 21 32 / .44); }
+.studio-style-dialog {
+  width: min(440px, calc(100vw - 24px)); padding: 0; overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--blue) 28%, var(--line)); border-radius: 20px;
+  background: var(--card); color: var(--ink); box-shadow: var(--sh-l);
+}
+.studio-style-dialog::backdrop { background: rgb(12 18 36 / .48); backdrop-filter: blur(4px); }
+.studio-style-dialog[open] { animation: control-unfold .25s cubic-bezier(.2,.8,.3,1) both; }
 .studio-style-dialog h2, .studio-style-dialog p { margin: 0; }
-.studio-style-dialog form { display: grid; gap: 12px; }
+.studio-style-dialog form { display: grid; gap: 0; }
+.studio-style-body { padding: 16px 20px 20px; display: grid; gap: 12px; }
 .studio-style-dialog label { display: grid; gap: 5px; font-size: 13px; font-weight: 650; }
 .studio-style-dialog textarea { min-height: 74px; resize: vertical; }
 .studio-style-actions { display: flex; justify-content: flex-end; gap: 7px; flex-wrap: wrap; }
@@ -1357,13 +1416,14 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
   border-radius: 11px;
   padding: 8px 10px;
   margin: 4px -10px;
-  cursor: pointer;
+  cursor: text;
   transition: background-color 0.16s;
 }
-.para:hover { background: var(--surface); }
-.para.sel { background: color-mix(in srgb, var(--blue) 10%, transparent); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--blue) 42%, transparent); }
-.para p { margin: 0; font: 16.5px/1.58 var(--study-reading); color: var(--ink); }
-.para p .src-pill, .para p .para-act { font-family: var(--font); }
+.para:hover { background: color-mix(in srgb, var(--surface) 78%, transparent); }
+.para.sel { background: color-mix(in srgb, var(--blue) 9%, transparent); box-shadow: inset 2.5px 0 0 var(--blue); }
+.para p { margin: 0; font: var(--study-font-size, 16.5px)/1.58 var(--study-reading); color: var(--ink); user-select: text; }
+.slide-frame { user-select: text; }
+.para p .src-pill, .para p .para-act { font-family: var(--font); user-select: none; }
 .para p .src-pill { margin-inline-start: 4px; vertical-align: baseline; }
 .para-act {
   display: inline-flex;
@@ -1382,17 +1442,95 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 }
 .para:hover .para-act, .para.sel .para-act, .para:focus-within .para-act { opacity: 1; }
 
-.sel-pop {
-  margin: 8px 0 6px;
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 13px 15px;
-  box-shadow: var(--sh-l);
-  animation: rise 0.2s ease both;
+/* REVISION2000-inspired text-selection floating popover in royal-azure atlas aesthetic */
+.explain-sel-pop {
+  position: fixed;
+  z-index: 72;
+  width: min(376px, calc(100vw - 20px));
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, .1) 1px, transparent 1px) 0 0 / 14px 14px,
+    linear-gradient(160deg, #102561, #0c173c 55%, #11182c);
+  color: #f4f7ff;
+  border: 1px solid rgba(145, 200, 255, .34);
+  border-radius: 17px;
+  padding: 13px 14px;
+  box-shadow: 0 22px 44px -14px rgba(5, 16, 52, .62), 0 0 0 1px rgba(255, 255, 255, .07) inset;
+  animation: rise 0.18s ease both;
 }
-.sel-pop-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
-.sel-ask-row { display: flex; gap: 7px; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
+.explain-sel-pop.hidden { display: none; }
+.explain-sel-pop::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: var(--arrow-left, 36px);
+  width: 11px;
+  height: 11px;
+  background: #102561;
+  border-left: 1px solid rgba(145, 200, 255, .34);
+  border-top: 1px solid rgba(145, 200, 255, .34);
+  transform: rotate(45deg);
+}
+.explain-sel-pop.above::before {
+  top: auto;
+  bottom: -6px;
+  background: #11182c;
+  border-left: 0;
+  border-top: 0;
+  border-right: 1px solid rgba(145, 200, 255, .34);
+  border-bottom: 1px solid rgba(145, 200, 255, .34);
+}
+.explain-sel-head {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
+  margin-bottom: 8px;
+}
+.explain-sel-meta { min-width: 0; display: grid; gap: 3px; }
+.explain-sel-kicker {
+  font-size: 10px; font-weight: 750; letter-spacing: .06em; text-transform: uppercase;
+  color: #9ed0ff;
+}
+.explain-sel-quote {
+  font-size: 12px; line-height: 1.38; color: #ffffff; font-style: italic;
+  background: rgba(255, 255, 255, .1); border-left: 2px solid #75c6ff;
+  border-radius: 6px; padding: 4px 8px;
+  overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+.explain-sel-close {
+  width: 24px; height: 24px; border-radius: 999px; flex: none;
+  background: rgba(255, 255, 255, .14); color: #ffffff;
+  font-size: 11.5px; font-weight: 700; display: grid; place-items: center;
+}
+.explain-sel-close:hover { background: rgba(255, 255, 255, .26); }
+.explain-sel-actions {
+  display: flex; flex-wrap: wrap; gap: 5px;
+}
+.explain-sel-actions button {
+  padding: 5px 9px; border-radius: 999px; font-size: 11.5px; font-weight: 650;
+  background: rgba(255, 255, 255, .12); color: #eef5ff;
+  border: 1px solid rgba(175, 215, 255, .22);
+  transition: background-color .15s, border-color .15s, transform .15s;
+}
+.explain-sel-actions button:hover {
+  background: rgba(74, 152, 255, .36); border-color: rgba(165, 218, 255, .55); transform: translateY(-1px);
+}
+.explain-sel-actions button.primary { background: #1d70f8; border-color: rgba(180, 224, 255, .5); color: #ffffff; }
+.explain-sel-actions button.primary:hover { background: #2c7eff; }
+.explain-sel-ask {
+  display: flex; gap: 6px; align-items: center;
+  margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, .14);
+}
+.explain-sel-ask input {
+  flex: 1; min-width: 0; border-radius: 10px; padding: 7px 10px; font-size: 12.5px;
+  background: rgba(6, 13, 35, .64); color: #ffffff;
+  border: 1px solid rgba(160, 210, 255, .28);
+}
+.explain-sel-ask input::placeholder { color: rgba(215, 232, 255, .62); }
+.explain-sel-ask input:focus { outline: none; border-color: #79c4ff; }
+.explain-sel-ask button {
+  height: 32px; padding: 0 11px; border-radius: 10px; flex: none;
+  background: #2276ff; color: #ffffff; font-size: 12px; font-weight: 700;
+}
+.explain-sel-ask button:hover { background: #3b88ff; }
+
 .tut-chip {
   margin-top: 8px;
   padding: 10px 13px;
@@ -1403,6 +1541,13 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
   color: var(--ink);
 }
 .tut-chip-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 4px; }
+.tut-quote-ref {
+  font-size: 11.5px; font-style: italic; color: var(--ink-2);
+  padding: 4px 8px; margin: 2px 0 6px; border-radius: 7px;
+  background: color-mix(in srgb, var(--purple) 11%, var(--card));
+  border-left: 2.5px solid var(--purple);
+}
+.slide-clarify-slot { margin-top: 12px; }
 .diff-reason { font-size: 12px; color: var(--mut); background: var(--card); border: 1px solid var(--line); border-radius: 9px; padding: 7px 10px; margin-bottom: 8px; }
 .diff-sources { margin-top: 4px; }
 .diff-sources summary { width: fit-content; color: var(--blue-i); font-weight: 650; cursor: pointer; }
@@ -1474,6 +1619,71 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
   background-size: 24px 24px, 100% 100%;
   transition: background-color .22s, box-shadow .22s;
 }
+/* Scribe Theme Style variants + Lao Note selection highlights + Share */
+.paper-pane[data-note-style="minimal"] .note-scroll {
+  background-image: none;
+}
+.paper-pane[data-note-style="warm"] .note-scroll {
+  background-color: color-mix(in srgb, #f5e6c8 34%, var(--paper));
+  background-image: radial-gradient(circle at 14px 14px, color-mix(in srgb, var(--amber) 14%, transparent) 1px, transparent 0);
+  background-size: 26px 26px;
+}
+.paper-pane[data-note-style="contrast"] .note-scroll {
+  background-image: linear-gradient(180deg, color-mix(in srgb, var(--blue-s) 20%, transparent), transparent 160px);
+  background-size: 100% 100%;
+}
+.paper-pane[data-note-font="sans"] { --note-font: var(--font); }
+.paper-pane[data-note-font="mono"] { --note-font: var(--mono); }
+.paper-pane .pane-top { position: relative; z-index: 25; }
+.note-menu-wrap.static-pop { position: static; }
+.note-style-pop, .note-share-pop {
+  position: absolute; right: 12px; top: calc(100% + 4px); width: min(244px, calc(100% - 24px)); z-index: 65;
+  background: var(--card); color: var(--ink); border: 1px solid var(--line);
+  border-radius: 15px; padding: 11px; box-shadow: var(--sh-l);
+  animation: control-unfold .24s cubic-bezier(.2,.8,.3,1) both; transform-origin: top right;
+}
+.note-style-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--mut); margin: 0 0 7px; }
+.note-style-swatches { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-bottom: 10px; }
+.note-style-swatch {
+  display: grid; justify-items: center; gap: 3px; padding: 7px 4px; border-radius: 10px;
+  border: 1.5px solid var(--line); background: var(--surface); font-size: 10.5px; font-weight: 650; color: var(--ink-2);
+}
+.note-style-swatch b { font: 700 13px/1 var(--study-reading); }
+.note-style-swatch.on { border-color: var(--blue); background: var(--blue-s); color: var(--blue-i); }
+.note-style-swatch[data-swatch="warm"] { background: #fbf1de; color: #543e21; }
+.note-style-swatch[data-swatch="contrast"] { background: #181c28; color: #f6f7fb; }
+.note-font-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
+.note-font-row button {
+  padding: 5px 6px; border-radius: 8px; border: 1px solid var(--line); font-size: 11.5px; font-weight: 650; color: var(--ink-2); background: var(--surface);
+}
+.note-font-row button.on { border-color: var(--blue); background: var(--blue-s); color: var(--blue-i); }
+.note-share-pop button {
+  width: 100%; text-align: left; padding: 8px 9px; border-radius: 9px; font-size: 12.5px; font-weight: 600;
+  color: var(--ink-2); display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.note-share-pop button:hover { background: var(--surface); color: var(--ink); }
+.note-share-linkbox {
+  margin-top: 6px; padding: 6px 8px; border-radius: 9px; background: var(--surface); border: 1px solid var(--line);
+  font-family: var(--mono); font-size: 10.5px; color: var(--mut); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.note-selection-pop {
+  position: fixed; z-index: 85; display: inline-flex; align-items: center; gap: 4px;
+  padding: 5px 8px; border-radius: 999px; background: #161822; color: #f8f9ff;
+  border: 1px solid rgba(255,255,255,.16); box-shadow: var(--sh-l);
+  animation: control-unfold .18s cubic-bezier(.2,.8,.25,1) both; transform-origin: bottom center;
+}
+.note-selection-pop button {
+  min-width: 24px; height: 24px; border-radius: 999px; display: grid; place-items: center;
+  font-size: 11.5px; font-weight: 700; color: inherit; padding: 0 5px;
+}
+.note-selection-pop button:hover { background: rgba(255,255,255,.16); }
+.hl-dot { width: 13px; height: 13px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,.65); display: block; }
+.hl-dot.amber { background: #ffd15c; }
+.hl-dot.blue { background: #6cb3ff; }
+.hl-dot.green { background: #5de0a6; }
+mark.hl-amber { background: rgba(255, 210, 76, 0.38); color: inherit; padding: 0 2px; border-radius: 4px; }
+mark.hl-blue { background: rgba(74, 146, 255, 0.25); color: inherit; padding: 0 2px; border-radius: 4px; }
+mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0 2px; border-radius: 4px; }
 .paper-dock-wrap {
   position: sticky;
   bottom: 10px;
@@ -1576,19 +1786,19 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .paper-pane:has(.paper-dock-wrap.is-pinned) .note-scroll { padding-bottom: 32px; }
 .note-page { max-width: 600px; margin: 0 auto; min-width: 0; }
 .note-h1 {
-  font: 700 clamp(25px, 2.45vw, 35px)/1.14 var(--study-reading);
+  font: 700 clamp(25px, 2.45vw, 35px)/1.14 var(--note-font, var(--study-reading));
   letter-spacing: -0.027em; overflow-wrap: anywhere;
   color: var(--paper-ink); margin: 0 0 18px; outline: none; border-radius: 8px; padding: 2px 4px; margin-left: -4px;
 }
 .note-h1:focus { background: rgba(130, 130, 140, 0.08); }
-.note-sec { font: 700 18px/1.3 var(--study-reading); color: var(--paper-ink); margin: 22px 0 8px; }
+.note-sec { font: 700 18px/1.3 var(--note-font, var(--study-reading)); color: var(--paper-ink); margin: 22px 0 8px; }
 
 .note-block {
   position: relative;
   padding: 7px 11px;
   margin: 4px -11px;
   border-radius: 10px;
-  font: 16.5px/1.58 var(--study-reading);
+  font: var(--study-font-size, 16.5px)/1.58 var(--note-font, var(--study-reading));
   color: var(--paper-ink2);
   overflow-wrap: break-word;
 }
@@ -1627,15 +1837,15 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .note-bottom-bar { padding: 10px 18px 13px; border-top: 1px solid var(--paper-line); display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
 .note-footer-caption { color: var(--paper-mut); font-size: 12px; }
 .studio-complete-dialog {
-  width: min(420px, calc(100% - 32px));
-  padding: 28px;
+  width: min(436px, calc(100% - 32px));
+  padding: 0; overflow: hidden;
   color: var(--ink);
   background: var(--card);
-  border: 1px solid var(--line);
+  border: 1px solid color-mix(in srgb, var(--blue) 26%, var(--line));
   border-radius: 22px;
   box-shadow: var(--sh-l);
 }
-.studio-complete-dialog::backdrop { background: rgba(18, 24, 39, 0.52); }
+.studio-complete-dialog::backdrop { background: rgba(12, 18, 36, 0.52); backdrop-filter: blur(4px); }
 .studio-complete-dialog[open] { animation: control-unfold .27s cubic-bezier(.2,.8,.3,1) both; }
 .studio-complete-dialog[open] .studio-complete-icon { animation: study-check-in .46s cubic-bezier(.2,.65,.25,1) both; }
 @keyframes study-check-in {
@@ -1657,10 +1867,11 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .study-transfer-btn .ic { transition: transform .22s cubic-bezier(.2,.8,.25,1.25); }
 .study-transfer-btn { background: color-mix(in srgb, var(--card) 82%, transparent); border: 1px solid var(--line); }
 .study-transfer-btn:is(:hover,:focus-visible) .ic { transform: translateX(2px) scale(1.09); }
-.studio-complete-icon { width: 40px; height: 40px; display: grid; place-items: center; color: var(--green-i); border-radius: 13px; background: var(--green-s); }
-.studio-complete-dialog h2 { margin: 12px 0 4px; font-size: 23px; line-height: 1.2; letter-spacing: -0.03em; }
-.studio-complete-dialog p { margin: 0; color: var(--mut); overflow-wrap: anywhere; }
-.studio-complete-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-top: 22px; }
+.studio-complete-icon { width: 40px; height: 40px; display: grid; place-items: center; color: #09452c; border-radius: 13px; background: rgba(255, 255, 255, .92); box-shadow: var(--sh-s); }
+.studio-complete-body { padding: 18px 22px 22px; }
+.studio-complete-dialog h2 { margin: 0 0 4px; font-size: 21px; line-height: 1.2; letter-spacing: -0.03em; color: #ffffff; }
+.studio-complete-dialog p { margin: 0; color: var(--ink-2); font-size: 14px; font-weight: 550; overflow-wrap: anywhere; }
+.studio-complete-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-top: 18px; }
 
 /* ============================================================================
    6. VIEW: RIPASSO (CLEAN LOBBY / FOCUS SESSION / RESULTS / ARCHIVE)
@@ -1808,6 +2019,42 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .recall-agenda .recall-choice .recall-item-icon { width: 28px; height: 28px; background: var(--card); border: 1px solid var(--line); }
 .recall-agenda .recall-choice .recall-item-icon.complete, .recall-result .recall-item-icon.complete { color: var(--green-i); background: var(--green-s); }
 .recall-agenda .recall-choice .recall-item-icon svg, .recall-result .recall-item-icon svg { width: 15px; height: 15px; }
+/* Interactive Calendar + Checklist (Ripasso Prossimi Richiami) */
+.recall-cal-strip { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin-bottom: 12px; }
+.recall-cal-day {
+  display: grid; justify-items: center; gap: 2px; padding: 8px 4px; border-radius: 13px;
+  background: var(--card); border: 1px solid var(--line); color: var(--ink-2);
+  transition: border-color .18s, background-color .18s, transform .2s;
+}
+.recall-cal-day:hover { border-color: var(--blue); transform: translateY(-1px); }
+.recall-cal-day[aria-pressed="true"] { background: var(--blue-s); border-color: var(--blue); color: var(--blue-i); }
+.recall-cal-day small { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--mut); }
+.recall-cal-day[aria-pressed="true"] small { color: var(--blue-i); }
+.recall-cal-day b { font-size: 16px; letter-spacing: -.03em; line-height: 1.15; }
+.recall-cal-dot { width: 6px; height: 6px; border-radius: 50%; background: transparent; margin-top: 2px; }
+.recall-cal-dot.due { background: var(--amber); }
+.recall-cal-dot.done { background: var(--green); }
+.recall-checklist { display: grid; gap: 7px; }
+.recall-check-row {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px;
+  padding: 9px 11px; border-radius: 13px; background: var(--card); border: 1px solid var(--line);
+  transition: border-color .18s, background-color .18s;
+}
+.recall-check-row.checked { background: color-mix(in srgb, var(--green-s) 45%, var(--card)); border-color: color-mix(in srgb, var(--green) 35%, var(--line)); }
+.recall-check-btn {
+  width: 22px; height: 22px; border-radius: 7px; border: 1.8px solid var(--faint); background: var(--surface);
+  display: grid; place-items: center; color: #ffffff; transition: background-color .18s, border-color .18s, transform .2s cubic-bezier(.2,.8,.25,1.3);
+}
+.recall-check-row.checked .recall-check-btn { background: var(--green); border-color: var(--green); transform: scale(1.04); }
+.recall-check-btn svg { width: 13px; height: 13px; }
+.recall-check-copy { min-width: 0; }
+.recall-check-copy b { display: block; font-size: 13px; overflow-wrap: anywhere; }
+.recall-check-row.checked .recall-check-copy b { text-decoration: line-through; color: var(--mut); }
+.recall-check-copy small { display: block; font-size: 11.5px; color: var(--mut); }
+.recall-hero-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.recall-open-grade { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.recall-open-grade .btn[aria-pressed="true"].ok { background: var(--green-s); border-color: var(--green); color: var(--green-i); }
+.recall-open-grade .btn[aria-pressed="true"].retry { background: var(--amber-s); border-color: var(--amber); color: var(--amber-i); }
 
 .focus-shell { width: min(100%, 700px); margin: 0 auto; display: flex; flex-direction: column; gap: 23px; }
 .focus-topbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
@@ -1829,6 +2076,15 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .focus-shell .qopt { transition: background-color .18s ease, border-color .18s ease; }
 .focus-shell .qopt .l { transition: background-color .18s ease, color .18s ease; }
 .focus-shell .qopt.sel .l { animation: recall-option-tick .22s ease both; }
+.focus-stage {
+  background:
+    radial-gradient(circle, var(--paper-dot) 1px, transparent 1px) 0 0 / 18px 18px,
+    var(--card);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: clamp(18px, 3vw, 24px);
+  box-shadow: var(--sh-s);
+}
 .focus-stage.recall-step-in, .recall-picker-body.recall-step-in,
 .recall-agenda details[open] > .recall-choice, .recall-result details[open] .recall-result-details {
   animation: recall-content-in .23s cubic-bezier(.2,.7,.2,1) both;
@@ -1841,7 +2097,9 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .recall-result .recall-hero.perfect { --result-accent: var(--green); --result-ink: var(--green-i); }
 .recall-result .recall-hero.has-errors { --result-accent: var(--red); --result-ink: var(--red-i); }
 .recall-result .recall-hero {
-  background: color-mix(in srgb, var(--result-accent) 8%, var(--card));
+  background:
+    radial-gradient(circle, var(--paper-dot) 1px, transparent 1px) 0 0 / 16px 16px,
+    color-mix(in srgb, var(--result-accent) 8%, var(--card));
   border-color: color-mix(in srgb, var(--result-accent) 33%, var(--line));
 }
 .recall-result .recall-hero h2, .recall-result .recall-hero-art { color: var(--result-ink); }
@@ -1964,6 +2222,81 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .profile-activity-link:is(:hover,:focus-visible) .profile-activity-chevron { transform: translateX(4px); }
 .profile-activity-symbol.appunti { color: var(--amber-i); background: var(--amber-s); }
 .profile-activity-symbol.verifica { color: var(--green-i); background: var(--green-s); }
+.profile-activity-symbol.verifica-err { color: var(--red-i); background: var(--red-s); }
+.profile-activity-symbol.verifica-warn { color: var(--amber-i); background: var(--amber-s); }
+.profile-activity-subpill {
+  display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700;
+  background: var(--surface); color: var(--ink-2); border: 1px solid var(--line); white-space: nowrap;
+}
+.profile-activity-subpill.err { background: var(--red-s); color: var(--red-i); border-color: color-mix(in srgb, var(--red) 35%, transparent); }
+.profile-activity-subpill.ok { background: var(--green-s); color: var(--green-i); border-color: color-mix(in srgb, var(--green) 35%, transparent); }
+.profile-insights {
+  width: min(100%, 880px); margin: 22px auto 0;
+  display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr); gap: 16px;
+}
+.profile-insight-card {
+  border: 1px solid var(--line); border-radius: 20px; background: var(--card); padding: 18px 20px;
+  display: grid; gap: 12px; align-content: space-between; min-width: 0;
+}
+.profile-insight-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.profile-insight-head h2 { margin: 0; font-size: 16px; letter-spacing: -.02em; }
+.profile-weekly-bars {
+  display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); align-items: end; gap: 8px; height: 108px; padding-top: 8px;
+}
+.profile-bar-col { display: grid; justify-items: center; gap: 5px; height: 100%; align-content: end; }
+.profile-bar-track {
+  width: 100%; max-width: 26px; height: 74px; border-radius: 999px; background: var(--surface);
+  display: flex; align-items: flex-end; overflow: hidden; padding: 2px;
+}
+.profile-bar-fill {
+  width: 100%; border-radius: 999px;
+  background: linear-gradient(180deg, var(--blue), color-mix(in srgb, var(--blue) 55%, var(--purple)));
+  transition: height .4s cubic-bezier(.2,.8,.25,1);
+}
+.profile-bar-col.today .profile-bar-fill { background: linear-gradient(180deg, #48c788, var(--blue)); }
+.profile-bar-col small { font-size: 11px; font-weight: 650; color: var(--mut); }
+.profile-bar-col.today small { color: var(--blue-i); font-weight: 800; }
+.profile-globe-card {
+  border-radius: 20px; padding: 16px 18px; color: #eef5ff; min-width: 0;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, .13) 1px, transparent 1px) 0 0 / 16px 16px,
+    radial-gradient(circle at 82% 20%, rgba(98, 237, 255, .3), transparent 52%),
+    linear-gradient(145deg, #0b49c9, #1565f2 62%, #0839a3);
+  border: 1px solid rgba(170, 215, 255, .28); box-shadow: 0 14px 28px -18px rgba(10, 62, 185, .55);
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 14px;
+}
+.profile-globe-copy { display: grid; gap: 6px; min-width: 0; }
+.profile-globe-copy small { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: rgba(215, 235, 255, .86); }
+.profile-globe-copy small::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #64f0c8; box-shadow: 0 0 8px #64f0c8; }
+.profile-globe-copy strong { font-size: 20px; letter-spacing: -.03em; line-height: 1.15; }
+.profile-globe-copy p { margin: 0; font-size: 12px; color: rgba(235, 245, 255, .86); line-height: 1.45; }
+.ascii-globe-box {
+  margin: 0; padding: 10px 12px; border-radius: 15px;
+  background: rgba(4, 16, 54, .42); border: 1px solid rgba(180, 225, 255, .25);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+  font: 700 clamp(6.6px, 1.5vw, 7.6px)/1.08 var(--mono); letter-spacing: .02em; color: #dff5ff;
+  user-select: none; white-space: pre; text-align: center; max-width: 100%; overflow: hidden;
+}
+.profile-screen-hero {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+  padding: 18px 22px; margin: 10px 0 18px; border-radius: 22px; color: #eef5ff;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, .14) 1px, transparent 1px) 0 0 / 15px 15px,
+    radial-gradient(circle at 86% 22%, rgba(98, 237, 255, .28), transparent 52%),
+    linear-gradient(142deg, #0b49c9, #1565f2 64%, #0839a3);
+  border: 1px solid rgba(170, 215, 255, .28);
+  box-shadow: 0 14px 28px -18px rgba(10, 62, 185, .45);
+}
+.profile-screen-hero h1 { margin: 2px 0 3px !important; font-size: clamp(23px, 3vw, 31px) !important; color: #ffffff; }
+.profile-screen-hero p { margin: 0; font-size: 12.5px; color: rgba(232, 244, 255, .86); }
+.profile-hero-badge {
+  width: 46px; height: 46px; border-radius: 15px; flex: none;
+  display: grid; place-items: center; color: #ffffff;
+  background: rgba(255, 255, 255, .16); border: 1px solid rgba(255, 255, 255, .26);
+}
+.profile-hero-badge .ic { width: 22px; height: 22px; }
+@media (max-width: 780px) { .profile-insights { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 620px) { .profile-globe-card { grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; } .profile-globe-copy small { justify-self: center; } }
 .profile-activity-description { display: grid; min-width: 0; gap: 3px; }
 .profile-activity-description b { font-size: 14px; overflow-wrap: anywhere; }
 .profile-activity-description small, .profile-activity-time { color: var(--mut); font-size: 12px; }
@@ -2089,18 +2422,93 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
   border: 1px solid var(--line);
   border-radius: 22px; padding: 22px 24px; box-shadow: var(--sh-l);
 }
+.modal-box--atlas {
+  padding: 0; overflow: hidden; display: flex; flex-direction: column;
+  border-color: color-mix(in srgb, var(--blue) 28%, var(--line));
+}
+.modal-atlas-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 15px 20px; color: #eef5ff;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, .14) 1px, transparent 1px) 0 0 / 15px 15px,
+    radial-gradient(circle at 86% 18%, rgba(98, 237, 255, .26), transparent 52%),
+    linear-gradient(138deg, #0b49c9, #1565f2 62%, #0839a3);
+  border-bottom: 1px solid rgba(175, 215, 255, .24);
+}
+.modal-atlas-head--emerald {
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, .14) 1px, transparent 1px) 0 0 / 15px 15px,
+    radial-gradient(circle at 86% 18%, rgba(125, 255, 216, .28), transparent 52%),
+    linear-gradient(138deg, #0d6e66, #1565f2 68%, #093595);
+}
+.modal-atlas-title { display: flex; align-items: center; gap: 11px; min-width: 0; }
+.modal-atlas-icon {
+  width: 36px; height: 36px; border-radius: 11px; flex: none;
+  display: grid; place-items: center;
+  background: rgba(255, 255, 255, .16); border: 1px solid rgba(255, 255, 255, .26); color: #ffffff;
+}
+.modal-atlas-kicker {
+  display: block; font-size: 10px; font-weight: 750; letter-spacing: .06em;
+  text-transform: uppercase; color: rgba(215, 235, 255, .86);
+}
+.modal-atlas-head h3, .modal-atlas-head h2 { margin: 1px 0 0; font-size: 17px; color: #ffffff; letter-spacing: -.02em; }
+.modal-atlas-head .btn {
+  background: rgba(255, 255, 255, .16); color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, .28);
+}
+.modal-atlas-head .btn:hover { background: rgba(255, 255, 255, .26); }
+.modal-atlas-body { padding: 18px 22px 22px; overflow-y: auto; min-height: 0; }
+
+.shortcuts-visual-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 560px) { .shortcuts-visual-grid { grid-template-columns: 1fr; } }
+.shortcut-vis-card {
+  display: grid; gap: 6px; padding: 13px 14px; border-radius: 15px;
+  background:
+    radial-gradient(circle, var(--paper-dot) 1px, transparent 1px) 0 0 / 16px 16px,
+    var(--surface);
+  border: 1px solid var(--line);
+}
+.shortcut-vis-top { display: flex; align-items: center; gap: 8px; }
+.shortcut-vis-ic {
+  width: 30px; height: 30px; border-radius: 9px; flex: none;
+  display: grid; place-items: center;
+  background: var(--blue-s); color: var(--blue-i);
+}
+.shortcut-vis-ic.g { background: var(--green-s); color: var(--green-i); }
+.shortcut-vis-ic.p { background: var(--purple-s); color: var(--purple); }
+.shortcut-vis-ic.a { background: var(--amber-s); color: var(--amber-i); }
+.shortcut-vis-card b { font-size: 13px; letter-spacing: -.015em; }
+.shortcut-vis-card small { font-size: 12px; color: var(--mut); line-height: 1.45; }
+.shortcuts-kbd-strip {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; padding-top: 12px;
+  border-top: 1px solid var(--line); font-size: 11.5px; color: var(--mut);
+}
+.shortcuts-kbd-strip kbd {
+  font-family: var(--mono); font-size: 11px; font-weight: 700;
+  padding: 2px 6px; border-radius: 6px; background: var(--surface); border: 1px solid var(--line); color: var(--ink);
+}
 
 .demo-drawer {
   position: fixed; left: 88px; bottom: 16px;
   width: min(420px, calc(100vw - 108px)); max-height: 75vh;
   background: var(--card); color: var(--ink);
-  border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--sh-l);
+  border: 1px solid color-mix(in srgb, var(--blue) 28%, var(--line)); border-radius: 20px; box-shadow: var(--sh-l);
   z-index: 75;
   display: flex; flex-direction: column; overflow: hidden;
   opacity: 0; transform: translateY(10px) scale(0.97); transform-origin: bottom left; pointer-events: none;
   transition: opacity 0.18s ease, transform 0.25s ease;
 }
 .demo-drawer.open { opacity: 1; transform: none; pointer-events: auto; }
+.demo-drawer-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 11px 14px; color: #ffffff;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, .13) 1px, transparent 1px) 0 0 / 14px 14px,
+    linear-gradient(135deg, #0d2b6e, #1558d6);
+  border-bottom: 1px solid rgba(175, 215, 255, .24);
+}
+.demo-drawer-head .btn { background: rgba(255, 255, 255, .16); color: #ffffff; border: 1px solid rgba(255, 255, 255, .28); }
+.demo-drawer-head .btn:hover { background: rgba(255, 255, 255, .26); }
 .demo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .demo-btn { text-align: left; padding: 7px 10px; border-radius: 10px; background: var(--surface); font-size: 11.5px; font-weight: 600; color: var(--ink-2); }
 .demo-btn:hover { background: var(--blue-s); color: var(--blue-i); }
@@ -2194,6 +2602,9 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
 </style>
+<link rel="stylesheet" href="tab-ripasso-profilo.css">
+<link rel="stylesheet" href="tab-corsi-archivio.css">
+<link rel="stylesheet" href="tab-studio-tutor.css">
 </head>
 <body>
 
@@ -2533,12 +2944,20 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
                 <button type="button" id="studioSourcesToggle" onclick="toggleStudioSources()">Mostra fonti</button>
                 <button type="button" id="studioWritingStyleButton" onclick="openStudioWritingStyle()">Stile della spiegazione</button>
               </div>
+              <div class="depth-size-row" role="group" aria-label="Dimensione testo lettura">
+                <span>Testo</span>
+                <div class="depth-size-ctrls">
+                  <button type="button" onclick="adjustStudyFontSize(-1)" aria-label="Riduci testo">−</button>
+                  <span id="studyFontSizeLabel">16px</span>
+                  <button type="button" onclick="adjustStudyFontSize(1)" aria-label="Ingrandisci testo">+</button>
+                </div>
+              </div>
             </div>
           </details>
         </div>
 
-        <div class="left-scroll">
-          <div class="doc-sheet" id="leftDocSheet"></div>
+        <div class="left-scroll" id="leftScrollArea" onscroll="if(!document.getElementById('explainSelPop')?.classList.contains('hidden'))hideExplainSelPop()">
+          <div class="doc-sheet" id="leftDocSheet" onmousedown="if(!event.target.closest('button,input,textarea,.tut-chip,.diag-node'))hideExplainSelPop()" onmouseup="handleExplainSelection(event)" onkeyup="handleExplainSelection(event)"></div>
         </div>
       </div>
 
@@ -2546,18 +2965,49 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
       <div class="splitter" id="paneSplitter" role="separator" aria-orientation="vertical" aria-label="Ridimensiona pannelli"></div>
 
       <!-- RIGHT PANE: OBSIDIAN-STYLE MICRO-GRID NOTEBOOK + FLOATING DOCK -->
-      <div class="pane paper-pane">
+      <div class="pane paper-pane" id="paperPane" data-note-style="tech" data-note-font="serif">
         <div class="pane-top">
           <div style="display:flex;align-items:center;gap:8px;min-width:0">
             <svg class="ic" style="width:14px;height:14px;color:var(--blue)"><use href="#i-book"/></svg>
             <b style="font-size:13px">I miei appunti</b>
             <span class="chip g" id="saveChip" role="status" style="height:22px;font-size:11px"><span class="d"></span><span id="saveText">Salvato</span></span>
           </div>
-          <div style="display:flex;align-items:center;gap:6px">
+          <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap">
             <button type="button" class="studio-control" id="noteToolsButton" aria-controls="paperDockWrap" aria-pressed="false" onclick="toggleNoteTools()">
               <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19 10 5l6 14M6 15h8M16 11h5m-2.5-2.5v5"/></svg>
               Strumenti
             </button>
+            <div class="note-menu-wrap static-pop">
+              <button type="button" class="studio-control" id="noteStyleButton" aria-controls="noteStylePop" aria-expanded="false" onclick="event.stopPropagation();toggleNoteStyleMenu()">Aa</button>
+              <div class="note-style-pop hidden" id="noteStylePop" onclick="event.stopPropagation()">
+                <div class="note-style-title">Theme Style foglio</div>
+                <div class="note-style-swatches" role="group" aria-label="Stile del foglio">
+                  <button type="button" class="note-style-swatch on" data-swatch="tech" onclick="setNoteStyle('tech')"><b>Aa</b><span>Griglia</span></button>
+                  <button type="button" class="note-style-swatch" data-swatch="minimal" onclick="setNoteStyle('minimal')"><b>Aa</b><span>Pulito</span></button>
+                  <button type="button" class="note-style-swatch" data-swatch="warm" onclick="setNoteStyle('warm')"><b>Aa</b><span>Caldo</span></button>
+                  <button type="button" class="note-style-swatch" data-swatch="contrast" onclick="setNoteStyle('contrast')"><b>Aa</b><span>Scuro</span></button>
+                </div>
+                <div class="note-style-title">Carattere appunti</div>
+                <div class="note-font-row" role="group" aria-label="Carattere appunti">
+                  <button type="button" class="on" data-nfont="serif" onclick="setNoteFont('serif')">Serif</button>
+                  <button type="button" data-nfont="sans" onclick="setNoteFont('sans')">Sans</button>
+                  <button type="button" data-nfont="mono" onclick="setNoteFont('mono')">Mono</button>
+                </div>
+              </div>
+            </div>
+            <div class="note-menu-wrap static-pop">
+              <button type="button" class="studio-control" id="noteShareButton" aria-controls="noteSharePop" aria-expanded="false" onclick="event.stopPropagation();toggleNoteShareMenu()">
+                <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
+                Condividi
+              </button>
+              <div class="note-share-pop hidden" id="noteSharePop" onclick="event.stopPropagation()">
+                <div class="note-style-title">Condivisione &amp; Obsidian</div>
+                <button type="button" onclick="copyNoteShareLink();toggleNoteShareMenu(false)">Copia link nota <span>🔗</span></button>
+                <button type="button" onclick="copyNoteObsidianMarkdown();toggleNoteShareMenu(false)">Copia per Obsidian <span>.md</span></button>
+                <button type="button" onclick="exportMarkdown();toggleNoteShareMenu(false)">Scarica file Markdown <span>↓</span></button>
+                <div class="note-share-linkbox" id="noteSharePreviewUrl">tutorai.app/note/lamport-v1</div>
+              </div>
+            </div>
             <select id="revSelect" aria-label="Versione degli appunti" onchange="switchRevision(this.value)" style="background:var(--sunken);border:0;border-radius:7px;padding:4px 6px;font-size:11.5px;font-weight:600;color:var(--ink)">
               <option value="v1">v1 · Bozza</option>
             </select>
@@ -2576,7 +3026,16 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
           </div>
         </div>
 
-        <div class="note-scroll" id="noteScrollArea" tabindex="-1" ondragover="allowStudyAssetDrop(event)" ondrop="dropStudyAsset(event)"></div>
+        <div class="note-scroll" id="noteScrollArea" tabindex="-1" ondragover="allowStudyAssetDrop(event)" ondrop="dropStudyAsset(event)" onmouseup="handleNoteTextSelection()" onkeyup="handleNoteTextSelection()"></div>
+        <div class="note-selection-pop hidden" id="noteSelectionPop" role="toolbar" aria-label="Evidenzia o formatta selezione" onmousedown="event.preventDefault()">
+          <button type="button" title="Evidenzia giallo" onclick="highlightNoteSelection('amber')"><i class="hl-dot amber"></i></button>
+          <button type="button" title="Evidenzia azzurro" onclick="highlightNoteSelection('blue')"><i class="hl-dot blue"></i></button>
+          <button type="button" title="Evidenzia verde" onclick="highlightNoteSelection('green')"><i class="hl-dot green"></i></button>
+          <span class="dock-sep"></span>
+          <button type="button" onclick="formatNote('bold')" title="Grassetto"><b>B</b></button>
+          <button type="button" onclick="formatNote('italic')" title="Corsivo"><i>I</i></button>
+          <button type="button" onclick="formatNote('code')" title="Codice">&lt;/&gt;</button>
+        </div>
 
         <!-- OBSIDIAN-STYLE FLOATING FORMATTING DOCK -->
         <div class="paper-dock-wrap" id="paperDockWrap">
@@ -2608,34 +3067,75 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
         <div class="note-bottom-bar" id="noteBottomBar"></div>
       </div>
     </div>
+    <div class="explain-sel-pop hidden" id="explainSelPop" role="dialog" aria-label="Chiedi al tutor sul testo selezionato" onclick="event.stopPropagation()">
+      <div class="explain-sel-head">
+        <div class="explain-sel-meta">
+          <span class="explain-sel-kicker" id="explainSelKicker">Testo selezionato · Chiedi al tutor</span>
+          <div class="explain-sel-quote" id="explainSelQuote"></div>
+        </div>
+        <button type="button" class="explain-sel-close" aria-label="Chiudi" onclick="hideExplainSelPop()">✕</button>
+      </div>
+      <div class="explain-sel-actions" id="explainSelActions">
+        <button type="button" class="primary" onclick="runExplainSelAction('approfondisci')">Approfondisci</button>
+        <button type="button" onclick="runExplainSelAction('semplifica')">Semplifica</button>
+        <button type="button" onclick="runExplainSelAction('esempio')">Esempio</button>
+        <button type="button" onclick="runExplainSelAction('to_note')">+ Negli appunti</button>
+        <button type="button" onclick="hideExplainSelPop();openStudioWritingStyle()">Adatta stile</button>
+        <button type="button" id="explainSelCompareBtn" class="hidden" onclick="runExplainSelAction('diff')">Confronta appunti</button>
+        <button type="button" id="explainSelSourceBtn" onclick="openExplainSelSource()">Fonte</button>
+      </div>
+      <div class="explain-sel-ask">
+        <input id="explainSelInput" type="text" placeholder="Chiedi qualsiasi cosa su questa selezione..." onkeydown="if(event.key==='Enter'){event.preventDefault();submitExplainSelQuestion();}">
+        <button type="button" onclick="submitExplainSelQuestion()">Chiedi →</button>
+      </div>
+    </div>
     <dialog class="studio-complete-dialog" id="studioCompleteDialog" aria-labelledby="studioCompleteHeading">
-      <span class="studio-complete-icon"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>
-      <h2 id="studioCompleteHeading">Studio completato</h2>
-      <p id="studioCompleteLesson"></p>
-      <div class="studio-complete-actions">
-        <button type="button" class="btn" onclick="leaveCompletedStudy(false)">Torna al corso</button>
-        <button type="button" class="btn blue-pri" autofocus onclick="leaveCompletedStudy(true)">Fai il quiz <span aria-hidden="true">→</span></button>
+      <div class="modal-atlas-head modal-atlas-head--emerald">
+        <div class="modal-atlas-title">
+          <span class="studio-complete-icon"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>
+          <div>
+            <span class="modal-atlas-kicker">Knowledge Brain · Nodo registrato</span>
+            <h2 id="studioCompleteHeading">Studio completato</h2>
+          </div>
+        </div>
+      </div>
+      <div class="studio-complete-body">
+        <p id="studioCompleteLesson"></p>
+        <div class="studio-complete-actions">
+          <button type="button" class="btn" onclick="leaveCompletedStudy(false)">Torna al corso</button>
+          <button type="button" class="btn blue-pri" autofocus onclick="leaveCompletedStudy(true)">Fai il quiz <span aria-hidden="true">→</span></button>
+        </div>
       </div>
     </dialog>
     <dialog class="studio-style-dialog" id="studioStyleDialog" aria-labelledby="studioStyleHeading">
       <form onsubmit="applyStudioWritingStyle(event)">
-        <h2 id="studioStyleHeading">Stile della spiegazione</h2>
-        <p class="muted">La demo applica il formato scelto e conserva le tue indicazioni per questa sessione.</p>
-        <label>Come vuoi leggere?
-          <select class="input-field" name="writingMode" id="studioWritingMode" autofocus>
-            <option value="adatta">Adatta dalle indicazioni</option>
-            <option value="originale">Stile originale</option>
-            <option value="diretta">Più diretta</option>
-            <option value="passaggi">Per passaggi</option>
-            <option value="esempi">Con un esempio</option>
-          </select>
-        </label>
-        <label>Indicazioni per il tutor <span class="muted">(facoltativo)</span>
-          <textarea class="input-field" id="studioWritingInstruction" name="writingInstruction" maxlength="240" placeholder="Per esempio: introduci prima i simboli che userai"></textarea>
-        </label>
-        <div class="studio-style-actions">
-          <button type="button" class="btn" onclick="document.getElementById('studioStyleDialog').close()">Annulla</button>
-          <button type="submit" class="btn blue-pri">Applica allo Studio</button>
+        <div class="modal-atlas-head">
+          <div class="modal-atlas-title">
+            <span class="modal-atlas-icon"><svg class="ic" aria-hidden="true"><use href="#i-pencil"/></svg></span>
+            <div>
+              <span class="modal-atlas-kicker">Scrittura adattiva · Studio</span>
+              <h2 id="studioStyleHeading">Stile della spiegazione</h2>
+            </div>
+          </div>
+        </div>
+        <div class="studio-style-body">
+          <p class="muted" style="font-size:12.5px">La demo applica il formato scelto e conserva le tue indicazioni per questa sessione.</p>
+          <label>Come vuoi leggere?
+            <select class="input-field" name="writingMode" id="studioWritingMode" autofocus>
+              <option value="adatta">Adatta dalle indicazioni</option>
+              <option value="originale">Stile originale</option>
+              <option value="diretta">Più diretta</option>
+              <option value="passaggi">Per passaggi</option>
+              <option value="esempi">Con un esempio</option>
+            </select>
+          </label>
+          <label>Indicazioni per il tutor <span class="muted">(facoltativo)</span>
+            <textarea class="input-field" id="studioWritingInstruction" name="writingInstruction" maxlength="240" placeholder="Per esempio: introduci prima i simboli che userai"></textarea>
+          </label>
+          <div class="studio-style-actions">
+            <button type="button" class="btn" onclick="document.getElementById('studioStyleDialog').close()">Annulla</button>
+            <button type="submit" class="btn blue-pri">Applica allo Studio</button>
+          </div>
         </div>
       </form>
     </dialog>
@@ -2663,11 +3163,14 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 
 <!-- DISCRETE PROTOTYPE CONTROLLER -->
 <aside class="demo-drawer" id="demoDrawer" aria-label="Pannello rapido stati prototipo">
-  <div class="pane-top" style="padding:10px 14px">
-    <b style="font-size:13px">Stati prototipo &amp; JSON</b>
+  <div class="demo-drawer-head">
+    <div>
+      <span class="modal-atlas-kicker">Sandbox stati · Prototipo</span>
+      <b style="font-size:13.5px;display:block">Stati rapidi &amp; JSON</b>
+    </div>
     <div style="display:flex;gap:6px">
-      <button class="btn" style="height:25px;font-size:11px;padding:0 9px" onclick="resetPrototype()">Ripristina</button>
-      <button class="btn" style="height:25px;font-size:11px;padding:0 9px" onclick="toggleDemoDrawer()">✕</button>
+      <button class="btn" style="height:26px;font-size:11px;padding:0 9px" onclick="resetPrototype()">Ripristina</button>
+      <button class="btn" style="height:26px;font-size:11px;padding:0 9px" onclick="toggleDemoDrawer()">✕</button>
     </div>
   </div>
   <div style="padding:12px 14px;overflow-y:auto;display:flex;flex-direction:column;gap:10px">
@@ -2692,105 +3195,161 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
      MODALS
      ========================================================================= -->
 <div class="modal-bg" id="modalAddLesson" role="dialog" aria-modal="true">
-  <div class="modal-box">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-      <div>
-        <span class="chip b" style="height:22px;font-size:11px;margin-bottom:4px">Lezione per lezione</span>
-        <h3 style="margin:0;font-size:17px">Aggiungi lezione di oggi</h3>
+  <div class="modal-box modal-box--atlas">
+    <div class="modal-atlas-head">
+      <div class="modal-atlas-title">
+        <span class="modal-atlas-icon"><svg class="ic" aria-hidden="true"><use href="#i-course-plus"/></svg></span>
+        <div>
+          <span class="modal-atlas-kicker">Lezione per lezione · Flusso continuo</span>
+          <h3>Aggiungi lezione di oggi</h3>
+        </div>
       </div>
       <button class="btn" onclick="closeModal('modalAddLesson')">Chiudi</button>
     </div>
 
-    <div class="grid-2" style="gap:10px;margin-bottom:12px">
-      <div>
-        <label for="addLessonCourseSelect" style="display:block;font-size:12px;font-weight:600;color:var(--mut);margin-bottom:4px">Corso</label>
-        <select id="addLessonCourseSelect" class="input-field" style="padding:8px 10px" onchange="syncAddLessonSuggestions()"></select>
+    <div class="modal-atlas-body">
+      <div class="grid-2" style="gap:10px;margin-bottom:12px">
+        <div>
+          <label for="addLessonCourseSelect" style="display:block;font-size:12px;font-weight:600;color:var(--mut);margin-bottom:4px">Corso</label>
+          <select id="addLessonCourseSelect" class="input-field" style="padding:8px 10px" onchange="syncAddLessonSuggestions()"></select>
+        </div>
+        <div>
+          <label for="addLessonTitleInput" style="display:block;font-size:12px;font-weight:600;color:var(--mut);margin-bottom:4px">Argomento della lezione</label>
+          <input id="addLessonTitleInput" class="input-field" style="padding:8px 10px" type="text" placeholder="es. Integrali doppi, Snapshot Globale...">
+        </div>
       </div>
-      <div>
-        <label for="addLessonTitleInput" style="display:block;font-size:12px;font-weight:600;color:var(--mut);margin-bottom:4px">Argomento della lezione</label>
-        <input id="addLessonTitleInput" class="input-field" style="padding:8px 10px" type="text" placeholder="es. Integrali doppi, Snapshot Globale...">
+
+      <div id="addLessonChips" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px"></div>
+
+      <input type="file" id="addLessonRealFile" accept=".pdf,.txt,.md" class="hidden" onchange="handleAddLessonFileInput(this.files)">
+      <div class="pickzone" id="addLessonDropzone" onclick="document.getElementById('addLessonRealFile').click()" style="padding:14px">
+        <div class="pickzone-icon"><svg class="ic" style="width:19px;height:19px"><use href="#i-upload"/></svg></div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:700" id="addLessonFileLabel">Scegli o trascina il PDF di oggi</div>
+          <div style="font-size:12px;color:var(--mut)">I tuoi appunti precedenti restano intatti</div>
+        </div>
       </div>
-    </div>
 
-    <div id="addLessonChips" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px"></div>
+      <div id="addLessonProgress" class="hidden" style="margin-top:10px"></div>
 
-    <input type="file" id="addLessonRealFile" accept=".pdf,.txt,.md" class="hidden" onchange="handleAddLessonFileInput(this.files)">
-    <div class="pickzone" id="addLessonDropzone" onclick="document.getElementById('addLessonRealFile').click()" style="padding:14px">
-      <div class="pickzone-icon"><svg class="ic" style="width:19px;height:19px"><use href="#i-upload"/></svg></div>
-      <div style="flex:1;min-width:0">
-        <div style="font-size:13px;font-weight:700" id="addLessonFileLabel">Scegli o trascina il PDF di oggi</div>
-        <div style="font-size:12px;color:var(--mut)">I tuoi appunti precedenti restano intatti</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px">
+        <button class="btn" onclick="submitAddLesson(true)">Simula PDF e accoda</button>
+        <button class="btn blue-pri" onclick="submitAddLesson(false)">Aggiungi al corso →</button>
       </div>
-    </div>
-
-    <div id="addLessonProgress" class="hidden" style="margin-top:10px"></div>
-
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px">
-      <button class="btn" onclick="submitAddLesson(true)">Simula PDF e accoda</button>
-      <button class="btn pri" onclick="submitAddLesson(false)">Aggiungi al corso →</button>
     </div>
   </div>
 </div>
 
 <div class="modal-bg" id="modalSource" role="dialog" aria-modal="true">
-  <div class="modal-box">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-      <h3 style="margin:0;font-size:17px">Fonte collegata</h3>
+  <div class="modal-box modal-box--atlas">
+    <div class="modal-atlas-head">
+      <div class="modal-atlas-title">
+        <span class="modal-atlas-icon"><svg class="ic" aria-hidden="true"><use href="#i-file"/></svg></span>
+        <div>
+          <span class="modal-atlas-kicker">Riferimento originale · Dispensa / Slide</span>
+          <h3>Fonte collegata</h3>
+        </div>
+      </div>
       <button class="btn" onclick="closeModal('modalSource')">Chiudi</button>
     </div>
-    <div id="modalSourceBody"></div>
+    <div class="modal-atlas-body" id="modalSourceBody"></div>
   </div>
 </div>
 
 <div class="modal-bg" id="modalCourseDetails" role="dialog" aria-modal="true">
-  <div class="modal-box">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-      <h3 style="margin:0;font-size:17px" id="modalCourseDetailsTitle">Materiali del corso</h3>
+  <div class="modal-box modal-box--atlas">
+    <div class="modal-atlas-head">
+      <div class="modal-atlas-title">
+        <span class="modal-atlas-icon"><svg class="ic" aria-hidden="true"><use href="#i-folder"/></svg></span>
+        <div>
+          <span class="modal-atlas-kicker">Knowledge Vault · Fonti caricate</span>
+          <h3 id="modalCourseDetailsTitle">Materiali del corso</h3>
+        </div>
+      </div>
       <button class="btn" onclick="closeModal('modalCourseDetails')">Chiudi</button>
     </div>
-    <div id="courseSourcesBody"></div>
-    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px">
-      <button class="btn" onclick="closeModal('modalCourseDetails');openAddLessonModal(app.courseId)">+ Aggiungi lezione</button>
-      <button class="btn pri" onclick="closeModal('modalCourseDetails');setView('studio')">Apri Studio →</button>
+    <div class="modal-atlas-body">
+      <div id="courseSourcesBody"></div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px;flex-wrap:wrap">
+        <button class="btn" onclick="closeModal('modalCourseDetails');openAddLessonModal(app.courseId)">+ Aggiungi lezione</button>
+        <button class="btn blue-pri" onclick="closeModal('modalCourseDetails');setView('studio')">Apri Studio →</button>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="modal-bg" id="modalShortcuts" role="dialog" aria-modal="true">
-  <div class="modal-box">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-      <div style="display:flex;align-items:center;gap:10px">
-        <img src="assets/logo.png" alt="Logo TutorAI" width="28" height="28" style="border-radius:8px">
-        <h3 style="margin:0;font-size:17px">Come funziona TutorAI</h3>
+  <div class="modal-box modal-box--atlas">
+    <div class="modal-atlas-head">
+      <div class="modal-atlas-title">
+        <span class="modal-atlas-icon"><img src="assets/logo.png" alt="Logo TutorAI" width="24" height="24" style="border-radius:6px"></span>
+        <div>
+          <span class="modal-atlas-kicker">Guida rapida · 4 passi essenziali</span>
+          <h3>Come funziona TutorAI</h3>
+        </div>
       </div>
       <button class="btn" onclick="closeModal('modalShortcuts')">Chiudi</button>
     </div>
-    <ul style="font-size:13.5px;line-height:1.7;color:var(--ink-2);padding-left:18px;margin:0">
-      <li><b>Lezione per lezione:</b> carica oggi la prima lezione e usa <i>+ Aggiungi lezione</i> quando il prof spiega nuovi argomenti, senza perdere gli appunti precedenti.</li>
-      <li><b>Prepara un esame:</b> carica tutte le dispense in blocco e ottieni una scansione temporale fino alla data dell'esame.</li>
-      <li><b>Studio a due pannelli:</b> a sinistra approfondisci spiegazioni e slide dalle tue fonti; a destra scrivi nel tuo foglio personale.</li>
-      <li><b>Verifica autonoma:</b> controlla a memoria cosa ricordi davvero e trasforma i concetti in padroni.</li>
-    </ul>
+    <div class="modal-atlas-body">
+      <div class="shortcuts-visual-grid">
+        <div class="shortcut-vis-card">
+          <div class="shortcut-vis-top"><span class="shortcut-vis-ic"><svg class="ic" aria-hidden="true"><use href="#i-course-plus"/></svg></span><b>Lezione per lezione</b></div>
+          <small>Accoda i PDF di ogni lezione mantenendo gli appunti precedenti intatti.</small>
+        </div>
+        <div class="shortcut-vis-card">
+          <div class="shortcut-vis-top"><span class="shortcut-vis-ic a"><svg class="ic" aria-hidden="true"><use href="#i-calendar"/></svg></span><b>Prepara un esame</b></div>
+          <small>Carica le dispense insieme e ottieni un calendario ordinato fino all’appello.</small>
+        </div>
+        <div class="shortcut-vis-card">
+          <div class="shortcut-vis-top"><span class="shortcut-vis-ic p"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg></span><b>Studio + Appunti</b></div>
+          <small>Seleziona qualsiasi frase per chiedere al tutor o salva formule nel tuo foglio.</small>
+        </div>
+        <div class="shortcut-vis-card">
+          <div class="shortcut-vis-top"><span class="shortcut-vis-ic g"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span><b>Knowledge Brain</b></div>
+          <small>Supera i richiami a memoria per accendere ogni concetto nella tua rete.</small>
+        </div>
+      </div>
+      <div class="shortcuts-kbd-strip">
+        <span><kbd>Seleziona testo</kbd> Chiedi al tutor</span>
+        <span><kbd>Ctrl</kbd> + <kbd>K</kbd> Archivio Vault</span>
+        <span><kbd>Esc</kbd> Chiudi pannelli</span>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class="modal-bg" id="modalStudyHistory" role="dialog" aria-modal="true">
-  <div class="modal-box">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-      <div>
-        <h3 style="margin:0;font-size:17px">Storico lezioni studiate</h3>
-        <div style="font-size:12px;color:var(--mut)">Clicca una lezione recente per riaprirla nello Studio</div>
+  <div class="modal-box modal-box--atlas">
+    <div class="modal-atlas-head">
+      <div class="modal-atlas-title">
+        <span class="modal-atlas-icon"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg></span>
+        <div>
+          <span class="modal-atlas-kicker">Diario recente · Studio</span>
+          <h3>Storico lezioni studiate</h3>
+        </div>
       </div>
       <button class="btn" onclick="closeModal('modalStudyHistory')">Chiudi</button>
     </div>
-    <div id="studyHistoryBody"></div>
+    <div class="modal-atlas-body">
+      <div style="font-size:12px;color:var(--mut);margin-bottom:10px">Clicca una lezione recente per riaprirla nello Studio</div>
+      <div id="studyHistoryBody"></div>
+    </div>
   </div>
 </div>
 
 <dialog id="fileFinder" class="file-finder" aria-labelledby="finderTitle">
   <header class="finder-top">
-    <h2 id="finderTitle">Archivio</h2>
-    <form method="dialog"><button type="submit" class="btn" autofocus>Chiudi</button></form>
+    <div class="finder-title-group">
+      <span class="finder-kicker">Knowledge Vault · Compatibile Obsidian</span>
+      <h2 id="finderTitle">Archivio</h2>
+    </div>
+    <div class="finder-top-actions">
+      <label class="search-pill finder-search">
+        <svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
+        <input id="finderSearchInput" type="search" aria-label="Cerca nell'archivio" placeholder="Cerca appunti o file..." oninput="app.finderQuery=this.value;renderFileFinder()">
+      </label>
+      <form method="dialog"><button type="submit" class="btn" autofocus>Chiudi</button></form>
+    </div>
   </header>
   <div class="finder-grid">
     <nav id="finderCourses" class="finder-nav" aria-label="Cartelle dei corsi"></nav>
@@ -3097,7 +3656,15 @@ function makeInitialState() {
     wizardStep: 1,
     demoMaterialsOpen: false,
     noteMenuOpen: false,
+    noteStyleMenuOpen: false,
+    noteShareMenuOpen: false,
     noteToolsPinned: false,
+    noteStyle: 'tech',
+    noteFont: 'serif',
+    studyFontSize: 16,
+    finderQuery: '',
+    ripassoSelectedDay: 0,
+    ripassoChecklistDone: {},
     sbCourseMenuOpen: false,
     sidebarOpen: false,
     courseId: 'sistemi',
@@ -3167,6 +3734,7 @@ function makeInitialState() {
     depth: 'completa',
     activeDiagramEvent: 'e22',
     selectedPara: null,
+    explainSel: null,
     showStudioSources: false,
     showSourceComparison: false,
     unitNotes: {},
@@ -3240,7 +3808,8 @@ function icon(id, cls = '') { return `<svg class="ic ${cls}" aria-hidden="true">
 const STEM_ICONS = [
   { id: 'nodes', label: 'Reti / Sistemi' },
   { id: 'wave', label: 'Analisi / Funzioni' },
-  { id: 'db', label: 'Dati / Strutture' },
+  { id: 'db', label: 'Basi di Dati / SQL' },
+  { id: 'lock', label: 'Sicurezza / Crittografia' },
   { id: 'matrix', label: 'Algebra / Calcolo' },
   { id: 'atom', label: 'Fisica / Scienze' }
 ];
@@ -3253,7 +3822,7 @@ function softTint(accent) {
 const COURSE_COVERS = {
   nodes: 'assets/course-covers/sistemi.webp',
   wave: 'assets/course-covers/algoritmi.webp',
-  db: 'assets/course-covers/crypto.webp',
+  db: 'assets/course-covers/db.webp',
   lock: 'assets/course-covers/crypto.webp',
   matrix: 'assets/course-covers/algebra.webp',
   atom: 'assets/course-covers/fisica.webp'
@@ -3385,6 +3954,7 @@ function recordStudyActivity(cid, uid, actionLabel, kind = 'studio', subText = '
 
 function setView(v) {
   app.view = v;
+  hideExplainSelPop();
   if (v === 'attivita') app.accountPage = app.demoSessionOpen ? 'activity' : 'login';
   if (v !== 'studio' || window.innerWidth <= 960) app.sidebarOpen = false;
   if (v === 'studio') recordStudyActivity(app.courseId, app.unitId, 'Studio in corso', 'studio');
@@ -3633,6 +4203,7 @@ function renderHomeView() {
 
   document.getElementById('coursesCardsGrid').innerHTML = courses.map(c => {
     const verified = c.units.filter(u => u.stato === 'dimostrato').length;
+    const pct = c.units.length ? Math.round((verified / c.units.length) * 100) : 0;
     return `
       <button type="button" class="course-card" style="--course-accent:${c.accent}" onclick="openCourseDetail('${c.id}')">
         <span class="course-banner ${COURSE_COVERS[c.kind] ? '' : 'course-art-fallback'}" style="background-color:${softTint(c.accent)}" aria-hidden="true">
@@ -3641,6 +4212,7 @@ function renderHomeView() {
         </span>
         <span class="course-body">
           <span class="course-title-line"><strong>${escapeCourseText(c.nome)}</strong><span class="course-card-arrow" aria-hidden="true">${icon('i-course-arrow')}</span></span>
+          <span class="course-progress" aria-hidden="true"><i style="width:${pct}%"></i></span>
           <span class="course-meta">
             <span>${verified} di ${c.units.length} unità verificate</span>
             ${c.units.some(u => u.stato === 'da_ripassare') ? '<span class="course-recall">Da ripassare</span>' : ''}
@@ -3661,8 +4233,9 @@ function renderCourseDetailView() {
     || course.units.find(u => ['in_corso', 'studiato_da_verificare', 'non_studiato'].includes(u.stato));
   const labels = {
     dimostrato: 'Verificata', in_corso: 'Riprendi',
-    studiato_da_verificare: 'Fai il quiz', da_ripassare: 'Ripassa', non_studiato: 'Da iniziare'
+    studiato_da_verificare: 'Studiata', da_ripassare: 'Da ripassare', non_studiato: 'Da iniziare'
   };
+  const ocrIssues = course.sources.filter(s => !s.ok).length;
 
   target.innerHTML = `
     <button type="button" class="btn ghost detail-back" onclick="openHomeHub()">← Corsi</button>
@@ -3678,6 +4251,7 @@ function renderCourseDetailView() {
       <header class="detail-actions">
         <h2 id="courseLessonsTitle">Lezioni del corso</h2>
         <div>
+          ${ocrIssues ? `<button type="button" class="detail-ocr-pill" onclick="openFileFinder('${course.id}', 'sources')">${icon('i-alert')} ${plural(ocrIssues, 'file senza OCR', 'file senza OCR')}</button>` : ''}
           <button type="button" class="btn" onclick="openFileFinder('${course.id}')">${icon('i-folder')} Materiali</button>
           <button type="button" class="btn" onclick="openAddLessonModal('${course.id}')">+ Aggiungi lezione</button>
         </div>
@@ -3687,16 +4261,17 @@ function renderCourseDetailView() {
           const state = labels[u.stato] || 'Apri';
           const highlighted = u.id === next?.id;
           const verified = u.stato === 'dimostrato';
-          const action = ['studiato_da_verificare', 'da_ripassare'].includes(u.stato)
-            ? `startRipassoSessionFor('${course.id}', '${u.id}')`
-            : `selectUnit('${u.id}')`;
+          const needsQuiz = ['studiato_da_verificare', 'da_ripassare'].includes(u.stato);
           return `
-            <li><button type="button" class="unit-row ${highlighted ? 'cur' : ''}"${highlighted ? ' aria-current="step"' : ''} onclick="${action}">
-              <span class="unit-num-box ${verified ? 'done' : highlighted ? 'cur' : ''}" aria-hidden="true">${verified ? icon('i-check') : escapeCourseText(u.num)}</span>
-              <strong>${escapeCourseText(u.titolo.startsWith(u.num + ' ') ? u.titolo.slice(u.num.length + 1) : u.titolo)}</strong>
-              <span class="unit-state">${highlighted && u.stato === 'non_studiato' ? 'Inizia' : state}</span>
-              <span class="unit-chevron" aria-hidden="true">${icon('i-course-arrow')}</span>
-            </button></li>`;
+            <li class="unit-row-wrap">
+              <button type="button" class="unit-row ${highlighted ? 'cur' : ''}"${highlighted ? ' aria-current="step"' : ''} onclick="selectUnit('${u.id}')">
+                <span class="unit-num-box ${verified ? 'done' : highlighted ? 'cur' : ''}" aria-hidden="true">${verified ? icon('i-check') : escapeCourseText(u.num)}</span>
+                <strong>${escapeCourseText(u.titolo.startsWith(u.num + ' ') ? u.titolo.slice(u.num.length + 1) : u.titolo)}</strong>
+                <span class="unit-state">${highlighted && u.stato === 'non_studiato' ? 'Inizia' : state}</span>
+                <span class="unit-chevron" aria-hidden="true">${icon('i-course-arrow')}</span>
+              </button>
+              ${needsQuiz ? `<button type="button" class="unit-quick-quiz" onclick="startRipassoSessionFor('${course.id}', '${u.id}')">${u.stato === 'da_ripassare' ? 'Ripassa →' : 'Fai il quiz →'}</button>` : ''}
+            </li>`;
         }).join('')}
       </ol>
     </section>`;
@@ -3708,8 +4283,11 @@ const FINDER_FOLDERS = [
   { id: 'sources', title: 'Slide e allegati', icon: 'i-file' }
 ];
 
-function openFileFinder(courseId = app.courseId) {
-  app.finder = { courseId, folder: '', index: null };
+function openFileFinder(courseId = app.courseId, folder = '') {
+  app.finder = { courseId, folder, index: null };
+  app.finderQuery = '';
+  const searchEl = document.getElementById('finderSearchInput');
+  if (searchEl) searchEl.value = '';
   renderFileFinder();
   document.getElementById('fileFinder').showModal();
 }
@@ -3729,6 +4307,30 @@ function openFinderInStudio(unitId, destination) {
   setMobilePane(destination === 'notes' ? 'right' : 'left');
 }
 
+function exportFinderMarkdown(courseId, unitId, folder) {
+  const course = COURSES_DATA[courseId];
+  const unit = course?.units.find(u => u.id === unitId);
+  if (!course || !unit) return;
+  let md = '';
+  if (folder === 'notes') {
+    const note = app.unitNotes[courseId + ':' + unit.id] || makeDefaultUnitNote(courseId, unit);
+    md = `# ${note.title}\n\n` + note.blocks.map(b => `## ${b.sec}\n${serializeNoteBlockMarkdown(b)}`).join('\n\n');
+  } else {
+    const prof = getUnitTopicProfile(course, unit);
+    md = `# ${unit.titolo}\n\n${prof.formula}\n\n${prof.para}\n\n## Passaggi\n${prof.steps.map(s => `- ${s}`).join('\n')}`;
+  }
+  try {
+    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `${unit.num}-${slugify(unit.short || unit.titolo)}.md`;
+    a.click();
+    showToast('File .md esportato per Obsidian');
+  } catch (_) {
+    showToast('Markdown pronto');
+  }
+}
+
 function releaseFinderObjectUrl() {
   if (!app.finderObjectUrl) return;
   URL.revokeObjectURL(app.finderObjectUrl);
@@ -3745,6 +4347,7 @@ function renderFileFinder() {
   });
   const filesByFolder = { notes: noteUnits, generated: course.units, sources: course.sources };
   const folderInfo = FINDER_FOLDERS.find(item => item.id === folder);
+  const query = (app.finderQuery || '').trim().toLowerCase();
   const files = filesByFolder[folder] || [];
   const file = files[index];
 
@@ -3760,6 +4363,26 @@ function renderFileFinder() {
       ${folderInfo ? `<span aria-hidden="true">›</span>
         <button class="finder-crumb" type="button" onclick="navigateFinder('${courseId}', '${folder}')">${folderInfo.title}</button>` : ''}
     </nav>`;
+
+  if (query && !file) {
+    const matches = [];
+    FINDER_FOLDERS.forEach(fInfo => {
+      (filesByFolder[fInfo.id] || []).forEach((entry, i) => {
+        const note = fInfo.id === 'notes' ? app.unitNotes[courseId + ':' + entry.id] : null;
+        const title = fInfo.id === 'sources' ? entry.nome : note?.title || entry.titolo;
+        const meta = fInfo.id === 'sources' ? entry.info : note ? `Unità ${entry.num} · ${note.version}` : `Unità ${entry.num}`;
+        if ((title + ' ' + meta + ' ' + fInfo.title).toLowerCase().includes(query)) {
+          matches.push({ fInfo, entry, i, title, meta });
+        }
+      });
+    });
+    content.insertAdjacentHTML('beforeend', matches.map(({ fInfo, i, title, meta }) => `
+      <button class="finder-file" type="button" onclick="app.finderQuery='';document.getElementById('finderSearchInput').value='';navigateFinder('${courseId}', '${fInfo.id}', ${i})">
+        ${icon(fInfo.icon)} <span><strong>${escapeCourseText(title)}</strong><small>${escapeCourseText(fInfo.title + ' · ' + meta)}</small></span>
+        <span aria-hidden="true">›</span>
+      </button>`).join('') || '<p class="finder-empty">Nessun risultato per questa ricerca.</p>');
+    return;
+  }
 
   if (!folderInfo) {
     content.insertAdjacentHTML('beforeend', `<div class="finder-folders">${FINDER_FOLDERS.map(item => `
@@ -3791,12 +4414,18 @@ function renderFileFinder() {
     : file;
   const title = folder === 'sources' ? file.nome : note?.title || file.titolo;
   const excerpt = folder === 'sources' ? [file.info] : note ? note.blocks.map(block => block.text) : [profile.para, ...profile.steps];
+  const isList = folder !== 'sources' && excerpt.some(t => t.startsWith('• ') || /^\d+\./.test(t));
   content.insertAdjacentHTML('beforeend', `
     <section class="finder-preview">
       <h3>${escapeCourseText(title)}</h3>
-      ${excerpt.map(text => `<p>${escapeCourseText(text)}</p>`).join('')}
+      ${isList
+        ? `<ul class="finder-preview-list">${excerpt.map(text => `<li>${escapeCourseText(text.replace(/^•\s*/, ''))}</li>`).join('')}</ul>`
+        : excerpt.map(text => `<p>${escapeCourseText(text)}</p>`).join('')}
       ${folder === 'sources' && file.file ? '<div id="finderAttachment"></div>' : ''}
-      ${linkedUnit ? `<button type="button" class="btn pri" onclick="openFinderInStudio('${linkedUnit.id}', '${folder}')">${folder === 'sources' ? 'Apri slide in Studio' : folder === 'notes' ? 'Apri appunti in Studio' : 'Apri spiegazione in Studio'} →</button>` : ''}
+      <div class="finder-preview-actions">
+        ${linkedUnit ? `<button type="button" class="btn pri" onclick="openFinderInStudio('${linkedUnit.id}', '${folder}')">${folder === 'sources' ? 'Apri slide in Studio' : folder === 'notes' ? 'Apri appunti in Studio' : 'Apri spiegazione in Studio'} →</button>` : ''}
+        ${folder !== 'sources' && linkedUnit ? `<button type="button" class="btn" onclick="exportFinderMarkdown('${courseId}', '${linkedUnit.id}', '${folder}')">Esporta .md Obsidian</button>` : ''}
+      </div>
     </section>`);
   renderMath(content);
 
@@ -4330,6 +4959,7 @@ function selectCourse(cid) {
   app.leftTab = 'explain';
   app.slidePage = cid === 'sistemi' ? 12 : 1;
   app.selectedPara = null;
+  hideExplainSelPop();
   app.showSourceComparison = false;
   app.recallMcqSubmitted = false;
   app.recallOpenSubmitted = false;
@@ -4346,6 +4976,7 @@ function selectUnit(uid) {
   app.unitId = uid;
   app.slidePage = app.courseId === 'sistemi' && uid === 'u13' ? 12 : 1;
   app.selectedPara = null;
+  hideExplainSelPop();
   app.showSourceComparison = false;
   syncActiveNoteAlias();
   syncRevSelect();
@@ -4420,6 +5051,7 @@ function renderSidebar() {
    ============================================================================ */
 function setLeftTab(tab) {
   app.leftTab = tab;
+  hideExplainSelPop();
   document.getElementById('tabExplain').classList.toggle('on', tab === 'explain');
   document.getElementById('tabSlides').classList.toggle('on', tab === 'slides');
   renderLeftPane();
@@ -4434,6 +5066,14 @@ function setDepth(d) {
     menu.querySelector('summary').focus();
   }
   renderLeftPane();
+}
+
+function adjustStudyFontSize(delta) {
+  app.studyFontSize = Math.min(22, Math.max(13, (app.studyFontSize || 16) + delta));
+  const studioView = document.getElementById('view-studio');
+  if (studioView) studioView.style.setProperty('--study-font-size', app.studyFontSize + 'px');
+  const label = document.getElementById('studyFontSizeLabel');
+  if (label) label.textContent = app.studyFontSize + 'px';
 }
 
 function selectDiagramEvent(evId) { app.activeDiagramEvent = evId; renderLeftPane(); }
@@ -4484,48 +5124,238 @@ function renderStudioWritingAid(mode, steps, example) {
   return '';
 }
 
-function openParaPopup(pid) { app.selectedPara = app.selectedPara === pid ? null : pid; renderLeftPane(); }
+let lastExplainSelAt = 0;
 
-function handleParaMouseUp(pid) {
+function hideExplainSelPop() {
+  app.explainSel = null;
+  document.getElementById('explainSelPop')?.classList.add('hidden');
+  document.querySelectorAll('#leftDocSheet .para.sel').forEach(el => el.classList.remove('sel'));
+}
+
+function getSelectedExplainText(sel, range) {
+  try {
+    const frag = range.cloneContents();
+    const box = document.createElement('div');
+    box.appendChild(frag);
+    box.querySelectorAll('.katex-mathml, .para-act, .src-pill').forEach(el => el.remove());
+    const cleaned = (box.textContent || sel.toString() || '').replace(/\s+/g, ' ').trim();
+    if (cleaned) return cleaned;
+  } catch (_) {}
+  return (sel.toString() || '').replace(/\s+/g, ' ').trim();
+}
+
+function positionExplainSelPop(rect, pid, quoteText, meta = {}) {
+  const pop = document.getElementById('explainSelPop');
+  if (!pop || !rect) return;
+  const quoteClean = String(quoteText || '').replace(/\s+/g, ' ').trim();
+  const shortQuote = quoteClean.length > 130 ? quoteClean.slice(0, 127) + '…' : quoteClean;
+  app.explainSel = {
+    pid,
+    text: quoteClean,
+    viaButton: Boolean(meta.viaButton),
+    sourceFile: meta.sourceFile || '',
+    pageNum: meta.pageNum || 1
+  };
+  document.querySelectorAll('#leftDocSheet .para.sel').forEach(el => el.classList.remove('sel'));
+  if (pid) {
+    document.querySelector(`#leftDocSheet .para[data-para-id="${pid}"]`)?.classList.add('sel');
+  }
+
+  const kickerEl = document.getElementById('explainSelKicker');
+  const quoteEl = document.getElementById('explainSelQuote');
+  const cmpBtn = document.getElementById('explainSelCompareBtn');
+  const srcBtn = document.getElementById('explainSelSourceBtn');
+  const inputEl = document.getElementById('explainSelInput');
+  if (kickerEl) kickerEl.textContent = meta.viaButton ? 'Passaggio selezionato · Chiedi al tutor' : 'Selezione testo · Chiedi al tutor';
+  if (quoteEl) {
+    quoteEl.textContent = shortQuote ? `«${shortQuote}»` : '';
+    quoteEl.classList.toggle('hidden', !shortQuote);
+  }
+  if (cmpBtn) cmpBtn.classList.toggle('hidden', pid !== 'p-viceversa');
+  if (srcBtn) srcBtn.classList.toggle('hidden', app.leftTab === 'slides' && !meta.sourceFile);
+  if (inputEl) inputEl.value = '';
+
+  pop.classList.remove('hidden', 'above');
+  pop.style.left = '0px';
+  pop.style.top = '0px';
+
+  const popRect = pop.getBoundingClientRect();
+  const popW = popRect.width || 368;
+  const popH = popRect.height || 210;
+  const anchorX = rect.left + (rect.width || 24) / 2;
+  const left = Math.min(window.innerWidth - popW - 10, Math.max(10, anchorX - popW / 2));
+  const preferAbove = rect.bottom + popH + 22 > window.innerHeight && rect.top > popH + 22;
+  let top = preferAbove ? rect.top - popH - 12 : rect.bottom + 12;
+  top = Math.min(window.innerHeight - popH - 10, Math.max(10, top));
+
+  pop.classList.toggle('above', preferAbove);
+  pop.style.left = Math.round(left) + 'px';
+  pop.style.top = Math.round(top) + 'px';
+  const arrowLeft = Math.min(popW - 28, Math.max(18, Math.round(anchorX - left - 6)));
+  pop.style.setProperty('--arrow-left', arrowLeft + 'px');
+}
+
+function handleExplainSelection(event) {
+  const target = event?.target;
+  if (target?.closest?.('button, input, textarea, select, summary, .tut-chip, .diag-node, .study-transfer-actions, .slide-nav, .sources-compare-grid')) {
+    return;
+  }
+  const sheet = document.getElementById('leftDocSheet');
   const sel = window.getSelection();
-  if (sel && sel.toString().trim().length > 6) { app.selectedPara = pid; renderLeftPane(); }
+  if (!sheet || !sel || sel.isCollapsed || sel.rangeCount === 0) {
+    return;
+  }
+  const range = sel.getRangeAt(0);
+  if (!sheet.contains(range.commonAncestorContainer)) return;
+  const text = getSelectedExplainText(sel, range);
+  if (text.length < 3) return;
+
+  const anchorEl = sel.anchorNode?.nodeType === 1 ? sel.anchorNode : sel.anchorNode?.parentElement;
+  const paraEl = anchorEl?.closest?.('[data-para-id]');
+  const pid = paraEl?.dataset.paraId || (app.leftTab === 'slides' ? `p-slide-${app.slidePage || 1}` : 'p-doc');
+  const rect = range.getBoundingClientRect();
+  const fallbackRect = !rect || (!rect.width && !rect.height) ? range.getClientRects?.()[0] : rect;
+  if (!fallbackRect || (!fallbackRect.width && !fallbackRect.height)) return;
+
+  lastExplainSelAt = Date.now();
+  positionExplainSelPop(fallbackRect, pid, text, {
+    viaButton: false,
+    sourceFile: paraEl?.dataset.sourceFile || '',
+    pageNum: Number(paraEl?.dataset.pageNum || app.slidePage || 1)
+  });
 }
 
-function askTutorOnPara(pid, mode) {
+function openParaAskFromButton(pid, btnEl) {
+  const paraEl = btnEl?.closest?.('.para');
+  const clone = paraEl?.querySelector('p')?.cloneNode(true);
+  clone?.querySelectorAll('.katex-mathml, .para-act, .src-pill').forEach(el => el.remove());
+  const raw = (clone?.textContent || '').replace(/\s+/g, ' ').trim();
+  const excerpt = raw.length > 96 ? raw.slice(0, 93) + '…' : raw;
+  const rect = btnEl.getBoundingClientRect();
+  lastExplainSelAt = Date.now();
+  positionExplainSelPop(rect, pid, excerpt, {
+    viaButton: true,
+    sourceFile: paraEl?.dataset.sourceFile || '',
+    pageNum: Number(paraEl?.dataset.pageNum || 1)
+  });
+  requestAnimationFrame(() => document.getElementById('explainSelInput')?.focus({ preventScroll: true }));
+}
+
+function buildSelectedTutorReply(mode, customQuestion, sel, c, u, prof) {
+  const text = (sel?.text || '').trim();
+  const shortRef = text && !sel?.viaButton ? (text.length > 96 ? text.slice(0, 93) + '…' : text) : '';
+  const isLamport = c.id === 'sistemi' && u.id === 'u13';
+  const mentionsOrder = /C\(a\)|C\(b\)|causal|viceversa|inversa|concorrent|messagg/i.test(text);
+
+  if (customQuestion) {
+    const answer = isLamport
+      ? `Sulla selezione ("${customQuestion}"): la condizione $a \\to b \\implies C(a) < C(b)$ vale lungo ogni catena causale di messaggi; per eventi senza cammino causale ($a \\parallel b$) i contatori possono crescere indipendentemente.`
+      : `Sulla tua domanda ("${customQuestion}") in ${u.short}: ${prof.para}`;
+    return { tag: `Domanda al tutor: "${customQuestion}"`, quote: shortRef, text: answer, collapsed: false };
+  }
+  const replies = {
+    approfondisci: {
+      tag: 'Approfondimento tutor AI',
+      quote: shortRef,
+      text: isLamport && mentionsOrder
+        ? 'Formalmente $C(a) < C(b)$ è condizione necessaria ma non sufficiente per $a \\to b$: per rendere equivalente la relazione servono gli orologi vettoriali $V(a) < V(b)$.'
+        : `Approfondimento su ${u.short}: ${prof.para}`,
+      collapsed: false
+    },
+    semplifica: {
+      tag: 'Spiegato diversamente',
+      quote: shortRef,
+      text: isLamport
+        ? 'In parole semplici: un contatore più piccolo dice che l’evento potrebbe precedere l’altro solo se esiste un messaggio che collega i due processi.'
+        : `Concentrati prima sul punto centrale di "${u.short}": ${prof.steps[0] || prof.para}`,
+      collapsed: false
+    },
+    esempio: {
+      tag: 'Esempio svolto',
+      quote: shortRef,
+      text: isLamport
+        ? 'Prendi due nodi isolati $P_1$ e $P_3$ senza messaggi: $C(e_{3,1})=1$ e $C(e_{2,2})=2$, quindi $1 < 2$, ma gli eventi sono concorrenti ($e_{3,1} \\parallel e_{2,2}$).'
+        : (prof.slides?.[2] || prof.steps.join(' · ')),
+      collapsed: false
+    }
+  };
+  return replies[mode] || replies.approfondisci;
+}
+
+function runExplainSelAction(mode) {
+  const sel = app.explainSel;
+  if (!sel) return;
+  if (mode === 'to_note') {
+    appendExcerptToNote(sel.text);
+    hideExplainSelPop();
+    return;
+  }
+  if (mode === 'diff') {
+    app.showSourceComparison = true;
+    const pid = sel.pid || 'p-viceversa';
+    hideExplainSelPop();
+    renderLeftPane();
+    updateDemoJson();
+    requestAnimationFrame(() => document.querySelector(`[data-clarify-pid="${pid}"]`)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }));
+    return;
+  }
   const c = COURSES_DATA[app.courseId];
   const u = c.units.find(x => x.id === app.unitId) || c.units[0];
   const prof = getUnitTopicProfile(c, u);
-  const map = {
-    approfondisci: { tag: 'Approfondimento tutor AI', text: `Nota formale (${u.short}): ${prof.para}`, collapsed: false },
-    semplifica: { tag: 'Spiegato diversamente', text: app.courseId === 'sistemi' ? 'Se due processi non scambiano messaggi tra due eventi, non puoi dedurre la causa leggendo solo i contatori locali.' : `Concentrati sul passo 1 di "${u.short}" prima di applicare la formula generale.`, collapsed: false },
-    esempio: { tag: 'Esempio svolto', text: app.courseId === 'sistemi' ? 'Prendi due nodi isolati con $C(A)=1$ e $C(B)=3$: $1 < 3$, ma non esiste alcun cammino causale.' : prof.slides[2] || prof.steps.join(' '), collapsed: false },
-    poco_chiaro: { tag: 'Riformulazione semplice', text: prof.steps.join(' · '), collapsed: false }
-  };
-  if (mode === 'diff') app.showSourceComparison = true;
-  else if (mode === 'esercizio') { startRipassoSessionFor(app.courseId, app.unitId); return; }
-  else { getActiveUnitNote().clarified[pid] = map[mode]; syncActiveNoteAlias(); }
-  renderLeftPane();
-  updateDemoJson();
-}
-
-function askCustomOnPara(pid) {
-  const inp = document.getElementById('tutorCustomQ_' + pid);
-  const q = inp ? inp.value.trim() : '';
-  if (!q) { showToast('Scrivi prima la tua domanda sul passaggio'); return; }
-  const c = COURSES_DATA[app.courseId];
-  const u = c.units.find(x => x.id === app.unitId) || c.units[0];
-  const prof = getUnitTopicProfile(c, u);
-  const answer = app.courseId === 'sistemi' && u.id === 'u13'
-    ? `Riguardo a "${q}": la condizione $a \\to b \\implies C(a) < C(b)$ garantisce solo la coerenza in avanti lungo le catene causali; per eventi isolati ($a \\parallel b$) i contatori possono crescere in qualsiasi ordine.`
-    : `Sulla tua domanda ("${q}") in ${u.short}: ${prof.para}`;
-  getActiveUnitNote().clarified[pid] = {
-    tag: `Domanda sul passaggio: "${q}"`,
-    text: answer,
-    collapsed: false
-  };
+  const pid = sel.pid || 'p-doc';
+  getActiveUnitNote().clarified[pid] = buildSelectedTutorReply(mode, '', sel, c, u, prof);
   syncActiveNoteAlias();
+  hideExplainSelPop();
   renderLeftPane();
   updateDemoJson();
+  requestAnimationFrame(() => document.querySelector(`[data-clarify-pid="${pid}"]`)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }));
+}
+
+function submitExplainSelQuestion() {
+  const inp = document.getElementById('explainSelInput');
+  const q = inp ? inp.value.trim() : '';
+  if (!q) { showToast('Scrivi prima la tua domanda sul testo selezionato'); return; }
+  const sel = app.explainSel || { pid: 'p-doc', text: '' };
+  const c = COURSES_DATA[app.courseId];
+  const u = c.units.find(x => x.id === app.unitId) || c.units[0];
+  const prof = getUnitTopicProfile(c, u);
+  const pid = sel.pid || 'p-doc';
+  getActiveUnitNote().clarified[pid] = buildSelectedTutorReply('custom', q, sel, c, u, prof);
+  syncActiveNoteAlias();
+  hideExplainSelPop();
+  renderLeftPane();
+  updateDemoJson();
+  requestAnimationFrame(() => document.querySelector(`[data-clarify-pid="${pid}"]`)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }));
+}
+
+function openExplainSelSource() {
+  const sel = app.explainSel;
+  if (!sel) return;
+  const f = sel.sourceFile;
+  const pg = sel.pageNum || app.slidePage || 1;
+  hideExplainSelPop();
+  openSourceModal(f, pg);
+}
+
+function appendExcerptToNote(excerpt) {
+  const note = getActiveUnitNote();
+  if (!canInsertStudyAsset(note)) {
+    showToast('Apri la versione corrente degli appunti per inserire contenuti');
+    return;
+  }
+  const text = String(excerpt || '').replace(/\s+/g, ' ').trim();
+  if (!text) return;
+  if (note.noteBlank) {
+    note.noteBlank = false;
+    note.blocks = [];
+  }
+  const lastSec = note.blocks.length ? note.blocks[note.blocks.length - 1].sec : 'Dalla spiegazione';
+  note.blocks.push({ id: 'nb-' + Date.now(), sec: lastSec, text: `• «${text}»` });
+  syncActiveNoteAlias();
+  renderRightPane();
+  showSaveFeedback();
+  if (window.matchMedia('(max-width: 900px)').matches) setMobilePane('right');
+  showToast('Passaggio salvato nei tuoi appunti');
 }
 
 function toggleClarifyCollapse(pid) {
@@ -4552,11 +5382,11 @@ function openSourceModal(filename, pageNum) {
       <span class="chip b">${escapeCourseText(fileUsed)}</span>
       <span class="chip">Pagina ${page}</span>
     </div>
-    <div style="background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;font-size:13.5px;line-height:1.65;color:var(--ink-2)">
+    <div style="background:radial-gradient(circle, var(--paper-dot) 1px, transparent 1px) 0 0 / 16px 16px, var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:13.5px;line-height:1.65;color:var(--ink-2)">
       ${prof.para}
     </div>
-    <div style="margin-top:12px;display:flex;justify-content:flex-end">
-      <button class="btn pri" data-unit="${(sourceUnit || u).id}" data-page="${page}" onclick="openSourceSlides(this.dataset.unit, Number(this.dataset.page))">${sourceUnit ? 'Apri slide in Studio' : 'Apri le slide dell’unità'}</button>
+    <div style="margin-top:14px;display:flex;justify-content:flex-end">
+      <button class="btn blue-pri" data-unit="${(sourceUnit || u).id}" data-page="${page}" onclick="openSourceSlides(this.dataset.unit, Number(this.dataset.page))">${sourceUnit ? 'Apri slide in Studio →' : 'Apri le slide dell’unità →'}</button>
     </div>`;
   openModal('modalSource');
 }
@@ -4643,8 +5473,8 @@ function renderLeftPane() {
     if (isLamport) {
       const lSlides = {
         11: '<b>Contesto asincrono:</b> Nessun clock fisico condiviso; ogni nodo mantiene il proprio contatore scalare $C_i$.',
-        12: '<b>Definizione 2.1:</b> $C_i \\leftarrow C_i + 1$ ad ogni evento; alla ricezione di $(m,t)$, $C_j \\leftarrow \\max(C_j, t) + 1$.<br><b>Teorema:</b> $a\\to b \\implies C(a)<C(b)$, non vale il viceversa.',
-        13: '<b>Concorrenza ($a \\parallel b$):</b> Due eventi su processi distinti senza catene di messaggi possono avere $C(a) < C(b)$ pur essendo indipendenti.',
+        12: '<b>Definizione 2.1:</b> $C_i \\leftarrow C_i + 1$ ad ogni evento; alla ricezione di $(m,t)$, $C_j \\leftarrow \\max(C_j, t) + 1$.<br><b>Teorema:</b> $a\\to b \\implies C(a) &lt; C(b)$, non vale il viceversa.',
+        13: '<b>Concorrenza ($a \\parallel b$):</b> Due eventi su processi distinti senza catene di messaggi possono avere $C(a) &lt; C(b)$ pur essendo indipendenti.',
         14: '<b>Passaggio agli orologi vettoriali:</b> Estendendo lo scalare a un vettore $V[1..N]$ si ottiene anche la condizione sufficiente.'
       };
       slideBody = lSlides[pg] || lSlides[12];
@@ -4662,16 +5492,17 @@ function renderLeftPane() {
           <button class="btn" style="height:28px;font-size:12px" onclick="app.slidePage=Math.min(${totalSlides},${pg}+1);renderLeftPane()">Succ. →</button>
         </div>
       </div>
-      <div class="slide-frame">
-        <div style="display:flex;justify-content:space-between;font-size:11px;color:#71717a;border-bottom:1px solid #e4e4e7;padding-bottom:8px;margin-bottom:14px">
+      <div class="slide-frame" data-para-id="p-slide-${pg}" data-source-file="${escapeCourseText(unitFile)}" data-page-num="${pg}">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--mut);border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:14px">
           <span>${u.titolo}</span>
           <span class="mono">${pg}/${totalSlides}</span>
         </div>
-        <div style="font-size:14px;line-height:1.68;color:#27272a">${slideBody}</div>
+        <div style="font-size:14px;line-height:1.68;color:var(--ink)">${slideBody}</div>
         <div style="margin-top:16px;text-align:right">
           <button class="btn" style="height:27px;font-size:11.5px" onclick="setLeftTab('explain')">Torna alla spiegazione</button>
         </div>
-      </div>`;
+      </div>
+      <div class="slide-clarify-slot">${renderClarificationChip('p-slide-' + pg)}</div>`;
     renderMath(sheet);
     return;
   }
@@ -4758,50 +5589,34 @@ function renderStudySource(label, filename, pageNum, className = 'src-pill') {
   return `<button type="button" class="${className}" data-file="${escapeCourseText(filename)}" data-page="${pageNum}" onclick="event.stopPropagation();openSourceModal(this.dataset.file, Number(this.dataset.page))">${escapeCourseText(label)}</button>`;
 }
 
+function renderClarificationChip(pid) {
+  const clar = app.clarifications?.[pid];
+  const compare = app.showSourceComparison && pid === 'p-viceversa' ? `
+    <div class="sources-compare-grid" data-clarify-pid="${pid}">
+      <div><b style="color:var(--blue);font-size:11.5px;display:block;margin-bottom:3px">FONTI DOCENTE</b>$C(a) < C(b)$ è necessaria ma non sufficiente per $a \\to b$.</div>
+      <div><b style="color:var(--amber-i);font-size:11.5px;display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">TUOI APPUNTI <button type="button" class="btn ghost" style="height:18px;font-size:10px;padding:0 5px" onclick="app.showSourceComparison=false;renderLeftPane()">✕</button></b>Scritto: "se $C(A) < C(B)$ allora $A$ ha causato $B$".</div>
+    </div>` : '';
+  const chip = clar ? `
+    <div class="tut-chip" data-clarify-pid="${pid}">
+      <div class="tut-chip-head">
+        <span style="font-size:11px;font-weight:700;color:var(--purple)">${escapeCourseText(clar.tag)}</span>
+        <div style="display:flex;gap:4px">
+          <button type="button" class="btn ghost" style="height:20px;font-size:11px;padding:0 6px" onclick="toggleClarifyCollapse('${pid}')">${clar.collapsed ? 'Espandi' : 'Riduci'}</button>
+          <button type="button" class="btn ghost" style="height:20px;font-size:11px;padding:0 6px" onclick="clearClarification('${pid}')">✕</button>
+        </div>
+      </div>
+      ${clar.collapsed ? '' : `${clar.quote ? `<div class="tut-quote-ref">Su: «${escapeCourseText(clar.quote)}»</div>` : ''}<div>${clar.text}</div>`}
+    </div>` : '';
+  return compare + chip;
+}
+
 function renderPara(pid, text, citeLabel, pageNum, sourceFile = '') {
-  const isSel = app.selectedPara === pid;
-  const clar = app.clarifications[pid];
   const citation = app.showStudioSources ? renderStudySource(citeLabel, sourceFile, pageNum) : '';
   return `
-    <div class="para ${isSel ? 'sel' : ''}" onclick="openParaPopup('${pid}')" onmouseup="handleParaMouseUp('${pid}')">
-      <p>${text}${citation}<button type="button" class="para-act" onclick="event.stopPropagation();openParaPopup('${pid}')">Chiedi al tutor</button></p>
+    <div class="para" data-para-id="${pid}" data-source-file="${escapeCourseText(sourceFile)}" data-page-num="${pageNum}">
+      <p>${text}${citation}<button type="button" class="para-act" onclick="event.stopPropagation();openParaAskFromButton('${pid}', this)">Chiedi al tutor</button></p>
     </div>
-    ${isSel ? `
-      <div class="sel-pop" onclick="event.stopPropagation()">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <span style="font-size:12px;font-weight:700;color:var(--mut)">Passaggio selezionato · Chiedi al tutor</span>
-          <button class="btn ghost" style="height:22px;font-size:11px;padding:0 6px" onclick="app.selectedPara=null;renderLeftPane()">✕</button>
-        </div>
-        <div class="sel-pop-chips">
-          <button class="chip b" onclick="askTutorOnPara('${pid}','approfondisci')">Approfondisci</button>
-          <button class="chip" onclick="askTutorOnPara('${pid}','semplifica')">Spiega diversamente</button>
-          <button class="chip" onclick="askTutorOnPara('${pid}','esempio')">Esempio</button>
-          <button class="chip r" onclick="askTutorOnPara('${pid}','poco_chiaro')">Poco chiaro</button>
-          <button type="button" class="chip" onclick="openStudioWritingStyle()">Adatta la scrittura</button>
-          ${renderStudySource('Mostra fonte', sourceFile, pageNum, 'chip')}
-          ${pid === 'p-viceversa' ? `<button class="chip a" onclick="askTutorOnPara('${pid}','diff')">Confronta appunti</button>` : ''}
-        </div>
-        <div class="sel-ask-row">
-          <input id="tutorCustomQ_${pid}" class="input-field" style="flex:1;padding:7px 11px;font-size:12.5px" type="text" placeholder="Scrivi una domanda su questo passaggio..." onkeydown="if(event.key==='Enter')askCustomOnPara('${pid}')">
-          <button class="btn pri" style="height:32px;font-size:12px;padding:0 12px" onclick="askCustomOnPara('${pid}')">Chiedi →</button>
-        </div>
-        ${app.showSourceComparison && pid === 'p-viceversa' ? `
-          <div class="sources-compare-grid">
-            <div><b style="color:var(--blue);font-size:11.5px;display:block;margin-bottom:3px">FONTI DOCENTE</b>$C(a) < C(b)$ è necessaria ma non sufficiente per $a \\to b$.</div>
-            <div><b style="color:var(--amber-i);font-size:11.5px;display:block;margin-bottom:3px">TUOI APPUNTI</b>Scritto: "se $C(A) < C(B)$ allora $A$ ha causato $B$".</div>
-          </div>` : ''}
-      </div>` : ''}
-    ${clar ? `
-      <div class="tut-chip">
-        <div class="tut-chip-head">
-          <span style="font-size:11px;font-weight:700;color:var(--purple)">${clar.tag}</span>
-          <div style="display:flex;gap:4px">
-            <button class="btn ghost" style="height:20px;font-size:11px;padding:0 6px" onclick="toggleClarifyCollapse('${pid}')">${clar.collapsed ? 'Espandi' : 'Riduci'}</button>
-            <button class="btn ghost" style="height:20px;font-size:11px;padding:0 6px" onclick="clearClarification('${pid}')">✕</button>
-          </div>
-        </div>
-        ${clar.collapsed ? '' : `<div>${clar.text}</div>`}
-      </div>` : ''}`;
+    ${renderClarificationChip(pid)}`;
 }
 
 /* ============================================================================
@@ -4809,8 +5624,125 @@ function renderPara(pid, text, citeLabel, pageNum, sourceFile = '') {
    ============================================================================ */
 function toggleNoteMenu(force) {
   app.noteMenuOpen = typeof force === 'boolean' ? force : !app.noteMenuOpen;
+  if (app.noteMenuOpen) { toggleNoteStyleMenu(false); toggleNoteShareMenu(false); }
   document.getElementById('noteMenuPop').classList.toggle('hidden', !app.noteMenuOpen);
   document.getElementById('noteMenuButton').setAttribute('aria-expanded', String(app.noteMenuOpen));
+}
+
+function toggleNoteStyleMenu(force) {
+  app.noteStyleMenuOpen = typeof force === 'boolean' ? force : !app.noteStyleMenuOpen;
+  if (app.noteStyleMenuOpen) { toggleNoteMenu(false); toggleNoteShareMenu(false); }
+  document.getElementById('noteStylePop')?.classList.toggle('hidden', !app.noteStyleMenuOpen);
+  document.getElementById('noteStyleButton')?.setAttribute('aria-expanded', String(app.noteStyleMenuOpen));
+}
+
+function toggleNoteShareMenu(force) {
+  app.noteShareMenuOpen = typeof force === 'boolean' ? force : !app.noteShareMenuOpen;
+  if (app.noteShareMenuOpen) { toggleNoteMenu(false); toggleNoteStyleMenu(false); }
+  const pop = document.getElementById('noteSharePop');
+  if (pop) pop.classList.toggle('hidden', !app.noteShareMenuOpen);
+  document.getElementById('noteShareButton')?.setAttribute('aria-expanded', String(app.noteShareMenuOpen));
+  const urlEl = document.getElementById('noteSharePreviewUrl');
+  if (urlEl) {
+    const un = getActiveUnitNote();
+    urlEl.textContent = `tutorai.app/note/${slugify(un.title)}-${un.version}`;
+  }
+}
+
+function setNoteStyle(style) {
+  app.noteStyle = style || 'tech';
+  const pane = document.getElementById('paperPane');
+  if (pane) pane.setAttribute('data-note-style', app.noteStyle);
+  document.querySelectorAll('#noteStylePop [data-swatch]').forEach(btn => {
+    btn.classList.toggle('on', btn.dataset.swatch === app.noteStyle);
+  });
+}
+
+function setNoteFont(font) {
+  app.noteFont = font || 'serif';
+  const pane = document.getElementById('paperPane');
+  if (pane) pane.setAttribute('data-note-font', app.noteFont);
+  document.querySelectorAll('#noteStylePop [data-nfont]').forEach(btn => {
+    btn.classList.toggle('on', btn.dataset.nfont === app.noteFont);
+  });
+}
+
+function buildActiveNoteMarkdown() {
+  const un = getActiveUnitNote();
+  const visibleBlocks = un.inspectingVersion === 'v1' && un.snapshot ? un.snapshot : un.blocks;
+  return `# ${un.title}\n\n` + visibleBlocks.map(b => `## ${b.sec}\n${serializeNoteBlockMarkdown(b)}`).join('\n\n');
+}
+
+function copyNoteShareLink() {
+  const un = getActiveUnitNote();
+  const link = `https://tutorai.app/note/${slugify(un.title)}-${un.version}`;
+  navigator.clipboard?.writeText(link).catch(() => {});
+  showToast('Link di sola lettura copiato');
+}
+
+function copyNoteObsidianMarkdown() {
+  const md = buildActiveNoteMarkdown();
+  navigator.clipboard?.writeText(md).catch(() => {});
+  showToast('Markdown copiato per Obsidian');
+}
+
+function hideNoteSelectionPop() {
+  document.getElementById('noteSelectionPop')?.classList.add('hidden');
+}
+
+function handleNoteTextSelection() {
+  const pop = document.getElementById('noteSelectionPop');
+  const sel = window.getSelection();
+  if (!pop || !sel || sel.isCollapsed || !sel.toString().trim()) {
+    hideNoteSelectionPop();
+    return;
+  }
+  const anchorEl = sel.anchorNode?.nodeType === 1 ? sel.anchorNode : sel.anchorNode?.parentElement;
+  const blockEl = anchorEl?.closest?.('.note-block[contenteditable="true"]');
+  if (!blockEl) {
+    hideNoteSelectionPop();
+    return;
+  }
+  const rect = sel.getRangeAt(0).getBoundingClientRect();
+  if (!rect || (!rect.width && !rect.height)) {
+    hideNoteSelectionPop();
+    return;
+  }
+  pop.classList.remove('hidden');
+  const popW = pop.offsetWidth || 210;
+  const left = Math.min(window.innerWidth - popW - 12, Math.max(12, rect.left + rect.width / 2 - popW / 2));
+  const top = Math.max(12, rect.top - 42);
+  pop.style.left = left + 'px';
+  pop.style.top = top + 'px';
+}
+
+function highlightNoteSelection(color) {
+  const sel = window.getSelection();
+  if (!sel || sel.isCollapsed) return;
+  const anchorEl = sel.anchorNode?.nodeType === 1 ? sel.anchorNode : sel.anchorNode?.parentElement;
+  const blockEl = anchorEl?.closest?.('.note-block[contenteditable="true"]');
+  if (!blockEl) return;
+  const range = sel.getRangeAt(0);
+  const existingMark = anchorEl?.closest?.('mark');
+  if (existingMark && existingMark.className === 'hl-' + color) {
+    const parent = existingMark.parentNode;
+    while (existingMark.firstChild) parent.insertBefore(existingMark.firstChild, existingMark);
+    existingMark.remove();
+  } else {
+    const mark = document.createElement('mark');
+    mark.className = 'hl-' + color;
+    try {
+      range.surroundContents(mark);
+    } catch (_) {
+      const frag = range.extractContents();
+      mark.appendChild(frag);
+      range.insertNode(mark);
+    }
+  }
+  blockEl.dataset.dirty = '1';
+  const bid = blockEl.getAttribute('data-block-id');
+  if (bid) updateNoteBlock(bid, blockEl);
+  hideNoteSelectionPop();
 }
 
 function toggleNoteTools() {
@@ -4860,7 +5792,7 @@ function renderNoteTools() {
 function sanitizeNoteHtml(html) {
   const div = document.createElement('div');
   div.innerHTML = html || '';
-  const allowed = new Set(['B', 'STRONG', 'I', 'EM', 'U', 'S', 'DEL', 'STRIKE', 'SUP', 'SUB', 'CODE', 'BR']);
+  const allowed = new Set(['B', 'STRONG', 'I', 'EM', 'U', 'S', 'DEL', 'STRIKE', 'SUP', 'SUB', 'CODE', 'BR', 'MARK']);
   const walk = (node) => {
     [...node.childNodes].forEach(ch => {
       if (ch.nodeType === 1) {
@@ -4868,7 +5800,9 @@ function sanitizeNoteHtml(html) {
           while (ch.firstChild) node.insertBefore(ch.firstChild, ch);
           ch.remove();
         } else {
+          const keepMarkClass = ch.tagName === 'MARK' && /^(hl-amber|hl-blue|hl-green)$/.test(ch.className) ? ch.className : '';
           [...ch.attributes].forEach(a => ch.removeAttribute(a.name));
+          if (keepMarkClass) ch.className = keepMarkClass;
           walk(ch);
         }
       }
@@ -4903,7 +5837,7 @@ function updateNoteBlock(id, elOrTxt) {
       clone.querySelectorAll('.katex-mathml').forEach(m => m.remove());
       b.text = (clone.innerText || clone.textContent || '').replace(/\s+/g, ' ').trim();
       const safeHtml = sanitizeNoteHtml(clone.innerHTML);
-      if (/<(b|strong|i|em|u|s|del|strike|sup|sub|code)\b/i.test(safeHtml) && !b.text.includes('$')) {
+      if (/<(b|strong|i|em|u|s|del|strike|sup|sub|code|mark)\b/i.test(safeHtml) && !b.text.includes('$')) {
         b.richHtml = safeHtml;
       } else {
         delete b.richHtml;
@@ -5153,8 +6087,7 @@ function exportMarkdown() {
   const un = getActiveUnitNote();
   const c = COURSES_DATA[app.courseId];
   const u = c.units.find(x => x.id === app.unitId) || c.units[0];
-  const visibleBlocks = un.inspectingVersion === 'v1' && un.snapshot ? un.snapshot : un.blocks;
-  const md = `# ${un.title}\n\n` + visibleBlocks.map(b => `## ${b.sec}\n${serializeNoteBlockMarkdown(b)}`).join('\n\n');
+  const md = buildActiveNoteMarkdown();
   try {
     const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
     const a = document.createElement('a');
@@ -5659,6 +6592,54 @@ function openVerificationSource(examId, questionIndex) {
   openSourceModal(question.source, question.slidePage || 1);
 }
 
+function selectRipassoDay(dayIdx) {
+  app.ripassoSelectedDay = dayIdx;
+  renderRipassoView();
+}
+
+function toggleChecklistTask(taskKey, courseId, unitId) {
+  app.ripassoChecklistDone[taskKey] = !app.ripassoChecklistDone[taskKey];
+  if (app.ripassoChecklistDone[taskKey] && courseId && unitId) {
+    showToast('Richiamo segnato come completato');
+  }
+  renderRipassoView();
+}
+
+function gradeOpenExam(examId, passed) {
+  const exam = app.completedExams.find(item => item.id === examId);
+  if (!exam) return;
+  exam.openSelfGrade = passed ? 'ok' : 'retry';
+  const course = COURSES_DATA[exam.courseId];
+  const unit = course?.units.find(u => u.id === exam.unitId);
+  if (unit) unit.stato = passed ? 'dimostrato' : 'da_ripassare';
+  const mList = app.masteryByCourse[exam.courseId] || [];
+  const mItem = mList.find(m => m.unitRef === exam.unitId);
+  if (mItem) {
+    mItem.stato = passed ? 'dimostrato' : 'da_ripassare';
+    mItem.score = passed ? 4 : 2;
+    mItem.note = passed ? 'Autovalutazione positiva' : 'Da consolidare';
+  }
+  showToast(passed ? 'Ottimo! Padronanza aggiornata' : 'Segnata in programma per il prossimo ripasso');
+  renderAll();
+}
+
+function getRipassoCalendarDays() {
+  const base = new Date();
+  const tasksByDay = {
+    0: [{ key: 'd0-u12', course: COURSES_DATA.sistemi, unit: COURSES_DATA.sistemi?.units.find(u => u.id === 'u12') || COURSES_DATA.sistemi?.units[0], note: 'Sessione prioritaria · 3 domande' }],
+    1: [{ key: 'd1-a2', course: COURSES_DATA.algoritmi, unit: COURSES_DATA.algoritmi?.units[1], note: 'Richiamo programmato · Prog. Dinamica' }],
+    2: [{ key: 'd2-u13', course: COURSES_DATA.sistemi, unit: COURSES_DATA.sistemi?.units.find(u => u.id === 'u13') || COURSES_DATA.sistemi?.units[0], note: 'Consolidamento Lamport' }],
+    4: [{ key: 'd4-c1', course: COURSES_DATA.crypto, unit: COURSES_DATA.crypto?.units[1], note: 'Richiamo sicurezza IND-CPA' }]
+  };
+  return [0, 1, 2, 3, 4].map(offset => {
+    const d = new Date(base);
+    d.setDate(base.getDate() + offset);
+    const weekday = offset === 0 ? 'Oggi' : new Intl.DateTimeFormat('it-IT', { weekday: 'short' }).format(d).replace('.', '');
+    const tasks = (tasksByDay[offset] || []).filter(t => t.course && t.unit);
+    return { offset, dayNum: d.getDate(), weekday, tasks };
+  });
+}
+
 function renderRipassoView() {
   const container = document.getElementById('ripassoPageContainer');
   if (!container) return;
@@ -5759,8 +6740,13 @@ function renderRipassoView() {
               ${misses ? `<span class="chip r">${plural(misses, 'errore', 'errori')}</span>` : ''}
             </div>
             <h2 id="recallResultScore">${written ? 'Confronta le risposte' : `${exam.correct} su ${exam.total} corrette`}</h2>
-            <p>${written ? 'La demo mostra una risposta modello per ogni domanda.' : recallText(exam.title)}</p>
-            ${archived ? '' : `<button class="btn blue-pri" onclick="app.courseId='${course.id}';selectUnit('${exam.unitId}')">Riapri la lezione →</button>`}
+            <p>${written ? 'Confronta le tue risposte con la traccia modello e aggiorna lo stato della lezione.' : recallText(exam.title)}</p>
+            ${written ? `
+              <div class="recall-open-grade" role="group" aria-label="Autovalutazione risposta scritta">
+                <button type="button" class="btn ok" aria-pressed="${exam.openSelfGrade === 'ok'}" onclick="gradeOpenExam('${exam.id}', true)">${icon('i-check')} Ricordata bene</button>
+                <button type="button" class="btn retry" aria-pressed="${exam.openSelfGrade === 'retry'}" onclick="gradeOpenExam('${exam.id}', false)">Da ripassare</button>
+              </div>` : ''}
+            ${archived ? '' : `<button class="btn blue-pri" style="margin-top:10px" onclick="app.courseId='${course.id}';selectUnit('${exam.unitId}')">Riapri la lezione →</button>`}
           </div>
           <div class="recall-hero-art" aria-hidden="true"><span class="recall-art-sheet">${icon(resultIcon)}</span><i></i></div>
         </div>
@@ -5813,10 +6799,8 @@ function renderRipassoView() {
     : null;
   const selectedCourse = COURSES_DATA[app.ripassoPickCourseId];
   const selectedUnit = selectedCourse?.units.find(unit => unit.id === app.ripassoPickUnitId);
-  const scheduled = [
-    { course: COURSES_DATA.algoritmi, dayOffset: 1 },
-    { course: COURSES_DATA.crypto, dayOffset: 4 }
-  ];
+  const calDays = getRipassoCalendarDays();
+  const activeCalDay = calDays.find(d => d.offset === app.ripassoSelectedDay) || calDays[0];
   const recent = app.completedExams.slice(0, 3);
 
   container.innerHTML = `
@@ -5828,7 +6812,10 @@ function renderRipassoView() {
         <p>${recallText(todayCourse.nome)} · ${todayResult ? 'Senza aiuti' : '3 domande · circa 5 min'}</p>
         ${todayResult
           ? `<button class="btn" onclick="openHistoricalVerification('${todayResult.id}', 'ripasso')">Vedi esito →</button>`
-          : `<button class="btn blue-pri" onclick="startRipassoSessionFor('${todayCourse.id}', '${todayUnit.id}')">Inizia sessione →</button>`}
+          : `<div class="recall-hero-actions">
+               <button class="btn blue-pri" onclick="startRipassoSessionFor('${todayCourse.id}', '${todayUnit.id}', 'mcq')">Inizia sessione →</button>
+               <button class="btn" onclick="startRipassoSessionFor('${todayCourse.id}', '${todayUnit.id}', 'open')">Risposta scritta</button>
+             </div>`}
       </div>
       <div class="recall-hero-illustration" aria-hidden="true">
         <div class="recall-illustration-cover">${courseCoverArt(todayCourse)}</div>
@@ -5873,27 +6860,35 @@ function renderRipassoView() {
 
       <div class="ripasso-col">
         <section class="recall-panel recall-agenda" aria-labelledby="recallAgendaTitle">
-          <h2 id="recallAgendaTitle">Prossimi richiami</h2>
-          ${scheduled.filter(entry => entry.course?.units[1]).map(({ course, dayOffset }) => {
-            const unit = course.units[1];
-            const date = new Date();
-            date.setDate(date.getDate() + dayOffset);
-            const month = new Intl.DateTimeFormat('it-IT', { month: 'short' }).format(date);
-            const done = app.completedExams.find(exam => exam.id.startsWith('ex-') && exam.courseId === course.id && exam.unitId === unit.id && exam.withoutAid && exam.correct >= 2);
-            return `
-              <details>
-                <summary>
-                  <span class="recall-date"><b>${date.getDate()}</b>${month}</span>
-                  <span><strong>${recallText(course.nome)}</strong><small>${done ? 'Completato' : '1 richiamo'}</small></span>
-                  <span class="recall-arrow" aria-hidden="true">›</span>
-                </summary>
-                <button class="recall-choice" onclick="${done ? `openHistoricalVerification('${done.id}', 'ripasso')` : `startRipassoSessionFor('${course.id}', '${unit.id}')`}">
-                  <span class="recall-item-icon ${done ? 'complete' : ''}">${done ? icon('i-check') : icon('i-book')}</span>
-                  <strong>${recallText(unit.titolo)}</strong>
-                  <span class="recall-arrow" aria-hidden="true">›</span>
-                </button>
-              </details>`;
-          }).join('')}
+          <h2 id="recallAgendaTitle">Calendario &amp; checklist richiami</h2>
+          <div class="recall-cal-strip" role="group" aria-label="Prossimi 5 giorni">
+            ${calDays.map(day => {
+              const allDone = day.tasks.length > 0 && day.tasks.every(t => app.ripassoChecklistDone[t.key] || (t.key === 'd0-u12' && app.todayReviewDone));
+              const dotCls = !day.tasks.length ? '' : allDone ? 'done' : 'due';
+              return `
+                <button type="button" class="recall-cal-day" aria-pressed="${day.offset === activeCalDay.offset}" onclick="selectRipassoDay(${day.offset})">
+                  <small>${recallText(day.weekday)}</small>
+                  <b>${day.dayNum}</b>
+                  <span class="recall-cal-dot ${dotCls}" aria-hidden="true"></span>
+                </button>`;
+            }).join('')}
+          </div>
+          <div class="recall-checklist">
+            ${activeCalDay.tasks.length ? activeCalDay.tasks.map(task => {
+              const isDone = Boolean(app.ripassoChecklistDone[task.key] || (task.key === 'd0-u12' && app.todayReviewDone));
+              return `
+                <div class="recall-check-row ${isDone ? 'checked' : ''}">
+                  <button type="button" class="recall-check-btn" role="checkbox" aria-checked="${isDone}" aria-label="Segna ${recallText(task.unit.titolo)} come completata" onclick="toggleChecklistTask('${task.key}', '${task.course.id}', '${task.unit.id}')">
+                    ${isDone ? icon('i-check') : ''}
+                  </button>
+                  <div class="recall-check-copy">
+                    <b>${recallText(task.unit.titolo)}</b>
+                    <small>${recallText(task.course.nome)} · ${recallText(task.note)}</small>
+                  </div>
+                  <button type="button" class="btn" style="height:29px;font-size:11.5px;padding:0 10px" onclick="startRipassoSessionFor('${task.course.id}', '${task.unit.id}')">Ripassa →</button>
+                </div>`;
+            }).join('') : `<p class="profile-empty" style="padding:8px 2px;margin:0;font-size:12.5px">Nessun richiamo fisso per questo giorno — usa <i>Ripasso a scelta</i> per esercitarti liberamente.</p>`}
+          </div>
         </section>
 
         <section class="recall-panel" aria-labelledby="recallHistoryTitle">
@@ -5901,14 +6896,17 @@ function renderRipassoView() {
             <h2 id="recallHistoryTitle">Ultime verifiche</h2>
             <button class="btn ghost" onclick="setView('attivita')">Cronologia →</button>
           </div>
-          ${recent.map(exam => `
+          ${recent.map(exam => {
+            const hasErr = exam.format !== 'open' && exam.correct < exam.total;
+            return `
             <button class="recall-choice" onclick="openHistoricalVerification('${exam.id}', 'ripasso')">
-              <span class="recall-item-icon">${icon('i-check')}</span>
+              <span class="recall-item-icon ${hasErr ? 'incorrect' : 'complete'}">${icon(hasErr ? 'i-alert' : 'i-check')}</span>
               <span><strong>${recallText(exam.title)}</strong><small>${recallText(exam.shortDate)}</small></span>
               ${exam.format === 'open'
                 ? '<span class="recall-score">Confronto</span>'
-                : `<span class="recall-score" aria-label="${exam.correct} su ${exam.total} corrette">${exam.correct}/${exam.total}</span>`}
-            </button>`).join('')}
+                : `<span class="recall-score" style="${hasErr ? 'color:var(--red-i);font-weight:700' : ''}" aria-label="${exam.correct} su ${exam.total} corrette">${exam.correct}/${exam.total}</span>`}
+            </button>`;
+          }).join('')}
         </section>
       </div>
     </div>`;
@@ -5973,17 +6971,25 @@ function saveProfile(event) {
   showToast('Profilo aggiornato');
 }
 
-function leaveDemoAccount() {
+function leaveDemoAccount(mode = 'login') {
   app.demoSessionOpen = false;
   openAccountPage('login');
+  if (window.TutorAuth) window.TutorAuth.open(mode);
 }
 
 function enterDemoAccount(event) {
   event.preventDefault();
-  app.profileEmail = event.currentTarget.elements.namedItem('email').value.trim();
   app.demoSessionOpen = true;
   openAccountPage('activity');
-  showToast('Sessione di prova aperta');
+  showToast('Bentornato sul profilo di ' + (app.profileName || 'Luca'));
+}
+
+function openAuthPortal(mode = 'login') {
+  if (window.TutorAuth) {
+    window.TutorAuth.open(mode);
+  } else {
+    leaveDemoAccount(mode);
+  }
 }
 
 function syncAccountSettings() {
@@ -5999,7 +7005,14 @@ function renderAccountScreen(page) {
     return `
       <div class="profile-screen">
         <button class="btn ghost" onclick="openAccountPage('settings')">← Impostazioni</button>
-        <h1 id="accountHeading" tabindex="-1">Modifica profilo</h1>
+        <header class="profile-screen-hero">
+          <div>
+            <span class="modal-atlas-kicker">Knowledge ID · Identità studente</span>
+            <h1 id="accountHeading" tabindex="-1">Modifica profilo</h1>
+            <p>Personalizza nome visualizzato, percorso di studi e avatar della tua rete.</p>
+          </div>
+          <span class="profile-hero-badge" aria-hidden="true">${icon('i-pencil')}</span>
+        </header>
         <form class="profile-edit-form" onsubmit="saveProfile(event)">
           <fieldset class="profile-avatar-picker">
             <legend>Immagine del profilo</legend>
@@ -6026,6 +7039,18 @@ function renderAccountScreen(page) {
   }
 
   if (page === 'login') {
+    if (window.TutorAuth && typeof window.TutorAuth.renderEmbeddedLoginCard === 'function') {
+      return `
+        <div class="profile-screen">
+          <button class="btn ghost" onclick="openHomeHub()">← Corsi</button>
+          ${window.TutorAuth.renderEmbeddedLoginCard({
+            name: app.profileName,
+            programme: app.profileProgramme,
+            email: app.profileEmail,
+            avatarChoice: app.profileAvatarChoice
+          })}
+        </div>`;
+    }
     return `
       <div class="profile-screen">
         <button class="btn ghost" onclick="openHomeHub()">← Corsi</button>
@@ -6048,7 +7073,14 @@ function renderAccountScreen(page) {
   return `
     <div class="profile-screen">
       <button class="btn ghost" onclick="openAccountPage('activity')">← Profilo</button>
-      <h1 id="accountHeading" tabindex="-1">Impostazioni</h1>
+      <header class="profile-screen-hero">
+        <div>
+          <span class="modal-atlas-kicker">Preferenze · Knowledge Atlas</span>
+          <h1 id="accountHeading" tabindex="-1">Impostazioni</h1>
+          <p>Gestisci tema, profondità delle spiegazioni e accesso al tuo profilo.</p>
+        </div>
+        <span class="profile-hero-badge" aria-hidden="true">${icon('i-settings')}</span>
+      </header>
       <div class="profile-settings">
         <section class="profile-settings-section" aria-labelledby="profileAccountTitle">
           <h2 id="profileAccountTitle">Account</h2>
@@ -6057,8 +7089,11 @@ function renderAccountScreen(page) {
             <button class="btn" onclick="openAccountPage('edit')">${icon('i-pencil')} Modifica profilo</button>
           </div>
           <div class="profile-settings-row">
-            <span>Accesso di prova<small id="profileAccountEmail"></small></span>
-            <button class="btn" onclick="leaveDemoAccount()">${icon('i-logout')} Esci dalla demo</button>
+            <span>Accesso di prova <small id="profileAccountEmail"></small></span>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn" onclick="openAuthPortal('register')">Simula Registrati</button>
+              <button class="btn" onclick="leaveDemoAccount('login')">${icon('i-logout')} Esci</button>
+            </div>
           </div>
         </section>
         <section class="profile-settings-section" aria-labelledby="profileStudioTitle">
@@ -6134,7 +7169,8 @@ function renderAttivitaView() {
       });
       document.getElementById('profileProgrammeInput').value = app.profileProgramme;
     } else if (app.accountPage === 'login') {
-      document.getElementById('profileEmailInput').value = app.profileEmail;
+      const em = document.getElementById('profileEmailInput');
+      if (em) em.value = app.profileEmail;
     } else {
       document.getElementById('profileAccountEmail').textContent = app.profileEmail;
     }
@@ -6143,8 +7179,14 @@ function renderAttivitaView() {
 
   const units = Object.values(COURSES_DATA).flatMap(course => course.units);
   const done = units.filter(unit => unit.stato === 'dimostrato').length;
+  const masteryPct = units.length ? Math.round((done / units.length) * 100) : 0;
   const exams = app.completedExams.filter(exam => exam.withoutAid).length;
   const filters = [['tutto', 'Tutte le attività'], ['studio', 'Studio'], ['appunti', 'Appunti'], ['verifica', 'Verifiche']];
+  const weekBars = [
+    { day: 'Lun', pct: 44 }, { day: 'Mar', pct: 62 }, { day: 'Mer', pct: 35 },
+    { day: 'Gio', pct: 78 }, { day: 'Ven', pct: 55 }, { day: 'Sab', pct: 68 },
+    { day: 'Oggi', pct: Math.min(100, 48 + Math.min(5, app.studyHistory.length) * 8), today: true }
+  ];
   container.innerHTML = `
     <div class="profile-banner">
       <div class="profile-id-wrap">
@@ -6161,9 +7203,32 @@ function renderAttivitaView() {
       </dl>
       <div class="profile-actions">
         <button type="button" class="btn profile-settings-trigger" aria-label="Impostazioni" title="Impostazioni" onclick="openAccountPage('settings')">${icon('i-settings')}</button>
-        <button type="button" class="btn profile-logout" aria-label="Esci dalla demo" title="Esci dalla demo" onclick="leaveDemoAccount()">${icon('i-logout')} Esci</button>
+        <button type="button" class="btn profile-logout" aria-label="Esci dalla demo" title="Esci dalla demo" onclick="leaveDemoAccount('login')">${icon('i-logout')} Esci</button>
       </div>
     </div>
+    <section class="profile-insights" aria-label="Statistiche e conoscenza">
+      <div class="profile-insight-card">
+        <div class="profile-insight-head">
+          <h2>Ritmo della settimana</h2>
+          <span class="chip b">${Object.keys(COURSES_DATA).length} corsi attivi</span>
+        </div>
+        <div class="profile-weekly-bars" aria-label="Andamento settimanale dello studio">
+          ${weekBars.map(bar => `
+            <div class="profile-bar-col ${bar.today ? 'today' : ''}">
+              <div class="profile-bar-track"><span class="profile-bar-fill" style="height:${bar.pct}%"></span></div>
+              <small>${bar.day}</small>
+            </div>`).join('')}
+        </div>
+      </div>
+      <div class="profile-globe-card">
+        <div class="profile-globe-copy">
+          <small>Knowledge Brain · ASCII</small>
+          <strong>${masteryPct}% padronanza</strong>
+          <p>${done} nodi neurali verificati su ${units.length} in ${Object.keys(COURSES_DATA).length} corsi · rete attiva.</p>
+        </div>
+        <pre class="ascii-globe-box" id="asciiGlobe" aria-hidden="true"></pre>
+      </div>
+    </section>
     <section class="profile-activity" aria-labelledby="profileActivityHeading">
       <div class="profile-activity-head">
         <h2 id="profileActivityHeading">Attività recenti</h2>
@@ -6182,6 +7247,37 @@ function renderAttivitaView() {
   programme.textContent = app.profileProgramme;
   programme.hidden = !app.profileProgramme;
   renderProfileTimeline();
+  startAsciiGlobeLoop(masteryPct / 100);
+}
+
+let asciiGlobeAngle = 0.4;
+let asciiGlobeTimer = null;
+let asciiBrainMasteryRatio = 0.44;
+
+function drawAsciiGlobeFrame() {
+  const el = document.getElementById('asciiGlobe');
+  if (!el) return;
+  if (window.TutorBrainAscii && typeof window.TutorBrainAscii.renderFrame === 'function') {
+    window.TutorBrainAscii.renderFrame(el, {
+      masteryRatio: asciiBrainMasteryRatio,
+      phase: asciiGlobeAngle
+    });
+  }
+}
+
+function startAsciiGlobeLoop(masteryRatio) {
+  if (typeof masteryRatio === 'number') asciiBrainMasteryRatio = masteryRatio;
+  clearInterval(asciiGlobeTimer);
+  drawAsciiGlobeFrame();
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+  asciiGlobeTimer = setInterval(() => {
+    if (app.view !== 'attivita' || app.accountPage !== 'activity' || !document.getElementById('asciiGlobe')) {
+      clearInterval(asciiGlobeTimer);
+      return;
+    }
+    asciiGlobeAngle += 0.11;
+    drawAsciiGlobeFrame();
+  }, 95);
 }
 
 function renderProfileTimeline() {
@@ -6218,19 +7314,32 @@ function renderProfileTimeline() {
     const list = group.querySelector('ul');
     rows.forEach(({ activity, course, unit, index }) => {
       const type = activityTypes[activity.kind] || activityTypes.studio;
+      const linkedExam = activity.kind === 'verifica'
+        ? (app.completedExams.find(e => e.id === activity.examId) || app.completedExams.find(e => e.courseId === course.id && e.unitId === unit.id))
+        : null;
+      const hasExamErrors = linkedExam && linkedExam.format !== 'open' && linkedExam.correct < linkedExam.total;
+      const isZeroCorrect = linkedExam && linkedExam.format !== 'open' && linkedExam.correct === 0;
+      const symIcon = hasExamErrors ? 'i-alert' : type.symbol;
+      const symClass = isZeroCorrect ? 'verifica-err' : hasExamErrors ? 'verifica-warn' : activity.kind;
+      const pillClass = hasExamErrors ? 'err' : activity.kind === 'verifica' && linkedExam?.format !== 'open' ? 'ok' : '';
       const li = document.createElement('li');
       li.innerHTML = '<button type="button" class="profile-activity-link">' +
-        '<span class="profile-activity-symbol">' + icon(type.symbol) + '</span>' +
+        '<span class="profile-activity-symbol">' + icon(symIcon) + '</span>' +
         '<span class="profile-activity-description"><b></b><small></small></span>' +
         '<span class="profile-activity-time"></span><span class="profile-activity-chevron" aria-hidden="true">›</span>' +
       '</button>';
       const button = li.firstElementChild;
       button.addEventListener('click', () => openProfileActivity(index));
       button.setAttribute('aria-label', type.label + ' · ' + unit.titolo + ' · ' + course.nome);
-      li.querySelector('.profile-activity-symbol').classList.add(activity.kind);
+      li.querySelector('.profile-activity-symbol').classList.add(symClass);
       li.querySelector('b').textContent = unit.titolo;
       li.querySelector('small').textContent = course.nome + ' · ' + activity.label;
-      li.querySelector('.profile-activity-time').textContent = activity.when;
+      const timeEl = li.querySelector('.profile-activity-time');
+      if (activity.sub && activity.kind === 'verifica') {
+        timeEl.innerHTML = `<span class="profile-activity-subpill ${pillClass}">${escapeCourseText(activity.sub)}</span>`;
+      } else {
+        timeEl.textContent = activity.when;
+      }
       list.append(li);
     });
     timeline.append(group);
@@ -6256,7 +7365,43 @@ function jumpDemo(what) {
   else if (what === 'esame') { openWizard(); setCoursePreset('Analisi Matematica II'); setOnboardingPath('esame'); goWizardStep(2); simulateBatchUpload(false); }
   else if (what === 'studio') { setLeftTab('explain'); un.rightPhase = 'write'; setView('studio'); }
   else if (what === 'slides') { app.slidePage = 12; setLeftTab('slides'); setView('studio'); }
-  else if (what === 'popup') { if (app.courseId !== 'sistemi') selectCourse('sistemi'); setLeftTab('explain'); app.selectedPara = 'p-viceversa'; getActiveUnitNote().rightPhase = 'write'; setView('studio'); }
+  else if (what === 'popup') {
+    if (app.courseId !== 'sistemi') selectCourse('sistemi');
+    selectUnit('u13');
+    setLeftTab('explain');
+    getActiveUnitNote().rightPhase = 'write';
+    setView('studio');
+    renderAll();
+    requestAnimationFrame(() => {
+      const targetPara = document.querySelector('#leftDocSheet .para[data-para-id="p-viceversa"]');
+      const pEl = targetPara?.querySelector('p');
+      if (pEl) {
+        const range = document.createRange();
+        const textNode = [...pEl.childNodes].find(n => n.nodeType === 3 && n.textContent.trim().length > 10);
+        let rect;
+        let snippet = 'Non vale però l’implicazione inversa: osservare C(a) < C(b) non dimostra causalità';
+        if (textNode) {
+          const end = Math.min(textNode.textContent.length, 46);
+          range.setStart(textNode, 0);
+          range.setEnd(textNode, end);
+          rect = range.getBoundingClientRect();
+          snippet = textNode.textContent.slice(0, end).trim();
+          const s = window.getSelection();
+          s.removeAllRanges();
+          s.addRange(range);
+        } else {
+          rect = pEl.getBoundingClientRect();
+        }
+        lastExplainSelAt = Date.now();
+        positionExplainSelPop(rect, 'p-viceversa', snippet, {
+          viaButton: false,
+          sourceFile: targetPara.dataset.sourceFile || '',
+          pageNum: Number(targetPara.dataset.pageNum || 6)
+        });
+      }
+    });
+    return;
+  }
   else if (what === 'review') { setView('studio'); startNoteReview(); }
   else if (what === 'diff') { un.rightPhase = 'diff'; un.diffStatus = 'pending'; setView('studio'); requestAnimationFrame(() => document.querySelector('#noteScrollArea .diff-card')?.scrollIntoView({ block: 'center' })); }
   else if (what === 'conflict') { un.rightPhase = 'diff'; app.conflictSimulated = true; setView('studio'); }
@@ -6269,6 +7414,9 @@ function resetPrototype() {
   const keepOpen = document.getElementById('demoDrawer').classList.contains('open');
   app = makeInitialState();
   setTheme('light', 0);
+  setNoteStyle(app.noteStyle);
+  setNoteFont(app.noteFont);
+  adjustStudyFontSize(0);
   renderAll();
   if (keepOpen) document.getElementById('demoDrawer').classList.add('open');
   showToast('Prototipo ripristinato');
@@ -6305,6 +7453,7 @@ window.addEventListener('resize', () => {
   const nowW = window.innerWidth;
   if (_lastWidth > 960 && nowW <= 960) app.sidebarOpen = false;
   _lastWidth = nowW;
+  hideExplainSelPop();
   requestAnimationFrame(() => { moveRailTind(); syncSegKnobs(); renderSidebar(); });
 });
 window.addEventListener('load', () => renderMath(document.body));
@@ -6312,7 +7461,13 @@ document.addEventListener('click', event => {
   const insert = document.getElementById('noteInsert');
   if (insert.open && !insert.contains(event.target)) insert.open = false;
   if (app.noteMenuOpen) toggleNoteMenu(false);
+  if (app.noteStyleMenuOpen) toggleNoteStyleMenu(false);
+  if (app.noteShareMenuOpen) toggleNoteShareMenu(false);
   if (app.sbCourseMenuOpen) toggleSidebarCourseMenu(false);
+  if (!event.target.closest?.('#noteScrollArea') && !event.target.closest?.('#noteSelectionPop')) hideNoteSelectionPop();
+  if (Date.now() - lastExplainSelAt > 240 && !event.target.closest?.('#explainSelPop') && !event.target.closest?.('.para-act')) {
+    hideExplainSelPop();
+  }
 });
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
@@ -6326,13 +7481,42 @@ document.addEventListener('keydown', e => {
     document.getElementById('demoDrawer').classList.remove('open');
     document.getElementById('btnDemoDrawer')?.classList.remove('on');
     if (app.noteMenuOpen) toggleNoteMenu(false);
+    if (app.noteStyleMenuOpen) toggleNoteStyleMenu(false);
+    if (app.noteShareMenuOpen) toggleNoteShareMenu(false);
+    hideNoteSelectionPop();
+    hideExplainSelPop();
     if (app.sbCourseMenuOpen) toggleSidebarCourseMenu(false);
-    if (app.selectedPara) { app.selectedPara = null; renderLeftPane(); }
   }
 });
 
 window.addEventListener('DOMContentLoaded', () => {
   app = makeInitialState();
+  setNoteStyle(app.noteStyle);
+  setNoteFont(app.noteFont);
+  adjustStudyFontSize(0);
+  if (window.TutorAuth) {
+    window.TutorAuth.mount({
+      getProfile: () => ({
+        name: app.profileName,
+        programme: app.profileProgramme,
+        email: app.profileEmail,
+        avatarChoice: app.profileAvatarChoice
+      }),
+      onThemeChange: (theme, pos) => setTheme(theme, pos),
+      onAuthenticated: (info) => {
+        app.demoSessionOpen = true;
+        if (app.view !== 'attivita') setView('attivita');
+        openAccountPage('activity');
+        const msg = info?.mode === 'register'
+          ? `Account collegato al profilo salvato di ${app.profileName}`
+          : `Bentornato sul profilo di ${app.profileName}`;
+        showToast(msg);
+      },
+      onDismiss: () => {
+        if (!app.demoSessionOpen && app.view === 'attivita') openHomeHub();
+      }
+    });
+  }
   document.getElementById('fileFinder').addEventListener('close', releaseFinderObjectUrl);
   const dz = document.getElementById('uploadDropzone');
   if (dz) {
@@ -6352,5 +7536,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 </script>
+<script src="knowledge-brain.js"></script>
+<script src="auth.js"></script>
 </body>
 </html>
