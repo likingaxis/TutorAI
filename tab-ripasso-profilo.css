@@ -27,12 +27,10 @@
 
   /* Supporting Atlas & Modal Surfaces */
   --atlas-emerald-glow: rgba(125, 255, 216, .28);
-  --atlas-shadow: 0 14px 28px -18px rgba(10, 62, 185, .52);
   --atlas-card-border: color-mix(in srgb, var(--blue) 28%, var(--line));
   --atlas-ctrl-bg: rgba(255, 255, 255, .16);
   --atlas-ctrl-hover: rgba(255, 255, 255, .26);
   --atlas-ctrl-border: rgba(255, 255, 255, .28);
-  --atlas-pulse: #64f0c8;
   --atlas-backdrop: rgba(16, 16, 22, .56);
 }
 
@@ -56,12 +54,10 @@
 
   /* Supporting Atlas & Modal Surfaces */
   --atlas-emerald-glow: rgba(176, 224, 178, .22);
-  --atlas-shadow: 0 14px 28px -18px rgba(42, 30, 18, .48);
   --atlas-card-border: rgba(166, 129, 86, .36);
   --atlas-ctrl-bg: rgba(252, 245, 230, .14);
   --atlas-ctrl-hover: rgba(252, 245, 230, .24);
   --atlas-ctrl-border: rgba(246, 224, 186, .28);
-  --atlas-pulse: #8adba8;
   --atlas-backdrop: rgba(30, 21, 13, .54);
 }
 
@@ -85,12 +81,10 @@
 
   /* Supporting Atlas & Modal Surfaces */
   --atlas-emerald-glow: rgba(98, 228, 188, .22);
-  --atlas-shadow: 0 16px 34px -16px rgba(0, 0, 0, .78);
   --atlas-card-border: rgba(130, 175, 255, .24);
   --atlas-ctrl-bg: rgba(190, 216, 255, .12);
   --atlas-ctrl-hover: rgba(190, 216, 255, .22);
   --atlas-ctrl-border: rgba(155, 195, 255, .24);
-  --atlas-pulse: #62e8bc;
   --atlas-backdrop: rgba(4, 6, 12, .72);
 }
 
@@ -100,80 +94,21 @@
   color: var(--ink);
 }
 
-:root[data-theme="dark"] :is(#view-ripasso, #view-attivita, #modalSource, #modalStudyHistory, #modalShortcuts, .studio-complete-dialog, .studio-style-dialog) .btn.blue-pri {
+:root[data-theme="dark"] :is(#view-attivita, #modalSource, #modalStudyHistory, #modalShortcuts, .studio-complete-dialog, .studio-style-dialog) .btn.blue-pri {
   background: #3b66e8;
   border-color: #5580ff;
   color: #ffffff;
   box-shadow: 0 6px 18px -4px rgba(59, 102, 232, .52);
 }
 
-:root[data-theme="dark"] :is(#view-ripasso, #view-attivita, #modalSource, #modalStudyHistory, #modalShortcuts, .studio-complete-dialog, .studio-style-dialog) .btn.blue-pri:hover:not(:disabled) {
+:root[data-theme="dark"] :is(#view-attivita, #modalSource, #modalStudyHistory, #modalShortcuts, .studio-complete-dialog, .studio-style-dialog) .btn.blue-pri:hover:not(:disabled) {
   background: #4873f5;
   border-color: #6f94ff;
 }
 
 /* ----------------------------------------------------------------------------
-   2. ATLAS HEROES, KNOWLEDGE BRAIN CARD & MODAL HEADERS (--atlas-*)
+   2. MODAL HEADERS (--atlas-*)
    ---------------------------------------------------------------------------- */
-:root .profile-globe-card {
-  color: var(--atlas-ink);
-  background:
-    radial-gradient(circle, var(--atlas-dot) 1px, transparent 1px) 0 0 / 16px 16px,
-    radial-gradient(circle at 82% 20%, var(--atlas-glow), transparent 52%),
-    linear-gradient(145deg, var(--atlas-g0), var(--atlas-g1) 62%, var(--atlas-g2));
-  border: 1px solid var(--atlas-border);
-  box-shadow: var(--atlas-shadow);
-}
-
-:root .profile-globe-copy small {
-  color: var(--atlas-sub);
-}
-
-:root .profile-globe-copy small::before {
-  background: var(--atlas-pulse);
-  box-shadow: 0 0 8px var(--atlas-pulse);
-}
-
-:root .profile-globe-copy strong {
-  color: var(--atlas-ink);
-}
-
-:root .profile-globe-copy p {
-  color: var(--atlas-sub);
-}
-
-:root .ascii-globe-box {
-  background: var(--atlas-box-bg);
-  border: 1px solid var(--atlas-box-border);
-  color: var(--atlas-box-ink);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
-}
-
-:root .profile-screen-hero {
-  color: var(--atlas-ink);
-  background:
-    radial-gradient(circle, var(--atlas-dot) 1px, transparent 1px) 0 0 / 15px 15px,
-    radial-gradient(circle at 86% 22%, var(--atlas-glow), transparent 52%),
-    linear-gradient(142deg, var(--atlas-g0), var(--atlas-g1) 64%, var(--atlas-g2));
-  border: 1px solid var(--atlas-border);
-  box-shadow: var(--atlas-shadow);
-}
-
-:root .profile-screen-hero h1 {
-  color: var(--atlas-ink);
-}
-
-:root .profile-screen-hero p,
-:root .profile-screen-hero .modal-atlas-kicker {
-  color: var(--atlas-sub);
-}
-
-:root .profile-hero-badge {
-  color: var(--atlas-ink);
-  background: var(--atlas-ctrl-bg);
-  border: 1px solid var(--atlas-ctrl-border);
-}
-
 :root .modal-bg {
   background: var(--atlas-backdrop);
 }
@@ -480,78 +415,6 @@
   color: var(--ink);
 }
 
-#view-ripasso .recall-hero {
-  background: color-mix(in srgb, var(--blue-s) 70%, var(--card));
-  border: 1px solid color-mix(in srgb, var(--blue) 22%, var(--line));
-  box-shadow: var(--sh-s);
-}
-
-#view-ripasso .recall-hero h2 {
-  color: var(--ink);
-}
-
-#view-ripasso .recall-hero p {
-  color: var(--ink-2);
-}
-
-#view-ripasso .recall-hero-today {
-  background:
-    radial-gradient(ellipse at 88% 18%, color-mix(in srgb, var(--recall-accent, var(--blue)) 16%, transparent), transparent 60%),
-    linear-gradient(116deg, var(--card), color-mix(in srgb, var(--recall-accent, var(--blue)) 8%, var(--card)));
-  border-color: color-mix(in srgb, var(--recall-accent, var(--blue)) 24%, var(--line));
-}
-
-:root[data-theme="sepia"] #view-ripasso .recall-hero {
-  background:
-    radial-gradient(ellipse at 88% 18%, color-mix(in srgb, var(--amber) 14%, transparent), transparent 62%),
-    linear-gradient(120deg, var(--paper), color-mix(in srgb, var(--amber-s) 62%, var(--card)));
-  border-color: color-mix(in srgb, var(--amber) 24%, var(--paper-line));
-}
-
-:root[data-theme="sepia"] #view-ripasso .recall-hero-today {
-  background:
-    radial-gradient(ellipse at 88% 18%, color-mix(in srgb, var(--recall-accent, var(--amber)) 14%, transparent), transparent 60%),
-    linear-gradient(116deg, var(--paper), color-mix(in srgb, var(--recall-accent, var(--amber)) 7%, var(--card)));
-  border-color: color-mix(in srgb, var(--recall-accent, var(--amber)) 24%, var(--paper-line));
-}
-
-:root[data-theme="sepia"] #view-ripasso .recall-illustration-cover {
-  background: var(--paper);
-  border-color: var(--paper);
-}
-
-:root[data-theme="sepia"] #view-ripasso .recall-illustration-badge {
-  background: var(--paper);
-  border-color: var(--paper-line);
-  color: var(--ink);
-}
-
-:root[data-theme="dark"] #view-ripasso .recall-hero {
-  background:
-    radial-gradient(ellipse at 88% 18%, color-mix(in srgb, var(--blue) 18%, transparent), transparent 60%),
-    linear-gradient(120deg, var(--card), color-mix(in srgb, var(--blue-s) 70%, var(--card)));
-  border-color: color-mix(in srgb, var(--blue) 28%, var(--line));
-  box-shadow: var(--sh);
-}
-
-:root[data-theme="dark"] #view-ripasso .recall-hero-today {
-  background:
-    radial-gradient(ellipse at 88% 18%, color-mix(in srgb, var(--recall-accent, var(--blue)) 22%, transparent), transparent 60%),
-    linear-gradient(116deg, var(--card), color-mix(in srgb, var(--recall-accent, var(--blue)) 12%, var(--card)));
-  border-color: color-mix(in srgb, var(--recall-accent, var(--blue)) 32%, var(--line));
-  box-shadow: var(--sh);
-}
-
-:root[data-theme="dark"] #view-ripasso .recall-illustration-cover {
-  border-color: color-mix(in srgb, var(--line) 55%, var(--card));
-}
-
-:root[data-theme="dark"] #view-ripasso .recall-illustration-badge {
-  background: var(--card);
-  border-color: color-mix(in srgb, var(--blue) 32%, var(--line));
-  color: var(--blue-i);
-}
-
 /* Ripasso panels, course/unit picker & recent verifications */
 #view-ripasso .recall-choice {
   border-radius: 12px;
@@ -590,60 +453,6 @@
 
 :root[data-theme="dark"] #view-ripasso .recall-launch {
   border-color: color-mix(in srgb, var(--blue) 22%, var(--line));
-}
-
-/* Calendar 5-day strip */
-:root .recall-cal-day {
-  background: var(--card);
-  border: 1px solid var(--line);
-  color: var(--ink-2);
-}
-
-:root .recall-cal-day:hover {
-  border-color: var(--blue);
-}
-
-:root .recall-cal-day[aria-pressed="true"] {
-  background: var(--blue-s);
-  border-color: var(--blue);
-  color: var(--blue-i);
-  box-shadow: var(--sh-s);
-}
-
-:root[data-theme="sepia"] .recall-cal-day {
-  background: var(--paper);
-  border-color: var(--paper-line);
-}
-
-:root[data-theme="sepia"] .recall-cal-day:hover {
-  border-color: var(--amber);
-}
-
-:root[data-theme="sepia"] .recall-cal-day[aria-pressed="true"] {
-  background: var(--amber-s);
-  border-color: var(--amber);
-  color: var(--amber-i);
-}
-
-:root[data-theme="sepia"] .recall-cal-day[aria-pressed="true"] small {
-  color: var(--amber-i);
-}
-
-:root[data-theme="dark"] .recall-cal-day {
-  background: var(--card);
-  border-color: var(--line);
-}
-
-:root[data-theme="dark"] .recall-cal-day:hover {
-  border-color: color-mix(in srgb, var(--blue) 70%, var(--line));
-  background: color-mix(in srgb, var(--blue-s) 32%, var(--card));
-}
-
-:root[data-theme="dark"] .recall-cal-day[aria-pressed="true"] {
-  background: var(--blue-s);
-  border-color: var(--blue);
-  color: var(--blue-i);
-  box-shadow: 0 6px 14px -8px rgba(110, 149, 255, .45);
 }
 
 /* Checklist rows & .recall-check-card alias */
@@ -717,26 +526,6 @@
 
 :root[data-theme="sepia"] .focus-prog-segs i {
   background: color-mix(in srgb, var(--line) 80%, var(--sunken));
-}
-
-:root .focus-stage {
-  background:
-    radial-gradient(circle, var(--paper-dot) 1px, transparent 1px) 0 0 / 18px 18px,
-    var(--card);
-  border: 1px solid var(--line);
-  box-shadow: var(--sh-s);
-}
-
-:root[data-theme="sepia"] .focus-stage {
-  background:
-    radial-gradient(circle, var(--paper-dot) 1px, transparent 1px) 0 0 / 18px 18px,
-    var(--paper);
-  border-color: var(--paper-line);
-}
-
-:root[data-theme="dark"] .focus-stage {
-  border-color: color-mix(in srgb, var(--blue) 22%, var(--line));
-  box-shadow: var(--sh);
 }
 
 :root[data-theme="sepia"] .focus-stage .input-field,
@@ -859,46 +648,6 @@
 }
 
 /* Ripasso Results & Archived Verification Cards */
-:root #view-ripasso .recall-result .recall-hero {
-  background:
-    radial-gradient(circle, var(--paper-dot) 1px, transparent 1px) 0 0 / 16px 16px,
-    color-mix(in srgb, var(--result-accent) 9%, var(--card));
-  border-color: color-mix(in srgb, var(--result-accent) 34%, var(--line));
-}
-
-:root #view-ripasso .recall-result .recall-hero h2,
-:root #view-ripasso .recall-result .recall-hero-art {
-  color: var(--result-ink);
-}
-
-:root[data-theme="sepia"] #view-ripasso .recall-result .recall-hero {
-  --result-accent: var(--amber);
-  --result-ink: var(--amber-i);
-  background:
-    radial-gradient(circle, var(--paper-dot) 1px, transparent 1px) 0 0 / 16px 16px,
-    color-mix(in srgb, var(--result-accent) 9%, var(--paper));
-  border-color: color-mix(in srgb, var(--result-accent) 32%, var(--paper-line));
-}
-
-:root[data-theme="sepia"] #view-ripasso .recall-result .recall-hero.perfect {
-  --result-accent: var(--green);
-  --result-ink: var(--green-i);
-}
-
-:root[data-theme="sepia"] #view-ripasso .recall-result .recall-hero.has-errors {
-  --result-accent: var(--red);
-  --result-ink: var(--red-i);
-}
-
-:root[data-theme="dark"] #view-ripasso .recall-result .recall-hero {
-  background:
-    radial-gradient(circle, var(--paper-dot) 1px, transparent 1px) 0 0 / 16px 16px,
-    radial-gradient(ellipse at 88% 20%, color-mix(in srgb, var(--result-accent) 20%, transparent), transparent 58%),
-    color-mix(in srgb, var(--result-accent) 11%, var(--card));
-  border-color: color-mix(in srgb, var(--result-accent) 38%, var(--line));
-  box-shadow: var(--sh);
-}
-
 :root #view-ripasso .recall-result .recall-status .chip {
   border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
 }
@@ -1007,141 +756,63 @@
 /* ----------------------------------------------------------------------------
    6. PROFILO & IMPOSTAZIONI (#view-attivita)
    ---------------------------------------------------------------------------- */
-:root .profile-banner {
-  border-color: var(--line);
-  box-shadow: var(--sh-s);
+:root[data-theme="sepia"] .profile-journal {
+  --journal-ink: #6a4922;
+  --journal-tint: #efe0bf;
+  --journal-paper: #fbf3e3;
+  --journal-gutter: #f3e7ce;
+  --journal-rule: #daccac;
 }
 
-:root[data-theme="sepia"] .profile-banner {
-  background:
-    radial-gradient(ellipse at 100% 33%, color-mix(in srgb, var(--amber-s) 78%, transparent), transparent 52%),
-    linear-gradient(120deg, var(--paper) 35%, color-mix(in srgb, var(--amber-s) 52%, var(--card)));
-  border-color: var(--paper-line);
-}
-
-:root[data-theme="sepia"] .profile-banner::before {
-  background: radial-gradient(circle at center, var(--amber) 1px, transparent 1.5px) 0 0 / 17px 17px;
-  opacity: .19;
-}
-
-:root[data-theme="sepia"] .profile-avatar-lg {
-  outline-color: color-mix(in srgb, var(--amber-s) 85%, transparent);
-}
-
-:root[data-theme="dark"] .profile-banner {
-  background:
-    radial-gradient(ellipse at 100% 33%, color-mix(in srgb, var(--purple-s) 85%, transparent), transparent 52%),
-    linear-gradient(120deg, var(--card) 35%, color-mix(in srgb, var(--blue-s) 72%, var(--card)));
-  border-color: color-mix(in srgb, var(--blue) 24%, var(--line));
-  box-shadow: var(--sh);
-}
-
-:root[data-theme="dark"] .profile-banner::before {
-  opacity: .22;
-}
-
-:root[data-theme="dark"] .profile-avatar-lg {
-  box-shadow: 0 0 0 5px color-mix(in srgb, var(--blue-s) 70%, transparent);
-  outline: none;
-}
-
-:root[data-theme="dark"] .profile-actions .btn {
-  background: var(--surface);
-  border-color: var(--line);
-}
-
-:root[data-theme="dark"] .profile-actions .btn:hover {
-  background: color-mix(in srgb, var(--blue-s) 45%, var(--card));
-  border-color: var(--atlas-card-border);
-}
-
-/* Weekly rhythm & bars */
-:root .profile-insight-card {
-  box-shadow: var(--sh-s);
-}
-
-:root[data-theme="sepia"] .profile-insight-card {
-  background: var(--paper);
-  border-color: var(--paper-line);
-}
-
-:root[data-theme="dark"] .profile-insight-card {
-  border-color: color-mix(in srgb, var(--line) 85%, var(--atlas-border));
-  box-shadow: var(--sh);
-}
-
-:root .profile-bar-track {
-  background: var(--surface);
-  border: 1px solid color-mix(in srgb, var(--line) 75%, transparent);
-}
-
-:root[data-theme="sepia"] .profile-bar-track {
-  background: var(--sunken);
-  border-color: var(--paper-line);
-}
-
-:root[data-theme="sepia"] .profile-bar-fill {
-  background: linear-gradient(180deg, var(--blue), color-mix(in srgb, var(--blue) 52%, var(--amber)));
-}
-
-:root[data-theme="sepia"] .profile-bar-col.today .profile-bar-fill {
-  background: linear-gradient(180deg, var(--green), var(--blue));
-}
-
-:root[data-theme="dark"] .profile-bar-track {
-  background: var(--sunken);
-  border-color: var(--line);
-}
-
-:root[data-theme="dark"] .profile-bar-col.today .profile-bar-fill {
-  background: linear-gradient(180deg, #52d998, var(--blue));
-  box-shadow: 0 0 12px -2px rgba(72, 199, 136, .45);
-}
-
-/* Activity Timeline & Symbols */
-#profileActivityFilter {
-  background: var(--card);
-  border: 1px solid var(--line);
-  color: var(--ink);
-}
-
-:root[data-theme="sepia"] #profileActivityFilter {
-  background: var(--paper);
-  border-color: var(--paper-line);
-}
-
-:root[data-theme="sepia"] .profile-activity-list {
-  background: var(--paper);
-  border-color: var(--paper-line);
-}
-
-:root[data-theme="sepia"] .profile-activity-link:hover,
-:root[data-theme="sepia"] .profile-activity-link:focus-visible {
-  background: var(--card);
-}
-
-:root[data-theme="dark"] .profile-activity-list {
-  border-color: var(--line);
-  box-shadow: var(--sh-s);
-}
-
-:root[data-theme="dark"] .profile-activity-link:hover,
-:root[data-theme="dark"] .profile-activity-link:focus-visible {
-  background: color-mix(in srgb, var(--blue-s) 45%, var(--card));
-}
-
-:root[data-theme="dark"] .profile-activity-symbol {
-  border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
-}
-
-:root[data-theme="dark"] .profile-activity-subpill {
-  background: var(--surface);
-  border-color: var(--line);
-  color: var(--ink-2);
+:root[data-theme="dark"] .profile-journal {
+  --journal-ink: #a9c4ef;
+  --journal-tint: #303f55;
+  --journal-paper: #242a34;
+  --journal-gutter: #1e242e;
+  --journal-rule: #414b5b;
 }
 
 /* Settings & Edit Profile */
-:root .profile-settings-section,
+:root .profile-settings {
+  gap: 0;
+  background: var(--paper);
+  border-block-start: 3px solid var(--journal-ink);
+  border-inline: 1px solid var(--journal-rule);
+  border-block-end: 1px solid var(--journal-rule);
+  border-radius: 4px 12px 12px 4px;
+  box-shadow: 0 4px 0 -2px var(--journal-rule);
+}
+
+:root .profile-screen:has(.profile-settings) {
+  --journal-ink: #294978;
+  --journal-rule: #d9dcdb;
+}
+
+:root[data-theme="sepia"] .profile-screen:has(.profile-settings) {
+  --journal-ink: #6a4922;
+  --journal-rule: #daccac;
+}
+
+:root[data-theme="dark"] .profile-screen:has(.profile-settings) {
+  --journal-ink: #a9c4ef;
+  --journal-rule: #414b5b;
+}
+
+:root .profile-settings-section {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.profile-settings-section + .profile-settings-section {
+  border-top: 1px solid var(--journal-rule);
+}
+
+.profile-settings-section h2 {
+  color: var(--journal-ink);
+  font: 500 21px/1.1 Georgia, serif;
+}
+
 :root .profile-edit-form {
   box-shadow: var(--sh-s);
 }
@@ -1151,7 +822,6 @@
   color: var(--ink);
 }
 
-:root[data-theme="sepia"] .profile-settings-section,
 :root[data-theme="sepia"] .profile-edit-form {
   background: var(--paper);
   border-color: var(--paper-line);
@@ -1163,7 +833,6 @@
   background: var(--amber-s);
 }
 
-:root[data-theme="dark"] .profile-settings-section,
 :root[data-theme="dark"] .profile-edit-form {
   border-color: color-mix(in srgb, var(--line) 85%, var(--atlas-border));
   box-shadow: var(--sh);
@@ -1259,18 +928,4 @@
 :root[data-theme="dark"] .profile-field input:focus {
   background: var(--surface);
   border-color: var(--blue);
-}
-
-/* Fallback .profile-login card coherence */
-:root .profile-login-art {
-  background:
-    radial-gradient(circle, var(--atlas-dot) 1px, transparent 1px) 0 0 / 16px 16px,
-    radial-gradient(circle at 22% 20%, var(--atlas-glow), transparent 55%),
-    linear-gradient(148deg, var(--atlas-g0), var(--atlas-g1) 64%, var(--atlas-g2));
-  color: var(--atlas-ink);
-  border: 1px solid var(--atlas-border);
-}
-
-:root .profile-login-art::before {
-  border-color: var(--atlas-border);
 }
