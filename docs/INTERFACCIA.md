@@ -4,6 +4,8 @@ La direzione visiva deriva dalle slide e dal riferimento REVISION2000. Il compor
 
 Il [mockup HTML](../index.html) illustra il flusso, ma non è approvato integralmente e usa operazioni simulate.
 
+Per l’identità visiva del mockup corrente, usare la [guida allo stile](STILE_VISIVO.md). Questa pagina conserva le indicazioni sul comportamento e i riferimenti visivi originari.
+
 ## 1 Riferimenti da aprire
 
 | Riferimento | Cosa osservare |

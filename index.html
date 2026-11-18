@@ -7,7 +7,7 @@
 <link rel="icon" type="image/png" href="assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
 <link rel="stylesheet" href="auth.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
@@ -175,6 +175,7 @@
 
 :root {
   --font: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --serif: "Newsreader", "Source Serif 4", Georgia, "Times New Roman", serif;
   --mono: "JetBrains Mono", Consolas, monospace;
 }
 
@@ -693,7 +694,7 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 #view-corso, #view-dettaglio, .file-finder {
   --desk-mat: color-mix(in srgb, var(--surface) 91%, #bcac94);
   --desk-rule: color-mix(in srgb, var(--line) 88%, var(--ink));
-  --desk-title: Georgia, "Times New Roman", serif;
+  --desk-title: var(--serif);
 }
 [data-theme="dark"] :is(#view-corso,#view-dettaglio,.file-finder) {
   --desk-mat: color-mix(in srgb, var(--surface) 97%, #ac9d85);
@@ -733,7 +734,6 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .resume-cta-icon .ic { width: 15px; height: 15px; }
 .resume-hero .btn:is(:hover, :focus-visible) .resume-cta-icon { transform: translateX(2px); }
 .home-catalog { display: grid; grid-template-columns: minmax(0,1.95fr) minmax(0,1fr); align-items: start; gap: clamp(19px, 3vw, 36px); }
-.home-catalog:has(.desk-note-slot.hidden) { grid-template-columns: minmax(0,1fr); }
 .home-catalog > section { min-width: 0; }
 .desk-note-slot {
   display: grid; align-content: start; gap: 12px;
@@ -839,13 +839,10 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 }
 .course-card-arrow .ic { width: 15px; height: 15px; }
 .course-card:is(:hover, :focus-visible) .course-card-arrow { transform: translateX(3px); }
-.course-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 4px 9px; font-size: 11.5px; color: var(--mut); }
-.course-meta .course-recall { color: var(--amber-i); font-weight: 650; }
 .course-recall::before { content: ""; display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: currentColor; margin-inline-end: 5px; vertical-align: 2px; }
 @container (max-width: 520px) {
   .course-card { grid-template-columns: 36px minmax(0,1fr) 22px; gap: 8px; padding-inline: 3px; }
   .course-filemark { grid-area: 1 / 1 / span 2; width: 30px; height: 28px; }
-  .course-meta { grid-column: 2; justify-content: flex-start; }
   .course-card-arrow { grid-area: 1 / 3 / span 2; }
 }
 .course-badge-art { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; flex: none; }
@@ -892,11 +889,7 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
   white-space: nowrap; transition: transform .18s, filter .18s;
 }
 .unit-quick-quiz:hover { filter: brightness(.97); transform: translateY(-1px); }
-.detail-ocr-pill {
-  display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 11px; border-radius: 999px;
-  font-size: 11.5px; font-weight: 650; color: var(--amber-i); background: var(--amber-s);
-  border: 1px solid color-mix(in srgb, var(--amber) 35%, transparent);
-}
+.detail-actions .detail-ocr-notice { gap: 5px; color: var(--amber-i); font-size: 11.5px; }
 .unit-row:is(:hover, :focus-visible) { background: var(--surface); }
 .unit-row.cur {
   background: color-mix(in srgb, var(--course-accent) 9%, var(--card));
@@ -936,6 +929,7 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .finder-search .ic { color: var(--mut); }
 .finder-top .btn { border-radius: 8px; }
 .finder-top h2 { margin: 0; font: 700 24px/1 var(--desk-title); letter-spacing: -.035em; }
+.finder-top h2[tabindex="-1"]:focus { outline: none; }
 .finder-grid { display: grid; grid-template-columns: minmax(190px, .93fr) minmax(0,3fr); min-height: 505px; }
 .finder-nav { background: var(--desk-mat); border-inline-end: 1px solid var(--line); padding: 17px 11px; min-width: 0; }
 .finder-tree-label { display: block; margin: 0 0 9px 7px; color: var(--mut); font-size: 11px; font-weight: 650; }
@@ -945,7 +939,8 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
   display: flex; align-items: center; gap: 8px; width: 100%; min-width: 0;
   padding: 8px; text-align: left; border-radius: 6px; font-size: 12px; overflow-wrap: anywhere;
 }
-.finder-tree button[aria-current="page"] { color: var(--ink); background: var(--card); font-weight: 700; box-shadow: inset 2px 0 var(--tree-accent,var(--blue)); }
+.finder-tree button[aria-current="page"] { color: var(--ink); background: color-mix(in srgb, var(--tree-accent,var(--blue)) 10%, var(--card)); font-weight: 700; }
+.finder-tree button[aria-current="page"]:hover { background: color-mix(in srgb, var(--tree-accent,var(--blue)) 15%, var(--card)); }
 .finder-tree .finder-course-active { font-weight: 700; }
 .finder-tree .finder-course-active > .ic, .finder-tree button[aria-current="page"] > .ic { color: color-mix(in srgb,var(--tree-accent,var(--blue)) 58%,var(--ink)); }
 .finder-tree button .ic { flex: none; width: 15px; height: 15px; transition: transform .24s cubic-bezier(.2,.8,.25,1.3); }
@@ -1024,8 +1019,8 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .finder-document small { margin-top: auto; color: var(--paper-mut); font-size: 10.5px; }
 .finder-preview {
   background: var(--paper);
-  border: 1px solid var(--paper-line); border-inline-start: 3px solid color-mix(in srgb,var(--blue) 43%,var(--paper-line)); border-radius: 4px 9px 9px 4px;
-  padding: clamp(14px, 3vw, 24px); box-shadow: 2px 3px 0 var(--surface), 2px 4px 0 var(--paper-line);
+  border: 1px solid var(--paper-line); border-radius: 5px;
+  padding: clamp(14px, 3vw, 24px); box-shadow: 0 3px 10px -7px color-mix(in srgb, var(--ink) 40%, transparent);
   animation: control-unfold .24s cubic-bezier(.2,.8,.25,1) both; transform-origin: top left;
 }
 .finder-preview h3 { margin: 0 0 10px; font: 700 clamp(19px, 3vw, 25px)/1.2 Georgia, serif; letter-spacing: -.027em; }
@@ -1045,7 +1040,7 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
   .course-heading h1 { font-size: clamp(23px, 6.3vw, 33px); }
   .course-heading p { font-size: 12px; }
   .detail-actions > div { gap: 6px; }
-  .detail-actions .btn, .detail-ocr-pill { min-width: 0; font-size: 11px; padding-inline: 8px; }
+  .detail-actions .btn { min-width: 0; font-size: 11px; padding-inline: 8px; }
   .course-lessons { padding-inline: 5px; }
   .unit-row { padding: 9px 7px; gap: 7px; }
   .unit-state { font-size: 10px; }
@@ -1406,7 +1401,7 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .studio-outline-toggle.btn:hover, .studio-outline-toggle.btn.on { background: var(--studio-selected); border-color: var(--studio-rule); }
 .studio-position { padding-inline-start: 12px; border-left: 1px solid var(--studio-rule); font-size: 11.5px; font-weight: 650; color: var(--ink-2); white-space: nowrap; }
 #view-studio {
-  --study-reading: "Palatino Linotype", Georgia, serif;
+  --study-reading: "Newsreader", "Palatino Linotype", Georgia, serif;
   --study-font-size: 17px;
   --note-font: var(--study-reading);
   --studio-chrome: #f6f5f1;
@@ -1527,7 +1522,6 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .depth-size-ctrls span { min-width: 34px; text-align: center; font-family: var(--mono); font-size: 11px; color: var(--ink); }
 .study-transfer[draggable="true"] { cursor: grab; }
 .study-transfer[draggable="true"]:active { cursor: grabbing; }
-.study-transfer-actions { display: flex; justify-content: flex-end; margin-bottom: 3px; }
 .study-transfer-btn { display: inline-flex; gap: 5px; align-items: center; padding: 4px 6px; border-radius: 7px; color: var(--blue-i); font-size: 11.5px; font-weight: 650; }
 .study-transfer-btn:hover { background: var(--blue-s); }
 .study-transfer-btn .ic { width: 13px; height: 13px; flex: none; }
@@ -1728,7 +1722,7 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 #view-studio .code-block .kw { color: var(--blue-i); }
 .diag-node { cursor: pointer; }
 .diag-node :is(circle,rect) { transition: fill .18s, stroke .18s, stroke-width .2s; }
-.diag-node:hover circle { stroke-width: 3px; }
+.diag-node:is(:hover,:focus-visible) circle { stroke-width: 3px; }
 .diag-readout { margin-top: 8px; padding: 9px 12px; border-radius: 10px; background: var(--card); border: 1px solid var(--line); font-size: 12.5px; color: var(--ink-2); }
 
 .code-block { background: #16161b; color: #e4e4ec; border-radius: 13px; padding: 12px 14px; font-family: var(--mono); font-size: 12px; line-height: 1.6; overflow-x: auto; margin: 12px 0; max-width: 100%; }
@@ -2045,7 +2039,6 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
   border-color: var(--pri); background: var(--pri); color: var(--pri-ink); box-shadow: none;
 }
 #view-studio .note-bottom-bar .btn.blue-pri:hover { opacity: .88; }
-.note-footer-caption { color: var(--mut); font-size: 12px; }
 .studio-complete-dialog {
   width: min(436px, calc(100% - 32px));
   padding: 0; overflow: hidden;
@@ -2104,29 +2097,10 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
 .recall-hero .btn { min-height: 42px; }
 #view-ripasso .btn.blue-pri { border-color: var(--pri); background: var(--pri); color: var(--pri-ink); box-shadow: none; }
 #view-ripasso .btn.blue-pri:hover:not(:disabled) { opacity: .88; }
-.recall-hero-today {
-  background: linear-gradient(105deg, var(--paper) 50%, color-mix(in srgb, var(--recall-accent) 7%, var(--paper)));
-}
 .recall-today-label { display: inline-flex; align-items: center; gap: 7px; color: var(--ink-2); font-size: 12px; font-weight: 650; }
 .recall-today-label.complete { color: var(--green-i); }
 .recall-today-label .ic { width: 15px; height: 15px; }
-.recall-index-sheet {
-  position: relative; isolation: isolate; display: grid; justify-items: start; align-content: center;
-  gap: 10px; width: 112px; height: 126px; margin-inline-end: 12px; padding: 17px 17px 16px;
-  transform: rotate(-4deg); color: var(--blue-i); background: var(--paper);
-  border: 1px solid var(--line); border-radius: 8px; box-shadow: 5px 7px 0 var(--surface), var(--sh);
-  transition: transform .24s cubic-bezier(.2,.7,.2,1);
-}
-.recall-index-sheet::before {
-  content: ""; position: absolute; inset: 0 9px auto auto; width: 13px; height: 25px;
-  background: color-mix(in srgb, var(--recall-accent) 45%, var(--paper)); border-radius: 0 0 3px 3px;
-}
-.recall-index-sheet .ic { width: 22px; height: 22px; }
-.recall-index-sheet i { width: 100%; height: 1px; background: var(--line); }
-.recall-index-sheet i:last-child { width: 63%; }
-.recall-hero-today:has(.blue-pri:is(:hover, :focus-visible)) .recall-index-sheet { transform: translateY(-3px) rotate(-2deg); }
 .ripasso-lobby-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 28px; align-items: start; }
-.ripasso-col { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
 .recall-panel h2, .recall-result section h2 { margin: 0 0 11px; font-size: 17px; letter-spacing: -.025em; }
 .recall-picker-sheet { min-width: 0; padding: clamp(16px, 2.5vw, 22px); border: 1px solid var(--line); border-radius: 16px; background: var(--paper); }
 .recall-picker-sheet .recall-choice:last-child, .recall-history .recall-choice:last-child { border-bottom-color: transparent; }
@@ -2253,9 +2227,6 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
 .recall-open-grade .btn[aria-pressed="true"].retry { background: var(--amber-s); border-color: var(--amber); color: var(--amber-i); }
 
 .focus-shell { width: min(100%, 700px); margin: 0 auto; display: flex; flex-direction: column; gap: 23px; }
-.focus-topbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
-.focus-topbar b { font-size: 13px; font-weight: 650; color: var(--ink-2); }
-.focus-topbar .chip { margin-left: auto; }
 .focus-progress { display: flex; align-items: center; gap: 14px; }
 .focus-count { flex: none; color: var(--blue-i); font-size: 12px; font-weight: 700; }
 .focus-shell h2 { margin: 0 0 9px; font: 500 clamp(26px, 3.1vw, 36px)/1.13 Georgia, serif; letter-spacing: -.035em; overflow-wrap: anywhere; }
@@ -2320,11 +2291,6 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
 }
 @media (max-width: 560px) {
   .recall-hero { gap: 12px; padding: 18px 14px; }
-  .recall-index-sheet { display: none; }
-  .recall-hero-today { grid-template-columns: minmax(0, 1fr); }
-  .ripasso-lobby-grid { gap: 24px; }
-  .focus-topbar { gap: 8px; }
-  .focus-topbar .chip { margin-left: 0; }
 }
 
 /* ============================================================================
@@ -2341,7 +2307,7 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
 }
 .profile-avatar-lg:is(:hover,:focus-visible) { transform: rotate(0deg); }
 #profileAvatar { position: absolute; inset: 0; display: grid; place-items: center; border-radius: inherit; }
-.ripasso-lobby-grid > div, .result-grid > div { min-width: 0; }
+.result-grid > div { min-width: 0; }
 .act-row {
   background: var(--card); border: 1px solid var(--line); border-radius: 16px;
   padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
@@ -2533,12 +2499,6 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
 .profile-login-art .ic { animation: study-check-in .5s cubic-bezier(.2,.7,.25,1) backwards; }
 .profile-login form p { margin: 0; color: var(--ink-2); font-size: 13px; }
 .profile-login form .btn { justify-self: start; }
-#attivitaContainer .tutor-auth-embedded-art {
-  color: var(--ink); border: 1px solid var(--line);
-  background: linear-gradient(135deg, color-mix(in srgb, var(--blue-s) 63%, var(--paper)), var(--paper));
-}
-#attivitaContainer .tutor-auth-embedded-art::after { display: none; }
-#attivitaContainer .tutor-auth-embedded-av { color: var(--blue-i); border-color: var(--line); background: var(--paper); }
 @media (max-width: 760px) {
   .profile-banner { grid-template-columns: minmax(0, 1fr) auto; gap: 19px 7px; }
   .profile-journal-title { grid-column: 1 / -1; }
@@ -2785,6 +2745,12 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
   .studio-position { display: none; }
   .note-bottom-bar { padding: 8px 10px 10px; }
 }
+@media (max-width: 350px) {
+  .rail { padding-inline: 6px; }
+  .rail .tgroup { min-width: 0; gap: 2px; }
+  .rail .rb { gap: 3px; padding-inline: 6px; }
+  .rail-profile, .mobile-theme-btn { flex: none; }
+}
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
@@ -2798,6 +2764,19 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
 <!-- Inline SVG Vector Icon Sprite -->
 <svg xmlns="http://www.w3.org/2000/svg" class="hidden" aria-hidden="true">
   <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 10h18"/></symbol>
+  <symbol id="i-study-folder" viewBox="0 0 24 24" stroke="none">
+    <path d="M2 6a2 2 0 0 1 2-2h5l2.5 2.5H20a2 2 0 0 1 2 2V12H2Z" fill="#a9c8ff"/>
+    <rect x="2" y="8" width="20" height="12" rx="3" fill="#1565f2"/>
+    <path d="M12 9.5c.55 2.6 1.9 3.95 4.5 4.5-2.6.55-3.95 1.9-4.5 4.5-.55-2.6-1.9-3.95-4.5-4.5 2.6-.55 3.95-1.9 4.5-4.5Z" fill="#fff"/>
+  </symbol>
+  <symbol id="i-study-spark" viewBox="0 0 24 24" stroke="none">
+    <path d="M10 4c.9 4.7 3.3 7.1 8 8-4.7.9-7.1 3.3-8 8-.9-4.7-3.3-7.1-8-8 4.7-.9 7.1-3.3 8-8Z" fill="#1565f2"/>
+    <path d="M19 2c.45 2.1 1.4 3.05 3.5 3.5C20.4 5.95 19.45 6.9 19 9c-.45-2.1-1.4-3.05-3.5-3.5C17.6 5.05 18.55 4.1 19 2Z" fill="#48c788"/>
+  </symbol>
+  <symbol id="study-waves" viewBox="0 0 1180 220" preserveAspectRatio="none">
+    <path d="M0 182C220 144 430 226 710 172S1020 120 1180 162" fill="none" stroke="white" stroke-opacity=".17" stroke-width="2"/>
+    <path d="M0 207C260 171 470 237 740 190S1030 146 1180 186" fill="none" stroke="#8af5c4" stroke-opacity=".36" stroke-width="2"/>
+  </symbol>
   <symbol id="i-course-arrow" viewBox="0 0 24 24"><path d="M4.5 12h14M13 6.5l5.5 5.5-5.5 5.5"/></symbol>
   <symbol id="i-course-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
   <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></symbol>
@@ -2851,17 +2830,17 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
     <span class="tind" id="railTind" aria-hidden="true"></span>
 
     <button class="rb on" data-view="corso" data-tip="I tuoi corsi" onclick="openHomeHub()">
-      <svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>
+      <svg viewBox="0 0 24 24"><rect class="rb-sq-pri" x="4" y="4" width="7" height="7" rx="2"/><rect class="rb-sq-soft" x="13" y="4" width="7" height="7" rx="2"/><rect class="rb-sq-soft" x="4" y="13" width="7" height="7" rx="2"/><rect class="rb-sq-mint" x="13" y="13" width="7" height="7" rx="2"/></svg>
       <span>Corsi</span>
     </button>
 
     <button class="rb" data-view="studio" data-tip="Studio e appunti" onclick="setView('studio')">
-      <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M12 5v14"/></svg>
+      <svg viewBox="0 0 24 24"><rect class="rb-bk-l" x="3.5" y="4.5" width="8" height="15" rx="2"/><rect class="rb-bk-r" x="12.5" y="4.5" width="8" height="15" rx="2"/><path class="rb-bk-lines" d="M15 9.5h3M15 13h2"/></svg>
       <span>Studio</span>
     </button>
 
     <button class="rb" data-view="ripasso" data-tip="Verifica e ripasso" onclick="openRipassoLobby()">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M9 12l2 2 4-4"/></svg>
+      <svg viewBox="0 0 24 24"><circle class="rb-rc-ring" cx="12" cy="12" r="8.5"/><path class="rb-rc-chk" d="M8.8 12l2.3 2.3 4.4-4.6"/></svg>
       <span>Ripasso</span>
       <span class="rb-dot" id="railRipassoDot" title="Verifica in programma"></span>
     </button>
@@ -2895,19 +2874,17 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
 <!-- =========================================================================
      2. COLLAPSIBLE COURSE SIDEBAR (ACTIVE ONLY IN STUDIO)
      ========================================================================= -->
-<aside class="sidebar collapsed" id="courseSidebar" aria-label="Struttura corso e lezioni">
+<aside class="sidebar collapsed" id="courseSidebar" aria-label="Struttura corso e lezioni" inert>
   <div class="sb-top">
-    <button class="sb-course-btn" id="sbCourseBtn" onclick="event.stopPropagation();toggleSidebarCourseMenu()" title="Cambia corso in Studio">
-      <div style="display:flex;align-items:center;gap:9px;min-width:0">
-        <div class="sb-course-av" id="sbCourseAvatar"></div>
-        <div style="min-width:0">
-          <div style="font-weight:700;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="sbCourseName">Sistemi Distribuiti</div>
-          <div style="font-size:11.5px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="sbCourseMeta">Lezione per lezione · 4 unità</div>
-        </div>
-      </div>
-      <span style="font-size:12px;color:var(--mut);flex:none">▾</span>
+    <button type="button" class="sb-course-btn" id="sbCourseBtn" onclick="event.stopPropagation();toggleSidebarCourseMenu()" title="Cambia corso in Studio" aria-controls="sbCourseMenu" aria-expanded="false">
+      <span class="sb-course-av" id="sbCourseAvatar" aria-hidden="true"></span>
+      <span class="sb-course-nameplate">
+        <strong id="sbCourseName">Sistemi Distribuiti</strong>
+        <small id="sbCourseMeta">Lezione per lezione · 4 unità</small>
+      </span>
+      <span class="sb-course-caret" aria-hidden="true">▾</span>
     </button>
-    <button class="sb-close-btn" onclick="app.sidebarOpen=false;renderSidebar()" aria-label="Chiudi indice">✕</button>
+    <button type="button" class="sb-close-btn" onclick="toggleSidebar()" aria-label="Chiudi indice">✕</button>
   </div>
 
   <div class="sb-picker-pop hidden" id="sbCourseMenu" onclick="event.stopPropagation()"></div>
@@ -2916,16 +2893,19 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
     <div class="sb-sec-title"><span>Indice del corso</span></div>
     <div id="sbUnitsList"></div>
 
-    <div class="sb-sec-title" style="margin-top:14px">
-      <span>Lezioni e fonti</span>
-      <button style="color:var(--blue);font-size:11.5px;font-weight:700;text-transform:none;letter-spacing:0" onclick="openAddLessonModal(app.courseId)">+ Lezione</button>
+    <div class="sb-sec-title sb-source-title">
+      <span>Fonti</span>
+      <button type="button" class="sb-add-lesson" onclick="openAddLessonModal(app.courseId)"><svg class="ic" aria-hidden="true"><use href="#i-course-plus"/></svg> Lezione</button>
     </div>
     <div id="sbSourcesList"></div>
   </div>
 
   <div class="sb-footer">
-    <span id="sbProgressText">2/4 unità concluse</span>
-    <button class="btn ghost" style="height:24px;font-size:11px;padding:0 8px" onclick="openCourseDetail(app.courseId)">Corso</button>
+    <div class="sb-progress">
+      <progress id="sbProgress" aria-hidden="true"></progress>
+      <span id="sbProgressText">2/4 unità verificate</span>
+    </div>
+    <button type="button" class="btn ghost sb-open-course" onclick="openCourseDetail(app.courseId)">Corso <svg class="ic" aria-hidden="true"><use href="#i-course-arrow"/></svg></button>
   </div>
 </aside>
 
@@ -2943,25 +2923,82 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
 
         <div id="homeHubContainer">
           <header class="welcome-bar">
-            <h1 id="welcomeTitle">Bentornato, Luca</h1>
+            <div class="welcome-copy">
+              <time class="welcome-eyebrow" id="welcomeDate"></time>
+              <h1 id="welcomeTitle">Bentornato, Luca</h1>
+            </div>
             <div class="welcome-actions">
-              <button type="button" class="btn" onclick="openFileFinder()"><svg class="ic" aria-hidden="true"><use href="#i-folder"/></svg> Archivio</button>
+              <button type="button" class="btn home-recall-pill hidden" id="homeRecallsChip" onclick="openRipassoLobby(); selectRipassoDay(recallDateKey(new Date()))"></button>
+              <button type="button" class="btn home-vault-shortcut" onclick="openFileFinder()">
+                <svg class="ic" aria-hidden="true"><use href="#i-study-folder"/></svg> Archivio <span class="home-shortcut-chevron" aria-hidden="true">›</span>
+              </button>
             </div>
           </header>
 
           <section class="resume-hero" id="homeHeroCard" aria-labelledby="resumeUnitTitle">
+            <svg class="resume-hero-waves" viewBox="0 0 1180 220" preserveAspectRatio="none" aria-hidden="true">
+              <circle cx="1090" cy="18" r="175" fill="#ffffff" fill-opacity="0.06"/>
+              <path d="M0 186 C 220 144 430 228 710 172 S 1020 120 1180 166" fill="none" stroke="#ffffff" stroke-opacity="0.14" stroke-width="1.5"/>
+              <path d="M0 206 C 260 174 470 236 740 192 S 1030 146 1180 188" fill="none" stroke="#8af5c4" stroke-opacity="0.28" stroke-width="1.5"/>
+            </svg>
             <div class="resume-copy">
-              <span class="resume-kicker"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> Ultima lezione</span>
+              <span class="resume-kicker"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> Continua ultima lezione</span>
               <h2 id="resumeUnitTitle"></h2>
               <p id="resumeCourseName"></p>
+              <div class="resume-actions">
+                <button type="button" class="btn pri resume-pill-cta" onclick="openLastStudiedInStudio()">Riprendi lezione <span class="resume-cta-icon" aria-hidden="true"><svg class="ic"><use href="#i-course-arrow"/></svg></span></button>
+                <div class="resume-course-progress">
+                  <span>Unità verificate</span><b id="resumeProgressLabel"></b>
+                  <progress id="resumeProgress" aria-hidden="true"></progress>
+                </div>
+              </div>
             </div>
-            <button type="button" class="btn pri" onclick="openLastStudiedInStudio()">Riprendi lezione <span class="resume-cta-icon" aria-hidden="true"><svg class="ic"><use href="#i-course-arrow"/></svg></span></button>
+            <div class="resume-mini-diagram" id="resumeLessonPreview" aria-hidden="true">
+              <svg viewBox="0 0 340 136" width="100%" height="100%">
+                <defs>
+                  <pattern id="home-hero-dots" width="13" height="13" patternUnits="userSpaceOnUse">
+                    <circle cx="2" cy="2" r="0.95" fill="rgba(255,255,255,0.24)"/>
+                  </pattern>
+                  <marker id="home-hero-arr-m" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M1 1 L9 5 L1 9" fill="none" stroke="#8af5c4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </marker>
+                  <marker id="home-hero-arr-w" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M1 1 L9 5 L1 9" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </marker>
+                </defs>
+                <rect x="0.5" y="0.5" width="339" height="135" rx="18" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.24)"/>
+                <rect x="1" y="1" width="338" height="134" rx="18" fill="url(#home-hero-dots)"/>
+                <text x="18" y="39" font-family="var(--mono)" font-size="10.5" font-weight="600" fill="rgba(255,255,255,0.85)">P₁</text>
+                <text x="18" y="72" font-family="var(--mono)" font-size="10.5" font-weight="600" fill="rgba(255,255,255,0.85)">P₂</text>
+                <text x="18" y="105" font-family="var(--mono)" font-size="10.5" font-weight="600" fill="rgba(255,255,255,0.85)">P₃</text>
+                <line x1="42" y1="35" x2="318" y2="35" stroke="rgba(255,255,255,0.34)" stroke-width="1.35"/>
+                <line x1="42" y1="68" x2="318" y2="68" stroke="rgba(255,255,255,0.34)" stroke-width="1.35"/>
+                <line x1="42" y1="101" x2="318" y2="101" stroke="rgba(255,255,255,0.34)" stroke-width="1.35"/>
+                <path d="M78 35 L154 65" stroke="#8af5c4" stroke-width="1.9" marker-end="url(#home-hero-arr-m)" fill="none"/>
+                <path d="M168 65 L220 38" stroke="rgba(255,255,255,0.9)" stroke-width="1.5" marker-end="url(#home-hero-arr-w)" fill="none"/>
+                <path d="M168 72 L274 98" stroke="rgba(255,255,255,0.9)" stroke-width="1.5" marker-end="url(#home-hero-arr-w)" fill="none"/>
+                <circle cx="78" cy="35" r="5" fill="#ffffff"/>
+                <circle cx="110" cy="68" r="4.8" fill="#ffffff" fill-opacity="0.92"/>
+                <circle cx="126" cy="101" r="4.8" fill="#ffffff" fill-opacity="0.92"/>
+                <circle cx="162" cy="68" r="13.5" fill="#8af5c4" fill-opacity="0.26"/>
+                <circle cx="162" cy="68" r="7.2" fill="#48c788" stroke="#ffffff" stroke-width="2.2"/>
+                <rect x="140" y="81" width="44" height="17" rx="8.5" fill="#ffffff"/>
+                <text x="162" y="92.5" text-anchor="middle" font-family="var(--mono)" font-size="9.5" font-weight="700" fill="#1565f2">C=2</text>
+                <circle cx="226" cy="35" r="5" fill="#ffffff"/>
+                <circle cx="280" cy="101" r="5" fill="#ffffff"/>
+                <path d="M312 15 L314 20.5 L319.5 22.5 L314 24.5 L312 30 L310 24.5 L304.5 22.5 L310 20.5 Z" fill="#8af5c4"/>
+                <path d="M296 112 L297.2 115 L300.2 116.2 L297.2 117.4 L296 120.4 L294.8 117.4 L291.8 116.2 L294.8 115 Z" fill="#ffffff" fill-opacity="0.88"/>
+              </svg>
+            </div>
           </section>
 
           <div class="home-catalog">
             <section aria-labelledby="homeCoursesTitle">
               <div class="library-head">
-                <h2 id="homeCoursesTitle">I tuoi corsi</h2>
+                <div class="library-title-group">
+                  <h2 id="homeCoursesTitle">I tuoi corsi</h2>
+                  <span class="library-count" id="homeCoursesCount"></span>
+                </div>
                 <div class="library-actions">
                   <label class="search-pill">
                     <svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
@@ -2971,8 +3008,12 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
                 </div>
               </div>
               <div class="course-library" id="coursesCardsGrid"></div>
+              <div class="home-review-hint hidden" id="homeReviewHint"></div>
             </section>
-            <section class="desk-note-slot" id="deskNoteSlot" aria-labelledby="deskNoteTitle"></section>
+            <aside class="home-documents" aria-label="Appunti e archivio">
+              <section class="desk-note-slot" id="deskNoteSlot" aria-labelledby="deskNoteTitle"></section>
+              <section class="home-archive" id="homeArchive" aria-labelledby="homeArchiveTitle"></section>
+            </aside>
           </div>
         </div>
 
@@ -2989,7 +3030,11 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
             </div>
           </div>
 
-          <h1 class="wizard-title">Nuovo corso</h1>
+          <header class="wizard-intro study-band">
+            <svg class="study-band-waves" viewBox="0 0 1180 220" preserveAspectRatio="none" aria-hidden="true"><use href="#study-waves"/></svg>
+            <h1 class="wizard-title">Nuovo corso</h1>
+            <span class="wizard-intro-symbol" aria-hidden="true"><svg class="ic"><use href="#i-study-folder"/></svg></span>
+          </header>
           <div class="card" id="wizStep1">
             <h3 tabindex="-1">Come vuoi studiare?</h3>
             <div class="wizard-config">
@@ -3016,7 +3061,8 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
               <div class="picker-panel wizard-preview">
                 <div class="wizard-cover" id="wizardCover" aria-hidden="true"></div>
                 <div class="wizard-preview-body">
-                  <b>Aspetto del corso</b>
+                  <span class="wizard-preview-label">Anteprima della copertina</span>
+                  <b id="wizardCoverName">Il tuo corso</b>
                   <div class="icon-picker" id="obIconPicker" role="group" aria-label="Copertina e simbolo"></div>
                   <div class="color-picker" id="obColorPicker" role="group" aria-label="Colore del simbolo"></div>
                 </div>
@@ -3105,10 +3151,10 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
     </div>
 
     <!-- Mobile Switch sits strictly inside #view-studio -->
-    <div class="seg mobile-switch" id="mobileSwitch">
+    <div class="seg mobile-switch" id="mobileSwitch" role="group" aria-label="Pannello di studio">
       <span class="seg-knob" aria-hidden="true"></span>
-      <button class="on" onclick="setMobilePane('left')">Spiegazione e Slide</button>
-      <button onclick="setMobilePane('right')">I miei appunti</button>
+      <button type="button" class="on" aria-pressed="true" onclick="setMobilePane('left')">Lezione</button>
+      <button type="button" aria-pressed="false" onclick="setMobilePane('right')">Appunti</button>
     </div>
 
     <div class="studio-grid" id="studioGrid" data-mpane="left">
@@ -3116,15 +3162,15 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
       <!-- LEFT PANE: GROUNDED EXPLANATION & SLIDES -->
       <div class="pane left-pane">
         <div class="pane-top">
-          <div class="seg" role="tablist" aria-label="Contenuto sorgente">
-            <span class="seg-knob" aria-hidden="true"></span>
-            <button class="on" id="tabExplain" onclick="setLeftTab('explain')">Spiegazione</button>
-            <button id="tabSlides" onclick="setLeftTab('slides')">Slide</button>
+          <div class="seg" role="group" aria-label="Contenuto della lezione">
+            <button type="button" class="on" id="tabExplain" aria-pressed="true" onclick="setLeftTab('explain')"><svg viewBox="0 0 16 16" width="12" height="12" fill="none" class="studio-seg-spark" aria-hidden="true"><path d="M8 1.5l1.3 3.7L13 6.5l-3.7 1.3L8 11.5 6.7 7.8 3 6.5l3.7-1.3z" fill="currentColor"/></svg>Spiegazione</button>
+            <button type="button" id="tabSlides" aria-pressed="false" onclick="setLeftTab('slides')"><svg viewBox="0 0 16 16" width="12" height="12" fill="none" aria-hidden="true"><rect x="2.2" y="3" width="11.6" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/></svg>Slide</button>
           </div>
           <details class="studio-reading" id="studioReading">
-            <summary class="studio-control">
-              <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h12M3 18h8"/></svg>
-              Dettaglio
+            <summary class="studio-control studio-depth-pill">
+              <svg viewBox="0 0 18 16" width="14" height="13" fill="none" aria-hidden="true"><path d="M2 3.5h14M2 8h14M2 12.5h14" stroke="var(--mut)" stroke-width="1.5" stroke-linecap="round"/><circle cx="11.5" cy="3.5" r="2.2" fill="var(--card)" stroke="var(--blue)" stroke-width="1.5"/><circle cx="6" cy="8" r="2.2" fill="var(--card)" stroke="var(--blue)" stroke-width="1.5"/><circle cx="12.5" cy="12.5" r="2.2" fill="var(--card)" stroke="var(--blue)" stroke-width="1.5"/></svg>
+              <span>Dettaglio</span>
+              <span aria-hidden="true">▾</span>
             </summary>
             <div class="depth-pop">
               <div role="group" aria-label="Livello di dettaglio">
@@ -3160,7 +3206,7 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
       <div class="pane paper-pane" id="paperPane" data-note-tone="neutral" data-note-pattern="plain" data-note-font="serif">
         <div class="pane-top">
           <div class="studio-note-label">
-            <svg class="ic" aria-hidden="true"><use href="#i-book"/></svg>
+            <svg viewBox="0 0 18 20" width="16" height="18" fill="none" aria-hidden="true"><rect x="1" y="1" width="14" height="18" rx="3" fill="#1565f2"/><rect x="5" y="1" width="12" height="18" rx="2.5" fill="#d9e7ff"/><path d="M8 6.5h6M8 10h4.5" stroke="#1565f2" stroke-width="1.5" stroke-linecap="round"/></svg>
             <b>I miei appunti</b>
             <span class="chip g" id="saveChip" role="status"><span class="d" aria-hidden="true"></span><span id="saveText">Salvato</span></span>
           </div>
@@ -3265,7 +3311,7 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
             <button class="dock-btn" onmousedown="event.preventDefault()" onclick="formatNote('sub')" title="Pedice">x₂</button>
             <span class="dock-sep"></span>
             <button class="dock-btn mono" style="font-size:11px" onmousedown="event.preventDefault()" onclick="formatNote('code')" title="Codice inline o blocco">&lt;/&gt;</button>
-            <button class="dock-btn accent" onmousedown="event.preventDefault()" onclick="insertFromNoteDock('formula')" title="Blocco formula">Σ formula</button>
+            <button class="dock-btn accent" onmousedown="event.preventDefault()" onclick="insertFromNoteDock('formula')" aria-label="Inserisci formula" title="Inserisci formula">Σ<span class="dock-formula-label">formula</span></button>
           </div>
           <details class="dock-add" id="noteInsert">
             <summary aria-label="Inserisci negli appunti" title="Inserisci negli appunti">
@@ -3286,32 +3332,39 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
     <div class="explain-sel-pop hidden" id="explainSelPop" role="dialog" aria-label="Chiedi al tutor sul testo selezionato" onclick="event.stopPropagation()">
       <div class="explain-sel-head">
         <div class="explain-sel-meta">
-          <span class="explain-sel-kicker" id="explainSelKicker">Testo selezionato · Chiedi al tutor</span>
-          <div class="explain-sel-quote" id="explainSelQuote"></div>
+          <div class="explain-sel-title-row">
+            <span class="explain-sel-badge" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M11 4l1.7 4.6L17.3 10.3l-4.6 1.7L11 16.6l-1.7-4.6L4.7 10.3l4.6-1.7z" fill="#ffffff"/><path d="M19 3l.6 1.6 1.6.6-1.6.6-.6 1.6-.6-1.6-1.6-.6 1.6-.6z" fill="#8af5c4"/></svg>
+            </span>
+            <span class="explain-sel-kicker">Chiedi al tutor</span>
+          </div>
         </div>
         <button type="button" class="explain-sel-close" aria-label="Chiudi" onclick="hideExplainSelPop()">✕</button>
       </div>
-      <div class="explain-sel-actions" id="explainSelActions">
+      <div class="explain-sel-quote" id="explainSelQuote"></div>
+      <div class="explain-sel-actions">
         <button type="button" class="primary" onclick="runExplainSelAction('approfondisci')">Approfondisci</button>
         <button type="button" onclick="runExplainSelAction('semplifica')">Semplifica</button>
         <button type="button" onclick="runExplainSelAction('esempio')">Esempio</button>
-        <button type="button" onclick="runExplainSelAction('to_note')">+ Negli appunti</button>
-        <button type="button" onclick="hideExplainSelPop();openStudioWritingStyle()">Adatta stile</button>
-        <button type="button" id="explainSelCompareBtn" class="hidden" onclick="runExplainSelAction('diff')">Confronta appunti</button>
-        <button type="button" id="explainSelSourceBtn" onclick="openExplainSelSource()">Fonte</button>
+        <button type="button" class="mint" onclick="runExplainSelAction('to_note')">+ Negli appunti</button>
       </div>
       <div class="explain-sel-ask">
-        <input id="explainSelInput" type="text" placeholder="Chiedi qualsiasi cosa su questa selezione..." onkeydown="if(event.key==='Enter'){event.preventDefault();submitExplainSelQuestion();}">
-        <button type="button" onclick="submitExplainSelQuestion()">Chiedi →</button>
+        <input id="explainSelInput" type="text" aria-label="Domanda sul passaggio" placeholder="Fai una domanda sul passaggio" onkeydown="if(event.key==='Enter'){event.preventDefault();submitExplainSelQuestion();}">
+        <button type="button" aria-label="Invia domanda al tutor" onclick="submitExplainSelQuestion()">↑</button>
+      </div>
+      <div class="explain-sel-actions explain-sel-context">
+        <button type="button" id="explainSelCompareBtn" class="hidden" onclick="runExplainSelAction('diff')">Confronta appunti</button>
+        <button type="button" onclick="hideExplainSelPop();openStudioWritingStyle()">Adatta stile</button>
+        <button type="button" id="explainSelSourceBtn" onclick="openExplainSelSource()">Fonte</button>
       </div>
     </div>
     <dialog class="studio-complete-dialog" id="studioCompleteDialog" aria-labelledby="studioCompleteHeading">
-      <div class="studio-dialog-head">
+      <div class="studio-dialog-head studio-wave-head">
         <span class="studio-complete-icon"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>
         <h2 id="studioCompleteHeading">Studio completato</h2>
       </div>
       <div class="studio-complete-body">
-        <p id="studioCompleteLesson"></p>
+        <div class="studio-complete-lesson"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg><p id="studioCompleteLesson"></p></div>
         <div class="studio-complete-actions">
           <button type="button" class="btn" onclick="leaveCompletedStudy(false)">Torna al corso</button>
           <button type="button" class="btn blue-pri" autofocus onclick="leaveCompletedStudy(true)">Fai il quiz <span aria-hidden="true">→</span></button>
@@ -3320,12 +3373,12 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
     </dialog>
     <dialog class="studio-style-dialog" id="studioStyleDialog" aria-labelledby="studioStyleHeading">
       <form onsubmit="applyStudioWritingStyle(event)">
-        <div class="studio-dialog-head">
+        <div class="studio-dialog-head studio-wave-head">
           <span class="studio-style-icon"><svg class="ic" aria-hidden="true"><use href="#i-pencil"/></svg></span>
           <h2 id="studioStyleHeading">Stile della spiegazione</h2>
         </div>
         <div class="studio-style-body">
-          <p class="muted" style="font-size:12.5px">La demo applica il formato scelto e conserva le tue indicazioni per questa sessione.</p>
+          <p class="studio-style-session">Le preferenze si applicano alle spiegazioni di questa sessione.</p>
           <label>Come vuoi leggere?
             <select class="input-field" name="writingMode" id="studioWritingMode" autofocus>
               <option value="adatta">Adatta dalle indicazioni</option>
@@ -3403,21 +3456,20 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
 <!-- =========================================================================
      MODALS
      ========================================================================= -->
-<div class="modal-bg" id="modalAddLesson" role="dialog" aria-modal="true">
+<div class="modal-bg" id="modalAddLesson" role="dialog" aria-modal="true" aria-labelledby="addLessonHeading">
   <div class="modal-box modal-box--atlas">
     <div class="modal-atlas-head">
       <div class="modal-atlas-title">
         <span class="modal-atlas-icon"><svg class="ic" aria-hidden="true"><use href="#i-course-plus"/></svg></span>
         <div>
-          <span class="modal-atlas-kicker">Lezione per lezione · Flusso continuo</span>
-          <h3>Aggiungi lezione di oggi</h3>
+          <h3 id="addLessonHeading">Aggiungi una lezione</h3>
         </div>
       </div>
       <button class="btn" onclick="closeModal('modalAddLesson')">Chiudi</button>
     </div>
 
     <div class="modal-atlas-body">
-      <div class="grid-2" style="gap:10px;margin-bottom:12px">
+      <div class="add-lesson-fields">
         <div>
           <label for="addLessonCourseSelect" style="display:block;font-size:12px;font-weight:600;color:var(--mut);margin-bottom:4px">Corso</label>
           <select id="addLessonCourseSelect" class="input-field" style="padding:8px 10px" onchange="syncAddLessonSuggestions()"></select>
@@ -3431,13 +3483,10 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
       <div id="addLessonChips" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px"></div>
 
       <input type="file" id="addLessonRealFile" accept=".pdf,.txt,.md" class="hidden" onchange="handleAddLessonFileInput(this.files)">
-      <div class="pickzone" id="addLessonDropzone" onclick="document.getElementById('addLessonRealFile').click()" style="padding:14px">
-        <div class="pickzone-icon"><svg class="ic" style="width:19px;height:19px"><use href="#i-upload"/></svg></div>
-        <div style="flex:1;min-width:0">
-          <div style="font-size:13px;font-weight:700" id="addLessonFileLabel">Scegli o trascina il PDF di oggi</div>
-          <div style="font-size:12px;color:var(--mut)">I tuoi appunti precedenti restano intatti</div>
-        </div>
-      </div>
+      <button type="button" class="pickzone" id="addLessonDropzone" onclick="document.getElementById('addLessonRealFile').click()">
+        <span class="pickzone-icon"><svg class="ic" aria-hidden="true"><use href="#i-upload"/></svg></span>
+        <span><strong id="addLessonFileLabel">Scegli o trascina un file</strong><small>PDF, TXT o Markdown</small></span>
+      </button>
 
       <div id="addLessonProgress">
         <div class="ink-progress-announcement" role="status"></div>
@@ -3445,36 +3494,28 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
       </div>
 
       <div id="addLessonSubmitActions" style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px">
-        <button class="btn" onclick="submitAddLesson(true)">Simula PDF e accoda</button>
+        <button class="btn" onclick="submitAddLesson(true)">Usa un PDF di esempio</button>
         <button class="btn blue-pri" onclick="submitAddLesson(false)">Aggiungi al corso →</button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal-bg" id="modalSource" role="dialog" aria-modal="true">
-  <div class="modal-box modal-box--atlas">
-    <div class="modal-atlas-head">
-      <div class="modal-atlas-title">
-        <span class="modal-atlas-icon"><svg class="ic" aria-hidden="true"><use href="#i-file"/></svg></span>
-        <div>
-          <span class="modal-atlas-kicker">Riferimento originale · Dispensa / Slide</span>
-          <h3>Fonte collegata</h3>
-        </div>
-      </div>
-      <button class="btn" onclick="closeModal('modalSource')">Chiudi</button>
-    </div>
-    <div class="modal-atlas-body" id="modalSourceBody"></div>
+<dialog class="studio-source-dialog" id="modalSource" aria-labelledby="studioSourceHeading" onclose="this.classList.remove('open')">
+  <div class="studio-dialog-head studio-wave-head">
+    <span class="studio-source-icon"><svg class="ic" aria-hidden="true"><use href="#i-file"/></svg></span>
+    <h2 id="studioSourceHeading">Fonte collegata</h2>
+    <form method="dialog"><button type="submit" class="btn" autofocus>Chiudi</button></form>
   </div>
-</div>
+  <div class="studio-source-body" id="modalSourceBody"></div>
+</dialog>
 
-<div class="modal-bg" id="modalCourseDetails" role="dialog" aria-modal="true">
+<div class="modal-bg" id="modalCourseDetails" role="dialog" aria-modal="true" aria-labelledby="modalCourseDetailsTitle">
   <div class="modal-box modal-box--atlas">
     <div class="modal-atlas-head">
       <div class="modal-atlas-title">
         <span class="modal-atlas-icon"><svg class="ic" aria-hidden="true"><use href="#i-folder"/></svg></span>
         <div>
-          <span class="modal-atlas-kicker">Knowledge Vault · Fonti caricate</span>
           <h3 id="modalCourseDetailsTitle">Materiali del corso</h3>
         </div>
       </div>
@@ -3490,14 +3531,13 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
   </div>
 </div>
 
-<div class="modal-bg" id="modalShortcuts" role="dialog" aria-modal="true">
+<div class="modal-bg" id="modalShortcuts" role="dialog" aria-modal="true" aria-labelledby="shortcutsHeading">
   <div class="modal-box modal-box--atlas">
     <div class="modal-atlas-head">
       <div class="modal-atlas-title">
         <span class="modal-atlas-icon"><img src="assets/logo.png" alt="Logo TutorAI" width="24" height="24" style="border-radius:6px"></span>
         <div>
-          <span class="modal-atlas-kicker">Guida rapida · 4 passi essenziali</span>
-          <h3>Come funziona TutorAI</h3>
+          <h3 id="shortcutsHeading">Come funziona TutorAI</h3>
         </div>
       </div>
       <button class="btn" onclick="closeModal('modalShortcuts')">Chiudi</button>
@@ -3523,7 +3563,7 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
       </div>
       <div class="shortcuts-kbd-strip">
         <span><kbd>Seleziona testo</kbd> Chiedi al tutor</span>
-        <span><kbd>Ctrl</kbd> + <kbd>K</kbd> Archivio Vault</span>
+        <span>Corsi → Archivio</span>
         <span><kbd>Esc</kbd> Chiudi pannelli</span>
       </div>
     </div>
@@ -3552,15 +3592,15 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
 <dialog id="fileFinder" class="file-finder" aria-labelledby="finderTitle">
   <header class="finder-top">
     <div class="finder-title-group">
-      <svg class="ic" aria-hidden="true"><use href="#i-folder"/></svg>
-      <h2 id="finderTitle">Archivio</h2>
+      <span class="finder-brand"><svg class="ic" aria-hidden="true"><use href="#i-study-folder"/></svg></span>
+      <h2 id="finderTitle" tabindex="-1" autofocus>Archivio</h2>
     </div>
     <div class="finder-top-actions">
       <label class="search-pill finder-search">
         <svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
         <input id="finderSearchInput" type="search" aria-label="Cerca nel corso selezionato" placeholder="Cerca appunti o file" oninput="filterFinder(this.value)">
       </label>
-      <form method="dialog"><button type="submit" class="btn" autofocus>Chiudi</button></form>
+      <form method="dialog"><button type="submit" class="btn">Chiudi</button></form>
     </div>
   </header>
   <div class="finder-grid">
@@ -3972,6 +4012,7 @@ function makeInitialState() {
     ripassoArchiveOrigin: 'attivita',
     ripassoLastSessionReport: null,
     accountPage: 'activity',
+    profileEditOrigin: 'activity',
     demoSessionOpen: true,
     profileName: 'Luca',
     profileProgramme: 'Ingegneria Informatica',
@@ -4054,32 +4095,34 @@ function escapeCourseText(value) {
 }
 
 function renderSubjectSvg(kind, accent) {
+  const spk = `<path d="M25.5 2.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z" fill="#48c788"/>`;
   if (kind === 'lock') {
-    return `<svg width="24" height="24" viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M9 13V9a5 5 0 0 1 10 0v4" stroke="${accent}" stroke-width="2.3"/><rect x="6" y="12" width="16" height="12" rx="3.5" fill="${accent}" fill-opacity=".18" stroke="${accent}" stroke-width="2"/><path d="M14 16v4" stroke="${accent}" stroke-width="2.2" stroke-linecap="round"/></svg>`;
+    return `<svg width="30" height="30" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M10.5 14V9.8a5.5 5.5 0 0 1 11 0V14" stroke="color-mix(in srgb, ${accent} 52%, #b9d2ff)" stroke-width="2.5" stroke-linecap="round"/><rect x="6.5" y="13.5" width="19" height="14" rx="4.8" fill="${accent}"/><circle cx="16" cy="19.2" r="2.3" fill="#48c788"/><rect x="15" y="19.5" width="2" height="4.5" rx="1" fill="#48c788"/>${spk}</svg>`;
   }
   if (kind === 'wave') {
-    return `<svg width="24" height="24" viewBox="0 0 28 28" fill="none"><path d="M4 20 C8 6, 13 6, 16 14 C18 19, 21 16, 24 8" stroke="${accent}" stroke-width="2.2" stroke-linecap="round"/><circle cx="13" cy="8.5" r="2.2" fill="${accent}"/></svg>`;
+    return `<svg width="30" height="30" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M4.5 22C8.5 8.5 13 8.5 16.5 16.5C19.2 22.8 23 19.5 26.5 10.5" stroke="#48c788" stroke-width="2.4" stroke-linecap="round"/><path d="M16 10.5L9.5 19.5M16 10.5L22.5 19.5" stroke="color-mix(in srgb, ${accent} 38%, #c9d9f5)" stroke-width="2.2" stroke-linecap="round"/><circle cx="16" cy="10.5" r="3.8" fill="${accent}"/><circle cx="9.5" cy="19.5" r="3.4" fill="var(--blue)"/><circle cx="22.5" cy="19.5" r="3.4" fill="#48c788"/>${spk}</svg>`;
   }
   if (kind === 'db') {
-    return `<svg width="24" height="24" viewBox="0 0 28 28" fill="none"><ellipse cx="14" cy="8" rx="7.5" ry="3" stroke="${accent}" stroke-width="1.8"/><path d="M6.5 8v6c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3V8" stroke="${accent}" stroke-width="1.8"/><path d="M6.5 14v6c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3v-6" stroke="${accent}" stroke-width="1.8"/></svg>`;
+    return `<svg width="30" height="30" viewBox="0 0 32 32" fill="none" aria-hidden="true"><ellipse cx="16" cy="9" rx="8.5" ry="3.4" fill="${accent}" fill-opacity="0.22" stroke="${accent}" stroke-width="2"/><path d="M7.5 9v6.8c0 1.9 3.8 3.4 8.5 3.4s8.5-1.5 8.5-3.4V9" fill="${accent}" fill-opacity="0.1" stroke="${accent}" stroke-width="2"/><path d="M7.5 15.8v6.2c0 1.9 3.8 3.4 8.5 3.4s8.5-1.5 8.5-3.4v-6.2" stroke="${accent}" stroke-width="2"/><circle cx="22" cy="15.8" r="2.1" fill="#48c788"/>${spk}</svg>`;
   }
   if (kind === 'matrix') {
-    return `<svg width="24" height="24" viewBox="0 0 28 28" fill="none"><path d="M9 6H6v16h3M19 6h3v16h-3" stroke="${accent}" stroke-width="1.9" stroke-linecap="round"/><rect x="10" y="9" width="3.5" height="3.5" rx="0.9" fill="${accent}"/><rect x="15" y="9" width="3.5" height="3.5" rx="0.9" fill="${accent}" fill-opacity="0.45"/><rect x="10" y="15.5" width="3.5" height="3.5" rx="0.9" fill="${accent}" fill-opacity="0.45"/><rect x="15" y="15.5" width="3.5" height="3.5" rx="0.9" fill="${accent}"/></svg>`;
+    return `<svg width="30" height="30" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M9.5 6.5H6.2v19h3.3M22.5 6.5h3.3v19h-3.3" stroke="${accent}" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><rect x="11" y="9.8" width="4.4" height="4.4" rx="1.3" fill="${accent}"/><rect x="16.6" y="9.8" width="4.4" height="4.4" rx="1.3" fill="#48c788"/><rect x="11" y="17.4" width="4.4" height="4.4" rx="1.3" fill="${accent}" fill-opacity="0.34"/><rect x="16.6" y="17.4" width="4.4" height="4.4" rx="1.3" fill="${accent}"/></svg>`;
   }
   if (kind === 'atom') {
-    return `<svg width="24" height="24" viewBox="0 0 28 28" fill="none"><ellipse cx="14" cy="14" rx="9" ry="4" transform="rotate(42 14 14)" stroke="${accent}" stroke-width="1.75"/><ellipse cx="14" cy="14" rx="9" ry="4" transform="rotate(-42 14 14)" stroke="${accent}" stroke-width="1.75"/><circle cx="14" cy="14" r="2.4" fill="${accent}"/></svg>`;
+    return `<svg width="30" height="30" viewBox="0 0 32 32" fill="none" aria-hidden="true"><ellipse cx="16" cy="16" rx="10.2" ry="4.4" transform="rotate(42 16 16)" fill="${accent}" fill-opacity="0.1" stroke="${accent}" stroke-width="1.9"/><ellipse cx="16" cy="16" rx="10.2" ry="4.4" transform="rotate(-42 16 16)" fill="${accent}" fill-opacity="0.1" stroke="${accent}" stroke-width="1.9"/><circle cx="16" cy="16" r="3.4" fill="#48c788"/>${spk}</svg>`;
   }
-  return `<svg width="24" height="24" viewBox="0 0 28 28" fill="none"><line x1="8" y1="9" x2="20" y2="9" stroke="${accent}" stroke-width="1.8"/><line x1="8" y1="9" x2="14" y2="20" stroke="${accent}" stroke-width="1.8"/><line x1="20" y1="9" x2="14" y2="20" stroke="${accent}" stroke-width="1.8"/><circle cx="8" cy="9" r="3" fill="var(--card)" stroke="${accent}" stroke-width="1.9"/><circle cx="20" cy="9" r="3" fill="${accent}"/><circle cx="14" cy="20" r="3" fill="var(--card)" stroke="${accent}" stroke-width="1.9"/></svg>`;
+  return `<svg width="30" height="30" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 9L9 21.5M16 9L23 21.5M9 21.5H23" stroke="color-mix(in srgb, ${accent} 44%, #a9c8ff)" stroke-width="2.6" stroke-linecap="round"/><circle cx="16" cy="9" r="3.9" fill="${accent}"/><circle cx="9" cy="21.5" r="3.9" fill="${accent}"/><circle cx="23" cy="21.5" r="3.9" fill="#48c788"/>${spk}</svg>`;
 }
 
 function renderProgressRing(pct, color, size = 40) {
-  const r = size === 40 ? 16 : 15;
+  const r = size === 40 ? 16 : size <= 24 ? 8.5 : 15;
+  const sw = size <= 24 ? 2.6 : 3.6;
   const c = +(2 * Math.PI * r).toFixed(1);
   const dash = +((pct / 100) * c).toFixed(1);
   return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" aria-hidden="true" style="flex:none">
-    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--line)" stroke-width="3.5"/>
-    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="${dash} ${c}" transform="rotate(-90 ${size/2} ${size/2})"/>
-    <text x="${size/2}" y="${size/2 + 3.2}" text-anchor="middle" font-family="var(--mono)" font-size="9.5" font-weight="700" fill="var(--ink)">${pct}%</text>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="color-mix(in srgb, ${color} 18%, var(--line))" stroke-width="${sw}"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${dash} ${c}" transform="rotate(-90 ${size/2} ${size/2})"/>
+    ${size >= 34 ? `<text x="${size/2}" y="${size/2 + 3.2}" text-anchor="middle" font-family="var(--mono)" font-size="9.5" font-weight="700" fill="var(--ink)">${pct}%</text>` : ''}
   </svg>`;
 }
 
@@ -4140,7 +4183,9 @@ function syncSegKnobs() {
    ============================================================================ */
 function toggleSidebar() {
   app.sidebarOpen = !app.sidebarOpen;
+  if (!app.sidebarOpen) app.sbCourseMenuOpen = false;
   renderSidebar();
+  document.getElementById(app.sidebarOpen ? 'sbCourseBtn' : 'studioIndiceBtn').focus();
 }
 
 function toggleSidebarCourseMenu(force) {
@@ -4257,6 +4302,8 @@ function setMobilePane(side) {
   const btns = document.querySelectorAll('#mobileSwitch button');
   btns[0].classList.toggle('on', side === 'left');
   btns[1].classList.toggle('on', side === 'right');
+  btns[0].setAttribute('aria-pressed', String(side === 'left'));
+  btns[1].setAttribute('aria-pressed', String(side === 'right'));
   requestAnimationFrame(syncSegKnobs);
 }
 
@@ -4358,10 +4405,10 @@ function openAddLessonModal(preselectedCourseId) {
   const cid = preselectedCourseId || app.courseId;
   const sel = document.getElementById('addLessonCourseSelect');
   sel.innerHTML = Object.values(COURSES_DATA).map(c =>
-    `<option value="${c.id}" ${c.id === cid ? 'selected' : ''}>${c.nome}</option>`
+    `<option value="${c.id}" ${c.id === cid ? 'selected' : ''}>${escapeCourseText(c.nome)}</option>`
   ).join('');
   document.getElementById('addLessonTitleInput').value = '';
-  document.getElementById('addLessonFileLabel').textContent = 'Scegli o trascina il PDF di oggi';
+  document.getElementById('addLessonFileLabel').textContent = 'Scegli o trascina un file';
   updateInkProgress('addLessonProgress');
   app.addLessonSelectedFile = '';
   app.addLessonFile = null;
@@ -4478,9 +4525,28 @@ function renderHomeView() {
   const recent = app.lastStudied || { courseId: app.courseId, unitId: app.unitId };
   const course = COURSES_DATA[recent.courseId] || COURSES_DATA[app.courseId];
   const unit = course.units.find(u => u.id === recent.unitId) || course.units[0];
+  const today = new Date();
+  const todayKey = recallDateKey(today);
+  const dateLabel = document.getElementById('welcomeDate');
+  dateLabel.dateTime = todayKey;
+  dateLabel.textContent = today.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'short' });
   document.getElementById('welcomeTitle').textContent = `Bentornato, ${app.profileName || 'Luca'}`;
   document.getElementById('resumeUnitTitle').textContent = unit.titolo;
-  document.getElementById('resumeCourseName').textContent = course.nome;
+  document.getElementById('resumeCourseName').textContent = `${course.nome} · Lezione ${course.units.indexOf(unit) + 1} di ${course.units.length}`;
+  const progress = document.getElementById('resumeProgress');
+  progress.max = course.units.length;
+  progress.value = course.units.filter(lesson => lesson.stato === 'dimostrato').length;
+  document.getElementById('resumeProgressLabel').textContent = `${progress.value}/${progress.max}`;
+  document.getElementById('resumeLessonPreview').classList.toggle('hidden', course.id !== 'sistemi' || unit.id !== 'u13');
+
+  const upcoming = app.ripassoAgenda.filter(item => !item.completedBy && item.date >= todayKey &&
+    COURSES_DATA[item.courseId]?.units.some(lesson => lesson.id === item.unitId))
+    .sort((left, right) => left.date.localeCompare(right.date));
+  const dueTodayCount = upcoming.filter(item => item.date === todayKey).length;
+  const recallsChip = document.getElementById('homeRecallsChip');
+  recallsChip.classList.toggle('hidden', dueTodayCount === 0);
+  recallsChip.innerHTML = `<span class="home-recall-check">${icon('i-check')}</span> ${plural(dueTodayCount, 'richiamo oggi', 'richiami oggi')}`;
+
   renderDeskNote(recent);
 
   const query = (app.courseSearchQuery || '').trim().toLowerCase();
@@ -4489,23 +4555,44 @@ function renderHomeView() {
   const courses = Object.values(COURSES_DATA).filter(c =>
     c.nome.toLowerCase().includes(query) || c.units.some(u => u.titolo.toLowerCase().includes(query))
   );
+  document.getElementById('homeCoursesCount').textContent = `${courses.length} ${query ? 'trovati' : 'attivi'}`;
 
   document.getElementById('coursesCardsGrid').innerHTML = courses.map(c => {
     const verified = c.units.filter(u => u.stato === 'dimostrato').length;
+    const needsReview = c.units.some(u => u.stato === 'da_ripassare');
+    const nextReminder = upcoming.find(item => item.courseId === c.id);
+    const reminderLabel = nextReminder && (nextReminder.date === todayKey
+        ? 'oggi'
+        : recallDateFromKey(nextReminder.date).toLocaleDateString('it-IT', { day: 'numeric', month: 'short' }));
     return `
       <button type="button" class="course-card" style="--course-accent:${c.accent}" onclick="openCourseDetail('${c.id}')">
         <span class="course-filemark" aria-hidden="true">${renderSubjectSvg(c.kind, c.accent)}</span>
-        <span class="course-body">
-          <strong>${escapeCourseText(c.nome)}</strong>
-          <small>${c.percorso === 'lezione' ? 'Lezione per lezione' : 'Preparazione esame'}</small>
+        <span class="course-card-arrow" aria-hidden="true"><svg class="ic" viewBox="0 0 16 16"><path d="M4 12l8-8M6 4h6v6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="course-card-detail">
+          <span class="course-body">
+            <strong>${escapeCourseText(c.nome)}</strong>
+            <small>${c.percorso === 'lezione' ? 'Lezione per lezione' : 'Preparazione esame'}</small>
+          </span>
+          <span class="course-card-progress">
+            <span class="course-progress-segments" style="--segments:${c.units.length}" aria-hidden="true">${c.units.map(lesson => `<i class="${lesson.stato === 'dimostrato' ? 'verified' : ''}"></i>`).join('')}</span>
+            <span><b>${verified}</b> di ${c.units.length} unità verificate</span>
+          </span>
+          ${needsReview ? '<span class="course-card-status"><span class="course-recall">Da ripassare</span></span>'
+            : reminderLabel ? `<span class="course-card-status"><span class="course-cal-foot">${icon('i-calendar')} Richiamo · ${escapeCourseText(reminderLabel)}</span></span>` : ''}
         </span>
-        <span class="course-meta">
-          <span>${verified} di ${c.units.length} unità verificate</span>
-          ${c.units.some(u => u.stato === 'da_ripassare') ? '<span class="course-recall">Da ripassare</span>' : ''}
-        </span>
-        <span class="course-card-arrow" aria-hidden="true">${icon('i-course-arrow')}</span>
       </button>`;
   }).join('') || '<p class="library-empty">Nessun corso corrisponde alla ricerca.</p>';
+
+  const reviewCourse = courses.find(c => c.units.some(lesson => lesson.stato === 'da_ripassare'));
+  const hint = document.getElementById('homeReviewHint');
+  hint.classList.toggle('hidden', !reviewCourse);
+  if (reviewCourse) {
+    const reviewCount = reviewCourse.units.filter(lesson => lesson.stato === 'da_ripassare').length;
+    hint.innerHTML = `<span class="home-tutor-icon" aria-hidden="true">${icon('i-study-spark')}</span>
+      <div><span class="home-hint-caption">Promemoria di studio</span>
+      <strong>${escapeCourseText(reviewCourse.nome)} · ${plural(reviewCount, 'unità da ripassare', 'unità da ripassare')}</strong></div>
+      <button type="button" class="btn ghost" onclick="openRipassoLobby('${reviewCourse.id}')">Apri Ripasso ${icon('i-course-arrow')}</button>`;
+  }
 }
 
 function noteExcerpt(note) {
@@ -4514,11 +4601,22 @@ function noteExcerpt(note) {
 
 function renderDeskNote(recent) {
   const slot = document.getElementById('deskNoteSlot');
+  const archive = document.getElementById('homeArchive');
   const refs = [...app.studyHistory.filter(entry => entry.kind === 'appunti'), recent];
   const match = refs.find(({ courseId, unitId }) => {
     const note = app.unitNotes[courseId + ':' + unitId];
     return note && !note.noteBlank && note.blocks.length > 0;
   });
+  const archiveCourse = COURSES_DATA[match?.courseId] || COURSES_DATA[recent.courseId] || COURSES_DATA[app.courseId];
+  archive.innerHTML = `<div class="home-archive-head">
+    <span class="home-archive-icon">${icon('i-study-folder')}</span>
+    <div><h2 id="homeArchiveTitle">Archivio</h2><p>${escapeCourseText(archiveCourse.nome)}</p></div>
+    ${match ? `<button type="button" class="btn pri home-archive-export" aria-label="Esporta ultimo appunto in Markdown" onclick="exportFinderMarkdown('${match.courseId}', '${match.unitId}', 'notes')">.md ↓</button>` : ''}
+  </div>
+  <div class="home-archive-folders">
+    ${FINDER_FOLDERS.map(folder => `<button type="button" onclick="openFileFinder('${archiveCourse.id}', '${folder.id}')">${icon('i-folder')} ${folder.title}</button>`).join('')}
+  </div>`;
+
   if (!match) {
     slot.classList.add('hidden');
     return;
@@ -4527,13 +4625,24 @@ function renderDeskNote(recent) {
   const note = app.unitNotes[courseId + ':' + unitId];
   const course = COURSES_DATA[courseId];
   const excerpt = noteExcerpt(note);
+  const formulas = [...new Set(note.blocks.filter(block => !block.studyKind && !block.isTargetErr).flatMap(block =>
+    (block.text.match(/\$[^$\n]+\$/g) || []).filter(formula => formula.length <= 37 && /[<>=]|\\(?:to|implies|parallel)\b/.test(formula))
+  ))].sort((a, b) => Number(/[<>=]/.test(b)) - Number(/[<>=]/.test(a))).slice(0, 2);
   slot.classList.remove('hidden');
-  slot.innerHTML = `<h2 class="desk-note-label" id="deskNoteTitle">${icon('i-pencil')} Ultimo appunto</h2>
-    <button type="button" class="desk-note-paper" onclick="openDeskNote('${courseId}', '${unitId}')">
-      <strong>${escapeCourseText(note.title)}</strong>
-      ${excerpt ? `<span class="desk-note-excerpt">${escapeCourseText(excerpt)}</span>` : ''}
-      <span class="desk-note-meta"><span>${escapeCourseText(course.nome)} · ${note.version}</span>${icon('i-course-arrow')}</span>
-    </button>`;
+  slot.innerHTML = `
+    <div class="desk-note-head">
+      <h2 class="desk-note-label" id="deskNoteTitle">${icon('i-pencil')} Ultimo appunto</h2>
+      <button type="button" class="desk-note-all" aria-label="Tutti gli appunti di ${escapeCourseText(course.nome)}" onclick="openFileFinder('${courseId}', 'notes')">Tutti ›</button>
+    </div>
+    <div class="desk-note-stack">
+      <button type="button" class="desk-note-paper" onclick="openDeskNote('${courseId}', '${unitId}')">
+        <span class="desk-note-kicker">${escapeCourseText(course.nome)} · ${note.version}</span>
+        <strong>${escapeCourseText(note.title)}</strong>
+        ${excerpt ? `<span class="desk-note-excerpt">${escapeCourseText(excerpt)}</span>` : ''}
+        ${formulas.length ? `<span class="desk-note-formulas">${formulas.map(formula => `<span>${escapeCourseText(formula)}</span>`).join('')}</span>` : ''}
+        <span class="desk-note-meta"><span>Apri in Studio</span><span class="desk-note-arrow">${icon('i-course-arrow')}</span></span>
+      </button>
+    </div>`;
   renderMath(slot);
 }
 
@@ -4558,24 +4667,30 @@ function renderCourseDetailView() {
   };
   const ocrIssues = course.sources.filter(s => !s.ok).length;
   const hasCover = Boolean(COURSE_COVERS[course.kind]);
+  const verifiedCount = course.units.filter(unit => unit.stato === 'dimostrato').length;
 
   target.innerHTML = `
     <button type="button" class="btn ghost detail-back" onclick="openHomeHub()">← Corsi</button>
-    <header class="course-heading${hasCover ? ' has-cover' : ''}" style="--course-accent:${course.accent}">
+    <header class="course-heading study-band${hasCover ? ' has-cover' : ''}">
       ${hasCover ? `<div class="course-heading-cover" aria-hidden="true">${courseCoverArt(course)}</div>` : ''}
+      <svg class="study-band-waves" viewBox="0 0 1180 220" preserveAspectRatio="none" aria-hidden="true"><use href="#study-waves"/></svg>
       <span class="course-heading-badge" aria-hidden="true">${renderSubjectSvg(course.kind, course.accent)}</span>
       <div class="course-heading-copy">
         <h1>${escapeCourseText(course.nome)}</h1>
         <p>${course.percorso === 'lezione' ? 'Lezione per lezione' : 'Preparazione esame'} · ${plural(course.units.length, 'lezione', 'lezioni')}</p>
+        <div class="course-heading-progress">
+          <span>${verifiedCount} di ${course.units.length} unità verificate</span>
+          <progress aria-hidden="true" value="${verifiedCount}" max="${course.units.length}"></progress>
+        </div>
       </div>
     </header>
     <section aria-labelledby="courseLessonsTitle" style="--course-accent:${course.accent}">
       <header class="detail-actions">
         <h2 id="courseLessonsTitle">Lezioni del corso</h2>
         <div>
-          ${ocrIssues ? `<button type="button" class="detail-ocr-pill" onclick="openFileFinder('${course.id}', 'sources')">${icon('i-alert')} ${plural(ocrIssues, 'file senza OCR', 'file senza OCR')}</button>` : ''}
+          ${ocrIssues ? `<button type="button" class="btn ghost detail-ocr-notice" onclick="openFileFinder('${course.id}', 'sources')">${icon('i-alert')} ${plural(ocrIssues, 'file senza OCR', 'file senza OCR')}</button>` : ''}
           <button type="button" class="btn" onclick="openFileFinder('${course.id}')">${icon('i-folder')} Materiali</button>
-          <button type="button" class="btn" onclick="openAddLessonModal('${course.id}')">+ Aggiungi lezione</button>
+          <button type="button" class="btn blue-pri" onclick="openAddLessonModal('${course.id}')">${icon('i-course-plus')} Aggiungi lezione</button>
         </div>
       </header>
       <ol class="course-lessons">
@@ -4678,6 +4793,7 @@ function describeFinderEntry(course, folder, entry) {
 function renderFinderDocument(course, folder, entry, index) {
   const { title, excerpt, meta } = describeFinderEntry(course, folder, entry);
   return `<button type="button" class="finder-document ${folder}" onclick="navigateFinder('${course.id}', '${folder}', ${index})">
+    <span class="finder-document-kind">${icon(folder === 'notes' ? 'i-pencil' : 'i-book')}</span>
     <strong>${escapeCourseText(title)}</strong>
     ${excerpt ? `<span class="finder-document-excerpt">${escapeCourseText(excerpt)}</span>` : ''}
     <small>${escapeCourseText(meta)}</small>
@@ -4747,9 +4863,10 @@ function renderFileFinder() {
       .map(({ entry, i }) => renderFinderDocument(course, 'generated', entry, i));
     content.insertAdjacentHTML('beforeend', `<h3 class="finder-section-title">Cartelle</h3>
       <div class="finder-folders">${FINDER_FOLDERS.map(item => `
-      <button type="button" class="finder-folder" onclick="navigateFinder('${courseId}', '${item.id}')">
+      <button type="button" class="finder-folder ${item.id}" onclick="navigateFinder('${courseId}', '${item.id}')">
         <span class="finder-folder-art" aria-hidden="true"><span></span></span>
         <strong>${item.title}</strong><small>${plural(filesByFolder[item.id].length, 'file', 'file')}</small>
+        <span class="finder-folder-arrow" aria-hidden="true">${icon('i-course-arrow')}</span>
       </button>`).join('')}</div>
       <h3 class="finder-section-title">Appunti e spiegazioni</h3>
       <div class="finder-documents">${previews.concat(generatedPreviews).join('')}</div>`);
@@ -4779,7 +4896,8 @@ function renderFileFinder() {
   const excerpt = folder === 'sources' ? [file.info] : note ? note.blocks.map(block => block.text) : [profile.para, ...profile.steps];
   const isList = folder !== 'sources' && excerpt.some(t => t.startsWith('• ') || /^\d+\./.test(t));
   content.insertAdjacentHTML('beforeend', `
-    <section class="finder-preview">
+    <section class="finder-preview ${folder}">
+      <p class="finder-preview-category">${folderInfo.title}</p>
       <h3>${escapeCourseText(title)}</h3>
       ${isList
         ? `<ul class="finder-preview-list">${excerpt.map(text => `<li>${escapeCourseText(text.replace(/^•\s*/, ''))}</li>`).join('')}</ul>`
@@ -4877,6 +4995,7 @@ function renderOnboardingPickers() {
   const iconBox = document.getElementById('obIconPicker');
   const colorBox = document.getElementById('obColorPicker');
   if (!iconBox || !colorBox) return;
+  document.getElementById('wizardCoverName').textContent = getWizardCourseName() || 'Il tuo corso';
   const col = app.onboardingColor || '#2f65d8';
   const kind = app.onboardingIcon || 'nodes';
   const appearance = `${kind}:${col}`;
@@ -4911,8 +5030,8 @@ function onCourseNameChange() {
       : lc.includes('fisica') || lc.includes('chimica') || lc.includes('elettr') ? 'atom'
       : lc.includes('algebra') || lc.includes('geom') ? 'matrix'
       : 'nodes';
-    renderOnboardingPickers();
   }
+  renderOnboardingPickers();
   if (app.noFilesMode || app.ingestionQueue.length) rebuildWizardOutline();
 }
 
@@ -5374,7 +5493,10 @@ function renderSidebar() {
   document.getElementById('sbCourseMeta').textContent = `${c.percorso === 'lezione' ? 'Lezione per lezione' : 'Prepara esame'} · ${c.units.length} unità`;
 
   const showSb = app.view === 'studio' && app.sidebarOpen;
-  document.getElementById('courseSidebar').classList.toggle('collapsed', !showSb);
+  const sidebar = document.getElementById('courseSidebar');
+  sidebar.classList.toggle('collapsed', !showSb);
+  sidebar.inert = !showSb;
+  sidebar.style.setProperty('--sidebar-course-accent', c.accent);
   const outlineToggle = document.getElementById('studioIndiceBtn');
   outlineToggle.classList.toggle('on', showSb);
   outlineToggle.setAttribute('aria-expanded', String(showSb));
@@ -5383,37 +5505,46 @@ function renderSidebar() {
   const uIdx = Math.max(0, c.units.findIndex(x => x.id === app.unitId));
   const curU = c.units[uIdx] || c.units[0];
   const badge = document.getElementById('studioUnitBadge');
-  if (badge && curU) badge.textContent = `${uIdx + 1} di ${c.units.length}`;
+  if (badge && curU) {
+    const dots = c.units.length <= 10 ? c.units.map((u, idx) => `<i class="${idx === uIdx ? 'cur' : u.stato === 'dimostrato' ? 'done' : ''}"></i>`).join('') : '';
+    badge.innerHTML = `<span class="studio-pos-dots" aria-hidden="true">${dots}</span><span>${uIdx + 1}/${c.units.length}</span>`;
+    badge.setAttribute('aria-label', `${uIdx + 1} di ${c.units.length}`);
+  }
 
   const menuEl = document.getElementById('sbCourseMenu');
   if (menuEl) {
-    menuEl.classList.toggle('hidden', !app.sbCourseMenuOpen || !showSb);
+    const menuOpen = app.sbCourseMenuOpen && showSb;
+    menuEl.classList.toggle('hidden', !menuOpen);
+    document.getElementById('sbCourseBtn').setAttribute('aria-expanded', String(menuOpen));
     menuEl.innerHTML = Object.values(COURSES_DATA).map(crs => `
-      <button class="sb-pick-item ${crs.id === app.courseId ? 'on' : ''}" onclick="selectCourse('${crs.id}');app.sbCourseMenuOpen=false;renderAll()">
-        <span style="width:22px;height:22px;border-radius:6px;background:${softTint(crs.accent)};display:grid;place-items:center;flex:none">
+      <button type="button" class="sb-pick-item ${crs.id === app.courseId ? 'on' : ''}" aria-pressed="${crs.id === app.courseId}" onclick="app.sbCourseMenuOpen=false;selectCourse('${crs.id}');document.getElementById('sbCourseBtn').focus()">
+        <span class="sb-picker-icon" style="background:${softTint(crs.accent)}" aria-hidden="true">
           ${renderSubjectSvg(crs.kind, crs.accent)}
         </span>
-        <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${crs.nome}</span>
+        <span class="sb-picker-label">${escapeCourseText(crs.nome)}</span>
         ${crs.id === app.courseId ? icon('i-check') : ''}
       </button>`).join('') + `
       <div class="note-menu-sep"></div>
-      <button class="sb-pick-item" style="color:var(--blue)" onclick="app.sbCourseMenuOpen=false;openWizard()">+ Nuovo corso</button>`;
+      <button type="button" class="sb-pick-item sb-new-course" onclick="app.sbCourseMenuOpen=false;openWizard()">${icon('i-course-plus')} Nuovo corso</button>`;
   }
 
   const dotCls = st => st === 'dimostrato' ? 'done' : st === 'da_ripassare' ? 'warn' : st === 'in_corso' || st === 'studiato_da_verificare' ? 'cur' : 'idle';
   document.getElementById('sbUnitsList').innerHTML = c.units.map(u => `
-    <button class="sb-item ${u.id === app.unitId ? 'on' : ''}" onclick="selectUnit('${u.id}')">
-      <span class="sb-dot ${dotCls(u.stato)}"></span>
-      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u.titolo}</span>
+    <button type="button" class="sb-item ${u.id === app.unitId ? 'on' : ''}" ${u.id === app.unitId ? 'aria-current="page"' : ''} onclick="selectUnit('${u.id}')">
+      <span class="sb-dot ${dotCls(u.stato)}" aria-hidden="true">${u.stato === 'dimostrato' ? icon('i-check') : escapeCourseText(u.num)}</span>
+      <span class="sb-lesson-title">${escapeCourseText(u.titolo.replace(/^\d+(?:\.\d+)*\s+/, ''))}</span>
     </button>`).join('');
 
   document.getElementById('sbSourcesList').innerHTML = c.sources.map(s => `
-    <button class="sb-file" onclick="openSourceModal('${s.nome.replace(/'/g, "\\'")}', 1)">
+    <button type="button" class="sb-file" data-source-name="${escapeCourseText(s.nome)}" onclick="openSourceModal(this.dataset.sourceName, 1)">
       ${icon(s.ok ? 'i-file' : 'i-alert')}
-      <span class="nm">${s.nome}</span>
+      <span class="nm">${escapeCourseText(s.nome)}</span>
     </button>`).join('');
 
   const doneCount = c.units.filter(u => u.stato === 'dimostrato').length;
+  const progress = document.getElementById('sbProgress');
+  progress.max = c.units.length;
+  progress.value = doneCount;
   document.getElementById('sbProgressText').textContent = `${doneCount}/${c.units.length} verificate`;
 }
 
@@ -5423,10 +5554,15 @@ function renderSidebar() {
 function setLeftTab(tab) {
   app.leftTab = tab;
   hideExplainSelPop();
-  document.getElementById('tabExplain').classList.toggle('on', tab === 'explain');
-  document.getElementById('tabSlides').classList.toggle('on', tab === 'slides');
   renderLeftPane();
-  requestAnimationFrame(syncSegKnobs);
+}
+
+function stepStudySlide(page, direction) {
+  app.slidePage = page;
+  renderLeftPane();
+  const button = document.querySelector(`#leftDocSheet [data-slide-step="${direction}"]`);
+  const alternate = document.querySelector('#leftDocSheet [data-slide-step]:enabled');
+  (button?.disabled ? alternate : button)?.focus({ preventScroll: true });
 }
 
 function setDepth(d) {
@@ -5447,7 +5583,11 @@ function adjustStudyFontSize(delta) {
   if (label) label.textContent = app.studyFontSize + 'px';
 }
 
-function selectDiagramEvent(evId) { app.activeDiagramEvent = evId; renderLeftPane(); }
+function selectDiagramEvent(evId, restoreFocus = false) {
+  app.activeDiagramEvent = evId;
+  renderLeftPane();
+  if (restoreFocus) document.querySelector(`.diag-node[data-event="${evId}"]`)?.focus({ preventScroll: true });
+}
 function toggleStudioSources() {
   app.showStudioSources = !app.showStudioSources;
   const menu = document.getElementById('studioReading');
@@ -5528,16 +5668,14 @@ function positionExplainSelPop(rect, pid, quoteText, meta = {}) {
     pageNum: meta.pageNum || 1
   };
   document.querySelectorAll('#leftDocSheet .para.sel').forEach(el => el.classList.remove('sel'));
-  if (pid) {
+  if (pid && meta.viaButton) {
     document.querySelector(`#leftDocSheet .para[data-para-id="${pid}"]`)?.classList.add('sel');
   }
 
-  const kickerEl = document.getElementById('explainSelKicker');
   const quoteEl = document.getElementById('explainSelQuote');
   const cmpBtn = document.getElementById('explainSelCompareBtn');
   const srcBtn = document.getElementById('explainSelSourceBtn');
   const inputEl = document.getElementById('explainSelInput');
-  if (kickerEl) kickerEl.textContent = meta.viaButton ? 'Passaggio selezionato · Chiedi al tutor' : 'Selezione testo · Chiedi al tutor';
   if (quoteEl) {
     quoteEl.textContent = shortQuote ? `«${shortQuote}»` : '';
     quoteEl.classList.toggle('hidden', !shortQuote);
@@ -5550,11 +5688,14 @@ function positionExplainSelPop(rect, pid, quoteText, meta = {}) {
   pop.style.left = '0px';
   pop.style.top = '0px';
 
-  const popRect = pop.getBoundingClientRect();
-  const popW = popRect.width || 368;
-  const popH = popRect.height || 210;
+  const popW = pop.offsetWidth;
+  const popH = pop.offsetHeight;
+  const pane = document.getElementById('leftScrollArea').getBoundingClientRect();
+  const minLeft = Math.max(10, pane.left + 10);
+  const maxLeft = Math.min(window.innerWidth - 10, pane.right - 10) - popW;
   const anchorX = rect.left + (rect.width || 24) / 2;
-  const left = Math.min(window.innerWidth - popW - 10, Math.max(10, anchorX - popW / 2));
+  const left = maxLeft < minLeft ? (window.innerWidth - popW) / 2
+    : Math.min(maxLeft, Math.max(minLeft, anchorX - popW / 2));
   const preferAbove = rect.bottom + popH + 22 > window.innerHeight && rect.top > popH + 22;
   let top = preferAbove ? rect.top - popH - 12 : rect.bottom + 12;
   top = Math.min(window.innerHeight - popH - 10, Math.max(10, top));
@@ -5568,7 +5709,7 @@ function positionExplainSelPop(rect, pid, quoteText, meta = {}) {
 
 function handleExplainSelection(event) {
   const target = event?.target;
-  if (target?.closest?.('button, input, textarea, select, summary, .tut-chip, .diag-node, .study-transfer-actions, .slide-nav, .sources-compare-grid')) {
+  if (target?.closest?.('button, input, textarea, select, summary, .tut-chip, .diag-node, .slide-nav, .sources-compare-grid')) {
     return;
   }
   const sheet = document.getElementById('leftDocSheet');
@@ -5747,44 +5888,67 @@ function openSourceModal(filename, pageNum) {
   const fileUsed = filename || unitFile;
   const page = pageNum || app.slidePage;
   const sourceUnit = fileUsed === unitFile ? u : c.units.find(unit => unit.src === fileUsed);
-  const prof = getUnitTopicProfile(c, u);
+  const prof = getUnitTopicProfile(c, sourceUnit || u);
+  const dialog = document.getElementById('modalSource');
   document.getElementById('modalSourceBody').innerHTML = `
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap">
-      <span class="chip b">${escapeCourseText(fileUsed)}</span>
-      <span class="chip">Pagina ${page}</span>
+    <div class="studio-source-sheet">
+      <div class="studio-source-file">
+        ${icon('i-file')}
+        <strong>${escapeCourseText(fileUsed)}</strong>
+        <span>Pagina ${page}</span>
+      </div>
+      <div class="studio-source-preview">
+        <h3>Anteprima di studio</h3>
+        <p>${escapeCourseText(prof.para)}</p>
+      </div>
     </div>
-    <div style="background:radial-gradient(circle, var(--paper-dot) 1px, transparent 1px) 0 0 / 16px 16px, var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:13.5px;line-height:1.65;color:var(--ink-2)">
-      ${prof.para}
-    </div>
-    <div style="margin-top:14px;display:flex;justify-content:flex-end">
-      <button class="btn blue-pri" data-unit="${(sourceUnit || u).id}" data-page="${page}" onclick="openSourceSlides(this.dataset.unit, Number(this.dataset.page))">${sourceUnit ? 'Apri slide in Studio →' : 'Apri le slide dell’unità →'}</button>
+    <div class="studio-source-actions">
+      <button type="button" class="btn blue-pri" data-unit="${(sourceUnit || u).id}" data-page="${page}" onclick="openSourceSlides(this.dataset.unit, Number(this.dataset.page))">Apri le slide in Studio ${icon('i-course-arrow')}</button>
     </div>`;
-  openModal('modalSource');
+  if (!dialog.open) dialog.showModal();
+  dialog.classList.add('open');
+  renderMath(dialog);
 }
 
 function openSourceSlides(unitId, page) {
-  closeModal('modalSource');
+  document.getElementById('modalSource').close();
   if (app.unitId !== unitId) selectUnit(unitId);
   app.slidePage = page;
   setLeftTab('slides');
   setMobilePane('left');
   if (app.view !== 'studio') setView('studio');
+  document.getElementById('tabSlides').focus();
 }
 
 const LAMPORT_STUDY_FORMULA = '$$C_j \\leftarrow \\max(C_j, t_m) + 1$$';
 
 const LAMPORT_STUDY_EVENTS = [
-  ['e11', 120, 30, 'C=1'], ['e21', 165, 74, 'C=1'], ['e22', 246, 74, 'C=2'],
-  ['e12', 376, 30, 'C=3'], ['e31', 310, 118, 'C=1 (∥)']
+  ['e11', 118, 40, 'C=1'], ['e21', 170, 96, 'C=1'], ['e22', 286, 96, 'C=2'],
+  ['e12', 406, 40, 'C=3'], ['e31', 338, 152, 'C=1 (∥)']
 ];
 
-function renderStudyTransfer(kind, className, content) {
+function renderStudyTransfer(kind, className, content, headerLabel = '') {
   const label = kind === 'formula' ? 'Copia formula negli appunti' : 'Copia diagramma negli appunti';
-  return `<div class="${className} study-transfer" draggable="true" ondragstart="startStudyAssetDrag(event, '${kind}')" ondragend="endStudyAssetDrag()">
-    <div class="study-transfer-actions">
-      <button type="button" class="study-transfer-btn" onclick="insertStudyAsset('${kind}')" aria-label="${label}" title="${label}">
-        ${icon('i-pencil')}<span>Negli appunti</span>
-      </button>
+  const button = `<button type="button" class="study-transfer-btn" onclick="insertStudyAsset('${kind}')" aria-label="${label}" title="${label}"><svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true"><path d="M4 8h8M8 4v8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>${kind === 'formula' ? 'Appunti' : 'Negli appunti'}</button>`;
+  if (kind === 'formula') {
+    return `<div class="${className} callout-formula study-transfer" draggable="true" ondragstart="startStudyAssetDrag(event, 'formula')" ondragend="endStudyAssetDrag()">
+      <div class="formula-card-head">
+        ${headerLabel ? `<span class="callout-eyebrow">${headerLabel}</span>` : ''}
+        ${button}
+      </div>
+      <div class="callout-formula-body">
+        ${content}
+      </div>
+    </div>`;
+  }
+  return `<div class="${className} diagram-card-shell study-transfer" draggable="true" ondragstart="startStudyAssetDrag(event, '${kind}')" ondragend="endStudyAssetDrag()">
+    <div class="diagram-card-head">
+      <span class="diagram-head-title">
+        <svg viewBox="0 0 18 16" width="15" height="13" fill="none" aria-hidden="true"><path d="M2 3h8M2 8h13M2 13h6" stroke="var(--blue)" stroke-width="1.8" stroke-linecap="round"/><circle cx="13.5" cy="13" r="2.4" fill="#48c788"/></svg>
+        <b>${headerLabel || 'Diagramma interattivo'}</b>
+        ${headerLabel === 'Diagramma interattivo' ? '<span class="diagram-head-hint">· Scegli un evento</span>' : ''}
+      </span>
+      ${button}
     </div>
     ${content}
   </div>`;
@@ -5792,30 +5956,46 @@ function renderStudyTransfer(kind, className, content) {
 
 function renderStudioDiagram(kind, unitNumber, markerId, activeEvent, interactive = false) {
   if (kind === 'lamport') return `
-    <svg viewBox="0 0 560 148" width="100%" style="display:block" role="img" aria-label="Messaggi ed eventi nei processi P1, P2 e P3">
-      <text x="14" y="34" font-size="12" font-weight="700" font-family="var(--mono)" fill="var(--ink)">P₁</text>
-      <text x="14" y="78" font-size="12" font-weight="700" font-family="var(--mono)" fill="var(--ink)">P₂</text>
-      <text x="14" y="122" font-size="12" font-weight="700" font-family="var(--mono)" fill="var(--ink)">P₃</text>
-      <line x1="46" y1="30" x2="530" y2="30" stroke="var(--faint)" stroke-width="2" stroke-linecap="round"/>
-      <line x1="46" y1="74" x2="530" y2="74" stroke="var(--faint)" stroke-width="2" stroke-linecap="round"/>
-      <line x1="46" y1="118" x2="530" y2="118" stroke="var(--faint)" stroke-width="2" stroke-linecap="round"/>
-      <defs><marker id="${markerId}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1 L 10 5 L 0 9 z" fill="var(--blue)"/></marker></defs>
-      <line x1="128" y1="34" x2="236" y2="69" stroke="var(--blue)" stroke-width="2" marker-end="url(#${markerId})"/>
-      <line x1="254" y1="70" x2="366" y2="35" stroke="var(--blue)" stroke-width="2" marker-end="url(#${markerId})"/>
-      <text x="172" y="45" font-size="10.5px" font-weight="700" font-family="var(--mono)" fill="var(--blue)">m₁ (t=1)</text>
-      <text x="292" y="63" font-size="10.5px" font-weight="700" font-family="var(--mono)" fill="var(--blue)">m₂ (t=2)</text>
+    <svg viewBox="0 0 580 186" width="100%" style="display:block" role="${interactive ? 'group' : 'img'}" aria-label="Messaggi ed eventi nei processi P1, P2 e P3">
+      <defs>
+        <pattern id="${markerId}-dots" width="15" height="15" patternUnits="userSpaceOnUse">
+          <circle cx="2" cy="2" r="0.95" fill="var(--blue)" fill-opacity="0.22"/>
+        </pattern>
+        <marker id="${markerId}-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 1 1.2 L 9 5 L 1 8.8" fill="none" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+        <marker id="${markerId}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 1 1.2 L 9 5 L 1 8.8" fill="none" stroke="var(--blue)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+      </defs>
+      <rect x="2" y="4" width="576" height="178" rx="14" fill="url(#${markerId}-dots)"/>
+      <rect x="10" y="28" width="34" height="24" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <text x="27" y="44" text-anchor="middle" font-size="11.5" font-weight="700" font-family="var(--mono)" fill="var(--ink)">P₁</text>
+      <rect x="10" y="84" width="34" height="24" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <text x="27" y="100" text-anchor="middle" font-size="11.5" font-weight="700" font-family="var(--mono)" fill="var(--ink)">P₂</text>
+      <rect x="10" y="140" width="34" height="24" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <text x="27" y="156" text-anchor="middle" font-size="11.5" font-weight="700" font-family="var(--mono)" fill="var(--ink)">P₃</text>
+      <line x1="54" y1="40" x2="554" y2="40" stroke="var(--faint)" stroke-opacity="0.7" stroke-width="1.6" stroke-linecap="round"/>
+      <line x1="54" y1="96" x2="554" y2="96" stroke="var(--faint)" stroke-opacity="0.7" stroke-width="1.6" stroke-linecap="round"/>
+      <line x1="54" y1="152" x2="554" y2="152" stroke="var(--faint)" stroke-opacity="0.7" stroke-width="1.6" stroke-linecap="round"/>
+      <line x1="126" y1="43" x2="274" y2="91" stroke="var(--green)" stroke-width="2" marker-end="url(#${markerId}-green)"/>
+      <line x1="296" y1="92" x2="395" y2="44" stroke="var(--blue)" stroke-width="2" marker-end="url(#${markerId})"/>
+      <rect x="184" y="48" width="64" height="17" rx="8.5" fill="var(--green-s)" stroke="var(--green)" stroke-opacity="0.32"/>
+      <text x="216" y="60" text-anchor="middle" font-size="10" font-weight="700" font-family="var(--mono)" fill="var(--green-i)">m₁ (t=1)</text>
+      <rect x="334" y="55" width="64" height="17" rx="8.5" fill="var(--card)" stroke="color-mix(in srgb, var(--blue) 32%, var(--line))"/>
+      <text x="366" y="67" text-anchor="middle" font-size="10" font-weight="700" font-family="var(--mono)" fill="var(--blue-i)">m₂ (t=2)</text>
       ${LAMPORT_STUDY_EVENTS.map(([id, x, y, label]) => renderSvgNode(id, x, y, label, activeEvent, interactive)).join('')}
     </svg>`;
   return `
-    <svg viewBox="0 0 540 88" width="100%" style="display:block" role="img" aria-label="Ipotesi, regola e caso limite">
-      <rect x="8" y="20" width="154" height="46" rx="12" fill="var(--blue-s)" stroke="var(--blue)" stroke-width="1.5"/>
-      <text x="85" y="47" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--blue-i)">1 · Ipotesi / Modello</text>
-      <line x1="168" y1="43" x2="192" y2="43" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"/>
-      <rect x="196" y="20" width="154" height="46" rx="12" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
-      <text x="273" y="47" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--ink)">2 · Regola (${escapeCourseText(unitNumber)})</text>
-      <line x1="356" y1="43" x2="380" y2="43" stroke="var(--green)" stroke-width="2" stroke-linecap="round"/>
-      <rect x="384" y="20" width="148" height="46" rx="12" fill="var(--green-s)" stroke="var(--green)" stroke-width="1.5"/>
-      <text x="461" y="47" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--green-i)">3 · Caso limite</text>
+    <svg viewBox="0 0 540 92" width="100%" style="display:block" role="img" aria-label="Ipotesi, regola e caso limite">
+      <defs>
+        <marker id="${markerId}-flow-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 1.2 L 10 5 L 0 8.8 z" fill="var(--blue)"/></marker>
+        <marker id="${markerId}-flow-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 1.2 L 10 5 L 0 8.8 z" fill="var(--green)"/></marker>
+      </defs>
+      <rect x="8" y="21" width="152" height="50" rx="13" fill="var(--blue-s)" stroke="var(--blue)" stroke-width="1.6"/>
+      <text x="84" y="50" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--blue-i)">1 · Ipotesi / Modello</text>
+      <line x1="164" y1="46" x2="192" y2="46" stroke="var(--blue)" stroke-width="2" marker-end="url(#${markerId}-flow-b)"/>
+      <rect x="196" y="21" width="152" height="50" rx="13" fill="var(--card)" stroke="var(--line)" stroke-width="1.6"/>
+      <text x="272" y="50" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--ink)">2 · Regola (${escapeCourseText(unitNumber)})</text>
+      <line x1="352" y1="46" x2="380" y2="46" stroke="var(--green)" stroke-width="2" marker-end="url(#${markerId}-flow-g)"/>
+      <rect x="384" y="21" width="148" height="50" rx="13" fill="var(--green-s)" stroke="var(--green)" stroke-width="1.6"/>
+      <text x="458" y="50" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--green-i)">3 · Caso limite</text>
     </svg>`;
 }
 
@@ -5826,19 +6006,33 @@ function renderLeftPane() {
   const totalSlides = u.slides || 24;
   document.getElementById('studioCourseLink').textContent = c.nome;
   document.getElementById('studioUnitTitle').textContent = u.titolo;
+  const explanation = document.getElementById('tabExplain');
+  const slides = document.getElementById('tabSlides');
+  explanation.classList.toggle('on', app.leftTab !== 'slides');
+  explanation.setAttribute('aria-pressed', String(app.leftTab !== 'slides'));
+  slides.classList.toggle('on', app.leftTab === 'slides');
+  slides.setAttribute('aria-pressed', String(app.leftTab === 'slides'));
   const reading = document.getElementById('studioReading');
   reading.hidden = app.leftTab === 'slides';
   if (reading.hidden) reading.open = false;
   for (const button of reading.querySelectorAll('[data-depth]')) {
-    button.setAttribute('aria-pressed', String(button.dataset.depth === app.depth));
+    const selected = button.dataset.depth === app.depth;
+    button.setAttribute('aria-pressed', String(selected));
+    if (selected) {
+      const summary = reading.querySelector('summary');
+      summary.setAttribute('aria-label', `Dettaglio: ${button.textContent}`);
+      summary.title = `Dettaglio: ${button.textContent}`;
+    }
   }
   document.getElementById('studioSourcesToggle').textContent = app.showStudioSources ? 'Nascondi fonti' : 'Mostra fonti';
   const sheet = document.getElementById('leftDocSheet');
+  const isLamport = app.courseId === 'sistemi' && u.id === 'u13';
+  sheet.classList.toggle('slide-workspace', app.leftTab === 'slides');
+  sheet.classList.toggle('lamport-explanation', isLamport && app.leftTab !== 'slides');
   const prof = getUnitTopicProfile(c, u);
   const writingMode = getStudioWritingMode();
 
   if (app.leftTab === 'slides') {
-    const isLamport = app.courseId === 'sistemi' && u.id === 'u13';
     const pg = Math.max(1, Math.min(totalSlides, app.slidePage || 1));
     let slideBody = '';
     if (isLamport) {
@@ -5854,24 +6048,24 @@ function renderLeftPane() {
     }
     sheet.innerHTML = `
       <div class="slide-nav">
-        <div style="display:flex;align-items:center;gap:8px;min-width:0">
-          <span class="chip b" style="max-width:220px;overflow:hidden;text-overflow:ellipsis">${unitFile}</span>
-          <span class="chip">Slide ${pg} di ${totalSlides}</span>
-        </div>
-        <div style="display:flex;gap:6px">
-          <button class="btn" style="height:28px;font-size:12px" onclick="app.slidePage=Math.max(1,${pg}-1);renderLeftPane()">← Prec.</button>
-          <button class="btn" style="height:28px;font-size:12px" onclick="app.slidePage=Math.min(${totalSlides},${pg}+1);renderLeftPane()">Succ. →</button>
-        </div>
+        <button type="button" class="slide-file-btn" data-source-name="${escapeCourseText(unitFile)}" onclick="openSourceModal(this.dataset.sourceName, ${pg})" title="${escapeCourseText(unitFile)}">
+          <span class="slide-file-icon">${icon('i-file')}</span>
+          <span class="slide-file-name">${escapeCourseText(unitFile)}</span>
+        </button>
+        <nav class="slide-pager" aria-label="Navigazione slide">
+          <button type="button" class="slide-pager-arrow" data-slide-step="-1" ${pg <= 1 ? 'disabled' : ''} aria-label="Slide precedente" onclick="stepStudySlide(${pg - 1},-1)">${icon('i-course-arrow')}</button>
+          <span class="slide-pager-count" aria-label="Slide ${pg} di ${totalSlides}"><b>${pg}</b> / ${totalSlides}</span>
+          <button type="button" class="slide-pager-arrow" data-slide-step="1" ${pg >= totalSlides ? 'disabled' : ''} aria-label="Slide successiva" onclick="stepStudySlide(${pg + 1},1)">${icon('i-course-arrow')}</button>
+        </nav>
       </div>
-      <div class="slide-frame" data-para-id="p-slide-${pg}" data-source-file="${escapeCourseText(unitFile)}" data-page-num="${pg}">
-        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--mut);border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:14px">
-          <span>${u.titolo}</span>
-          <span class="mono">${pg}/${totalSlides}</span>
-        </div>
-        <div style="font-size:14px;line-height:1.68;color:var(--ink)">${slideBody}</div>
-        <div style="margin-top:16px;text-align:right">
-          <button class="btn" style="height:27px;font-size:11.5px" onclick="setLeftTab('explain')">Torna alla spiegazione</button>
-        </div>
+      <div class="slide-reading-mat">
+        <article class="slide-frame" data-para-id="p-slide-${pg}" data-source-file="${escapeCourseText(unitFile)}" data-page-num="${pg}">
+          <header class="slide-sheet-head">
+            <span>${escapeCourseText(c.nome)}</span>
+            <h1>${escapeCourseText(u.titolo)}</h1>
+          </header>
+          <div class="slide-sheet-copy">${slideBody}</div>
+        </article>
       </div>
       <div class="slide-clarify-slot">${renderClarificationChip('p-slide-' + pg)}</div>`;
     renderMath(sheet);
@@ -5894,10 +6088,14 @@ function renderLeftPane() {
     return;
   }
 
-  if (app.courseId !== 'sistemi' || u.id !== 'u13') {
+  const uIdx = Math.max(0, c.units.findIndex(x => x.id === u.id));
+  const nextU = c.units[uIdx + 1];
+  const nextUnitFooter = nextU ? `<div class="studio-next-unit-wrap"><button type="button" class="btn studio-next-unit-pill" onclick="selectUnit('${nextU.id}')"><span class="mono studio-next-eyebrow">PROSSIMO</span><b>${escapeCourseText(nextU.short)}</b><span aria-hidden="true">→</span></button></div>` : '';
+
+  if (!isLamport) {
     const stepLabels = prof.steps;
     const formula = prof.formula.startsWith('$$')
-      ? renderStudyTransfer('formula', 'callout', `<div>${prof.formula}</div>`)
+      ? renderStudyTransfer('formula', 'callout', `<div>${prof.formula}</div>`, 'Formula chiave')
       : `<div class="callout"><div>${prof.formula}</div></div>`;
     const paragraph = writingMode === 'diretta' ? escapeCourseText(prof.noteFix.replace(/^•\s*/, '')) : prof.para;
     const example = /calcolo differenziale/i.test(u.titolo)
@@ -5908,51 +6106,52 @@ function renderLeftPane() {
         <h1 class="doc-title">${u.titolo}</h1>
       </header>
       ${formula}
-      ${app.depth !== 'sintesi' ? renderStudyTransfer('diagram', 'diagram-box', renderStudioDiagram('flow', u.num)) : ''}
+      ${app.depth !== 'sintesi' ? renderStudyTransfer('diagram', 'diagram-box', renderStudioDiagram('flow', u.num), 'Schema concettuale') : ''}
       ${renderPara('p-custom-' + u.id, paragraph, unitFile, 1, unitFile)}
       ${renderStudioWritingAid(writingMode, stepLabels, example)}
-      ${app.depth === 'completa' && !['diretta', 'passaggi'].includes(writingMode) ? `<div class="code-block"><span class="cm"># Traccia di ragionamento (${u.short})</span>\n${stepLabels.join('\n')}</div>` : ''}`;
+      ${app.depth === 'completa' && !['diretta', 'passaggi'].includes(writingMode) ? `<div class="code-block"><span class="cm"># Traccia di ragionamento (${u.short})</span>\n${stepLabels.join('\n')}</div>` : ''}
+      ${nextUnitFooter}`;
     renderMath(sheet);
     return;
   }
 
   // Sistemi 1.3 Lamport (Full Interactive Diagram)
   const diagNotes = {
-    e11: '<b>Evento $e_{1,1}$ su $P_1$:</b> evento interno. Regola 1: $C_1 = 0 + 1 = \\mathbf{1}$.',
-    e21: '<b>Evento $e_{2,1}$ su $P_2$:</b> invia $m_1$ allegando $t=1$ ($C_2 = 1$).',
+    e11: '<b>Evento $e_{1,1}$ su $P_1$:</b> invia $m_1$ allegando $t=1$ ($C_1 = 1$).',
+    e21: '<b>Evento $e_{2,1}$ su $P_2$:</b> evento interno. $C_2 = 0 + 1 = \\mathbf{1}$.',
     e22: '<b>Evento $e_{2,2}$ su $P_2$:</b> riceve $m_1$ ($t=1$): $C_2 = \\max(1, 1) + 1 = \\mathbf{2}$.',
     e12: '<b>Evento $e_{1,2}$ su $P_1$:</b> riceve da $P_2$ con $t=2$: $C_1 = \\max(1, 2) + 1 = \\mathbf{3}$.',
     e31: '<b>Evento $e_{3,1}$ su $P_3$:</b> isolato ($C_3=1$). Con $e_{2,2}$ ($C_2=2$) vale $C(e_{3,1}) < C(e_{2,2})$, ma sono <b>concorrenti</b> ($e_{3,1} \\parallel e_{2,2}$).'
   };
 
   sheet.innerHTML = `
-    <header class="doc-heading">
-      <h1 class="doc-title">${u.titolo}</h1>
-      <p class="doc-lead">Ordine causale senza orologio fisico condiviso</p>
-    </header>
-    ${renderStudyTransfer('formula', 'callout', `
-      <div style="font-size:13.5px;line-height:1.65">
-        <div style="margin-bottom:4px">1. Ad ogni evento interno su $P_i$: $C_i \\leftarrow C_i + 1$.</div>
-        <div>2. Alla ricezione di $(m, t_m)$ su $P_j$: ${LAMPORT_STUDY_FORMULA}</div>
-      </div>
-    `)}
+    <h1 class="doc-title studio-reading-title">${escapeCourseText(u.titolo)}</h1>
+    ${renderStudyTransfer('formula', 'callout', `<div class="callout-math-main">${LAMPORT_STUDY_FORMULA}</div>`, 'Regola di ricezione')}
     ${app.depth !== 'sintesi' ? renderStudyTransfer('diagram', 'diagram-box', `
-      <div style="font-size:11.5px;font-weight:700;color:var(--mut);margin-bottom:6px">Diagramma interattivo (clicca un evento)</div>
       ${renderStudioDiagram('lamport', u.num, 'explanation-arrow', app.activeDiagramEvent, true)}
-      <div class="diag-readout">${diagNotes[app.activeDiagramEvent]}</div>
-    `) : ''}
+      <div class="diag-readout" aria-live="polite"><span class="diag-dot" aria-hidden="true"></span><span>${diagNotes[app.activeDiagramEvent]}</span></div>
+    `, 'Diagramma interattivo') : ''}
     ${renderPara('p-causa', writingMode === 'diretta' ? 'La causalità impone l’ordine dei timestamp: $a \\to b$ implica $C(a) < C(b)$.' : 'Se $a$ avviene causalmente prima di $b$ ($a \\to b$), allora i timestamp logici soddisfano sempre $C(a) < C(b)$.', 'Slide p. 12', 12)}
     ${renderPara('p-viceversa', writingMode === 'diretta' ? 'Un timestamp minore non prova la causalità. Senza una catena di messaggi, gli eventi possono essere concorrenti.' : 'Non vale però l\'implicazione inversa: osservare $C(a) < C(b)$ non dimostra che $a \\to b$, perché due eventi privi di messaggi possono essere concorrenti ($a \\parallel b$).', 'Dispensa p. 6', 6, c.units.find(unit => unit.id === 'u12')?.src)}
+    <p class="studio-rule-reminder">A ogni evento interno su $P_i$, il contatore avanza di uno: $C_i \\leftarrow C_i + 1$.</p>
     ${renderStudioWritingAid(writingMode, ['Aumenta il contatore locale quando avviene un evento.', 'Alla ricezione, prendi il massimo tra contatore locale e timestamp del messaggio, poi aggiungi uno.', 'Per stabilire la causalità, controlla se gli eventi sono collegati da una catena di messaggi.'], 'Se ricevi un messaggio con timestamp $5$ quando il contatore locale è $3$, il nuovo contatore vale $\\max(3,5)+1=6$.')}
-    ${app.depth === 'completa' && !['diretta', 'passaggi'].includes(writingMode) ? `<div class="code-block"><span class="cm"># Regola di aggiornamento alla ricezione di (msg, ts_msg)</span>\n<span class="kw">function</span> onReceive(msg, ts_msg) {\n  clock = Math.max(clock, ts_msg) + 1;\n}</div>` : ''}`;
+    ${app.depth === 'completa' && !['diretta', 'passaggi'].includes(writingMode) ? `<div class="code-block"><span class="cm"># Regola di aggiornamento alla ricezione di (msg, ts_msg)</span>\n<span class="kw">function</span> onReceive(msg, ts_msg) {\n  clock = Math.max(clock, ts_msg) + 1;\n}</div>` : ''}
+    ${nextUnitFooter}`;
   renderMath(sheet);
 }
 
 function renderSvgNode(id, cx, cy, label, activeEvent, interactive) {
   const on = activeEvent === id;
-  return `<g${interactive ? ` class="diag-node" onclick="selectDiagramEvent('${id}')"` : ''}>
-    <circle cx="${cx}" cy="${cy}" r="${on ? 10 : 7.5}" fill="${on ? 'var(--blue)' : 'var(--card)'}" stroke="var(--blue)" stroke-width="${on ? 3 : 2}"/>
-    <text x="${cx}" y="${cy - 14}" text-anchor="middle" font-size="11" font-weight="${on ? '700' : '600'}" font-family="var(--mono)" fill="${on ? 'var(--blue)' : 'var(--ink-2)'}">${label}</text>
+  const below = id === 'e21' || id === 'e22';
+  const pillY = below ? cy + 14 : cy - 30;
+  const textY = below ? (on ? cy + 25.5 : cy + 21) : cy - 19;
+  const pillW = label.length > 4 ? 54 : 44;
+  return `<g${interactive ? ` class="diag-node" role="button" tabindex="0" data-event="${id}" aria-pressed="${on}" aria-label="Evento ${id.slice(1).split('').join(', ')}, ${label}" onclick="selectDiagramEvent('${id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectDiagramEvent('${id}', true)}"` : ''}>
+    ${interactive ? `<circle cx="${cx}" cy="${cy}" r="23" fill="transparent"/>` : ''}
+    ${on ? `<circle cx="${cx}" cy="${cy}" r="16" fill="var(--blue)" fill-opacity="0.16"/>` : ''}
+    <circle cx="${cx}" cy="${cy}" r="${on ? 8.5 : 6.5}" fill="${on ? 'var(--blue)' : 'var(--card)'}" stroke="${on ? '#ffffff' : 'var(--blue)'}" stroke-width="${on ? 2.5 : 2}"/>
+    ${on ? `<rect x="${cx - pillW / 2}" y="${pillY}" width="${pillW}" height="17" rx="8.5" fill="var(--blue)"/>` : ''}
+    <text x="${cx}" y="${textY}" text-anchor="middle" font-size="10.2" font-weight="${on ? '700' : '650'}" font-family="var(--mono)" fill="${on ? '#ffffff' : 'var(--mut)'}">${label}</text>
   </g>`;
 }
 
@@ -5970,7 +6169,7 @@ function renderClarificationChip(pid) {
   const chip = clar ? `
     <div class="tut-chip" data-clarify-pid="${pid}">
       <div class="tut-chip-head">
-        <span style="font-size:11px;font-weight:700;color:var(--purple)">${escapeCourseText(clar.tag)}</span>
+        <span class="tut-chip-label">✦ DAL TUTOR · ${escapeCourseText(clar.tag)}</span>
         <div style="display:flex;gap:4px">
           <button type="button" class="btn ghost" style="height:20px;font-size:11px;padding:0 6px" onclick="toggleClarifyCollapse('${pid}')">${clar.collapsed ? 'Espandi' : 'Riduci'}</button>
           <button type="button" class="btn ghost" style="height:20px;font-size:11px;padding:0 6px" onclick="clearClarification('${pid}')">✕</button>
@@ -6499,22 +6698,50 @@ function startNoteReview() {
   const reviewable = un.blocks.filter(block => !block.studyKind && block.text.trim());
   if (un.noteBlank || !reviewable.length) { showToast('Scrivi qualche riga nei tuoi appunti prima di verificare'); return; }
   if (!reviewable.some(block => block.isTargetErr)) reviewable[reviewable.length - 1].isTargetErr = true;
+  un.inspectingVersion = un.version;
   un.rightPhase = 'review';
   app.hintRevealed = false;
   syncActiveNoteAlias();
   renderRightPane();
   updateDemoJson();
-  requestAnimationFrame(() => document.querySelector('#noteScrollArea .dpop')?.scrollIntoView({ behavior: 'smooth', block: 'center' }));
+  focusNoteReviewStage('.dpop');
 }
 
 function submitReviewAnswer() {
   const un = getActiveUnitNote();
   un.rightPhase = 'diff';
   un.diffStatus = 'pending';
+  app.editingDiffManual = false;
   syncActiveNoteAlias();
   renderRightPane();
   updateDemoJson();
-  requestAnimationFrame(() => document.querySelector('#noteScrollArea .diff-card')?.scrollIntoView({ behavior: 'smooth', block: 'center' }));
+  focusNoteReviewStage('.diff-card');
+}
+
+function focusNoteReviewStage(selector) {
+  requestAnimationFrame(() => {
+    const card = document.querySelector('#noteScrollArea ' + selector);
+    card?.querySelector('h2')?.focus({ preventScroll: true });
+    card?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest' });
+  });
+}
+
+function closeNoteReview() {
+  getActiveUnitNote().rightPhase = 'write';
+  renderRightPane();
+  document.querySelector('#noteBottomBar button')?.focus({ preventScroll: true });
+}
+
+function toggleNoteReviewHint() {
+  app.hintRevealed = !app.hintRevealed;
+  renderRightPane();
+  document.getElementById('noteReviewHintButton')?.focus({ preventScroll: true });
+}
+
+function toggleManualNoteDiff() {
+  app.editingDiffManual = !app.editingDiffManual;
+  renderRightPane();
+  document.getElementById(app.editingDiffManual ? 'manualDiffBox' : 'manualDiffToggle')?.focus({ preventScroll: true });
 }
 
 function applyDiffDecision(decision) {
@@ -6583,6 +6810,7 @@ function renderRightPane() {
   const scrollEl = document.getElementById('noteScrollArea');
   const barEl = document.getElementById('noteBottomBar');
   const un = getActiveUnitNote();
+  scrollEl.dataset.notePhase = un.rightPhase;
   syncActiveNoteAlias();
   syncRevSelect();
 
@@ -6600,6 +6828,7 @@ function renderRightPane() {
   }
 
   const blocks = (un.inspectingVersion === 'v1' && un.snapshot) ? un.snapshot : un.blocks;
+  const reviewIndex = blocks.findIndex(block => block.isTargetErr);
   const editable = canInsertStudyAsset(un);
   const groups = [];
   blocks.forEach((b, idx) => {
@@ -6608,31 +6837,37 @@ function renderRightPane() {
     g.items.push({ ...b, flatIdx: idx });
   });
 
+  const activeC = COURSES_DATA[app.courseId];
+  const activeU = activeC?.units.find(x => x.id === app.unitId);
+  const noteEyebrow = activeC && activeU ? `<div class="note-eyebrow">${escapeCourseText(activeC.nome)} / ${escapeCourseText(activeU.num)}</div>` : '';
+
   scrollEl.innerHTML = `<div class="note-page">
-    <h1 class="note-h1" contenteditable="true" onblur="const uNote=getActiveUnitNote();uNote.title=this.innerText.trim()||uNote.title;showSaveFeedback()">${un.title}</h1>
+    <header class="note-page-heading">
+      ${noteEyebrow}
+      <h1 class="note-h1" contenteditable="true" onblur="const uNote=getActiveUnitNote();uNote.title=this.innerText.trim()||uNote.title;showSaveFeedback()">${un.title}</h1>
+    </header>
     ${groups.map(g => `
       <h2 class="note-sec">${g.sec}</h2>
       ${g.items.map(b => `
         ${renderNotebookBlock(b, g.sec, editable, un.rightPhase)}
-        ${b.isTargetErr && un.rightPhase === 'review' ? renderSocraticCardHtml() : ''}
-        ${b.isTargetErr && un.rightPhase === 'diff' ? renderDiffCardHtml(b.text) : ''}
+        ${b.flatIdx === reviewIndex && un.rightPhase === 'review' ? renderSocraticCardHtml() : ''}
+        ${b.flatIdx === reviewIndex && un.rightPhase === 'diff' ? renderDiffCardHtml(b.text) : ''}
       `).join('')}
     `).join('')}
   </div>`;
 
   barEl.innerHTML = un.rightPhase === 'write' ? `
-    <span class="note-footer-caption">${un.version === 'v2' ? 'Revisione integrata' : ''}</span>
-    <div style="display:flex;gap:8px;align-items:center">
+    <div class="note-footer-actions">
       ${un.version === 'v2' || un.diffStatus === 'rejected'
         ? `<button class="btn ghost" style="height:30px;font-size:12px" onclick="startNoteReview()">Rivedi ancora</button><button class="btn blue-pri" onclick="completeCurrentUnitStudy()">Termina lo studio →</button>`
         : `<button class="btn blue-pri" onclick="startNoteReview()">Rivedi i miei appunti →</button>`}
     </div>
   ` : un.rightPhase === 'review' ? `
-    <span class="chip a">Domanda sul punto selezionato</span>
-    <button class="btn" onclick="getActiveUnitNote().rightPhase='write';renderRightPane()">Torna alla bozza</button>
+    <span class="note-stage-chip">${icon('i-pencil')} Revisione</span>
+    <button type="button" class="btn note-revision-back" onclick="closeNoteReview()">Torna alla bozza</button>
   ` : `
-    <span class="chip g">Confronto v1 → v2</span>
-    <button class="btn" onclick="getActiveUnitNote().rightPhase='write';renderRightPane()">Chiudi confronto</button>
+    <span class="note-stage-chip is-diff">${icon('i-book')} Confronto</span>
+    <button type="button" class="btn note-revision-back" onclick="closeNoteReview()">Torna alla bozza</button>
   `;
   const ta = document.getElementById('dpopReplyArea');
   if (ta) ta.value = un.reply1 || '';
@@ -6640,24 +6875,25 @@ function renderRightPane() {
 }
 
 function renderSocraticCardHtml() {
-  const un = getActiveUnitNote();
   const c = COURSES_DATA[app.courseId];
   const u = c.units.find(x => x.id === app.unitId) || c.units[0];
   const prof = getUnitTopicProfile(c, u);
   return `
-    <div class="dpop">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-        <span style="font-size:11.5px;font-weight:700;color:var(--amber-i)">Dubbio su questo passaggio</span>
-        <button type="button" aria-label="Chiudi dubbio" style="color:var(--mut);font-size:12px" onclick="getActiveUnitNote().rightPhase='write';renderRightPane()">✕</button>
+    <section class="dpop" aria-labelledby="noteReviewHeading">
+      <header class="note-review-head">
+        <span class="note-review-icon">${icon('i-study-spark')}</span>
+        <h2 id="noteReviewHeading" tabindex="-1">Rivedi questo passaggio</h2>
+        <button type="button" aria-label="Chiudi revisione" class="note-review-close" onclick="closeNoteReview()">✕</button>
+      </header>
+      <p class="note-review-question">${escapeCourseText(prof.socraticQ)}</p>
+      <div id="noteReviewHint" class="note-review-hint" ${app.hintRevealed ? '' : 'hidden'}>Controlla le regole nella spiegazione.</div>
+      <label class="note-review-label" for="dpopReplyArea">La tua spiegazione</label>
+      <textarea id="dpopReplyArea" oninput="getActiveUnitNote().reply1=this.value" placeholder="Scrivi cosa succede e perché"></textarea>
+      <div class="note-review-actions">
+        <button type="button" class="btn ghost note-hint-toggle" id="noteReviewHintButton" aria-expanded="${app.hintRevealed}" aria-controls="noteReviewHint" onclick="toggleNoteReviewHint()">${app.hintRevealed ? 'Nascondi indizio' : 'Mostra indizio'}</button>
+        <button type="button" class="btn blue-pri" onclick="submitReviewAnswer()">Confronta con le fonti ${icon('i-course-arrow')}</button>
       </div>
-      <div style="font-size:13.5px;line-height:1.55">${prof.socraticQ}</div>
-      ${app.hintRevealed ? `<div style="margin-top:8px;padding:8px 10px;border-radius:7px;background:var(--blue-s);font-size:12px;color:var(--blue-i)"><b>Indizio:</b> Controlla le regole nella spiegazione.</div>` : ''}
-      <textarea id="dpopReplyArea" oninput="getActiveUnitNote().reply1=this.value" placeholder="Scrivi qui la tua spiegazione prima del confronto..."></textarea>
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
-        <button style="font-size:12px;color:var(--blue-i);font-weight:600" onclick="app.hintRevealed=!app.hintRevealed;renderRightPane()">${app.hintRevealed ? 'Nascondi indizio' : 'Serve un indizio?'}</button>
-        <button class="btn pri" style="height:30px;font-size:12px" onclick="submitReviewAnswer()">Confronta con fonti →</button>
-      </div>
-    </div>`;
+    </section>`;
 }
 
 function renderDiffCardHtml(oldText) {
@@ -6672,11 +6908,12 @@ function renderDiffCardHtml(oldText) {
     ? renderStudySource('Dispensa p. 6', c.units.find(unit => unit.id === 'u12')?.src, 6) + renderStudySource('Slide p. 12', u.src, 12)
     : renderStudySource(u.src || 'Documento dell’unità', u.src, 1);
   return `
-    <div class="diff-card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px">
-        <b style="font-size:13px">Proposta di aggiornamento</b>
-        ${app.conflictSimulated ? '<span class="chip r">Simulato conflitto 409</span>' : '<span class="chip g">Preserva la tua struttura</span>'}
-      </div>
+    <section class="diff-card" aria-labelledby="noteDiffHeading">
+      <header class="note-review-head">
+        <span class="note-review-icon is-diff">${icon('i-pencil')}</span>
+        <h2 id="noteDiffHeading" tabindex="-1">Proposta di aggiornamento</h2>
+        ${app.conflictSimulated ? '<span class="chip r">Conflitto 409</span>' : ''}
+      </header>
       <div class="diff-reason">
         ${escapeCourseText(reasonText)}
         <details class="diff-sources">
@@ -6684,16 +6921,22 @@ function renderDiffCardHtml(oldText) {
           <div>${sources}</div>
         </details>
       </div>
-      <span class="hl-old">${oldText}</span>
-      ${app.editingDiffManual
-        ? `<textarea id="manualDiffBox" style="width:100%;min-height:74px;background:var(--card);border:1.5px solid var(--blue);border-radius:10px;padding:9px;font-size:13px;margin-bottom:8px" oninput="getActiveUnitNote().diffText=this.value">${un.diffText}</textarea>`
-        : `<span class="hl-new">${un.diffText}</span>`}
-      <div style="display:flex;justify-content:flex-end;gap:7px;flex-wrap:wrap;margin-top:10px">
-        <button class="btn" style="height:29px;font-size:12px" onclick="app.editingDiffManual=!app.editingDiffManual;renderRightPane()">${app.editingDiffManual ? 'Anteprima' : 'Modifica a mano'}</button>
-        <button class="btn" style="height:29px;font-size:12px;color:var(--red-i)" onclick="applyDiffDecision('rejected')">Rifiuta</button>
-        <button class="btn pri" style="height:29px;font-size:12px" onclick="applyDiffDecision('accepted')">Accetta modifica</button>
+      <div class="note-diff-pair">
+        <div class="note-diff-version hl-old">
+          <span>Bozza</span><div>${escapeCourseText(oldText)}</div>
+        </div>
+        <div class="note-diff-version hl-new">
+          ${app.editingDiffManual
+            ? `<label for="manualDiffBox">Proposta</label><textarea id="manualDiffBox" oninput="getActiveUnitNote().diffText=this.value">${escapeCourseText(un.diffText)}</textarea>`
+            : `<span>Proposta</span><div>${escapeCourseText(un.diffText)}</div>`}
+        </div>
       </div>
-    </div>`;
+      <div class="note-review-actions diff-actions">
+        <button type="button" class="btn ghost" id="manualDiffToggle" aria-pressed="${app.editingDiffManual}" onclick="toggleManualNoteDiff()">${app.editingDiffManual ? 'Anteprima' : 'Modifica a mano'}</button>
+        <button type="button" class="btn ghost note-diff-reject" onclick="applyDiffDecision('rejected')">Rifiuta</button>
+        <button type="button" class="btn blue-pri" onclick="applyDiffDecision('accepted')">Accetta modifica ${icon('i-check')}</button>
+      </div>
+    </section>`;
 }
 
 /* ============================================================================
@@ -7005,7 +7248,7 @@ function confirmSessionQuestion() {
     items: reportItems
   };
 
-  if (!written && rightCount >= 2 && !app.ripassoSessionAidUsed) {
+  if (isRecallExamVerified(examRec)) {
     u.stato = 'dimostrato';
     const mList = app.masteryByCourse[c.id] || [];
     const mItem = mList.find(m => m.unitRef === u.id);
@@ -7029,6 +7272,10 @@ function confirmSessionQuestion() {
 
 function recallText(value) {
   return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+}
+
+function isRecallExamVerified(exam) {
+  return exam.format === 'open' ? exam.openSelfGrade === 'ok' : exam.correct >= 2 && exam.withoutAid;
 }
 
 function pickReviewLesson(courseId, unitId = null) {
@@ -7108,6 +7355,7 @@ function gradeOpenExam(examId, passed) {
   syncRecallExamCompletion(exam, passed);
   showToast(passed ? 'Ottimo! Padronanza aggiornata' : 'Lezione segnata da ripassare');
   renderAll();
+  document.querySelector('.recall-open-grade [aria-pressed="true"]')?.focus({ preventScroll: true });
 }
 
 function getRipassoCalendarDays() {
@@ -7137,14 +7385,16 @@ function openRecallPlanner(mode = 'add', reminderId = '', date = app.ripassoSele
   const isManage = mode === 'manage';
   const canSave = !isManage || !reminder.completedBy;
   const heading = { add: 'Aggiungi richiamo', jump: 'Vai a una data', manage: 'Modifica richiamo', remove: 'Rimuovi richiamo?' }[mode];
+  const headingIcon = isRemove ? 'i-trash' : 'i-calendar';
   const courses = Object.values(COURSES_DATA).filter(course => course.units.length);
   document.getElementById('recallPlannerBody').innerHTML = `
-    <header class="recall-planner-head">
+    <header class="recall-planner-head recall-workbench-banner">
+      <span class="recall-planner-icon">${icon(headingIcon)}</span>
       <h2 id="recallPlannerTitle">${heading}</h2>
-      <button type="button" class="btn ghost" aria-label="Chiudi" onclick="document.getElementById('recallPlanner').close()">×</button>
+      <button type="button" class="btn ghost recall-planner-close" aria-label="Chiudi" onclick="document.getElementById('recallPlanner').close()">×</button>
     </header>
-    ${reminder ? `<p>${recallText(reminder.title)} · ${recallText(new Intl.DateTimeFormat('it-IT', { dateStyle: 'medium' }).format(recallDateFromKey(reminder.date)))}</p>` : ''}
     <form id="recallPlannerForm" onsubmit="saveRecallPlanner(event, '${mode}', '${reminder?.id || ''}')">
+      ${reminder ? `<p class="recall-planner-reminder">${icon(headingIcon)} <span><strong>${recallText(reminder.title)}</strong><time datetime="${reminder.date}">${recallText(new Intl.DateTimeFormat('it-IT', { dateStyle: 'medium' }).format(recallDateFromKey(reminder.date)))}</time></span></p>` : ''}
       ${isAdd ? `<label for="recallPlannerCourse">Corso
         <select id="recallPlannerCourse" name="courseId" class="input-field" required onchange="changePlannerCourse(this.value)">
           ${courses.map(course => `<option value="${escapeCourseText(course.id)}">${recallText(course.nome)}</option>`).join('')}
@@ -7159,7 +7409,7 @@ function openRecallPlanner(mode = 'add', reminderId = '', date = app.ripassoSele
       <div class="recall-planner-actions">
         ${isManage ? `<button type="button" class="btn ghost recall-planner-remove" onclick="openRecallPlanner('remove', '${reminder.id}')">${icon('i-trash')} Rimuovi</button>` : ''}
         <button type="button" class="btn" onclick="document.getElementById('recallPlanner').close()">${canSave ? 'Annulla' : 'Chiudi'}</button>
-        ${canSave ? `<button class="btn ${isRemove ? 'recall-planner-remove' : 'pri'}" type="submit">${isRemove ? 'Rimuovi richiamo' : isAdd ? 'Aggiungi' : isManage ? 'Sposta' : 'Mostra'}</button>` : ''}
+        ${canSave ? `<button class="btn ${isRemove ? 'recall-planner-delete' : 'recall-workbench-primary'}" type="submit">${isRemove ? 'Rimuovi richiamo' : isAdd ? 'Aggiungi' : isManage ? 'Sposta' : 'Mostra'} ${icon(isRemove ? 'i-trash' : 'i-course-arrow')}</button>` : ''}
       </div>
     </form>`;
   if (isAdd && courses.length) {
@@ -7218,56 +7468,57 @@ function renderRipassoView() {
     const segments = questions.map((_, i) => `<i class="${i < idx ? 'done' : i === idx ? 'cur' : ''}"></i>`).join('');
 
     container.innerHTML = `
-      <div class="focus-shell">
-        <div class="focus-topbar">
-          <button class="btn ghost" onclick="openRipassoLobby()">← Ripasso</button>
-          <b>${recallText(u.titolo)}</b>
-          <span class="chip ${app.ripassoSessionAidUsed ? 'a' : 'g'}">
-            ${icon(app.ripassoSessionAidUsed ? 'i-unlock' : 'i-lock')}
-            ${app.ripassoSessionAidUsed ? 'Con indizio' : 'Senza aiuti'}
-          </span>
+      <div class="focus-shell recall-workbench">
+        <header class="recall-workbench-topbar">
+          <button type="button" class="btn ghost recall-back" onclick="openRipassoLobby()">${icon('i-course-arrow')} Ripasso</button>
+          <span>${recallText(c.nome)}</span>
+        </header>
+        <div class="recall-workbench-banner focus-banner">
+          <div class="focus-banner-tools">
+            <span class="focus-format">${icon(written ? 'i-pencil' : 'i-list')} ${written ? 'Risposta scritta' : 'Scelta multipla'}</span>
+            <span class="focus-aid${app.ripassoSessionAidUsed ? ' hint-used' : ''}">
+              ${icon(app.ripassoSessionAidUsed ? 'i-unlock' : 'i-lock')}
+              ${app.ripassoSessionAidUsed ? 'Con indizio' : 'Senza aiuti'}
+            </span>
+          </div>
+          <h1>${recallText(u.titolo)}</h1>
+          <div class="focus-progress">
+            <span class="focus-count">Domanda ${idx + 1} di ${questions.length}</span>
+            <div class="focus-prog-segs" aria-hidden="true">${segments}</div>
+          </div>
         </div>
-        <div class="focus-progress">
-          <span class="focus-count">Domanda ${idx + 1} di ${questions.length}</span>
-          <div class="focus-prog-segs" aria-hidden="true">${segments}</div>
-        </div>
-        <div class="focus-stage">
+        <section class="focus-stage" aria-labelledby="recallQuestion">
           <h2 id="recallQuestion" tabindex="-1">${recallText(question.prompt)}</h2>
           <p class="focus-context">${recallText(question.sub)}</p>
           ${question.diagram ? `
-          <div class="prompt-diagram-card">
-            <svg viewBox="0 0 640 126" width="100%" style="display:block;max-height:142px" role="img" aria-label="Evento A sul processo P1 con timestamp 3, evento B sul processo P2 con timestamp 5. Nessun messaggio scambiato.">
-              <text x="16" y="34" font-family="var(--mono)" font-size="13" font-weight="700" fill="var(--ink)">P₁</text>
-              <line x1="48" y1="30" x2="616" y2="30" stroke="var(--faint)" stroke-width="1.6"/>
-              <circle cx="170" cy="30" r="12" fill="var(--blue)"/>
-              <text x="170" y="34" text-anchor="middle" font-family="var(--mono)" font-size="11" font-weight="700" fill="#ffffff">A</text>
-              <rect x="196" y="16" width="84" height="28" rx="9" fill="var(--blue-s)"/>
-              <text x="238" y="34" text-anchor="middle" font-family="var(--mono)" font-size="11.5" font-weight="700" fill="var(--blue-i)">C(A) = 3</text>
-
-              <rect x="238" y="51" width="164" height="26" rx="13" fill="var(--card)" stroke="var(--line)"/>
-              <text x="320" y="68" text-anchor="middle" font-family="var(--mono)" font-size="11.5" font-weight="600" fill="var(--amber)">0 messaggi scambiati</text>
-
-              <text x="16" y="102" font-family="var(--mono)" font-size="13" font-weight="700" fill="var(--ink)">P₂</text>
-              <line x1="48" y1="98" x2="616" y2="98" stroke="var(--faint)" stroke-width="1.6"/>
-              <circle cx="472" cy="98" r="12" fill="var(--ink)"/>
-              <text x="472" y="102" text-anchor="middle" font-family="var(--mono)" font-size="11" font-weight="700" fill="var(--card)">B</text>
-              <rect x="498" y="84" width="84" height="28" rx="9" fill="var(--card)" stroke="var(--line)"/>
-              <text x="540" y="102" text-anchor="middle" font-family="var(--mono)" font-size="11.5" font-weight="700" fill="var(--ink)">C(B) = 5</text>
-            </svg>
-          </div>` : ''}
+          <figure class="prompt-diagram-card recall-diagram" role="img" aria-label="Evento A sul processo P1 con timestamp 3, evento B sul processo P2 con timestamp 5. Nessun messaggio scambiato.">
+            <div class="recall-diagram-lane" aria-hidden="true">
+              <span class="recall-diagram-process">P₁</span>
+              <span class="recall-diagram-track"><span class="recall-diagram-event"><b>A</b><span>C(A) = 3</span></span></span>
+            </div>
+            <span class="recall-diagram-messages" aria-hidden="true">0 messaggi scambiati</span>
+            <div class="recall-diagram-lane second" aria-hidden="true">
+              <span class="recall-diagram-process">P₂</span>
+              <span class="recall-diagram-track"><span class="recall-diagram-event"><b>B</b><span>C(B) = 5</span></span></span>
+            </div>
+          </figure>` : ''}
           ${written
-            ? `<textarea id="sessionOpenTextarea" class="input-field" aria-label="La tua risposta" placeholder="Scrivi la tua risposta…" oninput="updateSessionAnswer(this.value)">${recallText(answer.text || '')}</textarea>`
-            : question.options.map((option, i) => `
-                <button class="qopt ${answer.pick === i ? 'sel' : ''}" data-recall-option aria-pressed="${answer.pick === i}" onclick="pickSessionOption(${i})">
+            ? `<label class="focus-written" for="sessionOpenTextarea">
+                <span>La tua risposta</span>
+                <textarea id="sessionOpenTextarea" class="input-field" placeholder="Scrivi la tua risposta…" oninput="updateSessionAnswer(this.value)">${recallText(answer.text || '')}</textarea>
+              </label>`
+            : `<div class="focus-options" role="group" aria-label="Risposte disponibili">${question.options.map((option, i) => `
+                <button type="button" class="qopt ${answer.pick === i ? 'sel' : ''}" data-recall-option aria-pressed="${answer.pick === i}" onclick="pickSessionOption(${i})">
                   <span class="l" aria-hidden="true">${option.l}</span>
                   <span>${recallText(option.main)}</span>
-                </button>`).join('')}
-          ${app.ripassoSessionHintOpen ? `<div class="callout amber" style="margin-top:12px">${recallText(question.hint)}</div>` : ''}
-        </div>
+                  <span class="focus-option-check" aria-hidden="true"></span>
+                </button>`).join('')}</div>`}
+          ${app.ripassoSessionHintOpen ? `<div class="focus-hint" id="recallHintText">${icon('i-alert')}<p>${recallText(question.hint)}</p></div>` : ''}
+        </section>
         <div class="focus-actions">
-          ${written ? `<button id="recallHint" class="btn ghost" onclick="toggleSessionHint()">${app.ripassoSessionHintOpen ? 'Nascondi indizio' : 'Mostra indizio'}</button>` : ''}
-          <button id="recallConfirm" class="btn blue-pri" onclick="confirmSessionQuestion()" ${canConfirm ? '' : 'disabled'}>
-            ${idx < questions.length - 1 ? 'Avanti →' : 'Consegna →'}
+          ${written ? `<button type="button" id="recallHint" class="btn ghost" aria-expanded="${app.ripassoSessionHintOpen}" ${app.ripassoSessionHintOpen ? 'aria-controls="recallHintText"' : ''} onclick="toggleSessionHint()">${icon('i-unlock')} ${app.ripassoSessionHintOpen ? 'Nascondi indizio' : 'Mostra indizio'}</button>` : ''}
+          <button type="button" id="recallConfirm" class="btn recall-workbench-primary" onclick="confirmSessionQuestion()" ${canConfirm ? '' : 'disabled'}>
+            ${idx < questions.length - 1 ? 'Avanti' : 'Consegna'} ${icon('i-course-arrow')}
           </button>
         </div>
       </div>`;
@@ -7284,35 +7535,30 @@ function renderRipassoView() {
     const items = exam.items || [];
     const written = exam.format === 'open';
     const misses = written ? 0 : exam.total - exam.correct;
+    const score = !written && exam.total ? Math.round(exam.correct * 100 / exam.total) : 0;
     const resultTone = written ? '' : misses ? 'has-errors' : 'perfect';
-    const resultIcon = written ? 'i-pencil' : misses ? 'i-alert' : 'i-check';
     const initialOpen = Math.max(0, items.findIndex(item => item.ok === false));
     const fromProfile = archived && app.ripassoArchiveOrigin === 'attivita';
     container.innerHTML = `
-      <article class="recall-result">
-        <header>
-          <button class="btn ghost" onclick="${fromProfile ? "setView('attivita')" : 'openRipassoLobby()'}">← ${fromProfile ? 'Cronologia' : 'Ripasso'}</button>
-          <h1 class="recall-title" id="recallResultTitle" tabindex="-1" aria-describedby="recallResultScore">${archived ? 'Verifica archiviata' : 'Sessione conclusa'}</h1>
-          <p>${recallText(course.nome)} · ${recallText(exam.date)}</p>
+      <article class="recall-result recall-workbench">
+        <header class="recall-workbench-topbar">
+          <button type="button" class="btn ghost recall-back" onclick="${fromProfile ? "setView('attivita')" : 'openRipassoLobby()'}">${icon('i-course-arrow')} ${fromProfile ? 'Cronologia' : 'Ripasso'}</button>
+          <span>${recallText(course.nome)} · ${recallText(exam.date)}</span>
         </header>
-        <div class="recall-hero ${resultTone}">
+        <div class="recall-hero recall-workbench-banner ${resultTone}">
           <div>
             <div class="recall-status">
-              <span class="chip ${exam.withoutAid ? '' : 'a'}">${exam.withoutAid ? 'Senza aiuti' : 'Con indizio'}</span>
-              ${misses ? `<span class="chip r">${plural(misses, 'errore', 'errori')}</span>` : ''}
+              <span class="focus-aid${exam.withoutAid ? '' : ' hint-used'}">${icon(exam.withoutAid ? 'i-lock' : 'i-unlock')} ${exam.withoutAid ? 'Senza aiuti' : 'Con indizio'}</span>
+              ${misses ? `<span class="recall-error-count">${icon('i-alert')} ${plural(misses, 'errore', 'errori')}</span>` : ''}
             </div>
+            <h1 class="recall-title" id="recallResultTitle" tabindex="-1" aria-describedby="recallResultScore">${archived ? 'Verifica archiviata' : 'Sessione conclusa'}</h1>
             <h2 id="recallResultScore">${written ? 'Confronta le risposte' : `${exam.correct} su ${exam.total} corrette`}</h2>
-            <p>${written ? 'Confronta le tue risposte con la traccia modello e aggiorna lo stato della lezione.' : recallText(exam.title)}</p>
-            ${written ? `
-              <div class="recall-open-grade" role="group" aria-label="Autovalutazione risposta scritta">
-                <button type="button" class="btn ok" aria-pressed="${exam.openSelfGrade === 'ok'}" onclick="gradeOpenExam('${exam.id}', true)">${icon('i-check')} Ricordata bene</button>
-                <button type="button" class="btn retry" aria-pressed="${exam.openSelfGrade === 'retry'}" onclick="gradeOpenExam('${exam.id}', false)">Da ripassare</button>
-              </div>` : ''}
-            ${archived ? '' : `<button class="btn blue-pri" style="margin-top:10px" onclick="app.courseId='${course.id}';selectUnit('${exam.unitId}')">Riapri la lezione →</button>`}
+            <p>${recallText(exam.title)}</p>
+            ${archived ? '' : `<button type="button" class="btn recall-result-return" onclick="app.courseId='${course.id}';selectUnit('${exam.unitId}')">Riapri la lezione ${icon('i-course-arrow')}</button>`}
           </div>
-          <span class="recall-result-mark" aria-hidden="true">${icon(resultIcon)}</span>
+          <span class="recall-result-mark recall-entry-score ${written ? 'written' : misses ? 'incorrect' : 'complete'}" aria-hidden="true" style="--recall-score:${score}%">${written ? icon('i-pencil') : `${exam.correct}/${exam.total}`}</span>
         </div>
-        <section aria-labelledby="recallAnswersTitle">
+        <section class="recall-answers" aria-labelledby="recallAnswersTitle">
           <h2 id="recallAnswersTitle">Le tue risposte</h2>
           ${items.map((item, i) => {
             const tone = written ? '' : item.ok ? 'complete' : 'incorrect';
@@ -7321,7 +7567,7 @@ function renderRipassoView() {
             const submittedChoice = item.choiceTag ? `${recallText(item.choiceTag)}. ` : '';
             const solutionChoice = item.solutionChoice ? `${recallText(item.solutionChoice)}. ` : '';
             return `
-            <details name="recall-result-question" ${i === initialOpen ? 'open' : ''}>
+            <details class="recall-answer ${tone}" name="recall-result-question" ${i === initialOpen ? 'open' : ''}>
               <summary>
                 <span class="recall-item-icon ${tone}">${icon(statusIcon)}</span>
                 <span>
@@ -7343,23 +7589,35 @@ function renderRipassoView() {
                   </div>` : ''}
                 </dl>
                 ${item.why && item.why !== item.solution ? `<p>${recallText(item.why)}</p>` : ''}
-                ${item.source ? `<button class="btn" onclick="openVerificationSource('${exam.id}', ${i})">${icon('i-file')} Vedi fonte</button>` : ''}
+                ${item.source ? `<button type="button" class="btn ghost recall-answer-source" onclick="openVerificationSource('${exam.id}', ${i})">${icon('i-file')} Vedi fonte</button>` : ''}
               </div>
             </details>`;
-          }).join('')}
+          }).join('') || '<p class="recall-panel-empty">Nessuna risposta disponibile per questa verifica.</p>'}
         </section>
+        ${written ? `
+          <section class="recall-grade-sheet" aria-labelledby="recallGradeTitle">
+            <h2 id="recallGradeTitle">Autovalutazione</h2>
+            <div class="recall-open-grade" role="group" aria-labelledby="recallGradeTitle">
+              <button type="button" class="btn ok" aria-pressed="${exam.openSelfGrade === 'ok'}" onclick="gradeOpenExam('${exam.id}', true)">${icon('i-check')} Ricordata bene</button>
+              <button type="button" class="btn retry" aria-pressed="${exam.openSelfGrade === 'retry'}" onclick="gradeOpenExam('${exam.id}', false)">Da ripassare</button>
+            </div>
+          </section>` : ''}
       </article>`;
     renderMath(container);
     return;
   }
 
   const courses = Object.values(COURSES_DATA);
-  const todayDate = recallDateKey(new Date());
+  const today = new Date();
+  const todayDate = recallDateKey(today);
   const todayTasks = app.ripassoAgenda.filter(item => item.date === todayDate && COURSES_DATA[item.courseId]?.units.some(unit => unit.id === item.unitId));
   const todayReminder = todayTasks.find(item => !item.completedBy) || todayTasks[0];
   const todayCourse = COURSES_DATA[todayReminder?.courseId];
+  const todayUnit = todayCourse?.units.find(unit => unit.id === todayReminder.unitId);
   const todayDone = Boolean(todayReminder?.completedBy);
   const todayResult = app.completedExams.find(exam => exam.id === todayReminder?.examId);
+  const questionCount = todayUnit && !todayDone ? buildSessionQuestions(todayCourse, todayUnit).length : 0;
+  const dueToday = todayTasks.filter(item => !item.completedBy).length;
   const selectedCourse = COURSES_DATA[app.ripassoPickCourseId];
   const selectedUnit = selectedCourse?.units.find(unit => unit.id === app.ripassoPickUnitId);
   const calDays = getRipassoCalendarDays();
@@ -7367,133 +7625,225 @@ function renderRipassoView() {
   const dateRange = new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'short', year: 'numeric' })
     .formatRange(recallDateFromKey(calDays[0].date), recallDateFromKey(calDays.at(-1).date));
   const recent = app.completedExams.slice(0, 3);
+  const scoredExams = app.completedExams.filter(exam => exam.format !== 'open' && Number.isFinite(exam.correct) && exam.total > 0);
+  const scoredQuestions = scoredExams.reduce((total, exam) => total + exam.total, 0);
+  const accuracy = scoredQuestions ? Math.round(scoredExams.reduce((total, exam) => total + exam.correct, 0) * 100 / scoredQuestions) : null;
+
+  const dayDoneCount = activeCalDay.tasks.filter(t => t.completedBy).length;
+  const dayFormat = new Intl.DateTimeFormat('it-IT', { weekday: 'long', day: 'numeric', month: 'long' });
+  const activeDate = dayFormat.format(recallDateFromKey(activeCalDay.date));
 
   container.innerHTML = `
-    <h1 class="recall-title">Ripasso</h1>
-    <section class="recall-hero recall-hero-today" aria-labelledby="recallTodayTitle" style="--recall-accent:${todayCourse?.accent || 'var(--blue)'}">
-      <div>
-        <span class="recall-today-label${todayDone ? ' complete' : ''}">${icon(todayDone ? 'i-check' : 'i-calendar')}${todayDone ? 'Completata oggi' : 'Sessione di oggi'}</span>
+    <header class="recall-topbar">
+      <div class="recall-heading">
+        <time datetime="${todayDate}">${recallText(dayFormat.format(today))}</time>
+        <h1 class="recall-title">Ripasso</h1>
+      </div>
+      <div class="recall-lobby-stats">
+        ${todayTasks.length ? `<span class="recall-lobby-stat due">${icon(dueToday ? 'i-calendar' : 'i-check')}${dueToday ? plural(dueToday, 'richiamo oggi', 'richiami oggi') : 'Richiami completati'}</span>` : ''}
+        ${accuracy === null ? '' : `<span class="recall-lobby-stat accuracy" title="Risposte corrette nei quiz a scelta multipla">${renderProgressRing(accuracy, 'var(--blue)', 23)} Precisione ${accuracy}%</span>`}
+      </div>
+    </header>
+    <section class="recall-hero recall-hero-today" aria-labelledby="recallTodayTitle">
+      <svg class="recall-hero-waves" viewBox="0 0 1180 220" preserveAspectRatio="none" aria-hidden="true">
+        <circle cx="950" cy="110" r="145" fill="#ffffff" fill-opacity="0.06"/>
+        <path d="M0 186 C 220 144 430 228 710 172 S 1020 120 1180 166" fill="none" stroke="#ffffff" stroke-opacity="0.14" stroke-width="1.5"/>
+        <path d="M0 206 C 260 174 470 236 740 192 S 1030 146 1180 188" fill="none" stroke="#8af5c4" stroke-opacity="0.28" stroke-width="1.5"/>
+      </svg>
+      <div class="recall-today-copy">
         ${todayReminder ? `
+          <span class="recall-today-label${todayDone ? ' complete' : ''}">${icon(todayDone ? 'i-check' : 'i-calendar')}${todayDone ? 'Sessione completata' : 'Sessione di oggi'}${todayDone ? '' : '<span class="recall-hero-priority">priorità</span>'}</span>
           <h2 id="recallTodayTitle">${recallText(todayReminder.title)}</h2>
-          <p>${recallText(todayCourse.nome)}${todayDone ? '' : ' · 3 domande · circa 5 min'}</p>
-          ${todayResult ? `<button class="btn" onclick="openHistoricalVerification('${todayResult.id}', 'ripasso')">Vedi esito →</button>`
+          <div class="recall-session-meta">
+            <span>${icon('i-book')}${recallText(todayCourse.nome)}</span>
+            ${questionCount ? `<span>${icon('i-file')}${plural(questionCount, 'domanda', 'domande')}</span>` : ''}
+          </div>
+          ${todayResult ? `<button class="btn recall-hero-cta blue-pri" onclick="openHistoricalVerification('${todayResult.id}', 'ripasso')">Vedi esito ${icon('i-course-arrow', 'recall-hero-next')}</button>`
             : todayDone ? '' : `<div class="recall-hero-actions">
-               <button class="btn blue-pri" onclick="startRecallReminder('${todayReminder.id}')">Inizia sessione →</button>
-               <button class="btn ghost" onclick="startRecallReminder('${todayReminder.id}', 'open')">Risposta scritta</button>
+               <button class="btn blue-pri recall-hero-cta" onclick="startRecallReminder('${todayReminder.id}')">Inizia sessione ${icon('i-course-arrow', 'recall-hero-next')}</button>
+               <button class="btn ghost recall-hero-alt" onclick="startRecallReminder('${todayReminder.id}', 'open')">${icon('i-pencil')} Risposta scritta</button>
              </div>`}
         ` : `<h2 id="recallTodayTitle">Nessun richiamo oggi</h2>
-          <button class="btn blue-pri" onclick="openRecallPlanner('add', '', recallDateKey(new Date()))">Aggiungi richiamo</button>`}
+          <button class="btn blue-pri recall-hero-cta" onclick="openRecallPlanner('add', '', recallDateKey(new Date()))">${icon('i-course-plus')} Aggiungi richiamo</button>`}
       </div>
-      <div class="recall-index-sheet" aria-hidden="true">
-        ${icon(todayDone ? 'i-check' : 'i-file')}<i></i><i></i><i></i>
+      <div class="recall-index-svg" aria-hidden="true">
+        <svg viewBox="0 0 210 162" width="210" height="162">
+          <defs>
+            <linearGradient id="recall-badge-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#48c788"/><stop offset="1" stop-color="#248a5c"/></linearGradient>
+            <marker id="recall-card-arr" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M1 1.5 L8.5 5 L1 8.5" fill="none" stroke="#1565f2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+          </defs>
+          <g transform="translate(106 16) rotate(8)">
+            <rect width="92" height="114" rx="15" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.38)"/>
+            <text x="46" y="70" text-anchor="middle" font-family="var(--serif)" font-size="44" font-weight="500" fill="rgba(255,255,255,0.92)">?</text>
+            <circle cx="34" cy="94" r="2.4" fill="#ffffff"/><circle cx="46" cy="94" r="2.4" fill="rgba(255,255,255,0.45)"/><circle cx="58" cy="94" r="2.4" fill="rgba(255,255,255,0.45)"/>
+          </g>
+          <g transform="translate(16 10) rotate(-5)">
+            <rect width="114" height="134" rx="14" fill="var(--card)" stroke="var(--line)"/>
+            <rect width="18" height="134" rx="9" fill="var(--blue-s)"/>
+            <circle cx="9" cy="19" r="3" fill="var(--card)" stroke="#9fc2ff" stroke-width="1.5"/>
+            <circle cx="9" cy="38" r="3" fill="var(--card)" stroke="#9fc2ff" stroke-width="1.5"/>
+            <circle cx="9" cy="57" r="3" fill="var(--card)" stroke="#9fc2ff" stroke-width="1.5"/>
+            <circle cx="9" cy="76" r="3" fill="var(--card)" stroke="#9fc2ff" stroke-width="1.5"/>
+            <circle cx="9" cy="95" r="3" fill="var(--card)" stroke="#9fc2ff" stroke-width="1.5"/>
+            <circle cx="9" cy="114" r="3" fill="var(--card)" stroke="#9fc2ff" stroke-width="1.5"/>
+            <rect x="26" y="15" width="54" height="6.5" rx="3.2" fill="#1565f2"/>
+            <rect x="26" y="27" width="74" height="4" rx="2" fill="var(--line)"/>
+            <rect x="26" y="35" width="58" height="4" rx="2" fill="var(--line)"/>
+            <path d="M26 56 H102 M26 76 H102" stroke="var(--line)" stroke-width="1.3"/>
+            <path d="M38 56.5 L72 72.5" stroke="#1565f2" stroke-width="1.7" marker-end="url(#recall-card-arr)" fill="none"/>
+            <circle cx="38" cy="56" r="3.8" fill="#1565f2"/><circle cx="77" cy="76" r="3.8" fill="#48c788"/>
+            <rect x="26" y="92" width="11" height="11" rx="3.2" fill="#48c788"/>
+            <path d="M28.5 97.5l2.2 2.2 3.8-4.2" stroke="#ffffff" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="42" y="95.5" width="54" height="4" rx="2" fill="var(--green-s)"/>
+            <rect x="26" y="109" width="11" height="11" rx="3.2" fill="none" stroke="var(--faint)" stroke-width="1.3"/>
+            <rect x="42" y="112.5" width="42" height="4" rx="2" fill="var(--line)"/>
+          </g>
+          <circle cx="132" cy="129" r="19" fill="url(#recall-badge-g)" stroke="#ffffff" stroke-width="3.2"/>
+          <path d="M124 129l5.2 5.2 10.5-10.8" stroke="#ffffff" stroke-width="2.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M194 14l1.5 4.2 4.2 1.5-4.2 1.5-1.5 4.2-1.5-4.2-4.2-1.5 4.2-1.5z" fill="#8af5c4"/>
+          <path d="M8 134l.9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9z" fill="#ffffff" fill-opacity="0.9"/>
+          <path d="M196 122l1 2.7 2.7 1-2.7 1-1 2.7-1-2.7-2.7-1 2.7-1z" fill="#ffffff" fill-opacity="0.78"/>
+        </svg>
       </div>
     </section>
 
     <div class="ripasso-lobby-grid">
+      <section class="recall-panel recall-agenda" aria-labelledby="recallAgendaTitle">
+        <div class="recall-calendar-head">
+          <div class="recall-cal-title-group">
+            <span aria-hidden="true" class="recall-calendar-icon">${icon('i-calendar')}</span>
+            <h2 id="recallAgendaTitle">Calendario dei richiami</h2>
+          </div>
+          <button type="button" class="btn ghost recall-add" id="recallAgendaAdd" onclick="openRecallPlanner()">${icon('i-course-plus')} Aggiungi</button>
+        </div>
+        <div class="recall-cal-nav" role="group" aria-label="Navigazione calendario">
+          <button type="button" class="btn ghost recall-cal-shift" aria-label="Cinque giorni precedenti" data-offset="-5" onclick="shiftRipassoCalendar(-5)">‹</button>
+          <button type="button" class="btn ghost" id="recallAgendaJump" title="Vai a una data" aria-label="Vai a una data · ${escapeCourseText(dateRange)}" onclick="openRecallPlanner('jump')">${recallText(dateRange)}</button>
+          <button type="button" class="btn ghost recall-cal-shift" aria-label="Cinque giorni successivi" data-offset="5" onclick="shiftRipassoCalendar(5)">›</button>
+        </div>
+        <div class="recall-cal-strip" role="group" aria-label="Giorni del calendario">
+          ${calDays.map(day => {
+            const allDone = day.tasks.length > 0 && day.tasks.every(item => item.completedBy);
+            const dayStatus = !day.tasks.length ? 'Nessun richiamo' : allDone ? 'Richiami completati' : 'Richiami in programma';
+            const dots = day.tasks.slice(0, 3).map(task =>
+              `<span class="recall-cal-dot ${task.completedBy ? 'done' : task.id === todayReminder?.id ? 'due' : 'scheduled'}"></span>`
+            ).join('') || '<span class="recall-cal-dash" aria-hidden="true"></span>';
+            return `
+              <button type="button" class="recall-cal-day" aria-label="${escapeCourseText(day.weekday)} ${day.dayNum} · ${dayStatus}" aria-pressed="${day.date === activeCalDay.date}" data-recall-date="${day.date}" onclick="selectRipassoDay('${day.date}')">
+                <small>${recallText(day.weekday)}</small>
+                <b>${day.dayNum}</b>
+                <span class="recall-cal-dots" aria-hidden="true">${dots}</span>
+              </button>`;
+          }).join('')}
+        </div>
+        <div class="recall-day-summary">
+          <time datetime="${activeCalDay.date}" title="${escapeCourseText(activeDate)}">${activeCalDay.date === todayDate ? 'Oggi' : recallText(activeDate)}</time>
+          ${activeCalDay.tasks.length ? `<span>${dayDoneCount} di ${activeCalDay.tasks.length} completati</span>
+          <progress class="recall-day-progress" value="${dayDoneCount}" max="${activeCalDay.tasks.length}" aria-hidden="true"></progress>` : ''}
+        </div>
+        <div class="recall-checklist">
+          ${activeCalDay.tasks.length ? activeCalDay.tasks.map(task => {
+            const verified = task.completedBy === 'quiz';
+            const isDone = Boolean(task.completedBy);
+            const available = COURSES_DATA[task.courseId]?.units.some(unit => unit.id === task.unitId);
+            const linkedExam = app.completedExams.find(exam => exam.id === task.examId);
+            const priority = !isDone && task.id === todayReminder?.id;
+            return `
+              <div class="recall-check-row${isDone ? ' checked' : ''}${priority ? ' priority' : ''}" data-reminder-row="${task.id}">
+                <button type="button" class="recall-check-btn" role="checkbox" aria-checked="${isDone}" aria-label="Completamento · ${escapeCourseText(task.title)}" data-task-key="${task.id}"${verified ? ' disabled' : ''} onclick="toggleChecklistTask('${task.id}')">
+                  ${isDone ? icon('i-check') : ''}
+                </button>
+                <div class="recall-check-copy">
+                  <b>${recallText(task.title)}</b>
+                  <small>${recallText(task.courseName)}${priority && questionCount ? ` · ${plural(questionCount, 'domanda', 'domande')}` : available ? '' : ' · Lezione non disponibile'}</small>
+                </div>
+                <div class="recall-check-actions">
+                  ${linkedExam ? `<button type="button" class="btn" onclick="openHistoricalVerification('${linkedExam.id}', 'ripasso')">Esito →</button>` :
+                    available ? `<button type="button" class="btn ghost recall-check-go" onclick="startRecallReminder('${task.id}')">${isDone ? 'Ripeti' : 'Ripassa'} ${priority ? icon('i-course-arrow') : ''}</button>` : ''}
+                  <button type="button" class="btn ghost recall-manage" data-reminder-edit="${task.id}" aria-label="Gestisci richiamo · ${escapeCourseText(task.title)}" title="Gestisci richiamo" onclick="openRecallPlanner('manage', '${task.id}')">${icon('i-pencil')}</button>
+                </div>
+              </div>`;
+            }).join('') : '<p class="recall-panel-empty">Nessun richiamo in programma.</p>'}
+        </div>
+      </section>
+
       <section class="recall-panel recall-picker-sheet" aria-labelledby="recallPickerTitle">
-        <h2 id="recallPickerTitle" tabindex="-1">Ripasso a scelta</h2>
-        <div class="recall-picker-body">
+        <div class="recall-panel-head recall-picker-head">
+          <h2 id="recallPickerTitle" tabindex="-1">Ripasso a scelta</h2>
+          ${selectedCourse ? '' : `<span class="recall-course-count">${plural(courses.length, 'corso', 'corsi')}</span>`}
+        </div>
+        <div class="recall-picker-body ${selectedCourse ? 'recall-lesson-picker' : 'recall-course-grid'}"${selectedCourse ? ` style="--recall-course-accent:${selectedCourse.accent}"` : ''}>
         ${selectedCourse ? `
           <nav class="recall-crumb" aria-label="Scelta della lezione">
-            <button onclick="pickReviewLesson(null)">Corsi</button><span aria-hidden="true">›</span>
+            <button type="button" onclick="pickReviewLesson(null)">Corsi</button><span aria-hidden="true">›</span>
             ${selectedUnit
-              ? `<button onclick="pickReviewLesson('${selectedCourse.id}')">${recallText(selectedCourse.nome)}</button><span aria-hidden="true">›</span><span>Quiz</span>`
-              : `<span>${recallText(selectedCourse.nome)}</span>`}
+              ? `<button type="button" onclick="pickReviewLesson('${selectedCourse.id}')">${recallText(selectedCourse.nome)}</button><span aria-hidden="true">›</span><span aria-current="step">Quiz</span>`
+              : `<span aria-current="step">${recallText(selectedCourse.nome)}</span>`}
           </nav>` : ''}
         ${selectedUnit ? `
-          <strong>${recallText(selectedUnit.titolo)}</strong>
           <form class="recall-launch" onsubmit="event.preventDefault();startRipassoSessionFor('${selectedCourse.id}', '${selectedUnit.id}', this.elements.format.value)">
+            <div class="recall-launch-heading">
+              <span class="recall-item-icon" aria-hidden="true">${renderSubjectSvg(selectedCourse.kind, selectedCourse.accent)}</span>
+              <h3>${recallText(selectedUnit.titolo)}</h3>
+            </div>
             <label>Formato della risposta
-              <select class="btn" name="format">
+              <select class="input-field" name="format">
                 <option value="mcq">Scelta multipla</option>
                 <option value="open">Risposta scritta</option>
               </select>
             </label>
-            <button class="btn blue-pri" type="submit">Inizia il quiz →</button>
+            <button class="btn recall-workbench-primary" type="submit">Inizia il quiz ${icon('i-course-arrow')}</button>
           </form>` : selectedCourse ? selectedCourse.units.map(unit => `
-          <button class="recall-choice" onclick="pickReviewLesson('${selectedCourse.id}', '${unit.id}')">
-            <span class="recall-item-icon">${recallText(unit.num)}</span>
+          <button type="button" class="recall-choice" onclick="pickReviewLesson('${selectedCourse.id}', '${unit.id}')">
+            <span class="recall-item-icon" aria-hidden="true">${recallText(unit.num)}</span>
             <strong>${recallText(unit.titolo)}</strong>
             <span class="recall-arrow" aria-hidden="true">›</span>
-          </button>`).join('') : courses.map(course => `
-          <button class="recall-choice recall-course-choice" onclick="pickReviewLesson('${course.id}')" style="--recall-course-accent:${course.accent}">
-            <span class="recall-item-icon">${renderSubjectSvg(course.kind, course.accent)}</span>
-            <span><strong>${recallText(course.nome)}</strong><small>${plural(course.units.length, 'lezione', 'lezioni')}</small></span>
-            <span class="recall-arrow" aria-hidden="true">›</span>
-          </button>`).join('')}
+          </button>`).join('') : courses.map(course => {
+            const dueN = course.units.filter(u => u.stato === 'da_ripassare').length;
+            const verifiedN = course.units.filter(u => u.stato === 'dimostrato').length;
+            return `
+            <button type="button" class="recall-choice recall-course-choice" onclick="pickReviewLesson('${course.id}')" style="--recall-course-accent:${course.accent}">
+              <span class="recall-item-icon" aria-hidden="true">${renderSubjectSvg(course.kind, course.accent)}</span>
+              <span class="recall-arrow" aria-hidden="true">›</span>
+              <strong>${recallText(course.nome)}</strong>
+              <span class="recall-course-meta">
+                <small>${plural(course.units.length, 'lezione', 'lezioni')}</small>
+                ${dueN ? `<span class="recall-due-inline">${dueN} da ripassare</span>` : `<progress value="${verifiedN}" max="${course.units.length}" aria-label="${verifiedN} di ${course.units.length} lezioni verificate"></progress>`}
+              </span>
+            </button>`;
+          }).join('')}
         </div>
       </section>
 
-      <div class="ripasso-col">
-        <section class="recall-panel recall-agenda" aria-labelledby="recallAgendaTitle">
-          <div class="recall-calendar-head">
-            <h2 id="recallAgendaTitle">Calendario dei richiami</h2>
-            <button type="button" class="btn" id="recallAgendaAdd" onclick="openRecallPlanner()">+ Aggiungi</button>
-          </div>
-          <div class="recall-cal-nav" role="group" aria-label="Navigazione calendario">
-            <button type="button" class="btn ghost recall-cal-shift" aria-label="Cinque giorni precedenti" data-offset="-5" onclick="shiftRipassoCalendar(-5)">‹</button>
-            <button type="button" class="btn ghost" id="recallAgendaJump" title="Vai a una data" aria-label="Vai a una data · ${escapeCourseText(dateRange)}" onclick="openRecallPlanner('jump')">${icon('i-calendar')} ${recallText(dateRange)}</button>
-            <button type="button" class="btn ghost recall-cal-shift" aria-label="Cinque giorni successivi" data-offset="5" onclick="shiftRipassoCalendar(5)">›</button>
-          </div>
-          <div class="recall-cal-strip" role="group" aria-label="Giorni del calendario">
-            ${calDays.map(day => {
-              const allDone = day.tasks.length > 0 && day.tasks.every(item => item.completedBy);
-              const dotCls = !day.tasks.length ? '' : allDone ? 'done' : 'due';
-              const dayStatus = !day.tasks.length ? 'Nessun richiamo' : allDone ? 'Richiami completati' : 'Richiami in programma';
-              return `
-                <button type="button" class="recall-cal-day" aria-label="${escapeCourseText(day.weekday)} ${day.dayNum} · ${dayStatus}" aria-pressed="${day.date === activeCalDay.date}" data-recall-date="${day.date}" onclick="selectRipassoDay('${day.date}')">
-                  <small>${recallText(day.weekday)}</small>
-                  <b>${day.dayNum}</b>
-                  <span class="recall-cal-dot ${dotCls}" aria-hidden="true"></span>
-                </button>`;
-            }).join('')}
-          </div>
-          <div class="recall-checklist">
-            ${activeCalDay.tasks.length ? activeCalDay.tasks.map(task => {
-              const verified = task.completedBy === 'quiz';
-              const isDone = Boolean(task.completedBy);
-              const available = COURSES_DATA[task.courseId]?.units.some(unit => unit.id === task.unitId);
-              const linkedExam = app.completedExams.find(exam => exam.id === task.examId);
-              return `
-                <div class="recall-check-row ${isDone ? 'checked' : ''}" data-reminder-row="${task.id}">
-                  <button type="button" class="recall-check-btn" role="checkbox" aria-checked="${isDone}" aria-label="Completamento · ${escapeCourseText(task.title)}" data-task-key="${task.id}"${verified ? ' disabled' : ''} onclick="toggleChecklistTask('${task.id}')">
-                    ${isDone ? icon('i-check') : ''}
-                  </button>
-                  <div class="recall-check-copy">
-                    <b>${recallText(task.title)}</b>
-                    <small>${recallText(task.courseName)}${available ? '' : ' · Lezione non disponibile'}</small>
-                  </div>
-                  <div class="recall-check-actions">
-                    ${linkedExam ? `<button type="button" class="btn" onclick="openHistoricalVerification('${linkedExam.id}', 'ripasso')">Esito →</button>` :
-                      available ? `<button type="button" class="btn" onclick="startRecallReminder('${task.id}')">Ripassa →</button>` : ''}
-                    <button type="button" class="btn ghost recall-manage" data-reminder-edit="${task.id}" aria-label="Modifica richiamo · ${escapeCourseText(task.title)}" title="Modifica richiamo" onclick="openRecallPlanner('manage', '${task.id}')">${icon('i-pencil')}</button>
-                  </div>
-                </div>`;
-            }).join('') : '<p class="profile-empty" style="padding:8px 2px;margin:0;font-size:12.5px">Nessun richiamo in programma.</p>'}
-          </div>
-        </section>
-
-        <section class="recall-panel recall-history" aria-labelledby="recallHistoryTitle">
-          <div class="recall-panel-head">
-            <h2 id="recallHistoryTitle">Ultime verifiche</h2>
-            <button class="btn ghost" onclick="setView('attivita')">Cronologia →</button>
-          </div>
-          ${recent.map(exam => {
-            const written = exam.format === 'open';
-            const hasErr = !written && exam.correct < exam.total;
-            const mark = written ? 'i-pencil' : hasErr ? 'i-alert' : 'i-check';
-            const markTone = written ? '' : hasErr ? 'incorrect' : 'complete';
-            return `
-            <button class="recall-choice" onclick="openHistoricalVerification('${exam.id}', 'ripasso')">
-              <span class="recall-item-icon ${markTone}">${icon(mark)}</span>
-              <span><strong>${recallText(exam.title)}</strong><small>${recallText(exam.shortDate)}</small></span>
-              ${exam.format === 'open'
-                ? '<span class="recall-score">Confronto</span>'
-                : `<span class="recall-score" style="${hasErr ? 'color:var(--red-i);font-weight:700' : ''}" aria-label="${exam.correct} su ${exam.total} corrette">${exam.correct}/${exam.total}</span>`}
-            </button>`;
-          }).join('')}
-        </section>
-      </div>
+      <section class="recall-panel recall-history" aria-labelledby="recallHistoryTitle">
+        <div class="recall-panel-head">
+          <h2 id="recallHistoryTitle">Ultime verifiche</h2>
+          <button class="btn ghost recall-hist-more" onclick="setView('attivita')">Cronologia ›</button>
+        </div>
+        <div class="recall-history-list">
+        ${recent.map((exam, index) => {
+          const written = exam.format === 'open';
+          const score = written || !exam.total ? 0 : Math.round(exam.correct * 100 / exam.total);
+          const verified = isRecallExamVerified(exam);
+          const status = verified ? 'Verificata'
+            : written && exam.openSelfGrade !== 'retry' ? 'Risposta scritta'
+            : !written && !exam.withoutAid ? 'Con indizio' : 'Da ripassare';
+          const courseNm = COURSES_DATA[exam.courseId]?.nome || '';
+          return `
+          <button type="button" class="recall-result-entry${index > 1 ? ' compact' : ''}" onclick="openHistoricalVerification('${exam.id}', 'ripasso')">
+            <span class="recall-entry-score ${written ? 'written' : verified ? 'complete' : 'incorrect'}"${written ? '' : ` role="img" aria-label="${exam.correct} risposte corrette su ${exam.total}" style="--recall-score:${score}%"`}>${written ? icon('i-pencil') : `${exam.correct}/${exam.total}`}</span>
+            <span class="recall-entry-copy">
+              <small>${recallText(exam.shortDate.replace(',', ' ·'))}</small>
+              <strong>${recallText(exam.title)}</strong>
+            </span>
+            <span class="recall-entry-footer">
+              <span class="recall-entry-status${verified ? ' verified' : ''}">${verified ? icon('i-check') : ''}${status}</span>
+              <small>${recallText(courseNm)}</small>
+            </span>
+          </button>`;
+          }).join('') || '<p class="recall-panel-empty">Nessuna verifica svolta.</p>'}
+        </div>
+      </section>
     </div>`;
 }
 
@@ -7517,14 +7867,13 @@ function profileAvatarPath(choice) {
   return choice === 'initial' ? '' : `assets/profile-avatars/avatar-${choice}.webp`;
 }
 
-function updateProfileAvatar(target) {
+function updateProfileAvatar(target, choice = app.profileAvatarChoice, initial = profileInitial()) {
   if (!target) return;
-  const initial = profileInitial();
-  if (target.dataset.avatar === app.profileAvatarChoice && target.dataset.initial === initial) return;
-  target.dataset.avatar = app.profileAvatarChoice;
+  if (target.dataset.avatar === choice && target.dataset.initial === initial) return;
+  target.dataset.avatar = choice;
   target.dataset.initial = initial;
   target.textContent = initial;
-  const source = profileAvatarPath(app.profileAvatarChoice);
+  const source = profileAvatarPath(choice);
   if (!source) return;
   const picture = document.createElement('img');
   picture.alt = '';
@@ -7534,10 +7883,13 @@ function updateProfileAvatar(target) {
 }
 
 function openAccountPage(page) {
+  if (page === 'edit' && app.accountPage !== 'edit') {
+    app.profileEditOrigin = app.accountPage === 'settings' ? 'settings' : 'activity';
+  }
   app.accountPage = app.demoSessionOpen ? page : 'login';
   renderAttivitaView();
   document.querySelector('#view-attivita .page-scroll').scrollTop = 0;
-  document.getElementById('accountHeading')?.focus({ preventScroll: true });
+  document.querySelector('#attivitaContainer h1')?.focus({ preventScroll: true });
 }
 
 function saveProfile(event) {
@@ -7552,7 +7904,7 @@ function saveProfile(event) {
   app.profileName = name.value.trim();
   app.profileProgramme = form.elements.namedItem('profileProgramme').value.trim();
   app.profileAvatarChoice = form.elements.namedItem('profileAvatar').value;
-  openAccountPage('activity');
+  openAccountPage(app.profileEditOrigin);
   showToast('Profilo aggiornato');
 }
 
@@ -7583,37 +7935,59 @@ function syncAccountSettings() {
   });
 }
 
+function renderProfileWaves() {
+  return `<svg class="profile-waves" viewBox="0 0 1180 220" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 171 C230 139 420 232 707 172 S1015 118 1180 168" stroke="white" stroke-opacity=".23"/>
+    <path d="M0 205 C254 170 477 240 740 193 S1036 142 1180 188" stroke="#8af5c4" stroke-opacity=".36"/>
+  </svg>`;
+}
+
+function renderProfileScreenHeader(title, symbol, backPage, backLabel) {
+  return `<button type="button" class="btn profile-back" onclick="openAccountPage('${backPage}')">← ${backLabel}</button>
+    <header class="profile-screen-hero">
+      ${renderProfileWaves()}
+      <h1 id="accountHeading" tabindex="-1">${title}</h1>
+      <span class="profile-hero-badge" aria-hidden="true">${icon(symbol)}</span>
+    </header>`;
+}
+
 function renderAccountScreen(page) {
   const themes = [['light', 'Chiaro'], ['sepia', 'Seppia'], ['dark', 'Scuro']];
   const depths = [['sintesi', 'Sintesi'], ['guidata', 'Guidata'], ['completa', 'Completa']];
   if (page === 'edit') {
+    const origin = app.profileEditOrigin;
     return `
       <div class="profile-screen">
-        <button class="btn ghost" onclick="openAccountPage('settings')">← Impostazioni</button>
-        <header class="profile-screen-hero">
-          <h1 id="accountHeading" tabindex="-1">Modifica profilo</h1>
-          <span class="profile-hero-badge" aria-hidden="true">${icon('i-pencil')}</span>
-        </header>
+        ${renderProfileScreenHeader('Modifica profilo', 'i-pencil', origin, origin === 'settings' ? 'Impostazioni' : 'Profilo')}
         <form class="profile-edit-form" onsubmit="saveProfile(event)">
-          <fieldset class="profile-avatar-picker">
-            <legend>Immagine del profilo</legend>
-            <div class="profile-avatar-options">
-              ${PROFILE_AVATARS.map(([id, label]) => `
-                <label class="profile-avatar-option" title="${label}">
-                  <input type="radio" name="profileAvatar" value="${id}" aria-label="${label}"${app.profileAvatarChoice === id ? ' checked' : ''}>
-                  <span class="profile-avatar-swatch" aria-hidden="true">${id === 'initial' ? '<span id="profileInitialSample"></span>' : `<img src="${profileAvatarPath(id)}" alt="">`}</span>
-                </label>`).join('')}
+          <div class="profile-edit-preview" aria-hidden="true">
+            <span id="profilePreviewAvatar"></span>
+            <div>
+              <strong id="profilePreviewName"></strong>
+              <p id="profilePreviewProgramme"></p>
             </div>
-          </fieldset>
-          <label class="profile-field">Nome visualizzato
-            <input id="profileNameInput" name="profileName" autocomplete="nickname" required maxlength="48" oninput="this.setCustomValidity('')">
-          </label>
-          <label class="profile-field">Percorso di studi
-            <input id="profileProgrammeInput" name="profileProgramme" maxlength="72">
-          </label>
-          <div class="profile-form-actions">
-            <button class="btn ghost" type="button" onclick="openAccountPage('settings')">Annulla</button>
-            <button class="btn blue-pri" type="submit">Salva profilo</button>
+          </div>
+          <div class="profile-edit-fields">
+            <fieldset class="profile-avatar-picker">
+              <legend>Immagine del profilo</legend>
+              <div class="profile-avatar-options">
+                ${PROFILE_AVATARS.map(([id, label]) => `
+                  <label class="profile-avatar-option" title="${label}">
+                    <input type="radio" name="profileAvatar" value="${id}" aria-label="${label}"${app.profileAvatarChoice === id ? ' checked' : ''}>
+                    <span class="profile-avatar-swatch" aria-hidden="true">${id === 'initial' ? '<span id="profileInitialSample"></span>' : `<img src="${profileAvatarPath(id)}" alt="">`}</span>
+                  </label>`).join('')}
+              </div>
+            </fieldset>
+            <label class="profile-field">Nome visualizzato
+              <input id="profileNameInput" name="profileName" autocomplete="nickname" required maxlength="48" oninput="this.setCustomValidity('')">
+            </label>
+            <label class="profile-field">Percorso di studi
+              <input id="profileProgrammeInput" name="profileProgramme" maxlength="72">
+            </label>
+            <div class="profile-form-actions">
+              <button class="btn ghost" type="button" onclick="openAccountPage('${origin}')">Annulla</button>
+              <button class="btn blue-pri" type="submit">Salva profilo ${icon('i-check')}</button>
+            </div>
           </div>
         </form>
       </div>`;
@@ -7623,7 +7997,7 @@ function renderAccountScreen(page) {
     if (window.TutorAuth && typeof window.TutorAuth.renderEmbeddedLoginCard === 'function') {
       return `
         <div class="profile-screen">
-          <button class="btn ghost" onclick="openHomeHub()">← Corsi</button>
+          <button class="btn profile-back" onclick="openHomeHub()">← Corsi</button>
           ${window.TutorAuth.renderEmbeddedLoginCard({
             name: app.profileName,
             programme: app.profileProgramme,
@@ -7634,7 +8008,7 @@ function renderAccountScreen(page) {
     }
     return `
       <div class="profile-screen">
-        <button class="btn ghost" onclick="openHomeHub()">← Corsi</button>
+        <button class="btn profile-back" onclick="openHomeHub()">← Corsi</button>
         <div class="profile-login">
           <div class="profile-login-art" aria-hidden="true">${icon('i-book')}</div>
           <form onsubmit="enterDemoAccount(event)">
@@ -7653,34 +8027,17 @@ function renderAccountScreen(page) {
 
   return `
     <div class="profile-screen">
-      <button class="btn ghost" onclick="openAccountPage('activity')">← Profilo</button>
-      <header class="profile-screen-hero">
-        <h1 id="accountHeading" tabindex="-1">Impostazioni</h1>
-        <span class="profile-hero-badge" aria-hidden="true">${icon('i-settings')}</span>
-      </header>
+      ${renderProfileScreenHeader('Impostazioni', 'i-settings', 'activity', 'Profilo')}
       <div class="profile-settings">
-        <section class="profile-settings-section" aria-labelledby="profileAccountTitle">
-          <h2 id="profileAccountTitle">Account</h2>
-          <div class="profile-settings-row">
-            <span>Profilo personale</span>
-            <button class="btn" onclick="openAccountPage('edit')">${icon('i-pencil')} Modifica profilo</button>
-          </div>
-          <div class="profile-settings-row">
-            <span>Accesso di prova <small id="profileAccountEmail"></small></span>
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <button class="btn" onclick="openAuthPortal('register')">Registrazione demo</button>
-              <button class="btn" onclick="leaveDemoAccount('login')">${icon('i-logout')} Esci</button>
-            </div>
-          </div>
-        </section>
-        <section class="profile-settings-section" aria-labelledby="profileStudioTitle">
-          <h2 id="profileStudioTitle">Preferenze</h2>
-          <div class="profile-settings-row">
-            <span id="profileThemeLabel">Tema</span>
+        <section class="profile-settings-section profile-settings-preferences" aria-labelledby="profileStudioTitle">
+          <h2 id="profileStudioTitle"><span class="profile-section-icon">${icon('i-book')}</span> Preferenze</h2>
+          <div class="profile-settings-row profile-settings-themes">
+            <span id="profileThemeLabel">Tema dell’interfaccia</span>
             <div class="profile-theme-options" role="group" aria-labelledby="profileThemeLabel">
               ${themes.map(([id, label], index) => `
-                <button type="button" class="btn" data-profile-theme="${id}" aria-pressed="${app.theme === id}" onclick="setTheme('${id}',${index})">
-                  <span class="profile-theme-sample ${id}" aria-hidden="true"></span>${label}
+                <button type="button" class="profile-theme-option" data-profile-theme="${id}" aria-pressed="${app.theme === id}" onclick="setTheme('${id}',${index})">
+                  <span class="profile-theme-sample ${id}" aria-hidden="true"><i></i></span>
+                  <span>${label}</span>
                 </button>`).join('')}
             </div>
           </div>
@@ -7691,11 +8048,25 @@ function renderAccountScreen(page) {
             </select>
           </div>
         </section>
+        <section class="profile-settings-section" aria-labelledby="profileAccountTitle">
+          <h2 id="profileAccountTitle"><span class="profile-section-icon">${icon('i-pencil')}</span> Account</h2>
+          <div class="profile-settings-row">
+            <span>Profilo personale</span>
+            <button class="btn" onclick="openAccountPage('edit')">Modifica profilo ${icon('i-course-arrow')}</button>
+          </div>
+          <div class="profile-settings-row">
+            <span>Accesso di prova <small id="profileAccountEmail"></small></span>
+            <div class="profile-settings-actions">
+              <button class="btn ghost" onclick="openAuthPortal('register')">Registrazione demo</button>
+              <button class="btn" onclick="leaveDemoAccount('login')">${icon('i-logout')} Esci</button>
+            </div>
+          </div>
+        </section>
         <section class="profile-settings-section" aria-labelledby="profileHelpTitle">
-          <h2 id="profileHelpTitle">Aiuto</h2>
+          <h2 id="profileHelpTitle"><span class="profile-section-icon">${icon('i-list')}</span> Aiuto</h2>
           <div class="profile-settings-row">
             <span>Scorciatoie da tastiera</span>
-            <button class="btn" onclick="openModal('modalShortcuts')">Guida rapida</button>
+            <button class="btn" onclick="openModal('modalShortcuts')">Guida rapida ${icon('i-course-arrow')}</button>
           </div>
           <details class="profile-developer">
             <summary>Strumenti prototipo</summary>
@@ -7771,14 +8142,22 @@ function renderAttivitaView() {
   if (app.accountPage !== 'activity') {
     container.innerHTML = renderAccountScreen(app.accountPage);
     if (app.accountPage === 'edit') {
-      const nameInput = document.getElementById('profileNameInput');
+      const form = container.querySelector('.profile-edit-form');
+      const nameInput = form.elements.namedItem('profileName');
+      const programmeInput = form.elements.namedItem('profileProgramme');
+      const avatarInput = form.elements.namedItem('profileAvatar');
       nameInput.value = app.profileName;
-      const initialSample = document.getElementById('profileInitialSample');
-      initialSample.textContent = profileInitial();
-      nameInput.addEventListener('input', () => {
-        initialSample.textContent = Array.from(nameInput.value.trim())[0]?.toLocaleUpperCase('it') || profileInitial();
-      });
-      document.getElementById('profileProgrammeInput').value = app.profileProgramme;
+      programmeInput.value = app.profileProgramme;
+      const renderAvatarPreview = () => {
+        const name = nameInput.value.trim() || app.profileName;
+        const initial = Array.from(name)[0]?.toLocaleUpperCase('it') || profileInitial();
+        document.getElementById('profileInitialSample').textContent = initial;
+        document.getElementById('profilePreviewName').textContent = name;
+        document.getElementById('profilePreviewProgramme').textContent = programmeInput.value.trim();
+        updateProfileAvatar(document.getElementById('profilePreviewAvatar'), avatarInput.value, initial);
+      };
+      form.addEventListener('input', renderAvatarPreview);
+      renderAvatarPreview();
     } else if (app.accountPage === 'login') {
       const em = document.getElementById('profileEmailInput');
       if (em) em.value = app.profileEmail;
@@ -7792,13 +8171,15 @@ function renderAttivitaView() {
   const done = units.filter(unit => unit.stato === 'dimostrato').length;
   const masteryPct = units.length ? Math.round((done / units.length) * 100) : 0;
   const filters = [['tutto', 'Tutto'], ['studio', 'Lezioni'], ['appunti', 'Appunti'], ['verifica', 'Verifiche']];
-  const dateLabel = new Date().toLocaleDateString('it-IT', { dateStyle: 'full' });
+  const date = new Date();
+  const dateLabel = date.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'short' });
   container.innerHTML = `
     <div class="profile-journal">
       <header class="profile-banner">
+        ${renderProfileWaves()}
         <div class="profile-journal-title">
+          <time datetime="${recallDateKey(date)}">${escapeCourseText(dateLabel)}</time>
           <h1 id="accountHeading" tabindex="-1">Diario di studio</h1>
-          <p>${escapeCourseText(dateLabel)}</p>
         </div>
         <div class="profile-id-wrap">
           <button type="button" class="profile-avatar-lg" aria-label="Modifica profilo" title="Modifica profilo" onclick="openAccountPage('edit')">
@@ -7827,12 +8208,12 @@ function renderAttivitaView() {
         <aside class="profile-insights" aria-label="Riepilogo dello studio">
           <section class="profile-insight-card" aria-labelledby="profileWeekHeading">
             <h2 id="profileWeekHeading">Ultimi 7 giorni</h2>
-            <p>Attività registrate per giorno</p>
             <ul class="profile-week">${renderProfileWeek()}</ul>
           </section>
           <section class="profile-globe-card" aria-labelledby="profileMasteryHeading">
             <h2 id="profileMasteryHeading">Unità verificate</h2>
             <p class="profile-globe-copy"><strong>${done}</strong> di ${units.length}</p>
+            <progress class="profile-mastery-progress" value="${done}" max="${units.length || 1}" aria-hidden="true"></progress>
             <pre class="ascii-globe-box" id="asciiGlobe" aria-hidden="true"></pre>
           </section>
         </aside>
@@ -8083,7 +8464,7 @@ document.addEventListener('keydown', e => {
       insert.querySelector('summary').focus();
       return;
     }
-    closeModal('modalAddLesson'); closeModal('modalSource'); closeModal('modalCourseDetails'); closeModal('modalShortcuts'); closeModal('modalStudyHistory');
+    closeModal('modalAddLesson'); closeModal('modalCourseDetails'); closeModal('modalShortcuts'); closeModal('modalStudyHistory');
     document.getElementById('demoDrawer').classList.remove('open');
     document.getElementById('btnDemoDrawer')?.classList.remove('on');
     if (app.noteMenuOpen) toggleNoteMenu(false);

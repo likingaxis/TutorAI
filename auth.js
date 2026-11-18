@@ -222,17 +222,15 @@
               '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 760" preserveAspectRatio="xMidYMid slice">' +
                 '<defs>' +
                   '<linearGradient id="ta-rw-base" x1="0" y1="0" x2="0.85" y2="1">' +
-                    '<stop offset="0%" style="stop-color:var(--rw-b0)"/>' +
-                    '<stop offset="50%" style="stop-color:var(--rw-b1)"/>' +
-                    '<stop offset="100%" style="stop-color:var(--rw-b2)"/>' +
+                    '<stop offset="0%" style="stop-color:var(--auth-wave-start)"/>' +
+                    '<stop offset="58%" style="stop-color:var(--auth-wave-mid)"/>' +
+                    '<stop offset="100%" style="stop-color:var(--auth-wave-end)"/>' +
                   '</linearGradient>' +
-                  '<filter id="ta-rw-blur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="16"/></filter>' +
                 '</defs>' +
                 '<rect width="420" height="760" fill="url(#ta-rw-base)"/>' +
-                '<path d="M-40 0 H460 V220 C330 280, 155 125, -40 195 Z" style="fill:var(--rw-w1);opacity:var(--rw-w1-op)" filter="url(#ta-rw-blur)"/>' +
-                '<path d="M-40 500 C95 435, 275 585, 460 495 V800 H-40 Z" style="fill:var(--rw-w2);opacity:var(--rw-w2-op)" filter="url(#ta-rw-blur)"/>' +
-                '<path d="M-40 620 C110 555, 285 680, 460 600 V800 H-40 Z" style="fill:var(--rw-w1);opacity:var(--rw-w1-op)"/>' +
-                '<path d="M-40 194 C150 124, 325 274, 460 216" fill="none" style="stroke:var(--rw-rim);stroke-opacity:var(--rw-rim-op)" stroke-width="2.5"/>' +
+                '<circle cx="438" cy="68" r="226" fill="white" fill-opacity=".07"/>' +
+                '<path d="M-20 528 C164 490, 251 622, 439 529" fill="none" stroke="white" stroke-opacity=".25" stroke-width="1.5"/>' +
+                '<path d="M-20 574 C170 544, 253 657, 440 569" fill="none" style="stroke:var(--auth-wave-spark)" stroke-opacity=".42" stroke-width="1.5"/>' +
               '</svg>' +
             '</div>' +
 
@@ -243,7 +241,6 @@
                 '</span>' +
                 '<div class="tutor-auth-brand-text">' +
                   '<span class="tutor-auth-brand-name">TutorAI</span>' +
-                  '<span class="tutor-auth-brand-tag">Università</span>' +
                 '</div>' +
               '</div>' +
 
@@ -253,22 +250,27 @@
             '</div>' +
 
             '<div class="tutor-auth-showcase-hero">' +
-              '<h1>Il tuo studio universitario, in un unico spazio</h1>' +
-              '<p class="tutor-auth-showcase-lead">Lezioni strutturate dalle tue dispense, appunti personali in stile quaderno e richiamo attivo guidato.</p>' +
+              '<h1>Il tuo studio universitario</h1>' +
+              '<p class="tutor-auth-showcase-lead">Ritrova lezioni, appunti e richiami nel tuo quaderno di studio.</p>' +
               '<div class="tutor-auth-feature-pills" aria-label="Funzionalità principali">' +
                 '<span class="tutor-auth-feature-pill">' +
                   '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>' +
-                  'Appunti stile Obsidian' +
+                  'Appunti' +
                 '</span>' +
                 '<span class="tutor-auth-feature-pill">' +
                   '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>' +
-                  'Spiegazioni dalle fonti' +
+                  'Spiegazioni' +
                 '</span>' +
                 '<span class="tutor-auth-feature-pill">' +
                   '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>' +
-                  'Ripasso attivo' +
+                  'Ripasso' +
                 '</span>' +
               '</div>' +
+            '</div>' +
+
+            '<div class="tutor-auth-book-preview" aria-hidden="true">' +
+              '<span class="tutor-auth-book-sheet"></span>' +
+              '<img src="assets/EXAMPLES/Pencil%20with%20Sparkle%20Orbit.png" alt="" width="126" height="126">' +
             '</div>' +
 
             '<div class="tutor-auth-avatar-card">' +
@@ -281,7 +283,6 @@
                   '<span id="tutorAuthSavedProgramme">' + safeProgramme + '</span>' +
                 '</div>' +
               '</div>' +
-              '<p class="tutor-auth-avatar-note">Corsi, appunti salvati, avatar e cronologia delle verifiche restano sempre pronti al tuo rientro.</p>' +
             '</div>' +
           '</section>' +
 
@@ -299,7 +300,7 @@
 
             '<div class="tutor-auth-proto-banner" role="note">' +
               '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>' +
-              '<span><b>Modalità prototipo</b> · Accedi o registrati con qualsiasi dato per rientrare nel profilo salvato di <span id="tutorAuthBadgeName">' + safeName + '</span>.</span>' +
+              '<span>Usa credenziali di prova per aprire il profilo demo di <b id="tutorAuthBadgeName">' + safeName + '</b>.</span>' +
             '</div>' +
 
             '<div class="tutor-auth-seg" role="tablist" aria-label="Modalità di accesso">' +
@@ -1157,14 +1158,11 @@
           '<div class="tutor-auth-embedded-user">' +
             '<span class="tutor-auth-embedded-av" aria-hidden="true">' + renderAvatarInnerHtml(resolved) + '</span>' +
             '<div>' +
-              '<strong style="display:block;font-size:15px">' + safeName + '</strong>' +
-              '<span style="display:block;font-size:12px;opacity:0.86">' + safeProgramme + '</span>' +
+              '<strong>' + safeName + '</strong>' +
+              '<span>' + safeProgramme + '</span>' +
             '</div>' +
           '</div>' +
-          '<div style="font-size:12px;line-height:1.45;opacity:0.9">' +
-            'Sessione demo chiusa · ' + safeEmail + '<br>' +
-            'Tutti i tuoi corsi, appunti e quiz sono al sicuro.' +
-          '</div>' +
+          '<small class="tutor-auth-embedded-session">Sessione demo chiusa · ' + safeEmail + '</small>' +
         '</div>' +
         '<div class="tutor-auth-embedded-body">' +
           '<h1 id="tutorAuthEmbeddedHeading" tabindex="-1">Accedi o registrati su TutorAI</h1>' +

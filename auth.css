@@ -66,6 +66,23 @@
 /* ============================================================================
    LEFT SHOWCASE PANEL (Flowing Wave Background matching .rail-bg)
    ============================================================================ */
+.tutor-auth-showcase, .tutor-auth-embedded-art {
+  --auth-wave-start: #1565f2;
+  --auth-wave-mid: #086bdb;
+  --auth-wave-end: #0a52bc;
+  --auth-wave-spark: #86efc3;
+}
+:root[data-theme="sepia"] :is(.tutor-auth-showcase, .tutor-auth-embedded-art) {
+  --auth-wave-start: var(--atlas-g0);
+  --auth-wave-mid: var(--atlas-g1);
+  --auth-wave-end: var(--atlas-g2);
+  --auth-wave-spark: #ebc58c;
+}
+:root[data-theme="dark"] :is(.tutor-auth-showcase, .tutor-auth-embedded-art) {
+  --auth-wave-start: #172747;
+  --auth-wave-mid: #224476;
+  --auth-wave-end: #214d8b;
+}
 .tutor-auth-showcase {
   position: relative;
   display: flex;
@@ -152,17 +169,6 @@
   color: #ffffff;
 }
 
-.tutor-auth-brand-tag {
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.24);
-  color: #ffffff;
-}
-
 /* Subtle Theme Switcher Pill inside Showcase */
 .tutor-auth-theme-pill {
   display: inline-flex;
@@ -222,8 +228,8 @@
 
 .tutor-auth-showcase-hero h1 {
   margin: 0;
-  font: 600 clamp(25px, 3vw, 37px) / 1.06 Georgia, "Times New Roman", serif;
-  letter-spacing: -0.04em;
+  font: 500 clamp(31px, 3.5vw, 47px) / 1.01 var(--serif, Georgia);
+  letter-spacing: -0.02em;
   color: #ffffff;
   text-wrap: balance;
   overflow-wrap: anywhere;
@@ -268,6 +274,51 @@
   stroke-linecap: round;
   stroke-linejoin: round;
   flex: none;
+}
+
+.tutor-auth-book-preview {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  min-height: 170px;
+  width: min(300px, 100%);
+  align-self: center;
+  background: radial-gradient(circle at 1px 1px, rgb(255 255 255 / .25) 1px, transparent 1.5px) 0 0 / 14px 14px, rgb(255 255 255 / .07);
+  border: 1px solid rgb(255 255 255 / .23);
+  border-radius: 22px;
+}
+.tutor-auth-book-preview::before, .tutor-auth-book-sheet {
+  content: "";
+  position: absolute;
+  width: 104px;
+  height: 119px;
+  border-radius: 13px;
+}
+.tutor-auth-book-preview::before {
+  background: rgb(255 255 255 / .14);
+  border: 1px solid rgb(255 255 255 / .3);
+  transform: translate(28px, 5px) rotate(12deg);
+}
+.tutor-auth-book-sheet {
+  z-index: 1;
+  transform: translateX(-14px) rotate(-9deg);
+  box-shadow: 0 10px 14px rgb(12 33 86 / .25);
+  background: linear-gradient(#1565f2, #1565f2) 16px 17px / 55px 6px no-repeat,
+    linear-gradient(#cbd4eb, #cbd4eb) 16px 36px / 70px 3px no-repeat,
+    linear-gradient(#cbd4eb, #cbd4eb) 16px 46px / 63px 3px no-repeat,
+    linear-gradient(#cbd4eb, #cbd4eb) 16px 56px / 66px 3px no-repeat,
+    linear-gradient(#41c489, #41c489) 16px 81px / 35px 5px no-repeat,
+    #fffaf1;
+}
+.tutor-auth-book-preview img {
+  position: absolute;
+  z-index: 2;
+  width: 112px;
+  height: 112px;
+  object-fit: contain;
+  transform: translate(57px, 28px);
+  filter: drop-shadow(0 5px 5px rgb(17 36 97 / .24));
 }
 
 /* Avatar Strip Preview Card */
@@ -352,13 +403,6 @@
   font-size: 11.5px;
   color: rgba(255, 255, 255, 0.8);
   overflow-wrap: anywhere;
-}
-
-.tutor-auth-avatar-note {
-  margin: 0;
-  font-size: 11.5px;
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.82);
 }
 
 /* ============================================================================
@@ -500,9 +544,8 @@
 
 .tutor-auth-form-head h2 {
   margin: 0;
-  font-size: clamp(21px, 2.3vw, 25px);
-  font-weight: 750;
-  letter-spacing: -0.035em;
+  font: 600 clamp(26px, 3.2vw, 36px) / 1.05 var(--serif, Georgia);
+  letter-spacing: -0.022em;
   color: var(--ink, #16161a);
 }
 
@@ -773,6 +816,10 @@
   background: #3f6ef2;
   border-color: #5480ff;
 }
+:root[data-theme="light"] .tutor-auth-submit {
+  background: #135adf;
+  border-color: #135adf;
+}
 
 .tutor-auth-submit:hover:not(:disabled) {
   filter: brightness(1.06);
@@ -1037,7 +1084,8 @@
   color: #ffffff;
   overflow: hidden;
   isolation: isolate;
-  background: linear-gradient(155deg, var(--rw-b0, #0c7bf0), var(--rw-b1, #0759d1), var(--rw-b2, #0a6be0));
+  background: radial-gradient(circle at 1px 1px, rgb(255 255 255 / .16) 1px, transparent 1.5px) 0 0 / 13px 13px,
+    linear-gradient(130deg, var(--auth-wave-start), var(--auth-wave-mid) 57%, var(--auth-wave-end));
 }
 
 .tutor-auth-embedded-art::after {
@@ -1047,7 +1095,7 @@
   width: 180px;
   height: 180px;
   border-radius: 50%;
-  background: var(--rw-w1, #62edff);
+  background: var(--auth-wave-spark);
   opacity: 0.24;
   filter: blur(22px);
   z-index: -1;
@@ -1058,19 +1106,24 @@
   align-items: center;
   gap: 12px;
 }
+.tutor-auth-embedded-user div { min-width: 0; overflow-wrap: anywhere; }
+.tutor-auth-embedded-user strong { display: block; font: 600 23px/1.1 var(--serif, Georgia); }
+.tutor-auth-embedded-user div > span, .tutor-auth-embedded-session {
+  display: block; margin-block-start: 4px; color: inherit; font-size: 12px; overflow-wrap: anywhere;
+}
 
 .tutor-auth-embedded-av {
   position: relative;
   width: 46px;
   height: 46px;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.85);
-  background: rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  border: 2px solid #fff;
+  background: #e8efff;
   display: grid;
   place-items: center;
   font-size: 18px;
   font-weight: 800;
-  color: #ffffff;
+  color: #173d8b;
   overflow: hidden;
   flex: none;
 }
@@ -1093,8 +1146,8 @@
 .tutor-auth-embedded-body h1,
 .tutor-auth-embedded-body h2 {
   margin: 0;
-  font-size: clamp(22px, 3vw, 28px);
-  letter-spacing: -0.04em;
+  font: 500 clamp(25px, 3.2vw, 36px)/1.04 var(--serif, Georgia);
+  letter-spacing: -0.025em;
   color: var(--ink, #16161a);
 }
 
@@ -1111,6 +1164,7 @@
   gap: 8px;
   margin-top: 4px;
 }
+.tutor-auth-embedded-actions .btn { min-height: 39px; border-radius: 999px; }
 
 /* ============================================================================
    SEPIA & DARK THEME PARITY POLISH
@@ -1129,15 +1183,8 @@
 }
 
 :root[data-theme="sepia"] .tutor-auth-showcase-lead,
-:root[data-theme="sepia"] .tutor-auth-saved-meta span,
-:root[data-theme="sepia"] .tutor-auth-avatar-note {
+:root[data-theme="sepia"] .tutor-auth-saved-meta span {
   color: rgba(246, 232, 204, 0.88);
-}
-
-:root[data-theme="sepia"] .tutor-auth-brand-tag {
-  background: rgba(252, 245, 230, 0.14);
-  border-color: rgba(240, 206, 154, 0.28);
-  color: #fcf5e6;
 }
 
 :root[data-theme="sepia"] .tutor-auth-theme-pill {
@@ -1215,15 +1262,8 @@
 }
 
 :root[data-theme="dark"] .tutor-auth-showcase-lead,
-:root[data-theme="dark"] .tutor-auth-saved-meta span,
-:root[data-theme="dark"] .tutor-auth-avatar-note {
+:root[data-theme="dark"] .tutor-auth-saved-meta span {
   color: rgba(206, 222, 252, 0.84);
-}
-
-:root[data-theme="dark"] .tutor-auth-brand-tag {
-  background: rgba(175, 210, 255, 0.14);
-  border-color: rgba(135, 180, 255, 0.26);
-  color: #edf3ff;
 }
 
 :root[data-theme="dark"] .tutor-auth-feature-pill {
@@ -1338,6 +1378,13 @@
     gap: 16px;
   }
 
+  .tutor-auth-book-preview,
+  .tutor-auth-avatar-card {
+    display: none;
+  }
+
+  .tutor-auth-showcase-hero { gap: 8px; }
+
   .tutor-auth-showcase-hero h1 {
     font-size: clamp(22px, 6vw, 28px);
   }
@@ -1370,10 +1417,7 @@
     font-size: 10.5px;
   }
 
-  .tutor-auth-avatar-chip {
-    width: 32px;
-    height: 32px;
-  }
+  .tutor-auth-feature-pills { display: none; }
 
   .tutor-auth-toast {
     left: 12px;

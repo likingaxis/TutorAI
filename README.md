@@ -34,6 +34,7 @@ Per iniziare, leggere **Specifica** e **Architettura**. Gli altri documenti appr
 | [Specifica di prodotto](docs/SPECIFICA.md) | Requisiti F01–F17 e progetto operativo di RAG, modelli/API, slide, figure e Android |
 | [Architettura e harness](docs/ARCHITETTURA.md) | Quattro ambiti: tecnologie, dati, contesto/API, strumenti per ritagli e SVG |
 | [Interfaccia](docs/INTERFACCIA.md) | Layout, interazioni, accessibilità e limiti del mockup |
+| [Guida allo stile visivo](docs/STILE_VISIVO.md) | Identità del mockup, componenti, temi e regole per estenderli |
 | [Contratti e dati](docs/CONTRATTI_E_DATI.md) | Documento canonico, salvataggi, ancoraggi, patch, API ed evidenze |
 | [Piano di sviluppo](docs/PIANO.md) | Fasi, prove tecniche e scenari AC01–AC18 |
 | [Domande per il team](docs/domande.md) | Scelte per la valutazione e condizioni del pilota |
