@@ -1314,27 +1314,18 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .wizard-wrap > .card:not(.hidden) { animation: wizard-step-reveal .28s cubic-bezier(.2,.75,.2,1) both; }
 .wizard-wrap .card > h3, .wizard-wrap .wizard-progress-head { font-size: clamp(17px, 2.25vw, 22px); letter-spacing: -.027em; }
 .wizard-wrap h3[tabindex="-1"]:focus { outline: none; }
-.wizard-config { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(270px, .85fr); gap: clamp(16px, 3vw, 26px); }
-.wizard-config > div { min-width: 0; }
+.wizard-config { display: grid; grid-template-columns: minmax(0, 1.16fr) minmax(270px, 1fr); gap: clamp(18px, 3vw, 40px); }
+.wizard-config > * { min-width: 0; }
 .wizard-label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; }
 .mode-card b, .mode-card small { display: block; }
 .mode-card small { margin-top: 3px; color: var(--mut); font-size: 12px; }
 .wizard-config .wizard-preview { align-self: start; min-width: 0; }
 .wizard-presets { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 16px; }
-.wizard-preview {
-  overflow: hidden; padding: 0; gap: 0; margin: 0;
-  background: linear-gradient(137deg, var(--card), color-mix(in srgb, var(--wizard-accent, var(--blue)) 11%, var(--card)));
-  border-color: color-mix(in srgb, var(--wizard-accent, var(--blue)) 18%, var(--line));
-  box-shadow: 0 15px 28px -23px color-mix(in srgb, var(--wizard-accent, var(--blue)) 45%, var(--ink));
-}
 .wizard-cover { position: relative; display: grid; place-items: center; aspect-ratio: 2.36; overflow: hidden; }
 .wizard-cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: course-art-arrival .32s ease-out both; }
 .wizard-cover-preview-badge { position: absolute; left: 10px; bottom: 10px; box-shadow: var(--sh); animation: wizard-step-marker .25s ease-out; }
-.wizard-preview-body { display: grid; gap: 9px; padding: 13px; }
-.wizard-preview-body .icon-opt svg { pointer-events: none; }
-.wizard-preview-body .icon-opt:is(:hover, :focus-visible) { transform: translateY(-2px); }
-.wizard-preview-body .color-swatch { position: relative; }
-.wizard-preview-body .color-swatch::before { content: ""; position: absolute; inset: -5px; border-radius: 50%; }
+.wizard-appearance .icon-opt svg { pointer-events: none; }
+.wizard-appearance .icon-opt:is(:hover, :focus-visible) { transform: translateY(-2px); }
 .wizard-stepper { max-width: 100%; justify-content: center; }
 .wizard-stepper .wstep { white-space: nowrap; }
 .wizard-foot { flex-wrap: wrap; }
@@ -1380,7 +1371,7 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
   .unit-row:is(:hover, :focus-visible) .unit-chevron,
   .mode-card:is(:hover, :focus-visible) .mode-art .ic,
   .pickzone:is(:hover, :focus-visible, .dragover) .pickzone-icon .ic,
-  .wizard-preview-body .icon-opt:is(:hover, :focus-visible) { transform: none; }
+  .wizard-appearance .icon-opt:is(:hover, :focus-visible) { transform: none; }
 }
 
 /* ============================================================================
@@ -2414,13 +2405,6 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
 .profile-globe-card { border-block-start: 1px solid var(--journal-rule); padding-top: 20px; }
 .profile-globe-copy { margin: 5px 0 0; color: var(--journal-ink); font: italic 500 19px/1 Georgia, serif; }
 .profile-globe-copy strong { font: 500 41px/1 Georgia, serif; }
-.ascii-globe-box {
-  margin: 7px 0 0; padding: 10px 0;
-  background-image: linear-gradient(var(--journal-rule) 1px, transparent 1px);
-  background-size: 100% 13px;
-  font: 550 clamp(5px, .72vw, 7px)/1.08 var(--mono); letter-spacing: .01em; color: var(--journal-ink);
-  user-select: none; white-space: pre; text-align: center; max-width: 100%; overflow: hidden;
-}
 .profile-screen-hero {
   display: flex; align-items: center; justify-content: space-between; gap: 14px;
   padding: 7px 0 16px; margin: 8px 0 20px; border-bottom: 1px solid var(--line);
@@ -3030,47 +3014,97 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
             </div>
           </div>
 
-          <header class="wizard-intro study-band">
-            <svg class="study-band-waves" viewBox="0 0 1180 220" preserveAspectRatio="none" aria-hidden="true"><use href="#study-waves"/></svg>
+          <header class="wizard-intro">
             <h1 class="wizard-title">Nuovo corso</h1>
-            <span class="wizard-intro-symbol" aria-hidden="true"><svg class="ic"><use href="#i-study-folder"/></svg></span>
+            <p id="wizardStepHint"></p>
           </header>
           <div class="card" id="wizStep1">
-            <h3 tabindex="-1">Come vuoi studiare?</h3>
             <div class="wizard-config">
-              <div>
+              <div class="wizard-setup">
+                <h3 tabindex="-1">Come vuoi studiare?</h3>
                 <label for="obCourseName" class="wizard-label">Nome del corso</label>
-                <input id="obCourseName" class="input-field" type="text" maxlength="90" placeholder="Es. Reti di Calcolatori" oninput="onCourseNameChange()">
+                <div class="wizard-name-field">
+                  <input id="obCourseName" class="input-field" type="text" maxlength="90" placeholder="Es. Reti di Calcolatori" oninput="onCourseNameChange()">
+                  <span id="wizardNameLength" aria-hidden="true">0/90</span>
+                </div>
                 <div class="wizard-presets">
-                  <button type="button" class="chip" onclick="setCoursePreset('Reti di Calcolatori')">Reti di Calcolatori</button>
-                  <button type="button" class="chip" onclick="setCoursePreset('Analisi Matematica II')">Analisi Matematica II</button>
-                  <button type="button" class="chip" onclick="setCoursePreset('Basi di Dati')">Basi di Dati</button>
+                  <span>Suggeriti</span>
+                  <button type="button" class="chip" aria-pressed="false" onclick="setCoursePreset('Reti di Calcolatori')">Reti di Calcolatori</button>
+                  <button type="button" class="chip" aria-pressed="false" onclick="setCoursePreset('Analisi Matematica II')">Analisi Matematica II</button>
+                  <button type="button" class="chip" aria-pressed="false" onclick="setCoursePreset('Basi di Dati')">Basi di Dati</button>
                 </div>
-                <button type="button" class="mode-card on" id="obLezBtn" onclick="setOnboardingPath('lezione')" aria-pressed="true">
-                  <span class="mode-art"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg></span>
-                  <span><b>Lezione per lezione</b><small>Parti da una lezione e aggiungi le successive.</small></span>
-                  <span class="mode-radio" aria-hidden="true"></span>
-                </button>
-                <button type="button" class="mode-card" id="obExBtn" onclick="setOnboardingPath('esame')" aria-pressed="false">
-                  <span class="mode-art"><svg class="ic" aria-hidden="true"><use href="#i-calendar"/></svg></span>
-                  <span><b>Prepara un esame</b><small>Organizza il programma fino alla data dell’esame.</small></span>
-                  <span class="mode-radio" aria-hidden="true"></span>
-                </button>
+                <span class="wizard-label" id="wizardPathLabel">Percorso di studio</span>
+                <div class="wizard-paths" role="group" aria-labelledby="wizardPathLabel">
+                  <button type="button" class="mode-card on" id="obLezBtn" onclick="setOnboardingPath('lezione')" aria-pressed="true">
+                    <span class="mode-art">
+                      <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="5" width="17" height="23" rx="4" fill="#b9d2ff" transform="rotate(-10 13.5 16.5)"/><rect x="9" y="3" width="18" height="24" rx="4" fill="#1565f2"/><path d="M13 10h10m-10 5h10m-10 5h6" stroke="white" stroke-linecap="round" stroke-width="1.6"/><circle cx="26" cy="26" r="4" fill="#48c788" stroke="white" stroke-width="1.5"/></svg>
+                    </span>
+                    <span><b>Lezione per lezione</b><small>Parti da una lezione e aggiungi le successive.</small></span>
+                    <span class="mode-radio" aria-hidden="true"></span>
+                  </button>
+                  <button type="button" class="mode-card" id="obExBtn" onclick="setOnboardingPath('esame')" aria-pressed="false">
+                    <span class="mode-art">
+                      <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="6" width="23" height="22" rx="6" fill="#fdf1dc" stroke="#c57f14" stroke-width="1.4"/><path d="M4 13h23M10 3v7m11-7v7" fill="none" stroke="#c57f14" stroke-linecap="round" stroke-width="1.5"/><circle cx="19" cy="20" r="3.8" fill="#e5484d"/><path d="M27 2c.4 2 1.3 2.9 3.3 3.3-2 .4-2.9 1.3-3.3 3.3-.4-2-1.3-2.9-3.3-3.3C25.7 4.9 26.6 4 27 2Z" fill="#c57f14"/></svg>
+                    </span>
+                    <span><b>Prepara un esame</b><small>Organizza il programma fino alla data dell’esame.</small></span>
+                    <span class="mode-radio" aria-hidden="true"></span>
+                  </button>
+                </div>
                 <div id="obPathwayDetails"></div>
-              </div>
-              <div class="picker-panel wizard-preview">
-                <div class="wizard-cover" id="wizardCover" aria-hidden="true"></div>
-                <div class="wizard-preview-body">
-                  <span class="wizard-preview-label">Anteprima della copertina</span>
-                  <b id="wizardCoverName">Il tuo corso</b>
-                  <div class="icon-picker" id="obIconPicker" role="group" aria-label="Copertina e simbolo"></div>
-                  <div class="color-picker" id="obColorPicker" role="group" aria-label="Colore del simbolo"></div>
+                <div class="wizard-appearance">
+                  <div>
+                    <span class="wizard-label" id="wizardIconLabel">Icona del corso</span>
+                    <div class="icon-picker" id="obIconPicker" role="group" aria-labelledby="wizardIconLabel"></div>
+                    <span class="wizard-choice-caption" id="wizardIconCaption"></span>
+                  </div>
+                  <div>
+                    <span class="wizard-label" id="wizardColorLabel">Colore copertina</span>
+                    <div class="color-picker" id="obColorPicker" role="group" aria-labelledby="wizardColorLabel"></div>
+                    <span class="wizard-choice-caption" id="wizardColorCaption"></span>
+                  </div>
+                </div>
+                <div class="wizard-icon-hint hidden" id="wizardIconHint">
+                  <svg class="ic" aria-hidden="true"><use href="#i-study-spark"/></svg>
+                  <span id="wizardIconHintText"></span>
+                  <button type="button" onclick="document.querySelector('#obIconPicker .on')?.focus()">Cambia</button>
                 </div>
               </div>
+              <section class="wizard-preview" aria-labelledby="wizardPreviewLabel">
+                <div class="wizard-preview-heading">
+                  <span class="wizard-preview-label" id="wizardPreviewLabel">Anteprima dal vivo</span>
+                  <span>Come apparirà nella Home</span>
+                </div>
+                <div class="wizard-preview-stage" id="wizardPreviewStage">
+                  <div class="wizard-preview-orbit" aria-hidden="true">
+                    <svg class="ic"><use href="#i-study-spark"/></svg><svg class="ic"><use href="#i-study-spark"/></svg>
+                  </div>
+                  <div class="wizard-preview-card">
+                    <div class="wizard-preview-card-top">
+                      <span class="wizard-preview-badge" id="wizardPreviewIcon" aria-hidden="true"></span>
+                      <span class="wizard-preview-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <div class="wizard-preview-card-paper">
+                      <b id="wizardCoverName">Il tuo corso</b>
+                      <span id="wizardPreviewPath">Lezione per lezione</span>
+                      <span class="wizard-preview-segments" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+                      <span id="wizardPreviewUnits">Nessuna unità ancora</span>
+                      <span class="wizard-preview-card-status"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg> Bozza</span>
+                    </div>
+                  </div>
+                  <div class="wizard-preview-bindings">
+                    <span><span id="wizardBindingIcon" aria-hidden="true"></span> <span id="wizardBindingIconName"></span></span>
+                    <span><i aria-hidden="true"></i> <span id="wizardBindingColorName"></span></span>
+                  </div>
+                  <details class="wizard-cover-details">
+                    <summary>Mostra l’illustrazione del corso</summary>
+                    <div class="wizard-cover" id="wizardCover" aria-hidden="true"></div>
+                  </details>
+                </div>
+              </section>
             </div>
             <div class="wizard-foot">
-              <span id="wizStep1Hint" style="font-size:12px;color:var(--mut)">Inserisci il nome del corso per continuare</span>
-              <button type="button" class="btn pri" id="btnWizTo2" onclick="goWizardStep(2)" disabled>Continua →</button>
+              <span class="wizard-ready-hint"><span id="wizardReadyCheck" class="hidden" aria-hidden="true"><svg class="ic"><use href="#i-check"/></svg></span><span id="wizStep1Hint">Inserisci il nome del corso per continuare</span></span>
+              <button type="button" class="btn blue-pri" id="btnWizTo2" onclick="goWizardStep(2)" disabled>Continua →</button>
             </div>
           </div>
 
@@ -3102,7 +3136,7 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
             </div>
             <div class="wizard-foot">
               <button type="button" class="btn" onclick="goWizardStep(1)">← Indietro</button>
-              <button type="button" class="btn pri" id="btnWizTo3" onclick="goWizardStep(3)" disabled>Vedi mappa del corso →</button>
+              <button type="button" class="btn blue-pri" id="btnWizTo3" onclick="goWizardStep(3)" disabled>Vedi mappa del corso →</button>
             </div>
           </div>
 
@@ -3208,7 +3242,7 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
           <div class="studio-note-label">
             <svg viewBox="0 0 18 20" width="16" height="18" fill="none" aria-hidden="true"><rect x="1" y="1" width="14" height="18" rx="3" fill="#1565f2"/><rect x="5" y="1" width="12" height="18" rx="2.5" fill="#d9e7ff"/><path d="M8 6.5h6M8 10h4.5" stroke="#1565f2" stroke-width="1.5" stroke-linecap="round"/></svg>
             <b>I miei appunti</b>
-            <span class="chip g" id="saveChip" role="status"><span class="d" aria-hidden="true"></span><span id="saveText">Salvato</span></span>
+            <span class="chip g" id="saveChip" role="status"><span class="d" aria-hidden="true"></span><span id="saveText">Salvato in sessione</span></span>
           </div>
           <div class="studio-note-controls">
             <button type="button" class="studio-control icon-only" id="noteToolsButton" aria-label="Fissa barra degli strumenti" title="Fissa barra degli strumenti" aria-controls="paperDockWrap" aria-pressed="false" onclick="toggleNoteTools()">
@@ -3276,13 +3310,14 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
             <div class="note-menu-wrap">
               <button type="button" class="studio-control icon-only" id="noteMenuButton" aria-label="Azioni sugli appunti" title="Azioni sugli appunti" aria-controls="noteMenuPop" aria-expanded="false" onclick="event.stopPropagation();toggleNoteMenu()">⋯</button>
               <div class="note-menu-pop hidden" id="noteMenuPop" onclick="event.stopPropagation()">
-                <button onclick="insertNoteBlock('heading');toggleNoteMenu(false)">Nuova sezione <span>H2</span></button>
-                <button onclick="insertNoteBlock('bullet');toggleNoteMenu(false)">Nuovo punto elenco <span>•</span></button>
-                <button onclick="insertNoteBlock('formula');toggleNoteMenu(false)">Nota su formula <span>Σ</span></button>
-                <button onclick="insertNoteBlock('code');toggleNoteMenu(false)">Esempio / codice <span>&lt;/&gt;</span></button>
+                <button data-note-write onclick="toggleNoteMenu(false);insertFromNoteDock('heading')">Nuova sezione <span>H2</span></button>
+                <button data-note-write onclick="toggleNoteMenu(false);insertFromNoteDock('paragraph')">Nuovo paragrafo <span>¶</span></button>
+                <button data-note-write onclick="toggleNoteMenu(false);insertFromNoteDock('bullet')">Nuovo punto elenco <span>•</span></button>
+                <button data-note-write onclick="toggleNoteMenu(false);insertFromNoteDock('formula')">Nuova formula <span>Σ</span></button>
+                <button data-note-write onclick="toggleNoteMenu(false);insertFromNoteDock('code')">Nuovo blocco di codice <span>&lt;/&gt;</span></button>
                 <div class="note-menu-sep"></div>
                 <button onclick="exportMarkdown();toggleNoteMenu(false)">Esporta Markdown <span>.md</span></button>
-                <button id="btnBlankToggle" style="color:var(--red-i)" onclick="toggleEmptyNote();toggleNoteMenu(false)">Svuota foglio</button>
+                <button id="btnBlankToggle" data-note-write style="color:var(--red-i)" onclick="toggleEmptyNote();toggleNoteMenu(false)">Svuota foglio</button>
               </div>
             </div>
           </div>
@@ -3318,6 +3353,7 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
               <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-7-7v14"/></svg>
             </summary>
             <div class="dock-add-pop" role="group" aria-label="Elementi da inserire">
+              <button type="button" onclick="insertFromNoteDock('paragraph')"><b aria-hidden="true">¶</b>Paragrafo</button>
               <button type="button" onclick="insertFromNoteDock('heading')"><b aria-hidden="true">H2</b>Sezione</button>
               <button type="button" onclick="insertFromNoteDock('bullet')"><b aria-hidden="true">•</b>Elenco</button>
               <button type="button" onclick="insertFromNoteDock('code')"><b aria-hidden="true">&lt;/&gt;</b>Codice</button>
@@ -3594,13 +3630,15 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
     <div class="finder-title-group">
       <span class="finder-brand"><svg class="ic" aria-hidden="true"><use href="#i-study-folder"/></svg></span>
       <h2 id="finderTitle" tabindex="-1" autofocus>Archivio</h2>
+      <span class="finder-local">Locale</span>
     </div>
     <div class="finder-top-actions">
       <label class="search-pill finder-search">
         <svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
-        <input id="finderSearchInput" type="search" aria-label="Cerca nel corso selezionato" placeholder="Cerca appunti o file" oninput="filterFinder(this.value)">
+        <input id="finderSearchInput" type="search" aria-label="Cerca nel corso selezionato" aria-keyshortcuts="Control+K Meta+K" placeholder="Cerca appunti o file" oninput="filterFinder(this.value)">
+        <kbd class="finder-search-key" aria-hidden="true">Ctrl K</kbd>
       </label>
-      <form method="dialog"><button type="submit" class="btn">Chiudi</button></form>
+      <form method="dialog"><button type="submit" class="btn pri"><span aria-hidden="true">×</span> Chiudi</button></form>
     </div>
   </header>
   <div class="finder-grid">
@@ -3880,7 +3918,10 @@ function getActiveUnitNote() {
   if (!app.unitNotes[key]) {
     const c = COURSES_DATA[app.courseId];
     const u = c.units.find(x => x.id === app.unitId) || c.units[0];
-    app.unitNotes[key] = makeDefaultUnitNote(app.courseId, u);
+    const note = makeDefaultUnitNote(app.courseId, u);
+    const example = note.blocks.find(block => block.isTargetErr);
+    note.reviewExample = { id: example.id, text: example.text, proposal: note.diffText, answer: note.reply1 };
+    app.unitNotes[key] = note;
   }
   return app.unitNotes[key];
 }
@@ -3916,6 +3957,8 @@ function makeInitialState() {
     noteFont: 'serif',
     studyFontSize: 17,
     finderQuery: '',
+    finderLayout: 'grid',
+    finderType: 'all',
     ripassoSelectedDate: recallDateKey(new Date()),
     ripassoWindowDate: recallDateKey(new Date()),
     ripassoAgenda: loadRipassoAgenda(),
@@ -4018,6 +4061,8 @@ function makeInitialState() {
     profileProgramme: 'Ingegneria Informatica',
     profileEmail: 'luca@example.com',
     profileAvatarChoice: 'initial',
+    profileBrainUnit: null,
+    profileBrainCourse: '',
     attivitaFilter: 'tutto',
     onboardingDiagStates: {},
     addLessonSelectedFile: '',
@@ -4131,6 +4176,7 @@ function renderMath(el) {
   try {
     renderMathInElement(el, {
       delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }],
+      ignoredClasses: ['note-block-editing', 'note-edit-name', 'note-edit-code'],
       throwOnError: false
     });
   } catch (_) {}
@@ -4264,6 +4310,7 @@ function openWizard(keepState = false) {
     app.extractedUnits = [];
     const inp = document.getElementById('obCourseName');
     if (inp) inp.value = '';
+    document.querySelector('.wizard-cover-details').open = false;
     document.getElementById('realFileInput').value = '';
     setOnboardingPath('lezione');
   }
@@ -4690,7 +4737,7 @@ function renderCourseDetailView() {
         <div>
           ${ocrIssues ? `<button type="button" class="btn ghost detail-ocr-notice" onclick="openFileFinder('${course.id}', 'sources')">${icon('i-alert')} ${plural(ocrIssues, 'file senza OCR', 'file senza OCR')}</button>` : ''}
           <button type="button" class="btn" onclick="openFileFinder('${course.id}')">${icon('i-folder')} Materiali</button>
-          <button type="button" class="btn blue-pri" onclick="openAddLessonModal('${course.id}')">${icon('i-course-plus')} Aggiungi lezione</button>
+          <button type="button" class="btn add-lesson-trigger" onclick="openAddLessonModal('${course.id}')">${icon('i-course-plus')} Aggiungi lezione</button>
         </div>
       </header>
       <ol class="course-lessons">
@@ -4704,8 +4751,10 @@ function renderCourseDetailView() {
               <button type="button" class="unit-row ${highlighted ? 'cur' : ''}"${highlighted ? ' aria-current="step"' : ''} onclick="selectUnit('${u.id}')">
                 <span class="unit-num-box ${verified ? 'done' : highlighted ? 'cur' : ''}" aria-hidden="true">${verified ? icon('i-check') : escapeCourseText(u.num)}</span>
                 <strong>${escapeCourseText(u.titolo.startsWith(u.num + ' ') ? u.titolo.slice(u.num.length + 1) : u.titolo)}</strong>
-                <span class="unit-state">${highlighted && u.stato === 'non_studiato' ? 'Inizia' : state}</span>
-                <span class="unit-chevron" aria-hidden="true">${icon('i-course-arrow')}</span>
+                <span class="unit-row-end">
+                  <span class="unit-state">${highlighted && u.stato === 'non_studiato' ? 'Inizia' : state}</span>
+                  <span class="unit-chevron" aria-hidden="true">${icon('i-course-arrow')}</span>
+                </span>
               </button>
               ${needsQuiz ? `<button type="button" class="unit-quick-quiz" onclick="startRipassoSessionFor('${course.id}', '${u.id}')">${u.stato === 'da_ripassare' ? 'Ripassa →' : 'Fai il quiz →'}</button>` : ''}
             </li>`;
@@ -4721,15 +4770,17 @@ const FINDER_FOLDERS = [
 ];
 
 function openFileFinder(courseId = app.courseId, folder = '') {
+  const finder = document.getElementById('fileFinder');
   app.finder = { courseId, folder, index: null };
   app.finderQuery = '';
-  const searchEl = document.getElementById('finderSearchInput');
-  if (searchEl) searchEl.value = '';
+  app.finderType = 'all';
+  document.getElementById('finderSearchInput').value = '';
   renderFileFinder();
-  document.getElementById('fileFinder').showModal();
+  if (!finder.open) finder.showModal();
 }
 
 function navigateFinder(courseId, folder = '', index = null) {
+  if (app.finder.courseId !== courseId) app.finderType = 'all';
   app.finder = { courseId, folder, index };
   app.finderQuery = '';
   document.getElementById('finderSearchInput').value = '';
@@ -4741,6 +4792,18 @@ function filterFinder(value) {
   app.finderQuery = value;
   app.finder.index = null;
   renderFileFinder();
+}
+
+function setFinderLayout(layout) {
+  app.finderLayout = layout;
+  renderFileFinder();
+  document.querySelector('.finder-layout [aria-pressed="true"]')?.focus({ preventScroll: true });
+}
+
+function setFinderType(type) {
+  app.finderType = type;
+  renderFileFinder();
+  document.querySelector('.finder-type-filter [aria-pressed="true"]')?.focus({ preventScroll: true });
 }
 
 function openFinderInStudio(unitId, destination) {
@@ -4759,20 +4822,43 @@ function exportFinderMarkdown(courseId, unitId, folder) {
   let md = '';
   if (folder === 'notes') {
     const note = app.unitNotes[courseId + ':' + unit.id] || makeDefaultUnitNote(courseId, unit);
-    md = `# ${note.title}\n\n` + note.blocks.map(b => `## ${b.sec}\n${serializeNoteBlockMarkdown(b)}`).join('\n\n');
+    md = finderNoteMarkdown(note);
   } else {
     const prof = getUnitTopicProfile(course, unit);
     md = `# ${unit.titolo}\n\n${prof.formula}\n\n${prof.para}\n\n## Passaggi\n${prof.steps.map(s => `- ${s}`).join('\n')}`;
   }
+  downloadFinderMarkdown(`${unit.num}-${slugify(unit.short || unit.titolo)}.md`, md);
+}
+
+function finderNoteMarkdown(note, heading = '#') {
+  return `${heading} ${note.title}\n\n` + note.blocks.map(block =>
+    `${heading}# ${block.sec}\n${serializeNoteBlockMarkdown(block)}`
+  ).join('\n\n');
+}
+
+function finderCourseNotes(course) {
+  return course.units.filter(unit => {
+    const note = app.unitNotes[course.id + ':' + unit.id];
+    return note && !note.noteBlank && note.blocks.length > 0;
+  });
+}
+
+function exportFinderCourseNotes(courseId) {
+  const course = COURSES_DATA[courseId];
+  const notes = finderCourseNotes(course).map(unit => finderNoteMarkdown(app.unitNotes[courseId + ':' + unit.id], '##'));
+  if (notes.length) downloadFinderMarkdown(`${slugify(course.nome)}-appunti.md`, `# ${course.nome}\n\n${notes.join('\n\n---\n\n')}`);
+}
+
+function downloadFinderMarkdown(name, content) {
   try {
-    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `${unit.num}-${slugify(unit.short || unit.titolo)}.md`;
-    a.click();
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(new Blob([content], { type: 'text/markdown;charset=utf-8' }));
+    link.href = url;
+    link.download = name;
+    try { link.click(); } finally { setTimeout(() => URL.revokeObjectURL(url), 30000); }
     showToast('File .md esportato per Obsidian');
   } catch (_) {
-    showToast('Markdown pronto');
+    showToast('Esportazione Markdown non riuscita');
   }
 }
 
@@ -4792,11 +4878,25 @@ function describeFinderEntry(course, folder, entry) {
 
 function renderFinderDocument(course, folder, entry, index) {
   const { title, excerpt, meta } = describeFinderEntry(course, folder, entry);
-  return `<button type="button" class="finder-document ${folder}" onclick="navigateFinder('${course.id}', '${folder}', ${index})">
-    <span class="finder-document-kind">${icon(folder === 'notes' ? 'i-pencil' : 'i-book')}</span>
-    <strong>${escapeCourseText(title)}</strong>
-    ${excerpt ? `<span class="finder-document-excerpt">${escapeCourseText(excerpt)}</span>` : ''}
-    <small>${escapeCourseText(meta)}</small>
+  const verified = folder === 'generated' && entry.stato === 'dimostrato';
+  return `<article class="finder-doc-card ${folder}">
+    <button type="button" class="finder-document ${folder}" onclick="navigateFinder('${course.id}', '${folder}', ${index})">
+      <span class="finder-document-kind${verified ? ' verified' : ''}">${icon(folder === 'notes' ? 'i-pencil' : verified ? 'i-check' : 'i-study-spark')} ${verified ? 'Verificata' : escapeCourseText(meta)}</span>
+      <strong>${escapeCourseText(title)}</strong>
+      ${excerpt ? `<span class="finder-document-excerpt">${escapeCourseText(excerpt)}</span>` : ''}
+    </button>
+    <div class="finder-document-footer"><small>Lezione ${escapeCourseText(entry.num)}</small>
+      <button type="button" class="finder-doc-export" aria-label="Esporta ${escapeCourseText(title)} in Markdown" onclick="exportFinderMarkdown('${course.id}', '${entry.id}', '${folder}')">.md</button>
+    </div>
+  </article>`;
+}
+
+function renderFinderSource(courseId, source, index) {
+  const extension = source.nome.match(/\.([a-z\d]{1,5})$/i)?.[1].toUpperCase() || 'FILE';
+  return `<button class="finder-file finder-attachment" type="button" onclick="navigateFinder('${courseId}', 'sources', ${index})">
+    <span class="finder-attachment-icon ${extension === 'PDF' ? 'pdf' : ''}">${icon('i-file')}<span>${escapeCourseText(extension)}</span></span>
+    <span><strong>${escapeCourseText(source.nome)}</strong><small>${escapeCourseText(source.info)}</small></span>
+    <span class="finder-attachment-open" aria-hidden="true">Apri ${icon('i-course-arrow')}</span>
   </button>`;
 }
 
@@ -4804,10 +4904,7 @@ function renderFileFinder() {
   releaseFinderObjectUrl();
   const { courseId, folder, index } = app.finder;
   const course = COURSES_DATA[courseId];
-  const noteUnits = course.units.filter(u => {
-    const note = app.unitNotes[courseId + ':' + u.id];
-    return note && !note.noteBlank && note.blocks.length > 0;
-  });
+  const noteUnits = finderCourseNotes(course);
   const filesByFolder = { notes: noteUnits, generated: course.units, sources: course.sources };
   const folderInfo = FINDER_FOLDERS.find(item => item.id === folder);
   const query = (app.finderQuery || '').trim().toLowerCase();
@@ -4825,23 +4922,40 @@ function renderFileFinder() {
         const active = c.id === courseId;
         return `<li style="--tree-accent:${c.accent}">
           <button type="button" class="${active ? 'finder-course-active' : ''}"${active && !folder ? ' aria-current="page"' : ''} onclick="navigateFinder('${c.id}')">
-            ${icon('i-folder')} <span>${escapeCourseText(c.nome)}</span>
+            <span class="finder-tree-arrow" aria-hidden="true">${active ? '⌄' : '›'}</span>
+            ${icon(active ? 'i-study-folder' : 'i-folder')} <span>${escapeCourseText(c.nome)}</span>
+            ${active ? `<small>${noteUnits.length + course.units.length + course.sources.length}</small>` : ''}
           </button>
           ${active ? `<ul class="finder-branch">${FINDER_FOLDERS.map(item => `
-            <li><button type="button"${item.id === folder ? ' aria-current="page"' : ''} onclick="navigateFinder('${c.id}', '${item.id}')">
+            <li><button type="button" class="${item.id}"${item.id === folder ? ' aria-current="page"' : ''} onclick="navigateFinder('${c.id}', '${item.id}')">
               ${icon(item.icon)} <span>${item.title}</span><small aria-label="${filesByFolder[item.id].length} file">${filesByFolder[item.id].length}</small>
             </button></li>`).join('')}</ul>` : ''}
         </li>`;
       }).join('')}
-    </ul>`;
+    </ul>
+    ${noteUnits.length ? `<button type="button" class="finder-course-export" onclick="exportFinderCourseNotes('${courseId}')">
+      <span class="finder-export-figure">${icon('i-file')}</span>
+      <span><strong>Esporta gli appunti</strong><small>${plural(noteUnits.length, 'nota', 'note')} in un file Markdown</small></span>
+      <span class="finder-export-arrow" aria-hidden="true">↓</span>
+    </button>` : ''}`;
 
   const content = document.getElementById('finderContent');
+  content.dataset.layout = app.finderLayout;
   content.innerHTML = `
-    <nav class="finder-breadcrumb" aria-label="Posizione in archivio">
-      <button class="finder-crumb" type="button" data-finder-focus onclick="navigateFinder('${courseId}')">${escapeCourseText(course.nome)}</button>
-      ${folderInfo ? `<span aria-hidden="true">›</span>
-        <button class="finder-crumb" type="button" onclick="navigateFinder('${courseId}', '${folder}')">${folderInfo.title}</button>` : ''}
-    </nav>`;
+    <div class="finder-content-bar">
+      <nav class="finder-breadcrumb" aria-label="Posizione in archivio">
+        <span class="finder-crumb-home">Archivio</span><span aria-hidden="true">›</span>
+        <button class="finder-crumb" type="button" data-finder-focus onclick="navigateFinder('${courseId}')">${escapeCourseText(course.nome)}</button>
+        ${folderInfo ? `<span aria-hidden="true">›</span>
+          <button class="finder-crumb" type="button" onclick="navigateFinder('${courseId}', '${folder}')">${folderInfo.title}</button>` : ''}
+      </nav>
+      ${!file && !query && folder !== 'sources' ? `<div class="finder-layout" role="group" aria-label="Vista archivio">
+        <button type="button" aria-label="Griglia" title="Griglia" aria-pressed="${app.finderLayout === 'grid'}" onclick="setFinderLayout('grid')">
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg>
+        </button>
+        <button type="button" aria-label="Elenco" title="Elenco" aria-pressed="${app.finderLayout === 'list'}" onclick="setFinderLayout('list')">${icon('i-list')}</button>
+      </div>` : ''}
+    </div>`;
 
   if (query && !file) {
     const matches = FINDER_FOLDERS.flatMap(fInfo => filesByFolder[fInfo.id].map((entry, i) => ({
@@ -4856,30 +4970,42 @@ function renderFileFinder() {
   }
 
   if (!folderInfo) {
-    const notePreviews = noteUnits.slice(0, 2);
+    const notePreviews = app.finderType === 'generated' ? [] : app.finderType === 'notes' ? noteUnits : noteUnits.slice(0, 2);
     const previews = notePreviews.map((entry, i) => renderFinderDocument(course, 'notes', entry, i));
-    const generatedPreviews = course.units.map((entry, i) => ({ entry, i }))
-      .filter(({ entry }) => !notePreviews.includes(entry)).slice(0, 3 - previews.length)
+    const generated = course.units.map((entry, i) => ({ entry, i }));
+    const generatedPreviews = (app.finderType === 'notes' ? []
+      : app.finderType === 'generated' ? generated
+        : generated.filter(({ entry }) => !notePreviews.includes(entry)).slice(0, 3 - previews.length))
       .map(({ entry, i }) => renderFinderDocument(course, 'generated', entry, i));
+    const sourceTypes = [...new Set(course.sources.map(source => source.nome.match(/\.([a-z\d]{1,5})$/i)?.[1].toUpperCase()).filter(Boolean))];
     content.insertAdjacentHTML('beforeend', `<h3 class="finder-section-title">Cartelle</h3>
       <div class="finder-folders">${FINDER_FOLDERS.map(item => `
       <button type="button" class="finder-folder ${item.id}" onclick="navigateFinder('${courseId}', '${item.id}')">
         <span class="finder-folder-art" aria-hidden="true"><span></span></span>
-        <strong>${item.title}</strong><small>${plural(filesByFolder[item.id].length, 'file', 'file')}</small>
-        <span class="finder-folder-arrow" aria-hidden="true">${icon('i-course-arrow')}</span>
+        <span class="finder-folder-copy"><strong>${item.title}</strong><small>${filesByFolder[item.id].length} file</small>
+          ${item.id === 'sources' && !sourceTypes.length ? '' : `<span class="finder-folder-kind">${item.id === 'notes' ? 'Personali' : item.id === 'generated' ? 'Da TutorAI' : escapeCourseText(sourceTypes.join(' · '))}</span>`}
+        </span>
       </button>`).join('')}</div>
-      <h3 class="finder-section-title">Appunti e spiegazioni</h3>
-      <div class="finder-documents">${previews.concat(generatedPreviews).join('')}</div>`);
+      <div class="finder-section-head">
+        <h3 class="finder-section-title">Appunti e spiegazioni</h3>
+        <div class="finder-type-filter" role="group" aria-label="Filtra i documenti">
+          ${[['all', 'Tutti'], ['notes', 'Appunti'], ['generated', 'Spiegazioni']].map(([id, label]) =>
+            `<button type="button" aria-pressed="${id === app.finderType}" onclick="setFinderType('${id}')">${label}</button>`
+          ).join('')}
+        </div>
+      </div>
+      ${previews.length || generatedPreviews.length ? `<div class="finder-documents">${previews.concat(generatedPreviews).join('')}</div>` : '<p class="finder-empty">Questa raccolta è ancora vuota.</p>'}
+      ${course.sources.length ? `<section class="finder-attachments">
+        <div class="finder-section-head"><h3>Allegati</h3><button class="finder-see-all" type="button" onclick="navigateFinder('${courseId}', 'sources')">Vedi tutti ${icon('i-course-arrow')}</button></div>
+        ${course.sources.slice(0, 2).map((source, i) => renderFinderSource(courseId, source, i)).join('')}
+      </section>` : ''}`);
     renderMath(content);
     return;
   }
 
   if (!file) {
     const items = folder === 'sources'
-      ? files.map((entry, i) => `<button class="finder-file" type="button" onclick="navigateFinder('${courseId}', '${folder}', ${i})">
-        ${icon(folderInfo.icon)} <span><strong>${escapeCourseText(entry.nome)}</strong><small>${escapeCourseText(entry.info)}</small></span>
-        <span aria-hidden="true">›</span>
-      </button>`).join('')
+      ? files.map((entry, i) => renderFinderSource(courseId, entry, i)).join('')
       : `<div class="finder-documents">${files.map((entry, i) => renderFinderDocument(course, folder, entry, i)).join('')}</div>`;
     content.insertAdjacentHTML('beforeend', files.length ? items : '<p class="finder-empty">Questa cartella è ancora vuota.</p>');
     renderMath(content);
@@ -4985,7 +5111,6 @@ function setOnboardingIcon(kind) {
 
 function setOnboardingColor(hex) {
   app.onboardingColor = hex;
-  app.onboardingCustomLook = true;
   renderOnboardingPickers();
   document.querySelector('#obColorPicker .on')?.focus({ preventScroll: true });
 }
@@ -4995,34 +5120,54 @@ function renderOnboardingPickers() {
   const iconBox = document.getElementById('obIconPicker');
   const colorBox = document.getElementById('obColorPicker');
   if (!iconBox || !colorBox) return;
-  document.getElementById('wizardCoverName').textContent = getWizardCourseName() || 'Il tuo corso';
+  const nameInput = document.getElementById('obCourseName');
+  const name = getWizardCourseName();
+  document.getElementById('wizardCoverName').textContent = name || 'Il tuo corso';
+  document.getElementById('wizardNameLength').textContent = `${nameInput.value.length}/${nameInput.maxLength}`;
+  document.getElementById('btnWizTo2').disabled = !name;
+  document.getElementById('wizardReadyCheck').classList.toggle('hidden', !name);
+  document.getElementById('wizStep1Hint').textContent = name ? 'Tutto pronto. Al prossimo passo aggiungi i materiali.' : 'Inserisci il nome del corso per continuare';
+  document.querySelectorAll('.wizard-presets .chip').forEach(button => {
+    button.setAttribute('aria-pressed', String(button.textContent.trim() === name));
+  });
+  document.getElementById('wizardPreviewPath').textContent = app.onboardingPath === 'esame' ? 'Preparazione esame' : 'Lezione per lezione';
+  const unitCount = app.extractedUnits.length;
+  document.getElementById('wizardPreviewUnits').textContent = unitCount ? `${unitCount} unità in bozza` : 'Nessuna unità ancora';
+
   const col = app.onboardingColor || '#2f65d8';
   const kind = app.onboardingIcon || 'nodes';
+  const iconName = STEM_ICONS.find(item => item.id === kind).label.split(' / ')[0];
+  document.getElementById('wizardIconHint').classList.toggle('hidden', !name || app.onboardingCustomLook);
+  document.getElementById('wizardIconHintText').textContent = `Icona suggerita · ${iconName}`;
   const appearance = `${kind}:${col}`;
   if (preview.dataset.appearance === appearance) return;
   preview.dataset.appearance = appearance;
-  preview.closest('.wizard-preview').style.setProperty('--wizard-accent', col);
+  const colorNames = ['Cobalto', 'Smeraldo', 'Ambra', 'Viola', 'Corallo', 'Petrolio'];
+  const colorName = colorNames[COURSE_COLORS.indexOf(col)];
+  document.getElementById('wizardPreviewStage').style.setProperty('--wizard-accent', col);
+  document.getElementById('wizardIconCaption').textContent = `${iconName} · selezionata`;
+  document.getElementById('wizardColorCaption').textContent = colorName;
+  document.getElementById('wizardBindingIconName').textContent = `Icona ${iconName}`;
+  document.getElementById('wizardBindingColorName').textContent = `Colore ${colorName}`;
+  const subjectIcon = renderSubjectSvg(kind, col);
+  document.getElementById('wizardPreviewIcon').innerHTML = subjectIcon;
+  document.getElementById('wizardBindingIcon').innerHTML = subjectIcon;
   preview.style.background = softTint(col);
   if (preview.dataset.kind !== kind) {
     preview.dataset.kind = kind;
     preview.innerHTML = `${courseCoverArt({ kind, accent: col })}<span class="course-banner-icon wizard-cover-preview-badge"></span>`;
   }
-  preview.querySelector('.wizard-cover-preview-badge').innerHTML = renderSubjectSvg(kind, col);
+  preview.querySelector('.wizard-cover-preview-badge').innerHTML = subjectIcon;
   iconBox.innerHTML = STEM_ICONS.map(ic => `
     <button type="button" class="icon-opt ${ic.id === kind ? 'on' : ''}" title="${ic.label}" aria-label="${ic.label}" aria-pressed="${ic.id === kind}" onclick="setOnboardingIcon('${ic.id}')">
       ${renderSubjectSvg(ic.id, ic.id === kind ? col : 'var(--mut)')}
     </button>`).join('');
-  colorBox.innerHTML = COURSE_COLORS.map(hex => `
-    <button type="button" class="color-swatch ${hex === col ? 'on' : ''}" style="background:${hex}" aria-pressed="${hex === col}" title="Colore ${hex}" onclick="setOnboardingColor('${hex}')"></button>`).join('');
+  colorBox.innerHTML = COURSE_COLORS.map((hex, index) => `
+    <button type="button" class="color-swatch ${hex === col ? 'on' : ''}" style="--swatch-color:${hex}" aria-pressed="${hex === col}" aria-label="${colorNames[index]}" title="${colorNames[index]}" onclick="setOnboardingColor('${hex}')">${hex === col ? icon('i-check') : ''}</button>`).join('');
 }
 
 function onCourseNameChange() {
   const name = getWizardCourseName();
-  const ok = name.length > 0;
-  const btn = document.getElementById('btnWizTo2');
-  const hint = document.getElementById('wizStep1Hint');
-  if (btn) btn.disabled = !ok;
-  if (hint) hint.textContent = ok ? '' : 'Inserisci il nome del corso per continuare';
   if (!app.onboardingCustomLook) {
     const lc = name.toLowerCase();
     app.onboardingIcon = lc.includes('analisi') || lc.includes('segnal') ? 'wave'
@@ -5031,8 +5176,8 @@ function onCourseNameChange() {
       : lc.includes('algebra') || lc.includes('geom') ? 'matrix'
       : 'nodes';
   }
-  renderOnboardingPickers();
   if (app.noFilesMode || app.ingestionQueue.length) rebuildWizardOutline();
+  renderOnboardingPickers();
 }
 
 function goWizardStep(step) {
@@ -5062,6 +5207,7 @@ function setOnboardingPath(p) {
   if (rEx) rEx.innerHTML = p === 'esame' ? icon('i-check') : '';
   if (changed && (app.noFilesMode || app.ingestionQueue.length)) rebuildWizardOutline();
   renderOnboardingDetails();
+  renderOnboardingPickers();
 }
 
 function renderOnboardingDetails() {
@@ -5297,6 +5443,8 @@ function createAndOpenNewCourse() {
 
 function renderWizardView() {
   const step = app.wizardStep || 1;
+  const stepHints = ['Scegli il percorso e l’aspetto del corso.', 'Aggiungi i materiali da cui iniziare.', 'Controlla le unità prima di studiare.'];
+  document.getElementById('wizardStepHint').textContent = `Passo ${step} di 3 · ${stepHints[step - 1]}`;
   const s1 = document.getElementById('wStep1Pill');
   const s2 = document.getElementById('wStep2Pill');
   const s3 = document.getElementById('wStep3Pill');
@@ -5326,9 +5474,6 @@ function renderWizardView() {
   if (step === 1) {
     renderOnboardingDetails();
     renderOnboardingPickers();
-    const ok = getWizardCourseName().length > 0;
-    document.getElementById('btnWizTo2').disabled = !ok;
-    document.getElementById('wizStep1Hint').textContent = ok ? '' : 'Inserisci il nome del corso per continuare';
   } else if (step === 2) {
     renderWizardStep2();
   } else if (step === 3) {
@@ -5861,8 +6006,8 @@ function appendExcerptToNote(excerpt) {
     note.noteBlank = false;
     note.blocks = [];
   }
-  const lastSec = note.blocks.length ? note.blocks[note.blocks.length - 1].sec : 'Dalla spiegazione';
-  note.blocks.push({ id: 'nb-' + Date.now(), sec: lastSec, text: `• «${text}»` });
+  const previous = note.blocks.at(-1);
+  note.blocks.push({ id: nextNoteBlockId(), sec: previous?.sec || 'Dalla spiegazione', sectionId: previous?.sectionId, text: `• «${text}»` });
   syncActiveNoteAlias();
   renderRightPane();
   showSaveFeedback();
@@ -6256,8 +6401,17 @@ function changeNoteAppearance(input) {
 
 function buildActiveNoteMarkdown() {
   const un = getActiveUnitNote();
-  const visibleBlocks = un.inspectingVersion === 'v1' && un.snapshot ? un.snapshot : un.blocks;
-  return `# ${un.title}\n\n` + visibleBlocks.map(b => `## ${b.sec}\n${serializeNoteBlockMarkdown(b)}`).join('\n\n');
+  const history = un.inspectingVersion !== un.version && un.snapshot;
+  const title = history ? un.snapshotTitle || un.title : un.title;
+  const visibleBlocks = history ? un.snapshot : un.noteBlank ? [] : un.blocks;
+  let previousSection;
+  const parts = visibleBlocks.filter(block => block.text.trim()).map(block => {
+    const section = noteSectionKey(block);
+    const heading = section !== previousSection ? `## ${block.sec}\n\n` : '';
+    previousSection = section;
+    return heading + serializeNoteBlockMarkdown(block);
+  });
+  return `# ${title}\n\n` + parts.join('\n\n');
 }
 
 function copyNoteShareLink() {
@@ -6277,6 +6431,14 @@ function hideNoteSelectionPop() {
   document.getElementById('noteSelectionPop')?.classList.add('hidden');
 }
 
+function selectedNoteBlock() {
+  const selection = window.getSelection();
+  if (!selection?.rangeCount) return null;
+  const container = selection.getRangeAt(0).commonAncestorContainer;
+  const element = container.nodeType === Node.ELEMENT_NODE ? container : container.parentElement;
+  return element?.closest('.note-block[contenteditable="true"]:not(.note-edit-code):not([data-kind="formula"])');
+}
+
 function handleNoteTextSelection() {
   const pop = document.getElementById('noteSelectionPop');
   const sel = window.getSelection();
@@ -6284,8 +6446,7 @@ function handleNoteTextSelection() {
     hideNoteSelectionPop();
     return;
   }
-  const anchorEl = sel.anchorNode?.nodeType === 1 ? sel.anchorNode : sel.anchorNode?.parentElement;
-  const blockEl = anchorEl?.closest?.('.note-block[contenteditable="true"]');
+  const blockEl = selectedNoteBlock();
   if (!blockEl) {
     hideNoteSelectionPop();
     return;
@@ -6307,7 +6468,7 @@ function highlightNoteSelection(color) {
   const sel = window.getSelection();
   if (!sel || sel.isCollapsed) return;
   const anchorEl = sel.anchorNode?.nodeType === 1 ? sel.anchorNode : sel.anchorNode?.parentElement;
-  const blockEl = anchorEl?.closest?.('.note-block[contenteditable="true"]');
+  const blockEl = selectedNoteBlock();
   if (!blockEl) return;
   const range = sel.getRangeAt(0);
   const existingMark = anchorEl?.closest?.('mark');
@@ -6326,9 +6487,7 @@ function highlightNoteSelection(color) {
       range.insertNode(mark);
     }
   }
-  blockEl.dataset.dirty = '1';
-  const bid = blockEl.getAttribute('data-block-id');
-  if (bid) updateNoteBlock(bid, blockEl);
+  updateNoteBlock(blockEl);
   hideNoteSelectionPop();
 }
 
@@ -6351,11 +6510,9 @@ function toggleNoteTools() {
   });
 }
 
-function insertFromNoteDock(kind) {
+function insertFromNoteDock(kind, atEnd = false) {
   document.getElementById('noteInsert').open = false;
-  insertNoteBlock(kind);
-  const blocks = document.querySelectorAll('#noteScrollArea .note-block[contenteditable="true"]');
-  blocks[blocks.length - 1]?.focus();
+  insertNoteBlock(kind, atEnd);
 }
 
 function renderNoteTools() {
@@ -6377,81 +6534,127 @@ function renderNoteTools() {
 }
 
 function sanitizeNoteHtml(html) {
-  const div = document.createElement('div');
-  div.innerHTML = html || '';
+  const template = document.createElement('template');
+  template.innerHTML = html || '';
   const allowed = new Set(['B', 'STRONG', 'I', 'EM', 'U', 'S', 'DEL', 'STRIKE', 'SUP', 'SUB', 'CODE', 'BR', 'MARK']);
+  const excluded = new Set(['SCRIPT', 'STYLE', 'IFRAME', 'SVG', 'MATH', 'OBJECT', 'TEMPLATE']);
   const walk = (node) => {
     [...node.childNodes].forEach(ch => {
-      if (ch.nodeType === 1) {
-        if (!allowed.has(ch.tagName)) {
-          while (ch.firstChild) node.insertBefore(ch.firstChild, ch);
-          ch.remove();
-        } else {
-          const keepMarkClass = ch.tagName === 'MARK' && /^(hl-amber|hl-blue|hl-green)$/.test(ch.className) ? ch.className : '';
-          [...ch.attributes].forEach(a => ch.removeAttribute(a.name));
-          if (keepMarkClass) ch.className = keepMarkClass;
-          walk(ch);
+      if (ch.nodeType !== Node.ELEMENT_NODE) return;
+      if (excluded.has(ch.tagName) || ch.namespaceURI !== 'http://www.w3.org/1999/xhtml') {
+        ch.remove();
+        return;
+      }
+      walk(ch);
+      if (!allowed.has(ch.tagName)) {
+        if (/^(DIV|P|LI)$/.test(ch.tagName) && ch.previousSibling && ch.previousSibling.nodeName !== 'BR') {
+          node.insertBefore(document.createElement('br'), ch);
         }
+        ch.replaceWith(...ch.childNodes);
+      } else {
+        const keepMarkClass = ch.tagName === 'MARK' && /^(hl-amber|hl-blue|hl-green)$/.test(ch.className) ? ch.className : '';
+        [...ch.attributes].forEach(attribute => ch.removeAttribute(attribute.name));
+        if (keepMarkClass) ch.className = keepMarkClass;
       }
     });
   };
-  walk(div);
-  return div.innerHTML.trim();
+  walk(template.content);
+  return template.innerHTML;
 }
 
-function beginEditNoteBlock(id, el) {
-  const un = getActiveUnitNote();
-  const b = un.blocks.find(x => x.id === id);
-  if (!b || !el) return;
-  if (el.querySelector('.katex')) {
-    el.textContent = b.text;
-  } else if (b.richHtml) {
-    el.innerHTML = b.richHtml;
-  }
-  el.dataset.dirty = '0';
+function readNoteBlock(el) {
+  const rich = sanitizeNoteHtml(el.innerHTML);
+  const plain = document.createElement('template');
+  plain.innerHTML = rich.replace(/<br>/g, '\n');
+  const text = plain.content.textContent.replace(/\u00a0/g, ' ').replace(/^\n+|\n+$/g, '');
+  return { text, richHtml: /<(?!br\b)[a-z]+[\s>]/i.test(rich) ? rich : undefined };
 }
 
-function updateNoteBlock(id, elOrTxt) {
-  const un = getActiveUnitNote();
-  const b = un.blocks.find(x => x.id === id);
-  if (!b) return;
-  if (typeof elOrTxt === 'string') {
-    b.text = elOrTxt.replace(/\n+/g, ' ').trim();
-    delete b.richHtml;
-  } else if (elOrTxt) {
-    if (elOrTxt.dataset.dirty === '1' || !elOrTxt.querySelector('.katex')) {
-      const clone = elOrTxt.cloneNode(true);
-      clone.querySelectorAll('.katex-mathml').forEach(m => m.remove());
-      b.text = (clone.innerText || clone.textContent || '').replace(/\s+/g, ' ').trim();
-      const safeHtml = sanitizeNoteHtml(clone.innerHTML);
-      if (/<(b|strong|i|em|u|s|del|strike|sup|sub|code|mark)\b/i.test(safeHtml) && !b.text.includes('$')) {
-        b.richHtml = safeHtml;
-      } else {
-        delete b.richHtml;
-      }
-    }
-    if (b.richHtml && !b.text.includes('$')) elOrTxt.innerHTML = b.richHtml;
-    else {
-      elOrTxt.textContent = b.text;
-      renderMath(elOrTxt);
-    }
+function findEditableNote(el) {
+  const key = app.courseId + ':' + app.unitId;
+  const note = app.unitNotes[key];
+  return el.isContentEditable && el.closest('.note-page')?.dataset.noteKey === key && note && canInsertStudyAsset(note) ? note : null;
+}
+
+function setNoteCaret(el, atEnd) {
+  const selection = window.getSelection();
+  const range = document.createRange();
+  range.selectNodeContents(el);
+  range.collapse(!atEnd);
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+
+function noteFormula(text) {
+  const source = text.trim();
+  if (!source) return '';
+  return source.startsWith('$$') && source.endsWith('$$') ? source : '$$' + source.replace(/^\$|\$$/g, '') + '$$';
+}
+
+function noteBlockContent(block, editing = false) {
+  const text = !editing && block.kind === 'formula' ? noteFormula(block.text) : block.text;
+  return block.richHtml && block.kind !== 'formula' && block.kind !== 'code'
+    ? block.richHtml : escapeCourseText(text).replace(/\n/g, '<br>');
+}
+
+function beginEditNoteBlock(el) {
+  const note = findEditableNote(el);
+  if (!note) return;
+  const id = el.dataset.blockId;
+  app.noteWriteCursor = { key: el.closest('.note-page').dataset.noteKey, id };
+  el.classList.add('note-block-editing');
+  const block = note.blocks.find(item => item.id === id);
+  if (block && (el.querySelector('.katex') || block.kind === 'formula')) {
+    el.innerHTML = noteBlockContent(block, true);
+    setNoteCaret(el, true);
   }
-  syncActiveNoteAlias();
-  if (!elOrTxt || elOrTxt.dataset?.dirty === '1') showSaveFeedback();
+}
+
+function finishEditNoteBlock(el) {
+  el.classList.remove('note-block-editing');
+  const note = findEditableNote(el);
+  const block = note?.blocks.find(item => item.id === el.dataset.blockId);
+  if (block && block.kind !== 'code' && (block.kind === 'formula' || block.text.includes('$'))) {
+    el.innerHTML = noteBlockContent(block);
+    renderMath(el);
+  }
+}
+
+function updateNoteBlock(el) {
+  const note = findEditableNote(el);
+  if (!note || el.querySelector('.katex')) return;
+  const id = el.dataset.blockId;
+  const content = readNoteBlock(el);
+  let block = note.noteBlank ? null : note.blocks.find(item => item.id === id);
+  const starting = !block && id === 'note-first-block' && Boolean(content.text.trim());
+  if (starting) {
+    block = { id, sec: 'Appunti', kind: 'paragraph', text: '' };
+    note.blocks = [block];
+    note.noteBlank = false;
+  }
+  if (!block || (block.text === content.text && block.richHtml === content.richHtml)) return;
+  Object.assign(block, content);
+  if (starting) {
+    el.closest('.note-page').classList.remove('is-empty');
+    document.getElementById('btnBlankToggle').textContent = 'Svuota foglio';
+    renderNoteFooter(note, 'write');
+  }
+  showSaveFeedback();
+}
+
+function pasteNotebookText(event, singleLine = false) {
+  const text = event.clipboardData?.getData('text/plain');
+  if (text === undefined) return;
+  event.preventDefault();
+  document.execCommand('insertText', false, singleLine ? text.replace(/[\r\n]+/g, ' ') : text);
 }
 
 function formatNote(cmd) {
   const sel = window.getSelection();
-  let blockEl = sel && sel.anchorNode ? (sel.anchorNode.nodeType === 1 ? sel.anchorNode : sel.anchorNode.parentElement)?.closest('.note-block[contenteditable="true"]') : null;
-  if (!blockEl) {
-    const blocks = document.querySelectorAll('#noteScrollArea .note-block[contenteditable="true"]');
-    blockEl = blocks[blocks.length - 1];
-    if (!blockEl) { showToast('Apri un blocco modificabile'); return; }
-    blockEl.focus();
-  }
-  const hasRange = sel && !sel.isCollapsed && blockEl.contains(sel.anchorNode);
-  if (!hasRange && cmd !== 'code') {
-    showToast('Seleziona il testo da formattare');
+  const blockEl = selectedNoteBlock();
+  if (!blockEl || sel.isCollapsed) {
+    if (cmd === 'code') insertFromNoteDock('code');
+    else showToast('Seleziona il testo da formattare');
     return;
   }
   if (cmd === 'bold') document.execCommand('bold');
@@ -6461,76 +6664,165 @@ function formatNote(cmd) {
   else if (cmd === 'sup') document.execCommand('superscript');
   else if (cmd === 'sub') document.execCommand('subscript');
   else if (cmd === 'code') {
-    if (hasRange) {
-      const txt = sel.toString();
-      const codeEl = document.createElement('code');
-      codeEl.style.cssText = 'font-family:var(--mono);font-size:0.88em;padding:1px 5px;border-radius:5px;background:var(--sunken);';
-      codeEl.textContent = txt;
-      const range = sel.getRangeAt(0);
-      range.deleteContents();
-      range.insertNode(codeEl);
-    } else {
-      insertNoteBlock('code');
-      return;
-    }
+    const codeEl = document.createElement('code');
+    codeEl.textContent = sel.toString();
+    const range = sel.getRangeAt(0);
+    range.deleteContents();
+    range.insertNode(codeEl);
   }
-  blockEl.dataset.dirty = '1';
-  const bid = blockEl.getAttribute('data-block-id');
-  if (bid) updateNoteBlock(bid, blockEl);
-  else showSaveFeedback();
+  updateNoteBlock(blockEl);
 }
 
-function handleBlockKeydown(e, sec, idx) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    const un = getActiveUnitNote();
-    const nb = { id: 'nb-' + Date.now(), sec, text: '• ' };
-    un.blocks.splice(idx + 1, 0, nb);
-    syncActiveNoteAlias();
-    renderRightPane();
-    requestAnimationFrame(() => {
-      const el = document.querySelector(`[data-block-id="${nb.id}"]`);
-      if (el) { el.focus(); const range = document.createRange(); range.selectNodeContents(el); range.collapse(false); const s = window.getSelection(); s.removeAllRanges(); s.addRange(range); }
-    });
+let noteBlockSequence = 0;
+
+function nextNoteBlockId() {
+  return 'nb-edit-' + (++noteBlockSequence);
+}
+
+function noteSectionKey(block) {
+  return block.sectionId || block.sec;
+}
+
+function updateNoteHeading(el) {
+  const note = findEditableNote(el);
+  if (!note) return;
+  const title = el.textContent.replace(/\s+/g, ' ').trim();
+  if (el.dataset.noteSectionStart === undefined) {
+    if (note.title === (title || 'Appunti')) return;
+    note.title = title || 'Appunti';
+  } else {
+    const start = Number(el.dataset.noteSectionStart);
+    const first = note.blocks[start];
+    const next = title || 'Nuova sezione';
+    if (!first || first.sec === next) return;
+    const section = noteSectionKey(first);
+    for (let i = start; i < note.blocks.length && noteSectionKey(note.blocks[i]) === section; i++) {
+      note.blocks[i].sec = next;
+    }
   }
+  showSaveFeedback();
+}
+
+function handleNoteHeadingKeydown(event) {
+  if (event.key === 'Enter' && !event.isComposing) {
+    event.preventDefault();
+    event.currentTarget.blur();
+  }
+}
+
+function finishNoteHeading(el) {
+  const note = findEditableNote(el);
+  if (!note) return;
+  const sectionStart = el.dataset.noteSectionStart;
+  el.textContent = sectionStart === undefined ? note.title : note.blocks[Number(sectionStart)]?.sec || 'Nuova sezione';
+}
+
+function focusWrittenBlock(id, atEnd = false) {
+  const el = document.querySelector(`#noteScrollArea .note-block[data-block-id="${CSS.escape(id)}"][contenteditable="true"]`);
+  if (el) {
+    el.focus();
+    setNoteCaret(el, atEnd);
+  } else {
+    document.getElementById('noteScrollArea').focus({ preventScroll: true });
+  }
+}
+
+function handleBlockKeydown(event) {
+  if (event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+  const el = event.currentTarget;
+  const note = findEditableNote(el);
+  if (!note) return;
+  const index = note.blocks.findIndex(block => block.id === el.dataset.blockId);
+  const block = note.noteBlank ? null : note.blocks[index];
+  if (event.key === 'Backspace' && block && index > 0 && !block.text.trim()) {
+    event.preventDefault();
+    note.blocks.splice(index, 1);
+    renderRightPane();
+    focusWrittenBlock(note.blocks[index - 1].id, true);
+    showSaveFeedback();
+    return;
+  }
+  if (event.key !== 'Enter') return;
+  event.preventDefault();
+  if (event.shiftKey || ['formula', 'code'].includes(block?.kind)) {
+    document.execCommand('insertLineBreak');
+    updateNoteBlock(el);
+    return;
+  }
+  if (!block) return;
+  const bullet = block.kind === 'bullet' || /^•(?:\s|$)/.test(block.text);
+  if (bullet && !block.text.replace(/^•/, '').trim()) {
+    block.kind = 'paragraph';
+    block.text = '';
+    delete block.richHtml;
+    renderRightPane();
+    focusWrittenBlock(block.id);
+    showSaveFeedback();
+    return;
+  }
+  const trailing = document.createElement('div');
+  const selection = window.getSelection();
+  if (selection?.rangeCount && el.contains(selection.getRangeAt(0).commonAncestorContainer)) {
+    const caret = selection.getRangeAt(0);
+    caret.deleteContents();
+    const rest = document.createRange();
+    rest.selectNodeContents(el);
+    rest.setStart(caret.startContainer, caret.startOffset);
+    trailing.append(rest.extractContents());
+    updateNoteBlock(el);
+  }
+  const next = { ...readNoteBlock(trailing), id: nextNoteBlockId(), sec: block.sec, sectionId: block.sectionId, kind: bullet ? 'bullet' : 'paragraph' };
+  note.blocks.splice(index + 1, 0, next);
+  renderRightPane();
+  focusWrittenBlock(next.id);
+  showSaveFeedback();
 }
 
 function recalcWords() {
   const un = getActiveUnitNote();
-  const w = un.blocks.map(b => b.text).join(' ').trim().split(/\s+/).filter(Boolean).length;
-  app.wordCount = un.noteBlank ? 0 : w;
-  document.getElementById('saveText').textContent = app.saveErrorSimulated ? 'Solo locale' : 'Salvato';
+  app.wordCount = un.noteBlank ? 0 : un.blocks.map(block => block.text).join(' ').trim().split(/\s+/).filter(Boolean).length;
+}
+
+function renderNoteSaveStatus() {
+  const chip = document.getElementById('saveChip');
+  const label = document.getElementById('saveText');
+  const text = app.saveErrorSimulated ? 'Errore di salvataggio' : 'Salvato in sessione';
+  chip.classList.toggle('r', app.saveErrorSimulated);
+  chip.classList.toggle('g', !app.saveErrorSimulated);
+  if (label.textContent !== text) label.textContent = text;
 }
 
 function showSaveFeedback() {
-  const chip = document.getElementById('saveChip');
-  if (app.saveErrorSimulated) {
-    chip.className = 'chip r';
-    document.getElementById('saveText').textContent = 'Errore di salvataggio';
-    return;
+  syncActiveNoteAlias();
+  renderNoteSaveStatus();
+  if (!app.saveErrorSimulated) {
+    recordStudyActivity(app.courseId, app.unitId, 'Appunti aggiornati', 'appunti');
   }
-  chip.className = 'chip a';
-  document.getElementById('saveText').textContent = 'Salvataggio...';
-  setTimeout(() => {
-    chip.className = 'chip g';
-    document.getElementById('saveText').textContent = 'Salvato';
-  }, 260);
 }
 
-function insertNoteBlock(kind) {
-  const un = getActiveUnitNote();
-  un.noteBlank = false;
-  const lastSec = un.blocks.length ? un.blocks[un.blocks.length - 1].sec : 'Appunti';
-  const templates = {
-    heading: { sec: 'Nuova sezione', text: '• Scrivi qui i punti chiave.' },
-    bullet: { sec: lastSec, text: '• Nuovo punto aggiunto nei miei appunti' },
-    formula: { sec: lastSec, text: '• $C_j \\leftarrow \\max(C_j, t_m) + 1$' },
-    code: { sec: lastSec, text: '• Traccia: if (event) clock += 1;' },
-    quote: { sec: lastSec, text: '• Passaggio da verificare: aggiungi qui un dubbio aperto.', isTargetErr: true }
-  };
-  un.blocks.push({ id: 'nb-' + Date.now(), ...(templates[kind] || templates.bullet) });
-  syncActiveNoteAlias();
+function insertNoteBlock(kind, atEnd = false) {
+  const note = getActiveUnitNote();
+  if (!canInsertStudyAsset(note)) return;
+  if (note.noteBlank) note.blocks = [];
+  note.noteBlank = false;
+  const cursor = app.noteWriteCursor;
+  const cursorIndex = cursor?.key === app.courseId + ':' + app.unitId ? note.blocks.findIndex(block => block.id === cursor.id) : -1;
+  const heading = kind === 'heading';
+  const index = heading || atEnd || cursorIndex === -1 ? note.blocks.length : cursorIndex + 1;
+  const previous = note.blocks[index - 1];
+  const id = nextNoteBlockId();
+  const block = { id, sec: heading ? 'Nuova sezione' : previous?.sec || 'Appunti', sectionId: heading ? id : previous?.sectionId, kind: heading ? 'paragraph' : kind, text: '' };
+  if (kind === 'quote') block.isTargetErr = true;
+  note.blocks.splice(index, 0, block);
   renderRightPane();
+  if (heading) {
+    const el = document.querySelector(`#noteScrollArea [data-note-section-start="${index}"]`);
+    el?.focus();
+    if (el) window.getSelection().selectAllChildren(el);
+  } else {
+    focusWrittenBlock(id);
+  }
+  showSaveFeedback();
 }
 
 const STUDIO_ASSET_TYPE = 'application/x-tutorai-study-asset';
@@ -6615,7 +6907,7 @@ function insertStudyAsset(kind, index) {
   }
   const position = Number.isInteger(index) ? Math.max(0, Math.min(index, note.blocks.length)) : note.blocks.length;
   const previous = note.blocks[position - 1];
-  const block = { ...asset, id: 'study-asset-' + (++studioAssetCounter), sec: previous?.sec || 'Dalla spiegazione' };
+  const block = { ...asset, id: 'study-asset-' + (++studioAssetCounter), sec: previous?.sec || 'Dalla spiegazione', sectionId: previous?.sectionId };
   note.blocks.splice(position, 0, block);
   syncActiveNoteAlias();
   renderRightPane();
@@ -6664,10 +6956,11 @@ function leaveCompletedStudy(startQuiz) {
 
 function toggleEmptyNote() {
   const un = getActiveUnitNote();
+  if (!canInsertStudyAsset(un)) return;
   un.noteBlank = !un.noteBlank;
-  document.getElementById('btnBlankToggle').textContent = un.noteBlank ? 'Ripristina bozza' : 'Svuota foglio';
-  syncActiveNoteAlias();
   renderRightPane();
+  if (un.noteBlank) focusWrittenBlock('note-first-block');
+  else document.getElementById('noteScrollArea').focus({ preventScroll: true });
 }
 
 function exportMarkdown() {
@@ -6686,6 +6979,10 @@ function exportMarkdown() {
 }
 
 function serializeNoteBlockMarkdown(block) {
+  if (block.kind === 'formula') return noteFormula(block.text);
+  if (block.kind === 'code') return '\`\`\`\n' + block.text + '\n\`\`\`';
+  if (block.kind === 'bullet') return '- ' + block.text.replace(/\n/g, '\n  ');
+  if (block.kind === 'quote') return '> ' + block.text.replace(/\n/g, '\n> ');
   if (block.studyKind !== 'diagram') return block.text;
   const graph = block.diagram === 'lamport'
     ? 'sequenceDiagram\n  participant P1\n  participant P2\n  participant P3\n  Note over P1: Evento locale C=1\n  P1->>P2: m₁ (t=1)\n  Note over P2: Ricezione C=2\n  P2->>P1: m₂ (t=2)\n  Note over P1: Ricezione C=3\n  Note over P3: Evento isolato C=1'
@@ -6693,12 +6990,23 @@ function serializeNoteBlockMarkdown(block) {
   return block.text + '\n\n\`\`\`mermaid\n' + graph + '\n\`\`\`';
 }
 
-function startNoteReview() {
+function startNoteReview(blockId) {
   const un = getActiveUnitNote();
+  if (!canInsertStudyAsset(un)) return;
   const reviewable = un.blocks.filter(block => !block.studyKind && block.text.trim());
   if (un.noteBlank || !reviewable.length) { showToast('Scrivi qualche riga nei tuoi appunti prima di verificare'); return; }
-  if (!reviewable.some(block => block.isTargetErr)) reviewable[reviewable.length - 1].isTargetErr = true;
+  const target = reviewable.find(block => block.id === blockId) || reviewable.find(block => block.isTargetErr) || reviewable.at(-1);
+  un.reviewBlockId = target.id;
+  const example = un.reviewExample;
+  un.reviewManual = target.id !== example?.id || target.text !== example.text;
+  un.diffText = un.reviewManual ? target.text : example.proposal;
+  un.reply1 = un.reviewManual ? '' : example.answer;
+  target.isTargetErr = true;
   un.inspectingVersion = un.version;
+  if (un.reviewManual) {
+    submitReviewAnswer();
+    return;
+  }
   un.rightPhase = 'review';
   app.hintRevealed = false;
   syncActiveNoteAlias();
@@ -6711,7 +7019,7 @@ function submitReviewAnswer() {
   const un = getActiveUnitNote();
   un.rightPhase = 'diff';
   un.diffStatus = 'pending';
-  app.editingDiffManual = false;
+  app.editingDiffManual = Boolean(un.reviewManual);
   syncActiveNoteAlias();
   renderRightPane();
   updateDemoJson();
@@ -6750,10 +7058,17 @@ function applyDiffDecision(decision) {
     return;
   }
   const un = getActiveUnitNote();
+  const idx = un.blocks.findIndex(block => block.id === un.reviewBlockId || (!un.reviewBlockId && block.isTargetErr));
+  if (decision === 'accepted' && un.reviewManual && (!un.diffText.trim() || un.diffText === un.blocks[idx]?.text)) {
+    showToast('Modifica il passaggio prima di integrarlo');
+    return;
+  }
   un.diffStatus = decision;
   if (decision === 'accepted') {
-    un.snapshot = JSON.parse(JSON.stringify(un.blocks));
-    const idx = un.blocks.findIndex(b => b.isTargetErr);
+    if (!un.snapshot) {
+      un.snapshot = JSON.parse(JSON.stringify(un.blocks));
+      un.snapshotTitle = un.title;
+    }
     if (idx >= 0) {
       un.blocks[idx].text = un.diffText;
       delete un.blocks[idx].richHtml;
@@ -6783,19 +7098,28 @@ function switchRevision(v) {
   renderRightPane();
 }
 
-function renderNotebookBlock(block, section, editable, phase) {
+function renderNotebookBlock(block, editable, phase) {
+  const kind = block.kind || 'paragraph';
+  const placeholders = {
+    paragraph: 'Scrivi qui…', bullet: 'Voce dell’elenco…', quote: 'Dubbio o passaggio da rivedere…',
+    code: 'Scrivi il codice…', formula: 'Scrivi una formula in LaTeX…'
+  };
+  const placeholder = block.id === 'note-first-block' ? 'Scrivi i tuoi appunti…' : placeholders[kind];
+  const attrs = editable && !block.studyKind
+    ? `contenteditable="true" role="textbox" aria-multiline="true" aria-label="${placeholder}" data-placeholder="${placeholder}"
+       onfocus="beginEditNoteBlock(this)" oninput="updateNoteBlock(this)" onkeydown="handleBlockKeydown(event)"
+       onpaste="pasteNotebookText(event)" onblur="finishEditNoteBlock(this)"`
+    : '';
+  const flagged = block.isTargetErr && phase !== 'diff' && Boolean(block.text.trim());
   const body = block.studyKind === 'diagram'
     ? renderStudioDiagram(block.diagram, block.unitNumber, block.id + '-arrow', block.activeEvent)
-    : `<div class="note-block ${block.isTargetErr && phase !== 'diff' ? 'has-obs' : ''} ${block.merged ? 'rev-merged' : ''}"
-           data-block-id="${block.id}" data-note-index="${block.flatIdx}"
-           contenteditable="${editable}"
-           onfocus="beginEditNoteBlock('${block.id}', this)"
-           oninput="this.dataset.dirty='1'"
-           onkeydown="handleBlockKeydown(event, '${section.replace(/'/g, "\\'")}', ${block.flatIdx})"
-           onblur="updateNoteBlock('${block.id}', this)"
-           ${block.isTargetErr ? `onclick="if(getActiveUnitNote().rightPhase==='write') startNoteReview()"` : ''}>${block.studyKind === 'formula'
-             ? escapeCourseText(block.text) : block.richHtml && !block.text.includes('$') ? block.richHtml : block.text}</div>`;
-  if (!block.studyKind) return body;
+    : `<div class="note-block ${flagged ? 'has-obs' : ''} ${block.merged ? 'rev-merged' : ''} ${kind === 'code' ? 'note-edit-code' : ''}"
+        data-block-id="${block.id}" data-note-index="${block.flatIdx}" data-kind="${kind}" ${attrs}>${noteBlockContent(block)}</div>`;
+  if (!block.studyKind) {
+    return body + (flagged && editable
+      ? `<button type="button" class="note-inline-review" onclick="startNoteReview('${block.id}')">${icon('i-study-spark')} Rivedi passaggio</button>`
+      : '');
+  }
   const label = block.studyKind === 'formula' ? 'Formula' : 'Diagramma';
   return `<div class="note-transfer-block" data-note-transfer-id="${block.id}" data-note-index="${block.flatIdx}">
     <div class="note-transfer-header">
@@ -6808,71 +7132,77 @@ function renderNotebookBlock(block, section, editable, phase) {
 
 function renderRightPane() {
   const scrollEl = document.getElementById('noteScrollArea');
-  const barEl = document.getElementById('noteBottomBar');
   const un = getActiveUnitNote();
-  scrollEl.dataset.notePhase = un.rightPhase;
-  syncActiveNoteAlias();
-  syncRevSelect();
-
-  document.getElementById('btnBlankToggle').textContent = un.noteBlank ? 'Ripristina bozza' : 'Svuota foglio';
-  renderNoteTools();
-
-  if (un.noteBlank) {
-    scrollEl.innerHTML = `
-      <div class="note-page">
-        <h1 class="note-h1" contenteditable="true" onblur="getActiveUnitNote().title=this.innerText.trim()||'Appunti'">${un.title}</h1>
-        <div contenteditable="true" class="note-block" role="textbox" aria-label="Scrivi i tuoi appunti" aria-multiline="true" data-placeholder="Scrivi i tuoi appunti…" style="min-height:150px;border:1px dashed var(--paper-line);padding:12px" onblur="if(this.textContent.trim()){const uNote=getActiveUnitNote();uNote.noteBlank=false;uNote.blocks=[{id:'free-1',sec:'Appunti',text:this.textContent.trim()}];renderRightPane();}"></div>
-      </div>`;
-    barEl.innerHTML = `<button class="btn" onclick="toggleEmptyNote()">Ripristina bozza</button>`;
-    return;
-  }
-
-  const blocks = (un.inspectingVersion === 'v1' && un.snapshot) ? un.snapshot : un.blocks;
-  const reviewIndex = blocks.findIndex(block => block.isTargetErr);
+  const history = un.inspectingVersion !== un.version;
+  const phase = history ? 'history' : un.rightPhase;
   const editable = canInsertStudyAsset(un);
+  const blocks = history && un.snapshot ? un.snapshot : un.blocks;
+  const empty = editable && (un.noteBlank || !blocks.length);
+  const reviewIndex = blocks.findIndex(block => block.id === un.reviewBlockId || (!un.reviewBlockId && block.isTargetErr));
+  const headingAttrs = editable
+    ? 'contenteditable="plaintext-only" role="textbox" oninput="updateNoteHeading(this)" onkeydown="handleNoteHeadingKeydown(event)" onblur="finishNoteHeading(this)" onpaste="pasteNotebookText(event, true)"'
+    : '';
   const groups = [];
-  blocks.forEach((b, idx) => {
-    let g = groups.find(x => x.sec === b.sec);
-    if (!g) { g = { sec: b.sec, items: [] }; groups.push(g); }
-    g.items.push({ ...b, flatIdx: idx });
+  if (!empty) blocks.forEach((block, index) => {
+    const key = noteSectionKey(block);
+    if (groups.at(-1)?.key !== key) groups.push({ key, title: block.sec, start: index, items: [] });
+    groups.at(-1).items.push({ ...block, flatIdx: index });
   });
 
-  const activeC = COURSES_DATA[app.courseId];
-  const activeU = activeC?.units.find(x => x.id === app.unitId);
-  const noteEyebrow = activeC && activeU ? `<div class="note-eyebrow">${escapeCourseText(activeC.nome)} / ${escapeCourseText(activeU.num)}</div>` : '';
+  scrollEl.dataset.notePhase = phase;
+  syncActiveNoteAlias();
+  syncRevSelect();
+  renderNoteSaveStatus();
+  document.getElementById('btnBlankToggle').textContent = un.noteBlank ? 'Ripristina bozza' : 'Svuota foglio';
+  document.querySelectorAll('[data-note-write]').forEach(button => { button.disabled = !editable; });
+  hideNoteSelectionPop();
+  renderNoteTools();
 
-  scrollEl.innerHTML = `<div class="note-page">
+  const course = COURSES_DATA[app.courseId];
+  const unit = course?.units.find(item => item.id === app.unitId);
+  const eyebrow = course && unit ? `<div class="note-eyebrow">${escapeCourseText(course.nome)} / ${escapeCourseText(unit.num)}</div>` : '';
+  const title = history && un.snapshotTitle ? un.snapshotTitle : un.title;
+  scrollEl.innerHTML = `<div class="note-page ${empty ? 'is-empty' : ''}" data-note-key="${escapeCourseText(app.courseId + ':' + app.unitId)}">
     <header class="note-page-heading">
-      ${noteEyebrow}
-      <h1 class="note-h1" contenteditable="true" onblur="const uNote=getActiveUnitNote();uNote.title=this.innerText.trim()||uNote.title;showSaveFeedback()">${un.title}</h1>
+      ${eyebrow}
+      <h1 class="note-h1 note-edit-name" aria-label="Titolo degli appunti" ${headingAttrs}>${escapeCourseText(title)}</h1>
     </header>
-    ${groups.map(g => `
-      <h2 class="note-sec">${g.sec}</h2>
-      ${g.items.map(b => `
-        ${renderNotebookBlock(b, g.sec, editable, un.rightPhase)}
-        ${b.flatIdx === reviewIndex && un.rightPhase === 'review' ? renderSocraticCardHtml() : ''}
-        ${b.flatIdx === reviewIndex && un.rightPhase === 'diff' ? renderDiffCardHtml(b.text) : ''}
+    ${empty ? renderNotebookBlock({ id: 'note-first-block', flatIdx: 0, text: '' }, true, phase) : groups.map(group => `
+      <h2 class="note-sec note-edit-name" aria-label="Titolo della sezione" data-note-section-start="${group.start}" ${headingAttrs}>${escapeCourseText(group.title)}</h2>
+      ${group.items.map(block => `
+        ${renderNotebookBlock(block, editable, phase)}
+        ${block.flatIdx === reviewIndex && phase === 'review' ? renderSocraticCardHtml() : ''}
+        ${block.flatIdx === reviewIndex && phase === 'diff' ? renderDiffCardHtml(block.text) : ''}
       `).join('')}
     `).join('')}
+    ${editable ? `<button type="button" class="note-continue-writing" onclick="insertFromNoteDock('paragraph', true)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-7-7v14"/></svg> Continua a scrivere</button>` : ''}
   </div>`;
 
-  barEl.innerHTML = un.rightPhase === 'write' ? `
-    <div class="note-footer-actions">
-      ${un.version === 'v2' || un.diffStatus === 'rejected'
-        ? `<button class="btn ghost" style="height:30px;font-size:12px" onclick="startNoteReview()">Rivedi ancora</button><button class="btn blue-pri" onclick="completeCurrentUnitStudy()">Termina lo studio →</button>`
-        : `<button class="btn blue-pri" onclick="startNoteReview()">Rivedi i miei appunti →</button>`}
-    </div>
-  ` : un.rightPhase === 'review' ? `
-    <span class="note-stage-chip">${icon('i-pencil')} Revisione</span>
-    <button type="button" class="btn note-revision-back" onclick="closeNoteReview()">Torna alla bozza</button>
-  ` : `
-    <span class="note-stage-chip is-diff">${icon('i-book')} Confronto</span>
-    <button type="button" class="btn note-revision-back" onclick="closeNoteReview()">Torna alla bozza</button>
-  `;
-  const ta = document.getElementById('dpopReplyArea');
-  if (ta) ta.value = un.reply1 || '';
+  renderNoteFooter(un, phase);
+  const reply = document.getElementById('dpopReplyArea');
+  if (reply) reply.value = un.reply1 || '';
   renderMath(scrollEl);
 }
+
+function renderNoteFooter(un, phase) {
+  const bar = document.getElementById('noteBottomBar');
+  if (phase === 'history') {
+    bar.innerHTML = `<span class="note-stage-chip">${icon('i-book')} Versione precedente · Sola lettura</span>
+      <button type="button" class="btn note-revision-back" onclick="switchRevision(getActiveUnitNote().version)">Torna alla versione corrente</button>`;
+  } else if (phase === 'write') {
+    bar.innerHTML = un.noteBlank ? '<button type="button" class="btn" onclick="toggleEmptyNote()">Ripristina bozza</button>' : `
+      <div class="note-footer-actions">
+        ${un.version === 'v2' || un.diffStatus === 'rejected'
+          ? `<button class="btn ghost" style="height:30px;font-size:12px" onclick="startNoteReview()">Rivedi ancora</button><button class="btn blue-pri" onclick="completeCurrentUnitStudy()">Termina lo studio →</button>`
+          : `<button class="btn blue-pri" onclick="startNoteReview()">Rivedi i miei appunti →</button>`}
+      </div>`;
+  } else {
+    const diff = phase === 'diff';
+    bar.innerHTML = `<span class="note-stage-chip ${diff ? 'is-diff' : ''}">${icon(diff ? 'i-book' : 'i-pencil')} ${diff ? 'Confronto' : 'Revisione'}</span>
+      <button type="button" class="btn note-revision-back" onclick="closeNoteReview()">Torna alla bozza</button>`;
+  }
+}
+
 
 function renderSocraticCardHtml() {
   const c = COURSES_DATA[app.courseId];
@@ -6901,7 +7231,9 @@ function renderDiffCardHtml(oldText) {
   const c = COURSES_DATA[app.courseId];
   const u = c.units.find(x => x.id === app.unitId) || c.units[0];
   const isLamport = app.courseId === 'sistemi' && u.id === 'u13';
-  const reasonText = isLamport
+  const reasonText = un.reviewManual
+    ? 'Riscrivi il passaggio e confrontalo con la tua bozza.'
+    : isLamport
     ? 'La sola disuguaglianza C(A) < C(B) non implica causalità.'
     : "Precisazione sulle condizioni formali dell’unità.";
   const sources = isLamport
@@ -6911,7 +7243,7 @@ function renderDiffCardHtml(oldText) {
     <section class="diff-card" aria-labelledby="noteDiffHeading">
       <header class="note-review-head">
         <span class="note-review-icon is-diff">${icon('i-pencil')}</span>
-        <h2 id="noteDiffHeading" tabindex="-1">Proposta di aggiornamento</h2>
+        <h2 id="noteDiffHeading" tabindex="-1">${un.reviewManual ? 'Modifica del passaggio' : 'Proposta di aggiornamento'}</h2>
         ${app.conflictSimulated ? '<span class="chip r">Conflitto 409</span>' : ''}
       </header>
       <div class="diff-reason">
@@ -8111,26 +8443,167 @@ function profileActivityDay(activity, todayLabel) {
   return group.startsWith('Oggi') ? todayLabel : group.toLocaleLowerCase('it');
 }
 
-function renderProfileWeek() {
-  const today = new Date();
-  const todayLabel = profileDateLabel(today);
+function getProfileActivityCounts(today) {
   const days = new Map();
+  const todayLabel = profileDateLabel(today);
   for (const activity of app.studyHistory) {
     const day = profileActivityDay(activity, todayLabel);
     days.set(day, (days.get(day) || 0) + 1);
   }
-  return Array.from({ length: 7 }, (_, index) => {
+  return days;
+}
+
+function renderProfileWeek(today, days) {
+  const week = Array.from({ length: 7 }, (_, index) => {
     const day = new Date(today);
     day.setDate(today.getDate() - 6 + index);
-    const label = profileDateLabel(day);
-    const weekday = day.toLocaleDateString('it-IT', { weekday: 'short' });
-    const count = days.get(label) || 0;
-    return `<li class="profile-week-day${index === 6 ? ' today' : ''}" aria-label="${label}, ${count} attività" ${index === 6 ? 'aria-current="date"' : ''}>
-      <span aria-hidden="true">${escapeCourseText(weekday)}</span>
-      <time aria-hidden="true" datetime="${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}">${day.getDate()}</time>
-      <b aria-hidden="true" class="${count ? 'has-entries' : ''}">${count || '·'}</b>
-    </li>`;
+    return { day, count: days.get(profileDateLabel(day)) || 0 };
+  });
+  const maxCount = Math.max(1, ...week.map(entry => entry.count));
+  return {
+    total: week.reduce((total, entry) => total + entry.count, 0),
+    days: week.map(({ day, count }, index) => {
+      const label = profileDateLabel(day);
+      const weekday = day.toLocaleDateString('it-IT', { weekday: 'short' });
+      return `<li class="profile-week-day${index === 6 ? ' today' : ''}" aria-label="${label}, ${count} attività" ${index === 6 ? 'aria-current="date"' : ''}>
+        <span aria-hidden="true">${escapeCourseText(weekday)}</span>
+        <time aria-hidden="true" datetime="${recallDateKey(day)}">${day.getDate()}</time>
+        <span class="profile-week-meter" aria-hidden="true"><i style="--activity-share:${(count / maxCount) * 100}%"></i></span>
+        <b aria-hidden="true" class="${count ? 'has-entries' : ''}">${count}</b>
+      </li>`;
+    }).join('')
+  };
+}
+
+const PROFILE_BRAIN_STATES = {
+  dimostrato: { tone: 'verified', label: 'Verificata' },
+  in_corso: { tone: 'active', label: 'In corso' },
+  studiato_da_verificare: { tone: 'active', label: 'Da verificare' },
+  da_ripassare: { tone: 'review', label: 'Da ripassare' },
+  non_studiato: { tone: 'unstarted', label: 'Da iniziare' }
+};
+const PROFILE_BRAIN_POINTS = [[92, 80], [66, 170], [120, 232], [100, 316], [236, 70], [260, 160], [222, 250], [274, 260], [210, 338]];
+const PROFILE_BRAIN_SPREAD = [0, 4, 2, 5, 1, 7, 3, 6, 8].map(index => PROFILE_BRAIN_POINTS[index]);
+
+function renderProfileBrain(entries, selectedIndex) {
+  const panel = document.getElementById('profileBrainPanel');
+  if (!panel || !entries.length) return;
+  const courses = [...new Set(entries.map(entry => entry.course))];
+  if (!courses.some(course => course.id === app.profileBrainCourse)) app.profileBrainCourse = '';
+  const scoped = entries.filter(entry => !app.profileBrainCourse || entry.course.id === app.profileBrainCourse);
+  const selected = scoped.find(entry => entry.index === selectedIndex)
+    || scoped.find(entry => entry.state.tone === 'active')
+    || scoped[0];
+  const perPage = PROFILE_BRAIN_POINTS.length;
+  const pageStart = Math.floor(scoped.indexOf(selected) / perPage) * perPage;
+  const visibleEntries = scoped.slice(pageStart, pageStart + perPage);
+  const points = visibleEntries.length === perPage ? PROFILE_BRAIN_POINTS : PROFILE_BRAIN_SPREAD;
+  app.profileBrainUnit = selected.key;
+  const nodeButtons = visibleEntries.map((entry, pointIndex) => {
+    const [x, y] = points[pointIndex];
+    const active = entry === selected;
+    const label = escapeCourseText(entry.course.nome + ' · ' + entry.unit.titolo + ' · ' + entry.state.label);
+    return `<button type="button" class="profile-brain-node ${entry.state.tone}" data-brain-node="${entry.index}"
+      style="--node-x:${100 * x / 328}%;--node-y:${100 * y / 400}%" tabindex="${active ? 0 : -1}" aria-pressed="${active}"
+      aria-label="${label}" title="${label}"></button>`;
   }).join('');
+  const links = visibleEntries.slice(1).map((entry, from) => {
+    const previous = visibleEntries[from];
+    if (entry.course !== previous.course) return '';
+    const to = from + 1;
+    const [x1, y1] = points[from];
+    const [x2, y2] = points[to];
+    const bothVerified = previous.state.tone === 'verified' && entry.state.tone === 'verified';
+    return `<path class="${bothVerified ? 'verified' : ''}" d="M${x1} ${y1} Q${(x1 + x2) / 2} ${Math.min(y1, y2) - 14} ${x2} ${y2}"/>`;
+  }).join('');
+  const counts = { verified: 0, active: 0, review: 0, unstarted: 0 };
+  scoped.forEach(entry => counts[entry.state.tone]++);
+  document.getElementById('profileBrainProgress').textContent = `${counts.verified}/${scoped.length} verificate`;
+  panel.innerHTML = `
+    <div class="profile-brain-controls">
+      <label class="profile-brain-course">
+        <svg class="ic" aria-hidden="true"><use href="#i-folder"/></svg>
+        <select class="input-field" aria-label="Corso nella mappa">
+          <option value="">Tutti i corsi</option>
+          ${courses.map(course => `<option value="${course.id}"${course.id === app.profileBrainCourse ? ' selected' : ''}>${escapeCourseText(course.nome)}</option>`).join('')}
+        </select>
+      </label>
+      ${scoped.length > perPage ? `<div class="profile-brain-pages" role="group" aria-label="Pagine della mappa">
+        <button type="button" data-brain-page="-1" aria-label="Lezioni precedenti"${pageStart === 0 ? ' disabled' : ''}>‹</button>
+        <span>${pageStart + 1}–${pageStart + visibleEntries.length} di ${scoped.length}</span>
+        <button type="button" data-brain-page="1" aria-label="Lezioni successive"${pageStart + perPage >= scoped.length ? ' disabled' : ''}>›</button>
+      </div>` : ''}
+    </div>
+    <div class="profile-brain-figure" role="group" aria-label="Unità sulla mappa, seleziona con le frecce">
+      <img src="assets/profile-brain.svg" alt="">
+      <svg class="profile-brain-links" viewBox="0 0 328 400" aria-hidden="true">${links}</svg>
+      ${nodeButtons}
+    </div>
+    <div class="profile-brain-selection ${selected.state.tone}">
+      <div>
+        <span class="profile-brain-kicker">${selected.state.label}${selected.unit.prereqOk === false ? ' · Prerequisito consigliato' : ''}</span>
+        <h3>${escapeCourseText(selected.unit.titolo)}</h3>
+        <p>${escapeCourseText(selected.course.nome)}</p>
+      </div>
+      <div class="profile-brain-actions">
+        <button type="button" class="btn blue-pri profile-brain-open">Apri lezione ${icon('i-course-arrow')}</button>
+        ${selected.unit.prereqOk !== false ? `<button type="button" class="btn ghost profile-brain-notes">${icon('i-pencil')} Appunti</button>
+          <button type="button" class="btn ghost profile-brain-review">${icon('i-calendar')} Ripassa</button>` : ''}
+      </div>
+    </div>
+    <ul class="profile-brain-legend" aria-label="Stati delle unità">
+      ${[['verified','Verificate'],['active','In studio'],['review','Da ripassare'],['unstarted','Da iniziare']].map(([tone,label]) => `
+        <li class="${tone}"><span>${label}</span><strong>${counts[tone]}</strong></li>`).join('')}
+    </ul>`;
+  const selectNode = (entry, reveal = false) => {
+    renderProfileBrain(entries, entry.index);
+    panel.querySelector('[data-brain-node][aria-pressed="true"]')?.focus({ preventScroll: true });
+    if (reveal) panel.querySelector('.profile-brain-selection').scrollIntoView({ block: 'nearest' });
+  };
+  panel.querySelectorAll('[data-brain-node]').forEach((button, position) => {
+    button.addEventListener('click', event => selectNode(visibleEntries[position], event.detail > 0 && window.innerWidth <= 760));
+    button.addEventListener('keydown', event => {
+      const positions = { ArrowLeft: position - 1, ArrowUp: position - 1, ArrowRight: position + 1,
+        ArrowDown: position + 1, Home: 0, End: visibleEntries.length - 1 };
+      if (!Object.hasOwn(positions, event.key)) return;
+      event.preventDefault();
+      selectNode(visibleEntries[Math.max(0, Math.min(visibleEntries.length - 1, positions[event.key]))]);
+    });
+  });
+  panel.querySelectorAll('[data-brain-page]').forEach(button => {
+    button.addEventListener('click', () => {
+      const offset = Number(button.dataset.brainPage);
+      const next = scoped[pageStart + perPage * offset];
+      if (!next) return;
+      renderProfileBrain(entries, next.index);
+      const sameControl = panel.querySelector(`[data-brain-page="${offset}"]:not(:disabled)`);
+      if (sameControl) sameControl.focus({ preventScroll: true });
+      else panel.querySelector('[data-brain-node][aria-pressed="true"]')?.focus({ preventScroll: true });
+    });
+  });
+  panel.querySelector('.profile-brain-course select').addEventListener('change', event => {
+    app.profileBrainCourse = event.target.value;
+    renderProfileBrain(entries, selected.index);
+    panel.querySelector('.profile-brain-course select').focus({ preventScroll: true });
+  });
+  panel.querySelector('.profile-brain-open').addEventListener('click', () => {
+    selectCourse(selected.course.id);
+    selectUnit(selected.unit.id);
+    setMobilePane('left');
+    document.getElementById('leftScrollArea').scrollTop = 0;
+    document.getElementById('tabExplain').focus({ preventScroll: true });
+  });
+  panel.querySelector('.profile-brain-notes')?.addEventListener('click', () => {
+    openDeskNote(selected.course.id, selected.unit.id);
+    const sheet = document.getElementById('noteScrollArea');
+    sheet.scrollTop = 0;
+    sheet.focus({ preventScroll: true });
+  });
+  panel.querySelector('.profile-brain-review')?.addEventListener('click', () => {
+    openRipassoLobby(selected.course.id);
+    pickReviewLesson(selected.course.id, selected.unit.id);
+    document.getElementById('recallPickerTitle')?.scrollIntoView({ block: 'nearest' });
+  });
 }
 
 function renderAttivitaView() {
@@ -8167,20 +8640,38 @@ function renderAttivitaView() {
     return;
   }
 
-  const units = Object.values(COURSES_DATA).flatMap(course => course.units);
-  const done = units.filter(unit => unit.stato === 'dimostrato').length;
-  const masteryPct = units.length ? Math.round((done / units.length) * 100) : 0;
+  const courses = Object.values(COURSES_DATA);
+  const entries = courses.flatMap(course => course.units.map(unit => ({
+    course, unit, key: course.id + ':' + unit.id,
+    state: PROFILE_BRAIN_STATES[unit.stato] || PROFILE_BRAIN_STATES.non_studiato
+  }))).map((entry, index) => ({ ...entry, index }));
+  const done = entries.filter(entry => entry.state.tone === 'verified').length;
+  const masteryPct = entries.length ? Math.round((done / entries.length) * 100) : 0;
   const filters = [['tutto', 'Tutto'], ['studio', 'Lezioni'], ['appunti', 'Appunti'], ['verifica', 'Verifiche']];
   const date = new Date();
-  const dateLabel = date.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'short' });
+  const dateKey = recallDateKey(date);
+  const dateLabel = date.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  const activityCounts = getProfileActivityCounts(date);
+  const week = renderProfileWeek(date, activityCounts);
+  const streakDate = new Date(date);
+  let streak = 0;
+  while (streak < activityCounts.size && activityCounts.has(profileDateLabel(streakDate))) {
+    streak++;
+    streakDate.setDate(streakDate.getDate() - 1);
+  }
+  const recall = app.ripassoAgenda.filter(reminder => !reminder.completedBy && entries.some(entry =>
+    entry.course.id === reminder.courseId && entry.unit.id === reminder.unitId
+  )).sort((a, b) => a.date.localeCompare(b.date))[0];
+  const recallEntry = recall && entries.find(entry => entry.course.id === recall.courseId && entry.unit.id === recall.unitId);
+  const recallLabel = recall && (recall.date === dateKey ? 'Oggi' : recallDateFromKey(recall.date).toLocaleDateString('it-IT', { day:'numeric', month:'long' }));
   container.innerHTML = `
     <div class="profile-journal">
       <header class="profile-banner">
-        ${renderProfileWaves()}
         <div class="profile-journal-title">
-          <time datetime="${recallDateKey(date)}">${escapeCourseText(dateLabel)}</time>
           <h1 id="accountHeading" tabindex="-1">Diario di studio</h1>
+          <time datetime="${dateKey}">${escapeCourseText(dateLabel)}</time>
         </div>
+        ${streak ? `<span class="profile-streak">${icon('i-flame')} ${streak === 1 ? '1 giorno di studio' : 'Serie di ' + streak + ' giorni'}</span>` : ''}
         <div class="profile-id-wrap">
           <button type="button" class="profile-avatar-lg" aria-label="Modifica profilo" title="Modifica profilo" onclick="openAccountPage('edit')">
             <span id="profileAvatar" aria-hidden="true"></span>
@@ -8204,17 +8695,50 @@ function renderAttivitaView() {
             </select>
           </div>
           <div id="profileTimeline"></div>
+          ${recallEntry ? `<section class="profile-next-recall" aria-labelledby="profileRecallHeading">
+            <p class="profile-recall-kicker">Prossimo richiamo</p>
+            <h3 id="profileRecallHeading">${escapeCourseText(recallEntry.unit.titolo)}</h3>
+            <p>${recallLabel} · ${escapeCourseText(recallEntry.course.nome)}</p>
+            <button type="button" class="btn profile-recall-action" onclick="openRipassoLobby('${recallEntry.course.id}');selectRipassoDay('${recall.date}')">Prepara il ripasso ${icon('i-course-arrow')}</button>
+            <span class="profile-recall-art" aria-hidden="true">${icon('i-check')}</span>
+          </section>` : ''}
+        </section>
+        <section class="profile-brain-card" aria-labelledby="profileBrainHeading">
+          <header class="profile-brain-head">
+            <div>
+              <h2 id="profileBrainHeading">Knowledge Brain</h2>
+              <p>Scegli un nodo per vedere la lezione.</p>
+            </div>
+            <span class="profile-verified-pill" id="profileBrainProgress">${done}/${entries.length} verificate</span>
+          </header>
+          <div id="profileBrainPanel">${entries.length ? '' : '<p class="profile-empty">Le unità del tuo corso compariranno qui.</p>'}</div>
         </section>
         <aside class="profile-insights" aria-label="Riepilogo dello studio">
           <section class="profile-insight-card" aria-labelledby="profileWeekHeading">
             <h2 id="profileWeekHeading">Ultimi 7 giorni</h2>
-            <ul class="profile-week">${renderProfileWeek()}</ul>
+            <p>Attività registrate per giorno</p>
+            <ul class="profile-week">${week.days}</ul>
+            <p class="profile-week-total"><b>${week.total}</b> attività negli ultimi 7 giorni</p>
           </section>
           <section class="profile-globe-card" aria-labelledby="profileMasteryHeading">
             <h2 id="profileMasteryHeading">Unità verificate</h2>
-            <p class="profile-globe-copy"><strong>${done}</strong> di ${units.length}</p>
-            <progress class="profile-mastery-progress" value="${done}" max="${units.length || 1}" aria-hidden="true"></progress>
-            <pre class="ascii-globe-box" id="asciiGlobe" aria-hidden="true"></pre>
+            <div class="profile-mastery-total">
+              <p class="profile-globe-copy"><strong>${done}</strong> di ${entries.length}</p>
+              <span class="profile-mastery-ring" style="--mastery-progress:${masteryPct}%"><b>${masteryPct}%</b></span>
+            </div>
+            <div class="profile-mastery-segments" style="--mastery-unit-count:${entries.length || 1}" aria-hidden="true">
+              ${['verified','active','review','unstarted'].map(tone => entries.filter(entry => entry.state.tone === tone)
+                .map(() => `<span class="${tone}"></span>`).join('')).join('')}
+            </div>
+            <div class="profile-course-scores">
+              ${courses.map(course => {
+                const verified = course.units.filter(unit => unit.stato === 'dimostrato').length;
+                return `<button type="button" class="profile-course-score" onclick="openCourseDetail('${course.id}')" aria-label="${escapeCourseText(course.nome + ' · ' + verified + ' su ' + course.units.length + ' unità verificate')}">
+                  <span><strong>${escapeCourseText(course.nome)}</strong><small><b>${verified}</b>/${course.units.length}</small></span>
+                  <progress class="profile-mastery-progress" value="${verified}" max="${course.units.length || 1}" aria-hidden="true"></progress>
+                </button>`;
+              }).join('')}
+            </div>
           </section>
         </aside>
       </div>
@@ -8226,37 +8750,8 @@ function renderAttivitaView() {
   programme.textContent = app.profileProgramme;
   programme.hidden = !app.profileProgramme;
   renderProfileTimeline();
-  startAsciiGlobeLoop(masteryPct / 100);
-}
-
-let asciiGlobeAngle = 0.4;
-let asciiGlobeTimer = null;
-let asciiBrainMasteryRatio = 0.44;
-
-function drawAsciiGlobeFrame() {
-  const el = document.getElementById('asciiGlobe');
-  if (!el) return;
-  if (window.TutorBrainAscii && typeof window.TutorBrainAscii.renderFrame === 'function') {
-    window.TutorBrainAscii.renderFrame(el, {
-      masteryRatio: asciiBrainMasteryRatio,
-      phase: asciiGlobeAngle
-    });
-  }
-}
-
-function startAsciiGlobeLoop(masteryRatio) {
-  if (typeof masteryRatio === 'number') asciiBrainMasteryRatio = masteryRatio;
-  clearInterval(asciiGlobeTimer);
-  drawAsciiGlobeFrame();
-  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
-  asciiGlobeTimer = setInterval(() => {
-    if (app.view !== 'attivita' || app.accountPage !== 'activity' || !document.getElementById('asciiGlobe')) {
-      clearInterval(asciiGlobeTimer);
-      return;
-    }
-    asciiGlobeAngle += 0.11;
-    drawAsciiGlobeFrame();
-  }, 95);
+  const preferred = app.profileBrainUnit || app.lastStudied?.courseId + ':' + app.lastStudied?.unitId;
+  renderProfileBrain(entries, Math.max(0, entries.findIndex(entry => entry.key === preferred)));
 }
 
 function renderProfileTimeline() {
@@ -8487,6 +8982,14 @@ window.addEventListener('DOMContentLoaded', () => {
         email: app.profileEmail,
         avatarChoice: app.profileAvatarChoice
       }),
+      getStudySummary: () => {
+        const units = Object.values(COURSES_DATA).flatMap(course => course.units);
+        return {
+          units: units.length,
+          verified: units.filter(unit => unit.stato === 'dimostrato').length,
+          latest: app.completedExams[0]
+        };
+      },
       onThemeChange: (theme, pos) => setTheme(theme, pos),
       onAuthenticated: (info) => {
         app.demoSessionOpen = true;
@@ -8503,6 +9006,12 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
   document.getElementById('fileFinder').addEventListener('close', releaseFinderObjectUrl);
+  document.getElementById('fileFinder').addEventListener('keydown', event => {
+    if ((event.ctrlKey || event.metaKey) && !event.altKey && event.code === 'KeyK') {
+      event.preventDefault();
+      document.getElementById('finderSearchInput').focus();
+    }
+  });
   const dz = document.getElementById('uploadDropzone');
   if (dz) {
     dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
@@ -8521,7 +9030,6 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 </script>
-<script src="knowledge-brain.js"></script>
 <script src="auth.js"></script>
 </body>
 </html>

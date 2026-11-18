@@ -1020,6 +1020,72 @@
 .note-page-heading { padding-bottom: 6px; }
 .note-page-heading .note-h1 { margin-bottom: 0; }
 #view-studio .pane[data-note-font="serif"] .note-sec { font: 700 15.5px/1.35 var(--font); }
+
+#view-studio .note-page :is(.note-edit-name, .note-block)[contenteditable] {
+  caret-color: var(--paper-ink);
+  cursor: text;
+}
+#view-studio .note-sec[contenteditable] {
+  border-radius: 5px;
+  margin-inline: -4px;
+  padding-inline: 4px;
+}
+#view-studio .note-page :is(.note-edit-name, .note-block)[contenteditable]:focus {
+  outline: 1px solid var(--paper-line);
+  outline-offset: 1px;
+}
+#view-studio .note-page .note-block[data-kind="bullet"] {
+  margin-left: 7px;
+  padding-left: 14px;
+}
+#view-studio .note-block[data-kind="bullet"]::after {
+  content: '•';
+  position: absolute;
+  inset: 7px auto auto 0;
+  color: var(--paper-mut);
+  pointer-events: none;
+}
+#view-studio .note-page .note-block[data-kind="code"],
+#view-studio .note-page .note-block[data-kind="formula"].note-block-editing {
+  font: 13px/1.65 var(--mono, monospace);
+  white-space: pre-wrap;
+  background: color-mix(in srgb, var(--paper-line) 38%, transparent);
+  min-height: 42px;
+}
+#view-studio .note-page.is-empty .note-block[data-block-id="note-first-block"] {
+  min-height: 194px;
+  margin-top: 19px;
+}
+#view-studio .note-page.is-empty .note-continue-writing { display: none; }
+#view-studio .note-page :is(.note-continue-writing, .note-inline-review) {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--paper-mut);
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font: 600 12px/1.35 var(--font);
+}
+#view-studio .note-page .note-continue-writing { margin: 16px 0 0 -8px; }
+#view-studio .note-page .note-inline-review {
+  display: flex;
+  width: max-content;
+  margin-left: auto;
+}
+#view-studio .note-page :is(.note-continue-writing, .note-inline-review):hover {
+  color: var(--paper-ink);
+  background: color-mix(in srgb, var(--paper-line) 38%, transparent);
+}
+#view-studio .note-page :is(.note-continue-writing, .note-inline-review) .ic { width: 14px; height: 14px; }
+#view-studio #noteMenuPop [data-note-write]:disabled { display: none; }
+#view-studio #noteMenuPop:not(:has([data-note-write]:enabled)) .note-menu-sep { display: none; }
+
+@media (max-width: 900px) {
+  #view-studio .note-page :is(.note-continue-writing, .note-inline-review) { min-height: 35px; }
+}
+
 .dock-btn.accent { gap: 4px; }
 
 #view-studio .paper-dock-wrap:not(.is-pinned) .paper-dock {

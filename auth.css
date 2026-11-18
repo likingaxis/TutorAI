@@ -4,6 +4,13 @@
    ============================================================================ */
 
 #tutorAuthGate {
+  --auth-canvas: color-mix(in srgb, var(--bg, #ececef) 90%, transparent);
+  --auth-paper: var(--card, #ffffff);
+  --auth-line: var(--line, #e5e5ea);
+  --auth-control: var(--surface, #f7f7f9);
+  --auth-segment: var(--sunken, #ededf1);
+  --auth-action: #1760e1;
+  --auth-action-end: #1768e7;
   position: fixed;
   inset: 0;
   z-index: 90;
@@ -11,14 +18,22 @@
   overflow-x: hidden;
   overscroll-behavior: contain;
   background:
-    radial-gradient(circle at 1px 1px, var(--dot, rgba(20, 20, 24, 0.04)) 1px, transparent 0) 0 0 / 24px 24px,
-    color-mix(in srgb, var(--bg, #ececef) 86%, transparent);
+    radial-gradient(circle at 1px 1px, var(--dot, rgba(20, 20, 24, 0.04)) 1px, transparent 1.3px) 0 0 / 20px 20px,
+    var(--auth-canvas);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   transition: opacity 0.24s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0s linear 0.24s;
+}
+
+:root[data-theme="light"] #tutorAuthGate {
+  --auth-canvas: #f6f4ef;
+  --auth-paper: #fffefb;
+  --auth-line: #e5e1d8;
+  --auth-control: #faf9f6;
+  --auth-segment: #f3f1ec;
 }
 
 #tutorAuthGate.is-open {
@@ -39,15 +54,16 @@
 
 .tutor-auth-card {
   position: relative;
-  width: min(1020px, 100%);
+  width: min(1200px, 100%);
   max-width: 100%;
+  min-height: 760px;
   display: grid;
-  grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.06fr);
-  background: var(--card, #ffffff);
+  grid-template-columns: minmax(0, 29fr) minmax(0, 31fr);
+  background: var(--auth-paper);
   color: var(--ink, #16161a);
-  border: 1px solid var(--line, #e5e5ea);
-  border-radius: 28px;
-  box-shadow: var(--sh-l, 0 18px 46px -12px rgba(20, 20, 28, 0.18));
+  border: 1px solid var(--auth-line);
+  border-radius: 32px;
+  box-shadow: 0 20px 52px -12px rgba(35, 32, 26, .18);
   overflow: hidden;
   transform: translateY(14px) scale(0.985);
   opacity: 0;
@@ -68,8 +84,8 @@
    ============================================================================ */
 .tutor-auth-showcase, .tutor-auth-embedded-art {
   --auth-wave-start: #1565f2;
-  --auth-wave-mid: #086bdb;
-  --auth-wave-end: #0a52bc;
+  --auth-wave-mid: #0a71e4;
+  --auth-wave-end: #2189fa;
   --auth-wave-spark: #86efc3;
 }
 :root[data-theme="sepia"] :is(.tutor-auth-showcase, .tutor-auth-embedded-art) {
@@ -88,8 +104,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 24px;
-  padding: clamp(22px, 3.2vw, 34px);
+  gap: 20px;
+  padding: clamp(22px, 2.6vw, 31px);
   color: var(--rail-ink, rgba(255, 255, 255, 0.92));
   min-width: 0;
   overflow: hidden;
@@ -108,6 +124,13 @@
   width: 100%;
   height: 100%;
   display: block;
+}
+
+.tutor-auth-wave-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255, 255, 255, .18) 1px, transparent 1.25px) center / 14px 14px;
 }
 
 .tutor-auth-wave-bg stop,
@@ -163,10 +186,19 @@
 }
 
 .tutor-auth-brand-name {
-  font-size: 16px;
-  font-weight: 800;
+  font-size: 18px;
+  font-weight: 750;
   letter-spacing: -0.025em;
   color: #ffffff;
+}
+.tutor-auth-brand-pill {
+  padding: 3px 9px;
+  border: 1px solid rgb(255 255 255 / .27);
+  border-radius: 999px;
+  background: rgb(255 255 255 / .13);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 650;
 }
 
 /* Subtle Theme Switcher Pill inside Showcase */
@@ -223,44 +255,46 @@
 
 .tutor-auth-showcase-hero {
   display: grid;
-  gap: 14px;
+  gap: 11px;
 }
 
 .tutor-auth-showcase-hero h1 {
   margin: 0;
-  font: 500 clamp(31px, 3.5vw, 47px) / 1.01 var(--serif, Georgia);
+  font: 600 clamp(29px, 3vw, 40px) / 1.08 var(--serif, Georgia);
   letter-spacing: -0.02em;
   color: #ffffff;
-  text-wrap: balance;
+  text-wrap: pretty;
   overflow-wrap: anywhere;
 }
 
 .tutor-auth-showcase-lead {
   margin: 0;
-  font-size: 13.5px;
+  font-size: 14px;
   line-height: 1.55;
   color: rgba(255, 255, 255, 0.88);
-  max-width: 38ch;
+  max-width: 47ch;
 }
 
 .tutor-auth-feature-pills {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  max-width: 440px;
+  margin-top: 3px;
 }
 
 .tutor-auth-feature-pill {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 11px;
+  padding: 7px 11px;
   border-radius: 999px;
   background: rgba(8, 18, 42, 0.24);
   border: 1px solid rgba(255, 255, 255, 0.22);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   color: #ffffff;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
 }
@@ -278,68 +312,83 @@
 
 .tutor-auth-book-preview {
   position: relative;
-  isolation: isolate;
   display: grid;
   place-items: center;
-  min-height: 170px;
-  width: min(300px, 100%);
-  align-self: center;
-  background: radial-gradient(circle at 1px 1px, rgb(255 255 255 / .25) 1px, transparent 1.5px) 0 0 / 14px 14px, rgb(255 255 255 / .07);
-  border: 1px solid rgb(255 255 255 / .23);
-  border-radius: 22px;
-}
-.tutor-auth-book-preview::before, .tutor-auth-book-sheet {
-  content: "";
-  position: absolute;
-  width: 104px;
-  height: 119px;
-  border-radius: 13px;
-}
-.tutor-auth-book-preview::before {
-  background: rgb(255 255 255 / .14);
-  border: 1px solid rgb(255 255 255 / .3);
-  transform: translate(28px, 5px) rotate(12deg);
-}
-.tutor-auth-book-sheet {
-  z-index: 1;
-  transform: translateX(-14px) rotate(-9deg);
-  box-shadow: 0 10px 14px rgb(12 33 86 / .25);
-  background: linear-gradient(#1565f2, #1565f2) 16px 17px / 55px 6px no-repeat,
-    linear-gradient(#cbd4eb, #cbd4eb) 16px 36px / 70px 3px no-repeat,
-    linear-gradient(#cbd4eb, #cbd4eb) 16px 46px / 63px 3px no-repeat,
-    linear-gradient(#cbd4eb, #cbd4eb) 16px 56px / 66px 3px no-repeat,
-    linear-gradient(#41c489, #41c489) 16px 81px / 35px 5px no-repeat,
-    #fffaf1;
+  min-height: 224px;
 }
 .tutor-auth-book-preview img {
+  display: block;
+  width: min(500px, 100%);
+  height: auto;
+}
+.tutor-auth-scene-card,
+.tutor-auth-scene-formula {
   position: absolute;
-  z-index: 2;
-  width: 112px;
-  height: 112px;
-  object-fit: contain;
-  transform: translate(57px, 28px);
-  filter: drop-shadow(0 5px 5px rgb(17 36 97 / .24));
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.tutor-auth-scene-card {
+  background: #fffefb;
+  color: #182a48;
+  padding: 9px 11px;
+  border-radius: 16px;
+  box-shadow: 0 9px 19px rgb(6 38 100 / .26);
+}
+.tutor-auth-scene-mastery { inset: 5px auto auto 0; }
+.tutor-auth-scene-result { inset: auto 0 38px auto; color: #1c6b48; }
+.tutor-auth-scene-card b, .tutor-auth-scene-card small { display: block; }
+.tutor-auth-scene-card b { font: 700 11px/1.25 var(--mono, monospace); }
+.tutor-auth-scene-card small { margin-top: 3px; font-size: 10px; color: #687187; }
+.tutor-auth-scene-icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: 10px;
+  color: #fff;
+  background: linear-gradient(135deg, #2d8dff, #1352d7);
+}
+.tutor-auth-scene-icon svg {
+  width: 19px;
+  height: 19px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.65;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.tutor-auth-scene-result .tutor-auth-scene-icon { width: 26px; height: 26px; border-radius: 50%; color: #217c54; background: #e6f5eb; }
+.tutor-auth-scene-result .tutor-auth-scene-icon svg { width: 16px; height: 16px; }
+.tutor-auth-scene-formula {
+  inset: auto auto 18px 9px;
+  padding: 8px 20px;
+  color: #fff;
+  background: rgb(255 255 255 / .14);
+  border: 1px solid rgb(255 255 255 / .36);
+  border-radius: 999px;
+  font: 700 11px/1.2 var(--mono, monospace);
 }
 
 /* Avatar Strip Preview Card */
 .tutor-auth-avatar-card {
   display: flex;
   flex-direction: column;
-  gap: 11px;
+  gap: 12px;
   padding: 14px 16px;
-  border-radius: 18px;
-  background: rgba(8, 18, 42, 0.26);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 21px;
+  background: rgba(255, 255, 255, .12);
+  border: 1px solid rgba(255, 255, 255, .27);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
 
 .tutor-auth-avatar-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
   gap: 12px;
-  flex-wrap: wrap;
 }
 
 .tutor-auth-avatar-stack {
@@ -349,15 +398,13 @@
 
 .tutor-auth-avatar-chip {
   position: relative;
-  width: 38px;
-  height: 38px;
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
   border: 2px solid rgba(255, 255, 255, 0.88);
   background: rgba(255, 255, 255, 0.2);
   overflow: hidden;
-  margin-left: -10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.22);
-  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.25, 1);
+  margin-left: -5px;
   display: grid;
   place-items: center;
   color: #ffffff;
@@ -369,22 +416,34 @@
   margin-left: 0;
 }
 
-.tutor-auth-avatar-stack:hover .tutor-auth-avatar-chip {
-  transform: translateY(-2px);
-}
-
 .tutor-auth-avatar-chip img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-.tutor-auth-avatar-chip.is-active-choice {
-  outline: 2px solid #ffd147;
-  outline-offset: 1px;
-  z-index: 2;
+.tutor-auth-avatar-main { background: linear-gradient(145deg, #328f66, #166448); font: 650 16px/1 var(--serif, Georgia); }
+.tutor-auth-emblem.is-blue { background: #e9f1ff; color: #1565f2; }
+.tutor-auth-emblem.is-amber { background: #fff0d7; color: #a56810; }
+.tutor-auth-emblem.is-mint { background: #e5f7ee; color: #217c54; }
+.tutor-auth-emblem svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.tutor-auth-emblem circle { fill: currentColor; }
+.tutor-auth-avatar-caption { color: rgb(255 255 255 / .91); font-size: 11px; }
+.tutor-auth-avatar-return {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fffefb;
+  color: #1552cc;
+  font-size: 18px;
+  font-weight: 700;
 }
+.tutor-auth-avatar-return:hover { background: #e9f1ff; }
 
 .tutor-auth-saved-meta {
   display: grid;
@@ -411,10 +470,9 @@
 .tutor-auth-panel {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 16px;
-  padding: clamp(20px, 3vw, 32px);
-  background: var(--card, #ffffff);
+  gap: 18px;
+  padding: 31px clamp(24px, 3.82vw, 55px) 29px;
+  background: var(--auth-paper);
   min-width: 0;
 }
 
@@ -430,10 +488,11 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 10px 5px 8px;
+  min-height: 34px;
+  padding: 5px 14px 5px 11px;
   border-radius: 999px;
-  border: 1px solid transparent;
-  background: transparent;
+  border: 1px solid var(--auth-line);
+  background: var(--auth-control);
   color: var(--mut, #6c6c77);
   font-size: 12.5px;
   font-weight: 600;
@@ -451,6 +510,7 @@
   gap: 6px;
   padding: 4px 10px;
   border-radius: 999px;
+  border: 1px solid var(--auth-line);
   background: var(--blue-s, #eef3fe);
   color: var(--blue-i, #1e49a8);
   font-size: 11px;
@@ -465,38 +525,13 @@
   flex: none;
 }
 
-.tutor-auth-proto-banner {
-  display: flex;
-  align-items: flex-start;
-  gap: 9px;
-  padding: 9px 12px;
-  border-radius: 13px;
-  background: var(--surface, #f7f7f9);
-  border: 1px solid var(--line, #e5e5ea);
-  color: var(--ink-2, #46464f);
-  font-size: 12px;
-  line-height: 1.42;
-}
-
-.tutor-auth-proto-banner svg {
-  width: 15px;
-  height: 15px;
-  stroke: var(--blue, #2f65d8);
-  fill: none;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  flex: none;
-  margin-top: 1px;
-}
-
 /* Segmented Pill Switcher (Accedi | Registrati) */
 .tutor-auth-seg {
   position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  background: var(--sunken, #ededf1);
-  border: 1px solid var(--line, #e5e5ea);
+  background: var(--auth-segment);
+  border: 1px solid var(--auth-line);
   border-radius: 999px;
   padding: 4px;
   gap: 4px;
@@ -539,7 +574,7 @@
 .tutor-auth-form-head {
   display: grid;
   gap: 4px;
-  margin-bottom: 14px;
+  margin: 5px 0 1px;
 }
 
 .tutor-auth-form-head h2 {
@@ -551,14 +586,14 @@
 
 .tutor-auth-form-head p {
   margin: 0;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--mut, #6c6c77);
   line-height: 1.45;
 }
 
 .tutor-auth-tabpanel {
   display: grid;
-  gap: 12px;
+  gap: 14px;
   animation: tutor-auth-panel-in 0.22s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
@@ -586,6 +621,7 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
+  align-items: start;
 }
 
 .tutor-auth-field {
@@ -603,6 +639,7 @@
   justify-content: space-between;
   gap: 8px;
 }
+.tutor-auth-field label.tutor-auth-check { justify-content: flex-start; }
 
 .tutor-auth-field-opt {
   font-size: 11px;
@@ -616,13 +653,40 @@
   align-items: center;
 }
 
+.tutor-auth-input-wrap.has-leading-icon > svg {
+  position: absolute;
+  left: 14px;
+  width: 17px;
+  height: 17px;
+  stroke: var(--mut, #6c6c77);
+  fill: none;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+.tutor-auth-input-wrap.has-leading-icon .tutor-auth-input { padding-inline-start: 41px; }
+.tutor-auth-input-wrap:has(.tutor-auth-email-format:not([hidden])) .tutor-auth-input { padding-inline-end: 36px; }
+.tutor-auth-email-format:not([hidden]) {
+  position: absolute;
+  inset-inline-end: 13px;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--green-s);
+  color: var(--green-i);
+}
+.tutor-auth-email-format svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
 .tutor-auth-input {
   width: 100%;
-  min-height: 42px;
+  min-height: 46px;
   padding: 9px 12px;
-  border-radius: 12px;
-  border: 1.5px solid var(--line, #e5e5ea);
-  background: var(--surface, #f7f7f9);
+  border-radius: 14px;
+  border: 1px solid var(--auth-line);
+  background: var(--auth-control);
   color: var(--ink, #16161a);
   font: 500 14px / 1.4 var(--font);
   transition: border-color 0.16s ease, background-color 0.16s ease, box-shadow 0.16s ease;
@@ -863,7 +927,7 @@
   color: var(--mut, #6c6c77);
   font-size: 11.5px;
   font-weight: 600;
-  margin: 2px 0;
+  margin: 2px 0 1px;
 }
 
 .tutor-auth-divider::before,
@@ -871,22 +935,22 @@
   content: "";
   flex: 1;
   height: 1px;
-  background: var(--line, #e5e5ea);
+  background: var(--auth-line);
 }
 
 /* Quick Entry Buttons */
 .tutor-auth-quick-stack {
   display: grid;
-  gap: 8px;
+  gap: 11px;
 }
 
 .tutor-auth-quick-btn {
   width: 100%;
-  min-height: 46px;
-  padding: 7px 12px;
-  border-radius: 14px;
-  border: 1px solid var(--line, #e5e5ea);
-  background: var(--surface, #f7f7f9);
+  min-height: 54px;
+  padding: 8px 13px;
+  border-radius: 18px;
+  border: 1px solid var(--auth-line);
+  background: var(--auth-paper);
   color: var(--ink, #16161a);
   display: flex;
   align-items: center;
@@ -896,6 +960,51 @@
   cursor: pointer;
   transition: border-color 0.16s ease, background-color 0.16s ease, transform 0.14s ease, box-shadow 0.16s ease;
 }
+
+#tutorAuthGate .tutor-auth-quick-primary {
+  min-height: 64px;
+  padding-inline: 14px;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  background: linear-gradient(120deg, var(--auth-action-end), var(--auth-action));
+  color: #fff;
+  box-shadow: 0 10px 20px -10px rgb(16 76 209 / .58);
+}
+#tutorAuthGate .tutor-auth-quick-primary:hover:not(:disabled) {
+  border-color: transparent;
+  box-shadow: 0 11px 24px -9px rgb(16 76 209 / .64);
+  filter: brightness(1.08);
+}
+.tutor-auth-quick-primary .tutor-auth-quick-left { gap: 13px; }
+#tutorAuthGate .tutor-auth-quick-primary .tutor-auth-quick-av {
+  width: 37px;
+  height: 37px;
+  color: #fff;
+  background: linear-gradient(145deg, #328f66, #166448);
+  border: 2px solid #fff;
+  font: 650 18px/1 var(--serif, Georgia);
+}
+.tutor-auth-quick-primary .tutor-auth-quick-copy b { color: #fff; font-size: 15px; }
+.tutor-auth-quick-primary .tutor-auth-quick-copy small { color: #eef4ff; }
+.tutor-auth-quick-primary .tutor-auth-quick-arrow {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / .16);
+  color: #fff;
+  font-size: 19px;
+}
+#tutorAuthGate .tutor-auth-submit-secondary:not(.is-success) {
+  min-height: 47px;
+  border: 1px solid color-mix(in srgb, var(--blue) 33%, var(--auth-line));
+  border-radius: 15px;
+  background: var(--blue-s);
+  color: var(--blue-i);
+  box-shadow: none;
+}
+.tutor-auth-submit-secondary .tutor-auth-spinner { border-color: color-mix(in srgb, currentColor 26%, transparent); border-top-color: currentColor; }
 
 .tutor-auth-quick-btn:hover:not(:disabled) {
   background: var(--card, #ffffff);
@@ -1007,20 +1116,24 @@
   justify-content: space-between;
   gap: 10px;
   flex-wrap: wrap;
-  padding-top: 10px;
-  border-top: 1px solid var(--line, #e5e5ea);
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px solid var(--auth-line);
   font-size: 12px;
   color: var(--mut, #6c6c77);
 }
+.tutor-auth-storage-note { display: inline-flex; align-items: center; gap: 6px; }
+.tutor-auth-storage-note svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.7; }
 
 .tutor-auth-guest-btn {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 5px 10px;
+  min-height: 35px;
+  padding: 6px 11px;
   border-radius: 999px;
-  border: 1px solid var(--line, #e5e5ea);
-  background: var(--surface, #f7f7f9);
+  border: 1px solid var(--auth-line);
+  background: var(--auth-control);
   color: var(--ink-2, #46464f);
   font-size: 12px;
   font-weight: 600;
@@ -1064,19 +1177,17 @@
 .tutor-auth-embedded {
   display: grid;
   grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-  gap: clamp(18px, 3vw, 32px);
-  padding: clamp(18px, 3vw, 28px);
-  border-radius: 24px;
+  border-radius: 28px;
   border: 1px solid var(--line, #e5e5ea);
   background: var(--card, #ffffff);
   box-shadow: var(--sh-s, 0 1px 3px rgba(20, 20, 28, 0.05));
+  overflow: hidden;
   margin-top: 14px;
 }
 
 .tutor-auth-embedded-art {
   position: relative;
-  border-radius: 18px;
-  padding: 20px;
+  padding: clamp(18px, 3vw, 28px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -1087,6 +1198,8 @@
   background: radial-gradient(circle at 1px 1px, rgb(255 255 255 / .16) 1px, transparent 1.5px) 0 0 / 13px 13px,
     linear-gradient(130deg, var(--auth-wave-start), var(--auth-wave-mid) 57%, var(--auth-wave-end));
 }
+
+.tutor-auth-embedded-notebook { width: min(260px, 100%); height: auto; align-self: center; margin: -8px 0; }
 
 .tutor-auth-embedded-art::after {
   content: "";
@@ -1140,7 +1253,17 @@
   display: grid;
   align-content: center;
   gap: 12px;
+  padding: clamp(20px, 4vw, 44px);
   min-width: 0;
+}
+.tutor-auth-embedded-mode {
+  justify-self: start;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: var(--blue-s);
+  color: var(--blue-i);
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .tutor-auth-embedded-body h1,
@@ -1212,11 +1335,6 @@
   background: var(--amber, #af730a);
 }
 
-:root[data-theme="sepia"] .tutor-auth-proto-banner {
-  background: var(--card, #f9f3e6);
-  border-color: var(--paper-line, #dfd2bc);
-}
-
 :root[data-theme="sepia"] .tutor-auth-seg {
   border-color: var(--paper-line, #dfd2bc);
 }
@@ -1279,10 +1397,6 @@
 
 :root[data-theme="dark"] .tutor-auth-proto-pill {
   border: 1px solid rgba(110, 149, 255, 0.3);
-}
-
-:root[data-theme="dark"] .tutor-auth-proto-banner {
-  border-color: color-mix(in srgb, var(--blue, #6e95ff) 22%, var(--line, #262730));
 }
 
 :root[data-theme="dark"] .tutor-auth-seg-knob {
@@ -1362,6 +1476,8 @@
   outline-color: #ffffff !important;
 }
 
+#tutorAuthGate .tutor-auth-form-head h2:focus { outline: none; }
+
 @media (max-width: 860px) {
   .tutor-auth-stage {
     padding: 10px;
@@ -1370,6 +1486,7 @@
 
   .tutor-auth-card {
     grid-template-columns: minmax(0, 1fr);
+    min-height: auto;
     border-radius: 22px;
   }
 
@@ -1378,6 +1495,7 @@
     gap: 16px;
   }
 
+  .tutor-auth-title-break,
   .tutor-auth-book-preview,
   .tutor-auth-avatar-card {
     display: none;
@@ -1418,6 +1536,9 @@
   }
 
   .tutor-auth-feature-pills { display: none; }
+  .tutor-auth-brand-pill,
+  .tutor-auth-embedded-notebook { display: none; }
+  .tutor-auth-storage-note { font-size: 11px; }
 
   .tutor-auth-toast {
     left: 12px;

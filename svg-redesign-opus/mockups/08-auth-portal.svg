@@ -1,0 +1,283 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1440" height="900" viewBox="0 0 1440 900">
+  <title>TutorAI · Accedi / Registrati (redesign)</title>
+  <style>
+    .sans{font-family:Inter,'Segoe UI',system-ui,-apple-system,sans-serif}
+    .serif{font-family:Newsreader,'Source Serif 4','Iowan Old Style',Georgia,serif}
+    .mono{font-family:'JetBrains Mono','SFMono-Regular',Consolas,monospace}
+  </style>
+  <defs>
+    <linearGradient id="cobalt" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2a8bff"/><stop offset="1" stop-color="#1565f2"/>
+    </linearGradient>
+    <linearGradient id="heroG" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1565f2"/><stop offset=".58" stop-color="#0c7bf0"/><stop offset="1" stop-color="#2994ff"/>
+    </linearGradient>
+    <linearGradient id="brainBadgeG" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2c8fff"/><stop offset="1" stop-color="#1458e0"/>
+    </linearGradient>
+    <linearGradient id="mintG" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#48c788"/><stop offset="1" stop-color="#248a5c"/>
+    </linearGradient>
+    <pattern id="dotsPaper" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.05" fill="#8d8678" fill-opacity=".22"/>
+    </pattern>
+    <pattern id="dotsW" width="14" height="14" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#ffffff" fill-opacity=".16"/>
+    </pattern>
+    <filter id="shCard" x="-6%" y="-6%" width="112%" height="118%">
+      <feDropShadow dx="0" dy="22" stdDeviation="28" flood-color="#23201a" flood-opacity=".11"/>
+    </filter>
+    <filter id="shS" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#23201a" flood-opacity=".08"/>
+    </filter>
+    <filter id="shF" x="-20%" y="-20%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#06225e" flood-opacity=".26"/>
+    </filter>
+    <filter id="shCta" x="-10%" y="-20%" width="120%" height="180%">
+      <feDropShadow dx="0" dy="11" stdDeviation="12" flood-color="#1565f2" flood-opacity=".28"/>
+    </filter>
+    <clipPath id="cardClip"><rect x="120" y="70" width="1200" height="760" rx="32"/></clipPath>
+    <path id="spk" d="M0 -10C1.4 -3.2 3.2 -1.4 10 0C3.2 1.4 1.4 3.2 0 10C-1.4 3.2 -3.2 1.4 -10 0C-3.2 -1.4 -1.4 -3.2 0 -10Z"/>
+  </defs>
+
+  <!-- ============ WARM CRAFT PAPER CANVAS ============ -->
+  <rect width="1440" height="900" fill="#f6f4ef"/>
+  <rect width="1440" height="900" fill="url(#dotsPaper)"/>
+
+  <!-- ============ MAIN SPLIT CARD (DOUBLE-FRAME CRAFT FEEL) ============ -->
+  <rect x="120" y="70" width="1200" height="760" rx="32" fill="#fffefb" stroke="#e5e1d8" stroke-width="1" filter="url(#shCard)"/>
+
+  <!-- ============ LEFT: COBALT SHOWCASE ============ -->
+  <g clip-path="url(#cardClip)" class="sans">
+    <rect x="120" y="70" width="580" height="760" fill="url(#heroG)"/>
+    <rect x="120" y="70" width="580" height="760" fill="url(#dotsW)"/>
+    <path d="M120 680 C300 634 480 714 700 652 V830 H120Z" fill="#ffffff" fill-opacity=".06"/>
+    <path d="M120 416 C260 374 430 456 700 392" fill="none" stroke="#ffffff" stroke-opacity=".22" stroke-width="1.4"/>
+    <path d="M120 434 C280 392 440 476 700 412" fill="none" stroke="#8af5c4" stroke-opacity=".44" stroke-width="1.4"/>
+    <circle cx="690" cy="80" r="122" fill="#ffffff" fill-opacity=".06"/>
+
+    <!-- brand -->
+    <rect x="152" y="102" width="40" height="40" rx="12" fill="#ffffff" filter="url(#shF)"/>
+    <rect x="171" y="111" width="14" height="19" rx="3.5" fill="#eef3fb" stroke="#d3ddec"/>
+    <rect x="159" y="112" width="15" height="20" rx="4" fill="url(#cobalt)" transform="rotate(-8 166.5 122)"/>
+    <use href="#spk" transform="translate(166.5 122) scale(.42)" fill="#ffffff"/>
+    <circle cx="183" cy="133" r="4.4" fill="#48c788" stroke="#ffffff" stroke-width="1.3"/>
+    <path d="M181.2 133 l1.2 1.2 l2.3 -2.4" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="204" y="128" font-size="18" font-weight="700" fill="#ffffff">TutorAI</text>
+    <rect x="278" y="111" width="76" height="22" rx="11" fill="#ffffff" fill-opacity=".14" stroke="#ffffff" stroke-opacity=".3"/>
+    <text x="316" y="126" text-anchor="middle" font-size="11" font-weight="600" fill="#ffffff">Università</text>
+
+    <!-- theme toggle -->
+    <rect x="456" y="104" width="212" height="36" rx="18" fill="#08306f" fill-opacity=".35" stroke="#ffffff" stroke-opacity=".2"/>
+    <rect x="460" y="108" width="74" height="28" rx="14" fill="#ffffff"/>
+    <circle cx="476" cy="122" r="3" fill="#1565f2"/>
+    <path d="M476 116.2 v1.4 M476 126.4 v1.4 M470.2 122 h1.4 M480.4 122 h1.4 M471.9 117.9 l1 1 M479.1 125.1 l1 1 M471.9 126.1 l1 -1 M479.1 118.9 l1 -1" stroke="#1565f2" stroke-width="1.3" stroke-linecap="round"/>
+    <text x="487" y="126.5" font-size="12" font-weight="700" fill="#1565f2">Chiaro</text>
+    <circle cx="550" cy="122" r="4" fill="#ecdcb6"/>
+    <text x="560" y="126.5" font-size="12" font-weight="600" fill="#ffffff">Seppia</text>
+    <circle cx="615" cy="122" r="4" fill="#14171f" stroke="#ffffff" stroke-opacity=".55"/>
+    <text x="625" y="126.5" font-size="12" font-weight="600" fill="#ffffff">Scuro</text>
+
+    <!-- expressive composition: AI notebook + pencil orbit -->
+    <ellipse cx="410" cy="284" rx="216" ry="72" fill="none" stroke="#ffffff" stroke-opacity=".32" stroke-width="1.3" stroke-dasharray="2 6" transform="rotate(-12 410 284)"/>
+    <ellipse cx="410" cy="284" rx="156" ry="114" fill="none" stroke="#8af5c4" stroke-opacity=".38" stroke-width="1.2" transform="rotate(24 410 284)"/>
+    <circle cx="216" cy="320" r="4.8" fill="#8af5c4"/>
+    <circle cx="609" cy="244" r="4" fill="#ffd27a"/>
+
+    <!-- open Lamport notebook (single clean P1/P2 timeline) -->
+    <path d="M274 242 Q342 224 410 244 Q478 224 546 242 V360 Q478 342 410 362 Q342 342 274 360Z" fill="#08306f" fill-opacity=".44"/>
+    <path d="M286 230 Q344 214 404 232 V346 Q344 330 286 346Z" fill="#ffffff"/>
+    <path d="M416 232 Q476 214 534 230 V346 Q476 330 416 346Z" fill="#f3f7ff"/>
+    <path d="M404 232 Q410 228 416 232 V346 Q410 342 404 346Z" fill="#c9dcff"/>
+    <text x="302" y="256" class="serif" font-size="14" font-weight="600" fill="#14171f">Lamport</text>
+    <rect x="300" y="275" width="58" height="11" rx="3" fill="#8af5c4" fill-opacity=".6"/>
+    <path d="M302 281 h84 M302 299 h74 M302 317 h82 M302 332 h50" stroke="#c9d6ee" stroke-width="2.2" stroke-linecap="round"/>
+    <text x="428" y="262" class="mono" font-size="9" font-weight="700" fill="#1565f2">P₁</text>
+    <text x="428" y="306" class="mono" font-size="9" font-weight="700" fill="#1565f2">P₂</text>
+    <path d="M446 258 H520 M446 302 H520" stroke="#9fb4da" stroke-width="1.6" stroke-linecap="round"/>
+    <path d="M462 258 L496 300" stroke="#1565f2" stroke-width="1.6" stroke-linecap="round"/>
+    <circle cx="462" cy="258" r="4.5" fill="#1565f2"/>
+    <circle cx="496" cy="258" r="4.5" fill="#ffffff" stroke="#1565f2" stroke-width="1.6"/>
+    <circle cx="496" cy="302" r="4.5" fill="#48c788"/>
+    <circle cx="470" cy="302" r="4.5" fill="#ffffff" stroke="#1565f2" stroke-width="1.6"/>
+    <path d="M440 326 h56" stroke="#c9d6ee" stroke-width="2.2" stroke-linecap="round"/>
+
+    <!-- pencil -->
+    <g transform="translate(566 164) rotate(39)">
+      <rect x="-7" y="-22" width="14" height="11" rx="3.5" fill="#ff9a9a"/>
+      <rect x="-7" y="-12" width="14" height="10" fill="#dfe5ef"/>
+      <rect x="-7" y="-2" width="14" height="78" fill="#ffb547"/>
+      <rect x="-7" y="-2" width="5" height="78" fill="#ffc977"/>
+      <path d="M-7 76 L7 76 L0 94Z" fill="#f6dcb4"/>
+      <path d="M-2.6 87 L2.6 87 L0 94Z" fill="#14171f"/>
+    </g>
+    <use href="#spk" transform="translate(588 206) scale(.88)" fill="#8af5c4"/>
+    <use href="#spk" transform="translate(338 194) scale(.54)" fill="#ffffff"/>
+    <use href="#spk" transform="translate(618 368) scale(.44)" fill="#ffffff" fill-opacity=".82"/>
+
+    <!-- floating card top-left: Knowledge Brain / Mastery (distinct from Lamport notebook) -->
+    <rect x="152" y="160" width="166" height="56" rx="16" fill="#ffffff" filter="url(#shF)"/>
+    <rect x="162" y="170" width="36" height="36" rx="11" fill="url(#brainBadgeG)"/>
+    <!-- stylized two-hemisphere brain + neural spark nodes -->
+    <g fill="none" stroke="#ffffff" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M179.5 180.5 c-2.4 -1.8 -6 -0.8 -6.8 1.9 c-2.2 0.8 -3.1 3.6 -1.8 5.6 c-1.2 2.2 0.2 5.2 2.8 5.6 c1 2.1 4.2 2.4 5.8 0.8"/>
+      <path d="M180.5 180.5 c2.4 -1.8 6 -0.8 6.8 1.9 c2.2 0.8 3.1 3.6 1.8 5.6 c1.2 2.2 -0.2 5.2 -2.8 5.6 c-1 2.1 -4.2 2.4 -5.8 0.8"/>
+      <path d="M180 180.2 v14.8" stroke-opacity=".55" stroke-width="1.2"/>
+      <path d="M174.5 186.5 q2.2 1.2 4.2 -0.4 M185.5 189.2 q-2.2 -1.2 -4.2 0.4" stroke-width="1.2" stroke-opacity=".85"/>
+    </g>
+    <circle cx="174.5" cy="184" r="1.9" fill="#8af5c4"/>
+    <circle cx="185.5" cy="186" r="1.9" fill="#8af5c4"/>
+    <circle cx="180" cy="191.5" r="1.8" fill="#ffd27a"/>
+    <text x="208" y="185" class="mono" font-size="11" font-weight="700" fill="#14171f">4/9 verificate</text>
+    <text x="208" y="202" font-size="10.5" fill="#6b7280">Knowledge Brain</text>
+
+    <!-- floating card right: Verifica oggi -->
+    <rect x="536" y="302" width="138" height="54" rx="15" fill="#ffffff" filter="url(#shF)"/>
+    <circle cx="560" cy="329" r="11.5" fill="#e6f5ec"/>
+    <path d="M555 329 l3.4 3.4 l6.6 -7" fill="none" stroke="#248a5c" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="580" y="325" class="mono" font-size="11" font-weight="700" fill="#1d6b47">2/2 corrette</text>
+    <text x="580" y="342" font-size="10.5" fill="#6b7280">Verifica oggi</text>
+
+    <!-- floating chip bottom-left: formula -->
+    <rect x="162" y="344" width="96" height="34" rx="17" fill="#ffffff" fill-opacity=".15" stroke="#ffffff" stroke-opacity=".4"/>
+    <text x="210" y="365.5" text-anchor="middle" class="mono" font-size="12" font-weight="700" fill="#ffffff">C(e)+1</text>
+
+    <!-- editorial headline (gracefully tightened vertical rhythm) -->
+    <text x="152" y="462" class="serif" font-size="38" font-weight="600" fill="#ffffff" letter-spacing="-.3">Il tuo studio universitario,</text>
+    <text x="152" y="506" class="serif" font-size="38" font-weight="600" fill="#ffffff" letter-spacing="-.3">in un unico spazio</text>
+    <text x="152" y="542" font-size="15" fill="#ffffff" fill-opacity=".86">Lezioni strutturate dalle tue dispense, appunti</text>
+    <text x="152" y="564" font-size="15" fill="#ffffff" fill-opacity=".86">in stile quaderno e richiamo attivo guidato.</text>
+
+    <!-- 3 concise value pills -->
+    <rect x="152" y="588" width="198" height="34" rx="17" fill="#08306f" fill-opacity=".36" stroke="#ffffff" stroke-opacity=".26"/>
+    <rect x="167" y="598" width="12" height="15" rx="2.5" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+    <path d="M171 603 h5 M171 607 h4" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round"/>
+    <text x="188" y="609.5" font-size="13" font-weight="600" fill="#ffffff">Appunti stile Obsidian</text>
+
+    <rect x="360" y="588" width="204" height="34" rx="17" fill="#08306f" fill-opacity=".36" stroke="#ffffff" stroke-opacity=".26"/>
+    <use href="#spk" transform="translate(379 605) scale(.6)" fill="#8af5c4"/>
+    <text x="394" y="609.5" font-size="13" font-weight="600" fill="#ffffff">Spiegazioni dalle fonti</text>
+
+    <rect x="152" y="630" width="148" height="34" rx="17" fill="#08306f" fill-opacity=".36" stroke="#ffffff" stroke-opacity=".26"/>
+    <circle cx="173" cy="647" r="7" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+    <path d="M170 647 l2.2 2.2 l4 -4.4" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="188" y="651.5" font-size="13" font-weight="600" fill="#ffffff">Ripasso attivo</text>
+
+    <!-- quick-return profile strip (generous breathing room + TutorAI STEM emblems) -->
+    <rect x="152" y="700" width="516" height="98" rx="22" fill="#ffffff" fill-opacity=".14" stroke="#ffffff" stroke-opacity=".3"/>
+
+    <!-- emblem 3: leaf / knowledge brain (mint) -->
+    <circle cx="276" cy="736" r="16.5" fill="#e6f6ee" stroke="#ffffff" stroke-width="2.3"/>
+    <path d="M276 728.5 c5.4 1.6 7.4 7.4 3.4 13 c-5.4 -1 -8.4 -6.6 -3.4 -13z" fill="#48c788" stroke="#1f8558" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M276 742.5 v-9.5 M276 736.5 l3 -2.2" fill="none" stroke="#1f8558" stroke-width="1.2" stroke-linecap="round"/>
+    <circle cx="279.8" cy="733.2" r="1.4" fill="#ffffff"/>
+
+    <!-- emblem 2: code / algorithm wave (warm amber) -->
+    <circle cx="246" cy="736" r="16.5" fill="#fdf2dc" stroke="#ffffff" stroke-width="2.3"/>
+    <path d="M241 732.5 l-3.2 3.5 l3.2 3.5 M251 732.5 l3.2 3.5 l-3.2 3.5 M247.4 730.8 l-2.8 10.4" fill="none" stroke="#b86b00" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- emblem 1: distributed network graph (sky cobalt) -->
+    <circle cx="216" cy="736" r="16.5" fill="#e7f0ff" stroke="#ffffff" stroke-width="2.3"/>
+    <path d="M211.5 739.5 L216 731 L221.5 738.5 L211.5 739.5" fill="none" stroke="#1565f2" stroke-width="1.35" stroke-linejoin="round"/>
+    <circle cx="216" cy="731" r="2.6" fill="#1565f2"/>
+    <circle cx="211.5" cy="739.5" r="2.6" fill="#1565f2"/>
+    <circle cx="221.5" cy="738.5" r="2.6" fill="#248a5c"/>
+
+    <!-- primary student avatar L -->
+    <circle cx="186" cy="736" r="17" fill="url(#mintG)" stroke="#ffffff" stroke-width="2.4"/>
+    <text x="186" y="742" text-anchor="middle" class="serif" font-size="16" font-weight="600" fill="#ffffff">L</text>
+
+    <text x="308" y="733" font-size="14.5" font-weight="700" fill="#ffffff">Luca · Profilo salvato</text>
+    <text x="308" y="751" font-size="12" fill="#ffffff" fill-opacity=".82">Ingegneria Informatica · 3 corsi · 18 appunti</text>
+    <circle cx="636" cy="736" r="16" fill="#ffffff"/>
+    <path d="M629 736 h13 M637.5 731.5 l4.5 4.5 l-4.5 4.5" fill="none" stroke="#1565f2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="172" y="782" font-size="11.5" fill="#ffffff" fill-opacity=".76">Corsi, appunti e verifiche restano pronti al tuo rientro.</text>
+  </g>
+
+  <!-- ============ RIGHT: AUTH FORM ============ -->
+  <g class="sans">
+    <!-- Craft pill back button + Demo locale chip -->
+    <rect x="756" y="102" width="172" height="34" rx="17" fill="#faf9f6" stroke="#e4e0d8"/>
+    <path d="M782 119 h-11 M775.5 114.5 l-4.5 4.5 l4.5 4.5" fill="none" stroke="#4b5364" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="792" y="123.5" font-size="12.5" font-weight="600" fill="#3a4152">Torna all'anteprima</text>
+
+    <rect x="1156" y="105" width="108" height="28" rx="14" fill="#eef4ff" stroke="#dce8ff"/>
+    <circle cx="1172" cy="119" r="3.5" fill="#1565f2"/>
+    <text x="1182" y="123" font-size="11.5" font-weight="600" fill="#1565f2">Demo locale</text>
+
+    <!-- segmented toggle -->
+    <rect x="756" y="156" width="508" height="46" rx="23" fill="#f3f1ec" stroke="#e8e4dc"/>
+    <rect x="760" y="160" width="250" height="38" rx="19" fill="#ffffff" filter="url(#shS)"/>
+    <text x="885" y="183.5" text-anchor="middle" font-size="14" font-weight="700" fill="#14171f">Accedi</text>
+    <text x="1135" y="183.5" text-anchor="middle" font-size="14" font-weight="600" fill="#767c8a">Registrati</text>
+
+    <!-- editorial title -->
+    <text x="756" y="248" class="serif" font-size="33" font-weight="600" fill="#14171f" letter-spacing="-.3">Bentornato su TutorAI</text>
+    <text x="756" y="276" font-size="14" fill="#686e7c">Riprendi corsi, appunti e quiz senza perdere i progressi.</text>
+
+    <!-- primary CTA -->
+    <rect x="756" y="298" width="508" height="64" rx="20" fill="url(#cobalt)" filter="url(#shCta)"/>
+    <circle cx="790" cy="330" r="18" fill="url(#mintG)" stroke="#ffffff" stroke-width="2.4"/>
+    <text x="790" y="336" text-anchor="middle" class="serif" font-size="17" font-weight="600" fill="#ffffff">L</text>
+    <text x="822" y="325" font-size="15.5" font-weight="700" fill="#ffffff">Entra subito come Luca</text>
+    <text x="822" y="344" font-size="12" fill="#ffffff" fill-opacity=".84">Ingegneria Informatica · Profilo salvato</text>
+    <circle cx="1230" cy="330" r="17" fill="#ffffff" fill-opacity=".18"/>
+    <path d="M1223 330 h13 M1231.5 325.5 l4.5 4.5 l-4.5 4.5" fill="none" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- SSO -->
+    <rect x="756" y="374" width="508" height="54" rx="18" fill="#ffffff" stroke="#e2dfd7"/>
+    <rect x="770" y="387" width="28" height="28" rx="9" fill="#f4f3ef"/>
+    <path d="M776 397 l8 -5 l8 5z" fill="none" stroke="#2c3340" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M778 399 v8 M782.5 399 v8 M787 399 v8 M791 399 v8 M775.5 409 h17" stroke="#2c3340" stroke-width="1.4" stroke-linecap="round"/>
+    <text x="812" y="397" font-size="14" font-weight="700" fill="#14171f">Accesso con SSO Ateneo</text>
+    <text x="812" y="414" font-size="11.5" fill="#767c8a">Federato · credenziali universitarie</text>
+    <rect x="1212" y="391" width="38" height="20" rx="7" fill="#eef4ff" stroke="#dce8ff"/>
+    <text x="1231" y="405" text-anchor="middle" class="mono" font-size="10.5" font-weight="700" fill="#1565f2">IDP</text>
+
+    <!-- divider -->
+    <path d="M756 454 H948 M1072 454 H1264" stroke="#e8e5dd"/>
+    <text x="1010" y="458" text-anchor="middle" font-size="12" fill="#8f95a3">oppure con email</text>
+
+    <!-- email input with leading envelope icon -->
+    <text x="756" y="484" font-size="13" font-weight="600" fill="#2c3340">Email universitaria</text>
+    <rect x="756" y="494" width="508" height="46" rx="14" fill="#faf9f6" stroke="#dedbd2"/>
+    <rect x="772" y="511" width="16" height="12" rx="2.5" fill="none" stroke="#7c8494" stroke-width="1.5"/>
+    <path d="M773.2 512.5 L780 517.8 L786.8 512.5" fill="none" stroke="#7c8494" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="800" y="522" font-size="14.5" fill="#14171f">luca@studenti.ateneo.it</text>
+    <circle cx="1240" cy="517" r="9" fill="#e6f5ec"/>
+    <path d="M1236 517 l2.8 2.8 l5 -5.5" fill="none" stroke="#248a5c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- password input with leading lock icon -->
+    <text x="756" y="566" font-size="13" font-weight="600" fill="#2c3340">Password</text>
+    <rect x="756" y="576" width="508" height="46" rx="14" fill="#faf9f6" stroke="#dedbd2"/>
+    <path d="M776.5 597.5 v-2.8 a3.5 3.5 0 0 1 7 0 v2.8" fill="none" stroke="#7c8494" stroke-width="1.5" stroke-linecap="round"/>
+    <rect x="774" y="597.5" width="12" height="9" rx="2.5" fill="none" stroke="#7c8494" stroke-width="1.5"/>
+    <circle cx="780" cy="602" r="1.2" fill="#7c8494"/>
+    <g fill="#3a4152">
+      <circle cx="803" cy="599" r="3.1"/><circle cx="815" cy="599" r="3.1"/><circle cx="827" cy="599" r="3.1"/><circle cx="839" cy="599" r="3.1"/>
+      <circle cx="851" cy="599" r="3.1"/><circle cx="863" cy="599" r="3.1"/><circle cx="875" cy="599" r="3.1"/><circle cx="887" cy="599" r="3.1"/>
+    </g>
+    <path d="M1230 599 q10 -8.5 20 0 q-10 8.5 -20 0z" fill="none" stroke="#7c8494" stroke-width="1.5" stroke-linejoin="round"/>
+    <circle cx="1240" cy="599" r="2.7" fill="#7c8494"/>
+
+    <!-- options -->
+    <rect x="756" y="638" width="16" height="16" rx="4.5" fill="#1565f2"/>
+    <path d="M760 646 l2.6 2.6 l5 -5.2" fill="none" stroke="#ffffff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="782" y="650.5" font-size="13" fill="#3a4152">Resta connesso</text>
+    <text x="1264" y="650.5" text-anchor="end" font-size="13" font-weight="600" fill="#1565f2">Password dimenticata?</text>
+
+    <!-- email submit (polished secondary weight + aligned vector arrow) -->
+    <rect x="756" y="672" width="508" height="48" rx="16" fill="#f2f6ff" stroke="#b9d1ff" stroke-width="1.4"/>
+    <text x="998" y="701" text-anchor="middle" font-size="14" font-weight="700" fill="#1255d6">Accedi con email</text>
+    <path d="M1063 696 h10 M1069.5 692.2 l3.8 3.8 l-3.8 3.8" fill="none" stroke="#1255d6" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- footer -->
+    <path d="M756 746 H1264" stroke="#ebe8e0"/>
+    <rect x="757" y="778" width="11" height="8.5" rx="2" fill="none" stroke="#878d9c" stroke-width="1.4"/>
+    <path d="M759.5 778 v-2.8 a3 3 0 0 1 6 0 v2.8" fill="none" stroke="#878d9c" stroke-width="1.4"/>
+    <text x="776" y="786" font-size="12" fill="#878d9c">Dati salvati localmente nel prototipo</text>
+    <rect x="1084" y="764" width="180" height="36" rx="18" fill="#f5f3ee" stroke="#e4e0d8"/>
+    <text x="1164" y="786.5" text-anchor="middle" font-size="12.5" font-weight="600" fill="#2c3340">Continua come ospite</text>
+    <path d="M1235 782 h9 M1240.8 778.6 l3.4 3.4 l-3.4 3.4" fill="none" stroke="#4b5364" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

@@ -8,7 +8,6 @@
 
   var GATE_ID = 'tutorAuthGate';
   var TOAST_ID = 'tutorAuthToast';
-  var AVATAR_IDS = ['1', '2', '3', '4', '5'];
   var THEMES = [
     { id: 'light', label: 'Chiaro', pos: 0 },
     { id: 'sepia', label: 'Seppia', pos: 1 },
@@ -194,15 +193,14 @@
     var safeName = escapeHtml(profile.name);
     var safeProgramme = escapeHtml(profile.programme || 'Corso di laurea');
     var safeEmail = escapeHtml(profile.email);
+    var mailIcon = '<svg class="tutor-auth-leading-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg>';
+    var lockIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></svg>';
 
-    var avatarStackHtml = AVATAR_IDS.map(function (id) {
-      var isActive = String(profile.avatarChoice) === id ? ' is-active-choice' : '';
-      return (
-        '<span class="tutor-auth-avatar-chip' + isActive + '" title="Avatar ' + id + '">' +
-        '<img src="assets/profile-avatars/avatar-' + id + '.webp" alt="" loading="lazy" onerror="this.style.display=\'none\'">' +
-        '</span>'
-      );
-    }).join('');
+    var avatarStackHtml =
+      '<span class="tutor-auth-avatar-chip tutor-auth-avatar-main" id="tutorAuthSavedAvatar">' + renderAvatarInnerHtml(profile) + '</span>' +
+      '<span class="tutor-auth-avatar-chip tutor-auth-emblem is-blue"><svg viewBox="0 0 24 24"><path d="M5 17 12 5l7 12H5Z"/><circle cx="5" cy="17" r="2.7"/><circle cx="12" cy="5" r="2.7"/><circle cx="19" cy="17" r="2.7"/></svg></span>' +
+      '<span class="tutor-auth-avatar-chip tutor-auth-emblem is-amber"><svg viewBox="0 0 24 24"><path d="m8 7-5 5 5 5m8-10 5 5-5 5m-2-13-4 16"/></svg></span>' +
+      '<span class="tutor-auth-avatar-chip tutor-auth-emblem is-mint"><svg viewBox="0 0 24 24"><path d="M6 19c1-7 3-11 12-14 2 7-1 14-12 14Zm0 0L15 9"/></svg></span>';
 
     var themeButtonsHtml = THEMES.map(function (t) {
       return (
@@ -219,7 +217,7 @@
           /* LEFT SHOWCASE PANEL */
           '<section class="tutor-auth-showcase" aria-label="Presentazione TutorAI">' +
             '<div class="tutor-auth-wave-bg" aria-hidden="true">' +
-              '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 760" preserveAspectRatio="xMidYMid slice">' +
+              '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 580 760" preserveAspectRatio="xMidYMid slice">' +
                 '<defs>' +
                   '<linearGradient id="ta-rw-base" x1="0" y1="0" x2="0.85" y2="1">' +
                     '<stop offset="0%" style="stop-color:var(--auth-wave-start)"/>' +
@@ -227,10 +225,11 @@
                     '<stop offset="100%" style="stop-color:var(--auth-wave-end)"/>' +
                   '</linearGradient>' +
                 '</defs>' +
-                '<rect width="420" height="760" fill="url(#ta-rw-base)"/>' +
-                '<circle cx="438" cy="68" r="226" fill="white" fill-opacity=".07"/>' +
-                '<path d="M-20 528 C164 490, 251 622, 439 529" fill="none" stroke="white" stroke-opacity=".25" stroke-width="1.5"/>' +
-                '<path d="M-20 574 C170 544, 253 657, 440 569" fill="none" style="stroke:var(--auth-wave-spark)" stroke-opacity=".42" stroke-width="1.5"/>' +
+                '<rect width="580" height="760" fill="url(#ta-rw-base)"/>' +
+                '<circle cx="570" cy="10" r="126" fill="white" fill-opacity=".075"/>' +
+                '<path d="M0 610C180 564 360 644 580 582V760H0Z" fill="white" fill-opacity=".06"/>' +
+                '<path d="M0 347C140 305 310 387 580 323" fill="none" stroke="white" stroke-opacity=".23" stroke-width="1.4"/>' +
+                '<path d="M0 365C160 323 320 407 580 343" fill="none" style="stroke:var(--auth-wave-spark)" stroke-opacity=".44" stroke-width="1.4"/>' +
               '</svg>' +
             '</div>' +
 
@@ -241,6 +240,7 @@
                 '</span>' +
                 '<div class="tutor-auth-brand-text">' +
                   '<span class="tutor-auth-brand-name">TutorAI</span>' +
+                  '<span class="tutor-auth-brand-pill">Università</span>' +
                 '</div>' +
               '</div>' +
 
@@ -249,28 +249,30 @@
               '</div>' +
             '</div>' +
 
+            '<div class="tutor-auth-book-preview" aria-hidden="true">' +
+              '<img src="assets/auth-notebook.svg" alt="" width="500" height="240">' +
+              '<span class="tutor-auth-scene-card tutor-auth-scene-mastery"><span class="tutor-auth-scene-icon"><svg viewBox="0 0 24 24"><path d="M11 5a3 3 0 0 0-5 2 3 3 0 0 0-2 5 4 4 0 0 0 3 6 3 3 0 0 0 4 1V5Zm2 0a3 3 0 0 1 5 2 3 3 0 0 1 2 5 4 4 0 0 1-3 6 3 3 0 0 1-4 1V5Z"/><path d="M6 11q3-1 4 2m4 1q2-2 4-1"/></svg></span><span><b id="tutorAuthSceneMastery">Unità verificate</b><small>Knowledge Brain</small></span></span>' +
+              '<span class="tutor-auth-scene-card tutor-auth-scene-result"><span class="tutor-auth-scene-icon"><svg viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></svg></span><span><b id="tutorAuthSceneResult">Risultati</b><small>Ultima verifica</small></span></span>' +
+              '<span class="tutor-auth-scene-formula">C(e)+1</span>' +
+            '</div>' +
+
             '<div class="tutor-auth-showcase-hero">' +
-              '<h1>Il tuo studio universitario</h1>' +
-              '<p class="tutor-auth-showcase-lead">Ritrova lezioni, appunti e richiami nel tuo quaderno di studio.</p>' +
+              '<h1>Il tuo studio universitario,<br class="tutor-auth-title-break"> in un unico spazio</h1>' +
+              '<p class="tutor-auth-showcase-lead">Lezioni dalle tue dispense, appunti in stile quaderno e ripasso attivo guidato.</p>' +
               '<div class="tutor-auth-feature-pills" aria-label="Funzionalità principali">' +
                 '<span class="tutor-auth-feature-pill">' +
                   '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>' +
-                  'Appunti' +
+                  'Appunti in stile quaderno' +
                 '</span>' +
                 '<span class="tutor-auth-feature-pill">' +
                   '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>' +
-                  'Spiegazioni' +
+                  'Spiegazioni dalle fonti' +
                 '</span>' +
                 '<span class="tutor-auth-feature-pill">' +
                   '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>' +
-                  'Ripasso' +
+                  'Ripasso attivo' +
                 '</span>' +
               '</div>' +
-            '</div>' +
-
-            '<div class="tutor-auth-book-preview" aria-hidden="true">' +
-              '<span class="tutor-auth-book-sheet"></span>' +
-              '<img src="assets/EXAMPLES/Pencil%20with%20Sparkle%20Orbit.png" alt="" width="126" height="126">' +
             '</div>' +
 
             '<div class="tutor-auth-avatar-card">' +
@@ -282,7 +284,9 @@
                   '<strong id="tutorAuthSavedName">' + safeName + ' · Profilo salvato</strong>' +
                   '<span id="tutorAuthSavedProgramme">' + safeProgramme + '</span>' +
                 '</div>' +
+                '<button class="tutor-auth-avatar-return" type="button" data-auth-enter-profile aria-label="Rientra nel profilo salvato">→</button>' +
               '</div>' +
+              '<small class="tutor-auth-avatar-caption">Ritrova corsi, appunti e verifiche al tuo rientro.</small>' +
             '</div>' +
           '</section>' +
 
@@ -298,11 +302,6 @@
               '</span>' +
             '</div>' +
 
-            '<div class="tutor-auth-proto-banner" role="note">' +
-              '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>' +
-              '<span>Usa credenziali di prova per aprire il profilo demo di <b id="tutorAuthBadgeName">' + safeName + '</b>.</span>' +
-            '</div>' +
-
             '<div class="tutor-auth-seg" role="tablist" aria-label="Modalità di accesso">' +
               '<span class="tutor-auth-seg-knob" id="tutorAuthSegKnob" aria-hidden="true"></span>' +
               '<button type="button" class="tutor-auth-seg-tab" id="tutorAuthTabLogin" role="tab" aria-selected="true" aria-controls="tutorAuthLoginPanel" data-auth-tab="login" tabindex="0">Accedi</button>' +
@@ -312,47 +311,12 @@
             /* LOGIN TAB PANEL */
             '<div class="tutor-auth-tabpanel" id="tutorAuthLoginPanel" role="tabpanel" aria-labelledby="tutorAuthTabLogin">' +
               '<div class="tutor-auth-form-head">' +
-                '<h2 id="tutorAuthDialogTitle">Bentornato su TutorAI</h2>' +
-                '<p>Riprendi subito i tuoi corsi, appunti e quiz senza perdere i progressi.</p>' +
+                '<h2 id="tutorAuthDialogTitle" tabindex="-1">Bentornato su TutorAI</h2>' +
+                '<p>Riprendi corsi, appunti e quiz da dove li hai lasciati.</p>' +
               '</div>' +
 
-              '<form class="tutor-auth-form" id="tutorAuthLoginForm" novalidate>' +
-                '<div class="tutor-auth-field">' +
-                  '<label for="tutorAuthLoginEmail">Email universitaria</label>' +
-                  '<div class="tutor-auth-input-wrap">' +
-                    '<input class="tutor-auth-input" id="tutorAuthLoginEmail" name="email" type="email" autocomplete="email" placeholder="luca@studenti.unipa.it" value="' + safeEmail + '" maxlength="128">' +
-                  '</div>' +
-                  '<p class="tutor-auth-error" id="tutorAuthLoginEmailErr" role="alert"></p>' +
-                '</div>' +
-
-                '<div class="tutor-auth-field">' +
-                  '<label for="tutorAuthLoginPassword">Password</label>' +
-                  '<div class="tutor-auth-input-wrap">' +
-                    '<input class="tutor-auth-input has-toggle" id="tutorAuthLoginPassword" name="password" type="password" autocomplete="current-password" placeholder="Qualsiasi password (demo locale)" maxlength="128">' +
-                    '<button type="button" class="tutor-auth-eye-btn" data-auth-toggle-pw="tutorAuthLoginPassword" aria-label="Mostra password" aria-pressed="false">' +
-                      eyeSvg(false) +
-                    '</button>' +
-                  '</div>' +
-                  '<p class="tutor-auth-error" id="tutorAuthLoginPwErr" role="alert"></p>' +
-                '</div>' +
-
-                '<div class="tutor-auth-row-between">' +
-                  '<label class="tutor-auth-check">' +
-                    '<input type="checkbox" id="tutorAuthRemember" name="remember" checked>' +
-                    '<span>Resta connesso</span>' +
-                  '</label>' +
-                  '<button type="button" class="tutor-auth-link-btn" id="tutorAuthForgotBtn">Password dimenticata?</button>' +
-                '</div>' +
-
-                '<button type="submit" class="tutor-auth-submit" id="tutorAuthLoginSubmit">' +
-                  '<span>Accedi al profilo →</span>' +
-                '</button>' +
-              '</form>' +
-
-              '<div class="tutor-auth-divider"><span>oppure</span></div>' +
-
               '<div class="tutor-auth-quick-stack">' +
-                '<button type="button" class="tutor-auth-quick-btn" id="tutorAuthQuickLucaBtn">' +
+                '<button type="button" class="tutor-auth-quick-btn tutor-auth-quick-primary" id="tutorAuthQuickLucaBtn">' +
                   '<span class="tutor-auth-quick-left">' +
                     '<span class="tutor-auth-quick-av" id="tutorAuthQuickLucaAv">' + renderAvatarInnerHtml(profile) + '</span>' +
                     '<span class="tutor-auth-quick-copy">' +
@@ -370,19 +334,57 @@
                     '</span>' +
                     '<span class="tutor-auth-quick-copy">' +
                       '<b>Accesso con SSO Ateneo</b>' +
-                      '<small>Accesso rapido federato universitario</small>' +
+                      '<small>Simulazione dell’accesso universitario</small>' +
                     '</span>' +
                   '</span>' +
                   '<span class="tutor-auth-quick-badge">IDP</span>' +
                 '</button>' +
               '</div>' +
+
+              '<div class="tutor-auth-divider"><span>oppure con email</span></div>' +
+
+              '<form class="tutor-auth-form" id="tutorAuthLoginForm" novalidate>' +
+                '<div class="tutor-auth-field">' +
+                  '<label for="tutorAuthLoginEmail">Email universitaria</label>' +
+                  '<div class="tutor-auth-input-wrap has-leading-icon">' +
+                    mailIcon +
+                    '<input class="tutor-auth-input" id="tutorAuthLoginEmail" name="email" type="email" autocomplete="email" placeholder="luca@studenti.unipa.it" value="' + safeEmail + '" maxlength="128">' +
+                    '<span class="tutor-auth-email-format" id="tutorAuthEmailFormat" title="Formato email valido" aria-hidden="true" hidden><svg viewBox="0 0 24 24"><path d="m5 12 4 4 10-9"/></svg></span>' +
+                  '</div>' +
+                  '<p class="tutor-auth-error" id="tutorAuthLoginEmailErr" role="alert"></p>' +
+                '</div>' +
+
+                '<div class="tutor-auth-field">' +
+                  '<label for="tutorAuthLoginPassword">Password</label>' +
+                  '<div class="tutor-auth-input-wrap has-leading-icon">' +
+                    lockIcon +
+                    '<input class="tutor-auth-input has-toggle" id="tutorAuthLoginPassword" name="password" type="password" autocomplete="current-password" placeholder="Qualsiasi password di prova" maxlength="128">' +
+                    '<button type="button" class="tutor-auth-eye-btn" data-auth-toggle-pw="tutorAuthLoginPassword" aria-label="Mostra password" aria-pressed="false">' +
+                      eyeSvg(false) +
+                    '</button>' +
+                  '</div>' +
+                  '<p class="tutor-auth-error" id="tutorAuthLoginPwErr" role="alert"></p>' +
+                '</div>' +
+
+                '<div class="tutor-auth-row-between">' +
+                  '<label class="tutor-auth-check">' +
+                    '<input type="checkbox" id="tutorAuthRemember" name="remember" checked>' +
+                    '<span>Resta connesso</span>' +
+                  '</label>' +
+                  '<button type="button" class="tutor-auth-link-btn" id="tutorAuthForgotBtn">Password dimenticata?</button>' +
+                '</div>' +
+
+                '<button type="submit" class="tutor-auth-submit tutor-auth-submit-secondary" id="tutorAuthLoginSubmit">' +
+                  '<span>Accedi con email →</span>' +
+                '</button>' +
+              '</form>' +
             '</div>' +
 
             /* REGISTER TAB PANEL */
             '<div class="tutor-auth-tabpanel" id="tutorAuthRegisterPanel" role="tabpanel" aria-labelledby="tutorAuthTabRegister" hidden>' +
               '<div class="tutor-auth-form-head">' +
-                '<h2 id="tutorAuthRegisterTitle">Crea il tuo spazio di studio</h2>' +
-                '<p>Inserisci dati di prova: verrai comunque ricondotto al profilo completo di <span id="tutorAuthRegProfileName">' + safeName + '</span>.</p>' +
+                '<h2 id="tutorAuthRegisterTitle" tabindex="-1">Crea il tuo spazio di studio</h2>' +
+                '<p>Con i dati di prova puoi aprire il profilo salvato di <span id="tutorAuthRegProfileName">' + safeName + '</span>.</p>' +
               '</div>' +
 
               '<form class="tutor-auth-form" id="tutorAuthRegisterForm" novalidate>' +
@@ -405,7 +407,8 @@
 
                 '<div class="tutor-auth-field">' +
                   '<label for="tutorAuthRegEmail">Email universitaria</label>' +
-                  '<div class="tutor-auth-input-wrap">' +
+                  '<div class="tutor-auth-input-wrap has-leading-icon">' +
+                    mailIcon +
                     '<input class="tutor-auth-input" id="tutorAuthRegEmail" name="email" type="email" autocomplete="email" placeholder="es. marco@studenti.unipa.it" maxlength="128">' +
                   '</div>' +
                   '<p class="tutor-auth-error" id="tutorAuthRegEmailErr" role="alert"></p>' +
@@ -413,7 +416,8 @@
 
                 '<div class="tutor-auth-field">' +
                   '<label for="tutorAuthRegPassword">Password</label>' +
-                  '<div class="tutor-auth-input-wrap">' +
+                  '<div class="tutor-auth-input-wrap has-leading-icon">' +
+                    lockIcon +
                     '<input class="tutor-auth-input has-toggle" id="tutorAuthRegPassword" name="password" type="password" autocomplete="new-password" placeholder="Crea una password" maxlength="128">' +
                     '<button type="button" class="tutor-auth-eye-btn" data-auth-toggle-pw="tutorAuthRegPassword" aria-label="Mostra password" aria-pressed="false">' +
                       eyeSvg(false) +
@@ -449,7 +453,7 @@
             '</div>' +
 
             '<div class="tutor-auth-panel-foot">' +
-              '<span>Dati salvati localmente nel prototipo</span>' +
+              '<span class="tutor-auth-storage-note">' + lockIcon + ' Dati salvati localmente nel prototipo</span>' +
               '<button type="button" class="tutor-auth-guest-btn" data-auth-dismiss="guest">' +
                 'Continua come ospite →' +
               '</button>' +
@@ -485,8 +489,8 @@
       savedProg.textContent = profile.programme || 'Spazio di studio personale';
     }
 
-    var badgeName = document.getElementById('tutorAuthBadgeName');
-    if (badgeName) badgeName.textContent = profile.name;
+    var savedAvatar = document.getElementById('tutorAuthSavedAvatar');
+    if (savedAvatar) savedAvatar.innerHTML = renderAvatarInnerHtml(profile);
 
     var regProfileName = document.getElementById('tutorAuthRegProfileName');
     if (regProfileName) regProfileName.textContent = profile.name;
@@ -508,11 +512,25 @@
     if (loginEmail && !loginEmail.value.trim()) {
       loginEmail.value = profile.email;
     }
+    if (loginEmail) syncLoginEmailFormat(loginEmail);
 
-    var avatarChips = gate.querySelectorAll('.tutor-auth-avatar-chip');
-    avatarChips.forEach(function (chip, idx) {
-      chip.classList.toggle('is-active-choice', String(profile.avatarChoice) === String(idx + 1));
-    });
+    if (typeof state.options.getStudySummary === 'function') {
+      var summary = state.options.getStudySummary();
+      var mastery = document.getElementById('tutorAuthSceneMastery');
+      var result = document.getElementById('tutorAuthSceneResult');
+      if (mastery) mastery.textContent = summary.verified + '/' + summary.units + ' verificate';
+      if (result) {
+        var latest = summary.latest;
+        result.textContent = latest && Number.isFinite(latest.correct) && latest.total > 0
+          ? latest.correct + '/' + latest.total + ' corrette'
+          : 'Risultati';
+      }
+    }
+  }
+
+  function syncLoginEmailFormat(input) {
+    var badge = document.getElementById('tutorAuthEmailFormat');
+    if (badge) badge.hidden = !isValidEmail(input.value);
   }
 
   function syncSegmentedKnob() {
@@ -611,7 +629,7 @@
     if (!active) {
       if (loginSubmit) {
         loginSubmit.classList.remove('is-success');
-        loginSubmit.innerHTML = '<span>Accedi al profilo →</span>';
+        loginSubmit.innerHTML = '<span>Accedi con email →</span>';
       }
       if (regSubmit) {
         regSubmit.classList.remove('is-success');
@@ -932,6 +950,10 @@
 
     var loginForm = document.getElementById('tutorAuthLoginForm');
     if (loginForm) loginForm.addEventListener('submit', handleLoginSubmit);
+    var loginEmail = document.getElementById('tutorAuthLoginEmail');
+    if (loginEmail) {
+      loginEmail.addEventListener('input', function () { syncLoginEmailFormat(loginEmail); });
+    }
 
     var regForm = document.getElementById('tutorAuthRegisterForm');
     if (regForm) regForm.addEventListener('submit', handleRegisterSubmit);
@@ -965,6 +987,12 @@
     if (quickLucaBtn) {
       quickLucaBtn.addEventListener('click', function () {
         handleQuickEntry('quick-luca', quickLucaBtn);
+      });
+    }
+    var avatarReturn = gate.querySelector('[data-auth-enter-profile]');
+    if (avatarReturn) {
+      avatarReturn.addEventListener('click', function () {
+        handleQuickEntry('quick-luca', avatarReturn);
       });
     }
 
@@ -1114,7 +1142,7 @@
 
     window.requestAnimationFrame(function () {
       syncSegmentedKnob();
-      var focusId = mode === 'register' ? 'tutorAuthRegName' : 'tutorAuthLoginEmail';
+      var focusId = mode === 'register' ? 'tutorAuthRegisterTitle' : 'tutorAuthDialogTitle';
       var target = document.getElementById(focusId);
       if (target) {
         target.focus({ preventScroll: true });
@@ -1162,11 +1190,13 @@
               '<span>' + safeProgramme + '</span>' +
             '</div>' +
           '</div>' +
-          '<small class="tutor-auth-embedded-session">Sessione demo chiusa · ' + safeEmail + '</small>' +
+          '<img class="tutor-auth-embedded-notebook" src="assets/auth-notebook.svg" alt="" width="500" height="240">' +
+          '<small class="tutor-auth-embedded-session">' + safeEmail + '</small>' +
         '</div>' +
         '<div class="tutor-auth-embedded-body">' +
-          '<h1 id="tutorAuthEmbeddedHeading" tabindex="-1">Accedi o registrati su TutorAI</h1>' +
-          '<p>Rientra nel profilo salvato di <b>' + safeName + '</b> usando qualsiasi credenziale di prova oppure in un clic.</p>' +
+          '<span class="tutor-auth-embedded-mode">Demo locale</span>' +
+          '<h1 id="tutorAuthEmbeddedHeading" tabindex="-1">Rientra in TutorAI</h1>' +
+          '<p>Riprendi lezioni, appunti e quiz dal tuo profilo salvato.</p>' +
           '<div class="tutor-auth-embedded-actions">' +
             '<button type="button" class="btn blue-pri" data-tutor-auth-quick="luca">Entra subito come ' + safeName + ' →</button>' +
             '<button type="button" class="btn" data-tutor-auth-open="login">Accedi con email</button>' +

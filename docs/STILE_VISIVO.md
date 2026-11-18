@@ -2,7 +2,12 @@
 
 TutorAI ha il ritmo di un quaderno di studio. Il blu cobalto e le onde danno energia ai punti di partenza. Le superfici di carta e la tipografia editoriale danno spazio alla lettura, alle formule e al lavoro dello studente. La barra di navigazione con il logo e il motivo a onde è il riferimento che collega le schermate.
 
-Il [mockup HTML](../index.html) è il riferimento per interazioni, contenuti e responsive. Per confrontare la composizione desktop, aprire gli SVG di [Home](../svg-redesign-opus/mockups/01-home-corsi.svg), [Studio](../svg-redesign-opus/mockups/03-studio-spiegazione.svg) e [Ripasso](../svg-redesign-opus/mockups/05-ripasso-lobby.svg).
+Il mockup HTML è il riferimento per interazioni, contenuti e adattamento allo schermo. Gli SVG mostrano le composizioni desktop da cui riprendere proporzioni e gerarchia. [Mockup HTML](../index.html)
+
+| Schermate | Riferimenti |
+| --- | --- |
+| Entrare e organizzare i materiali | [Accesso](../svg-redesign-opus/mockups/08-auth-portal.svg) · [Home](../svg-redesign-opus/mockups/01-home-corsi.svg) · [Nuovo corso](../svg-redesign-opus/mockups/02-wizard-stile.svg) · [Archivio](../svg-redesign-opus/mockups/04-archivio-vault.svg) |
+| Studiare, ripassare e rileggere il percorso | [Studio](../svg-redesign-opus/mockups/03-studio-spiegazione.svg) · [Ripasso](../svg-redesign-opus/mockups/05-ripasso-lobby.svg) · [Profilo in tema scuro](../svg-redesign-opus/mockups/07-profilo-dark.svg) |
 
 ## Gli elementi che rendono riconoscibile TutorAI
 
@@ -40,10 +45,12 @@ In seppia, scaldare il grande fondo e ridurre la saturazione delle fasce. In scu
 ## Composizione per flusso
 
 - **Home e corso** · Separare la ripresa della lezione dall’indice. Affiancare appunto e Archivio quando c’è spazio. Nel corso, la copertina appartiene al banner e la lezione da riprendere emerge nella lista con una sola evidenza.
-- **Creazione corso** · Mostrare il passo corrente e una CTA per procedere. La copertina risponde a nome, simbolo e colore. Caricamento, stato dei file e mappa procedono in ordine e mantengono riconoscibile il punto in cui ci si trova.
-- **Studio** · La spiegazione mostra presto la formula o il diagramma. Gli appunti hanno una pagina distinta. Le azioni sulla selezione stanno vicino al testo e la barra di formattazione è a portata di mano. Slide, revisione e conclusione mantengono la stessa struttura visiva e usano i colori di stato per ciò che è cambiato.
+- **Creazione corso** · Aprire con il titolo su un fondo punteggiato caldo. Disporre i due percorsi uno accanto all’altro quando c’è spazio. L’anteprima della scheda Home risponde a nome, simbolo e colore, con apertura dell’illustrazione del dettaglio corso. Tenere visibili il passo corrente e l’azione per procedere durante configurazione, caricamento e mappa.
+- **Archivio** · L’albero dei corsi orienta la ricerca. Le cartelle usano tre tinte costanti. Ambra per gli appunti personali, cobalto per le spiegazioni e menta per gli allegati. Usare le anteprime su carta per leggere a colpo d’occhio e righe compatte per i file. L’esportazione Markdown scarica una nota, una spiegazione o una raccolta di appunti del corso.
+- **Studio** · La spiegazione mostra presto la formula o il diagramma. Ogni lezione ha un foglio distinto, con titolo, sezioni e testo modificabili direttamente sulla carta. Le azioni sulla selezione stanno vicino al testo e la barra di formattazione è a portata di mano. Un’azione esplicita apre la revisione del passaggio. La versione precedente si apre in sola lettura. Slide, revisione e conclusione mantengono la stessa struttura visiva e usano i colori di stato per ciò che è cambiato.
 - **Ripasso** · La sessione di oggi viene prima. La scelta del corso e il calendario conducono a un quiz con una domanda alla volta. L’esito separa errore, risposta corretta e azione successiva. Calcolare numeri, precisione e indicatori dai dati effettivamente presenti nel mockup.
-- **Profilo e account** · Il diario mette in primo piano attività e date. Le impostazioni raggruppano tema e azioni dell’account in sezioni leggibili. Accesso e registrazione possono usare una scena cobalto a fianco del modulo, con i campi raccolti su un’unica superficie.
+- **Profilo e impostazioni** · Cronologia, mappa delle unità e riepilogo formano tre colonne su desktop. Ogni nodo identifica una lezione e condivide i colori degli stati dello studio. Le linee collegano lezioni consecutive dello stesso corso. La selezione mostra il titolo e offre accesso alla lezione, agli appunti e al ripasso. La scelta del corso e le pagine mantengono la mappa leggibile quando crescono le unità. Raggruppare tema e azioni dell’account in sezioni con piccole anteprime dei temi.
+- **Accesso** · Usare un quaderno illustrato sulla scena cobalto e una superficie chiara per il modulo. L’ingresso rapido ha la massima evidenza. SSO di prova, email e ospite hanno ciascuno un punto di ingresso riconoscibile. Su telefono una fascia breve introduce il modulo.
 
 ## Movimento e adattamento
 

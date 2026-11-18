@@ -1,64 +1,63 @@
 # Contesto TutorAI · Passaggio a nuova chat
 
-Repository locale: `c:\Users\Luca\Desktop\TUTORAI` · Branch attivo: `UNI`
+Repository locale: `c:\Users\Luca\Desktop\TUTORAI` · Branch attivo: `UNI` (`HEAD`: `d1ccfd7`) · Aggiornato: `2026-11-18 23:35`
 
-## 1. Stato attuale del lavoro
+## 1. Stato attuale del lavoro (SVG Redesign + Prototipo Live)
 
-In questa sessione sono stati progettati, approvati e integrati sia i mockup vettoriali sia il prototipo interattivo:
+Il redesign visivo è stato progettato su mockup standalone `1440×900` in `svg-redesign-opus/mockups/` (con brief leggeri `00–02` e baseline in `screenshot/01–08`) ed è stato poi tradotto nel prototipo web (`index.html`, `auth.js`, `auth.css`, `tab-corsi-archivio.css`, `tab-studio-tutor.css`, `tab-ripasso-profilo.css`, `docs/STILE_VISIVO.md`):
 
-- **Mockup SVG (`docs/mockup-svg/`):** generati da `scripts/generate_svg_mockups.mjs` dopo revisione con **Gemini 4 Argon (High)** e documentati in `docs/mockup-svg/README.md`. Comprendono 11 schermate desktop (`1600×1000`, `01-corsi.svg`–`11-verifica-storica.svg`), 3 tavole riepilogative (`00-panoramica.svg`, `00-flusso-studio.svg`, `00-flusso-ripasso.svg`) e le rispettive 14 anteprime PNG in `docs/mockup-svg/anteprime/`.
-- **Prototipo interattivo (`index.html`):** aggiornato integrando l'intera architettura e l'estetica dei mockup SVG approvati, mantenendo i 3 temi (`light`, `sepia`, `dark`), KaTeX, il wizard a 3 passaggi e tutti i flussi interattivi lato client.
+- **Mockup SVG completati (`svg-redesign-opus/mockups/`, 7/7 validati XML + verificati visivamente a `1440×900`):**
+  - *Batch 1 (Claude Opus 5.5 High):*
+    - `01-home-corsi.svg` — Home con saluto, `Ultima lezione`, card corsi **Craft a doppia cornice**, ricerca e `+ Nuovo corso`.
+    - `03-studio-spiegazione.svg` — Split view Studio con selettore fonti/slide, diagramma interattivo, popup tutor su selezione testo e foglio appunti con dock flottante.
+    - `05-ripasso-lobby.svg` — Lobby Ripasso con sessione prioritaria del giorno, selettore corso e calendario 5 giorni.
+  - *Batch 2 (`07`, `02`, `04` da Claude Opus 5.5 High; `08` rifinito da Gemini 4 Neon High con contesto esteso):*
+    - `07-profilo-dark.svg` — Dark mode (`Diario di studio`), `Attività recenti` + `PROSSIMO RICHIAMO`, **Knowledge Brain** anatomico a due emisferi + percorsi sinaptici (`4/9 verificate`), `Ultimi 7 giorni`, `Unità verificate` (nessun tasto `Pausa`).
+    - `02-wizard-stile.svg` — Wizard passo 1 (`Obiettivo`): input corso (`0/90`), 2 percorsi affiancati, 6 icone STEM + 6 swatch colore e `ANTEPRIMA DAL VIVO` con card Craft a doppia cornice.
+    - `04-archivio-vault.svg` — Modale `Archivio · VAULT OBSIDIAN` (`Ctrl K`, `Chiudi`), albero corsi + `#etichette`, export `.md`, 3 cartelle colorate (`I miei appunti`, `Note generate`, `Slide e allegati`), schede e allegati.
+    - `08-auth-portal.svg` — Portale split-screen editoriale su carta calda `#f6f4ef`, lato cobalto con quaderno `Lamport` + badge `Knowledge Brain 4/9 verificate` + strip `Luca · Profilo salvato`; lato destro con pill `Torna all'anteprima`, `Accedi / Registrati`, `Entra subito come Luca`, `Accesso con SSO Ateneo`, form con icone busta/lucchetto e `Continua come ospite`.
+- **Nuovi asset SVG integrati nel prototipo:** `assets/auth-notebook.svg` e `assets/profile-brain.svg`.
+- **Documentazione allineata:** `docs/STILE_VISIVO.md` aggiornato con la tabella dei 7 mockup di riferimento (`01, 02, 03, 04, 05, 07, 08`) e le regole per ogni flusso (inclusi `Archivio`, `Profilo e impostazioni`, `Accesso`). *(Nota storica: i vecchi mockup generati `docs/mockup-svg/` + `scripts/generate_svg_mockups.mjs` sono stati sostituiti come riferimento visivo da `svg-redesign-opus/mockups/`.)*
 
-## 2. Decisioni UI/UX e architetturali consolidate
+## 2. Traduzione già applicata nel prototipo (stato al `23:35`, non committata)
 
-- **Tono visivo:** eliminati testi didascalici, avvisi meta-esplicativi e disclaimer ripetitivi; gerarchia guidata da card visive, anelli/barre di avanzamento e stati chiari.
-- **Rail laterale sinistra (con trama blu ondulata adattiva ai temi):**
-  - Logo `assets/logo.png` presente **una sola volta** in cima alla rail (rimosso il duplicato dall'header Home).
-  - Voci principali: `Corsi`, `Studio`, `Ripasso` (con indicatore di richiamo).
-  - In basso: selettore tema a 3 stati (`Chiaro`, `Seppia`, `Scuro`) e avatar **`Profilo`** (`L` con badge orologio) che apre la cronologia globale `#view-attivita`.
-  - L'ingranaggio di debug (`Proto · JSON` / `#demoDrawer`) è stato tolto dalla rail studente e collocato in modo discreto dentro la testata di `Profilo` (senza pulsanti fissi sovrapposti a schermo).
-- **Flusso a 4 viste principali + Profilo (`Corsi → Corso → Studio → Ripasso`):**
-  1. **Home (`#view-corso`):** saluto `Bentornato, Luca` con streak, filtro di ricerca corsi dal vivo, hero card `Ultima lezione` con i soli pulsanti `Continua →` e `Vai al corso` (nessun `+ Aggiungi lezione` né `Storico lezioni` in Home), griglia corsi con banner grafici per materia e tessera **`+ Nuovo corso`** integrata come 4ª card. Il wizard crea corsi con 2 percorsi (*Lezione per lezione* incrementale vs *Prepara un esame* in blocco), 5 icone STEM (`nodes`, `wave`, `db`, `matrix`, `atom`) e 6 colori.
-  2. **Dettaglio Corso (`#view-dettaglio`):** schermata dedicata aperta cliccando un corso; ospita `Lezioni del corso`, il pulsante contestuale **`+ Aggiungi lezione`**, il riquadro `Ripasso del corso` e il pannello `Materiali`.
-  3. **Studio (`#view-studio`):** topbar con `← Corso` e pulsante **`Indice`** in alto a sinistra accanto al breadcrumb; la sidebar `#courseSidebar` si apre **solo dentro Studio**. A sinistra `Spiegazione | Slide`, selettore `Dettaglio` (`Sintesi / Guidata / Completa`), diagramma interattivo e pop-up su selezione testo; a destra foglio appunti in stile **Obsidian** su micro-griglia tecnica con **dock flottante centrato in basso** (`B I S U | x² x₂ | </> Σ formula ”`) funzionante, revisione socratica ancorata al dubbio e diff inline `v1 → v2` prima di `Termina lo studio →`.
-  4. **Ripasso (`#view-ripasso`):** nessuna sidebar corso a sinistra; flussi separati in **Lobby** (`Da ripassare oggi`, `Prossimi richiami`, `Padronanza per materia` con anelli di progresso, `Verifiche recenti`), **Sessione focus senza aiuti** (3 domande una alla volta, toggle `Scelta rapida | Risposta scritta`, diagramma `P₁/P₂` con solo `0 messaggi scambiati` senza spoiler), **Esito della sessione** e **Verifica archiviata** riapribile da `Verifiche recenti` o da `Profilo`.
-  5. **Profilo e attività (`#view-attivita`):** banner statistiche calcolate dallo stato corrente, cronologia filtrabile (`Tutto | Studio | Appunti | Verifiche` + filtro per corso) e riepilogo corsi cliccabile.
+Oltre al passaggio precedente su Batch 1 (`Home`, `Studio`, `Ripasso`), risultano già applicate modifiche locali nei file `index.html` (`488,778` byte), `auth.js`, `auth.css`, `tab-corsi-archivio.css`, `tab-ripasso-profilo.css`, `tab-studio-tutor.css`:
 
-## 3. Verifiche eseguite sull'ultima versione
+- **Accesso (`auth.js`, `auth.css`, `assets/auth-notebook.svg`):** integrazione quaderno `auth-notebook.svg`, icone `tutor-auth-leading-icon` (mail/lucchetto) negli input, `Rientra nel profilo salvato`, caption di rientro, rimozione proto-banner superfluo, gerarchia `Entra subito come Luca` / `SSO Ateneo` / `Email` / `Ospite`.
+- **Wizard Nuovo Corso (`index.html`, `tab-corsi-archivio.css`):** griglia `.wizard-config`, contatore `wizardNameLength` (`0/90`), 2 percorsi affiancati, picker icone/colori con didascalie, suggerimento abbinamento icona e anteprima live `.wizard-preview-stage` / `.wizard-preview-card-paper`.
+- **Archivio Vault (`index.html`, `tab-corsi-archivio.css`):** modale `#fileFinder` con ricerca (`Ctrl+K`/`Meta+K`), filtro tipo `Tutti / Appunti / Spiegazioni` (`setFinderType`), switch griglia/lista (`setFinderLayout`), export `.md` singola unità (`exportFinderMarkdown`) o corso (`exportFinderCourseNotes`), righe allegati `.finder-attachment`.
+- **Profilo & Knowledge Brain (`index.html`, `tab-ripasso-profilo.css`, `assets/profile-brain.svg`):** `renderProfileBrain` con filtro per corso, paginazione nodi sopra `assets/profile-brain.svg`, collegamenti SVG dinamici (`.profile-brain-links`), legenda stati e azioni contestuali (`Apri lezione`, `Appunti`, `Ripassa`).
 
-- `python scripts/check_docs.py`: esito `0` (`OK: 10 documenti Markdown, 79 riferimenti locali, 2 esempi JSON, SVG e logo PNG. ID verificati: F01-F17, T01-T12, AC01-AC18.`).
-- Validazione sintattica del `<script>` in `index.html` con Node (`new Function`): `JS_SYNTAX_OK 170229`.
-- Validazione XML su tutti i 14 file in `docs/mockup-svg/*.svg`: `XML_OK 14`.
-- Verifica interattiva su browser locale (`1440×900` desktop e `390×844` mobile) su Home, Dettaglio Corso, modale `+ Aggiungi lezione`, Studio nei temi Light/Seppia/Dark, Ripasso Lobby/Session/Esito, Profilo/Archivio e Wizard: **0 errori console**, modali opachi, nessuna sovrapposizione in Studio e zero overflow orizzontale su mobile.
+## 3. Verifiche eseguite sull'ultima versione (`2026-11-18 23:35`)
 
-## 4. Stato git e file presenti nel workspace
+- `python scripts/check_docs.py`: **PASS** (`OK: 11 documenti Markdown, 100 riferimenti locali, 2 esempi JSON, SVG e logo PNG. ID verificati: F01-F17, T01-T12, AC01-AC18.`).
+- Controllo sintattico JS (`new Function` su `auth.js` e sul `<script>` inline di `index.html`) + bilanciamento `{ }` su `auth.css`, `tab-corsi-archivio.css`, `tab-ripasso-profilo.css`, `tab-studio-tutor.css`: **PASS** (`JS_CSS_SYNTAX_OK inline_scripts=1 html_bytes=488778`).
+- Validazione XML (`xml.etree.ElementTree.parse`) su `assets/auth-notebook.svg`, `assets/profile-brain.svg` e tutti e 7 i file in `svg-redesign-opus/mockups/*.svg`: **PASS** (`9/9 SVG_OK`).
+- **Attenzione — Da verificare nella nuova chat:** le ultime modifiche in working tree (`23:06–23:30` su `index.html`, `auth.*`, `tab-*.css`) **non hanno ancora ricevuto un audit completo interattivo in browser** dopo la traduzione del Batch 2 (solo gli SVG statici e Batch 1 precedente erano stati ispezionati a schermo).
 
-Al passaggio alla nuova chat, oltre ai file di questa attività (`index.html`, `docs/mockup-svg/`, `scripts/generate_svg_mockups.mjs`, `contesto.md`), risultano modificati o non tracciati nel working tree:
+## 4. Stato git nel workspace (`git status --short`)
 
-- Modificati: `CONTRIBUTING.md`, `README.md`, `docs/ARCHITETTURA.md`, `docs/INTERFACCIA.md`, `docs/PIANO.md`, `docs/SPECIFICA.md`, `index.html`.
-- Non tracciati: `assets/Visual identity/`, `docs/domande.md`, `docs/mockup-svg/`, `scripts/generate_svg_mockups.mjs`, `contesto.md`.
+- **Modificati (`M`):** `auth.css`, `auth.js`, `docs/STILE_VISIVO.md`, `index.html`, `tab-corsi-archivio.css`, `tab-ripasso-profilo.css`, `tab-studio-tutor.css` *(più questo `contesto.md`)*.
+- **Non tracciati (`??`):** `assets/auth-notebook.svg`, `assets/profile-brain.svg`, `svg-redesign-opus/mockups/02-wizard-stile.svg`, `04-archivio-vault.svg`, `07-profilo-dark.svg`, `08-auth-portal.svg`.
+- **Nota quote AI (al `23:00`):** `Claude Opus 5.5` e `Claude Sonnet 5.5` allo `0%`; `Gemini 4 Neon (High)` al `90%`; `Gemini 4 Hydrogen (XHigh)` al `90%`; `Gemini 4 Argon (High)` al `67%`.
 
-*(Nota: i file `CONTRIBUTING.md`, `README.md`, `docs/*.md` e `assets/Visual identity/` sono stati aggiornati separatamente nel repository rispetto al lavoro sugli SVG e su `index.html`: controllarne il contenuto prima di intervenire su specifica o documentazione.)*
+## 5. Prossimi passi consigliati nella nuova chat
 
-## 5. Comandi utili e prossimi passi suggeriti
-
-- Rigenerare i mockup SVG dopo eventuali modifiche al generatore: `node scripts/generate_svg_mockups.mjs` (le PNG in `docs/mockup-svg/anteprime/` vanno poi ri-renderizzate separatamente).
-- Controllo integrità documentazione e riferimenti: `python scripts/check_docs.py`.
-- **Prossimi passi nella nuova chat:**
-  1. Verificare con l'utente eventuali rifiniture su `index.html` o allineare `docs/domande.md` / `docs/SPECIFICA.md` / `docs/INTERFACCIA.md`.
-  2. Progettare e avviare l'implementazione applicativa reale (persistenza dati, ingestion documenti PDF/Markdown, backend LLM con citazioni e motore verifiche) seguendo `docs/ARCHITETTURA.md`, `docs/CONTRATTI_E_DATI.md` e `docs/PIANO.md`.
+1. **Audit visivo e interattivo in browser delle schermate aggiornate (Batch 1 + Batch 2):**
+   - Servire in locale (es. `python -m http.server 4173 --bind 127.0.0.1`) e testare desktop `1440×900` e mobile `390×844` in **Chiaro, Seppia e Scuro** con 0 errori console:
+     - **Login/Auth** (`auth.js` / `auth-notebook.svg`, SSO, Accedi/Registrati, ospite);
+     - **Wizard Nuovo Corso** (`+ Nuovo corso`, nome `0/90`, icone/colori, anteprima live, passi 1→2→3);
+     - **Archivio Vault (`#fileFinder`)** (`Ctrl+K`, albero corsi, cartelle, filtri griglia/lista, export `.md`);
+     - **Profilo & Knowledge Brain** (`assets/profile-brain.svg`, filtro per corso, selezione nodi, dark mode senza tasto `Pausa`);
+     - **Studio & Ripasso** (verifica finale di regressioni, evidenziatore/appunti, errori `0 su 3` in rosso).
+2. **Spuntare la checklist UX §8.2** man mano che ogni vista viene confermata con Luca sito alla mano, poi eseguire `python scripts/check_docs.py` e fare un commit pulito su `UNI`.
+3. **Fase successiva (sviluppo reale):** progettare e avviare backend, storage, ingestion PDF/Markdown e LLM seguendo `docs/ARCHITETTURA.md`, `docs/CONTRATTI_E_DATI.md` e `docs/PIANO.md`.
 
 ---
 
-## 6. Aggiornamento successivo: Visual Reference, feedback utente e piano UI/UX
+## 6. Nota sulle Visual Reference (`assets/Visual identity/`)
 
-> Le sezioni 1–5 fotografano lo stato iniziale al passaggio di consegna (prima dei restyling su `index.html`). Le sezioni 6–8 integrano le **visual reference** in `assets/Visual identity/`, le idee e le valutazioni raccolte da Luca sito alla mano (sia sul prototipo iniziale sia dopo la prima passata UI) e la **checklist operativa** da seguire punto per punto senza tralasciare richieste.
-
-### Stato osservato nella working tree (sola lettura)
-- In `assets/course-covers/` sono presenti **5** copertine: `algebra.webp`, `algoritmi.webp`, `crypto.webp`, `fisica.webp`, `sistemi.webp` (in `index.html`, `COURSE_COVERS` mappa 6 chiavi: `nodes`, `wave`, `db`, `lock`, `matrix`, `atom`, con `db` e `lock` che condividono `crypto.webp`).
-- In `assets/profile-avatars/` sono presenti **5** avatar: `avatar-1.webp`–`avatar-5.webp`.
-- In `assets/Visual identity/` risultano presenti **17** file (13 immagini + 4 video `.mp4`); il vecchio file `3e2bffa710df968f4d188ed8f17af7e4.jpg` risulta rimosso.
-- `index.html` presenta modifiche locali in corso (tra cui `#fileFinder`/`Archivio`, `showStudioSources`, `.recall-hero.has-errors`, `.profile-settings-trigger`, `openAccountPage('login')`, `PROFILE_AVATARS`): tutti i requisiti seguenti vanno verificati sull'interfaccia reale al termine delle modifiche.
+> Le sezioni 7–8 conservano la mappa delle **17 visual reference** in `assets/Visual identity/` (più il catalogo feedback "sito alla mano" di Luca). Tenere presenti sia queste reference sia i 7 SVG approvati in `svg-redesign-opus/mockups/` durante l'audit del prototipo.
 
 ---
 

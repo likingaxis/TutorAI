@@ -1,0 +1,294 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1440" height="900" viewBox="0 0 1440 900">
+  <title>TutorAI · Archivio Vault (redesign)</title>
+  <style>
+    .sans{font-family:Inter,'Segoe UI',system-ui,-apple-system,sans-serif}
+    .serif{font-family:Newsreader,'Source Serif 4','Iowan Old Style',Georgia,serif}
+    .mono{font-family:'JetBrains Mono','SFMono-Regular',Consolas,monospace}
+  </style>
+  <defs>
+    <linearGradient id="railG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b86ff"/><stop offset=".55" stop-color="#1565f2"/><stop offset="1" stop-color="#0b4fd6"/>
+    </linearGradient>
+    <linearGradient id="cobalt" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2a8bff"/><stop offset="1" stop-color="#1565f2"/>
+    </linearGradient>
+    <linearGradient id="heroG" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1565f2"/><stop offset=".6" stop-color="#0c7bf0"/><stop offset="1" stop-color="#2a96ff"/>
+    </linearGradient>
+    <linearGradient id="mintG" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#48c788"/><stop offset="1" stop-color="#248a5c"/>
+    </linearGradient>
+    <filter id="soften" x="-2%" y="-2%" width="104%" height="104%">
+      <feGaussianBlur stdDeviation="2.6"/>
+    </filter>
+    <filter id="shModal" x="-6%" y="-6%" width="112%" height="118%">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#0b1530" flood-opacity=".28"/>
+    </filter>
+    <filter id="shS" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#1b2a4a" flood-opacity=".09"/>
+    </filter>
+    <clipPath id="railClip"><rect x="16" y="16" width="88" height="868" rx="30"/></clipPath>
+    <clipPath id="modalClip"><rect x="170" y="84" width="1160" height="752" rx="28"/></clipPath>
+    <path id="spk" d="M0 -10C1.4 -3.2 3.2 -1.4 10 0C3.2 1.4 1.4 3.2 0 10C-1.4 3.2 -3.2 1.4 -10 0C-3.2 -1.4 -1.4 -3.2 0 -10Z"/>
+    <!-- custom folder: back panel + sheets + front flap (76 x 60) -->
+    <path id="fBack" d="M0 8 a6 6 0 0 1 6 -6 h18 l6 6 h40 a6 6 0 0 1 6 6 v40 a6 6 0 0 1 -6 6 h-64 a6 6 0 0 1 -6 -6z"/>
+    <path id="fFront" d="M0 24 a6 6 0 0 1 6 -6 h64 a6 6 0 0 1 6 6 v30 a6 6 0 0 1 -6 6 h-64 a6 6 0 0 1 -6 -6z"/>
+  </defs>
+
+  <!-- ============ SOFTENED HOME WORKSPACE (beneath) ============ -->
+  <g filter="url(#soften)" class="sans">
+    <rect width="1440" height="900" fill="#eceef3"/>
+    <rect x="16" y="16" width="88" height="868" rx="30" fill="url(#railG)"/>
+    <g clip-path="url(#railClip)">
+      <path d="M16 610 C46 575 74 660 104 615 L104 884 L16 884Z" fill="#ffffff" opacity=".07"/>
+      <path d="M16 668 C44 645 76 705 104 676" fill="none" stroke="#7ff0bd" stroke-width="1.6" opacity=".6"/>
+    </g>
+    <rect x="34" y="34" width="52" height="52" rx="16" fill="#ffffff"/>
+    <rect x="42" y="47" width="20" height="26" rx="5" fill="url(#cobalt)" transform="rotate(-8 52 60)"/>
+    <rect x="26" y="120" width="68" height="58" rx="18" fill="#ffffff"/>
+    <rect x="49" y="129" width="22" height="22" rx="5" fill="#b9d2ff"/>
+    <circle cx="60" cy="204" r="9" fill="none" stroke="#ffffff" stroke-width="1.8"/>
+    <circle cx="60" cy="271" r="9" fill="none" stroke="#ffffff" stroke-width="1.8"/>
+    <rect x="38" y="690" width="44" height="116" rx="22" fill="#ffffff" fill-opacity=".16"/>
+    <circle cx="60" cy="712" r="16" fill="#ffffff"/>
+    <circle cx="60" cy="836" r="18" fill="url(#mintG)"/>
+
+    <text x="184" y="100" class="serif" font-size="44" font-weight="600" fill="#14171f">Bentornato, Luca</text>
+    <rect x="1220" y="64" width="140" height="40" rx="20" fill="#ffffff"/>
+    <text x="1290" y="89" text-anchor="middle" font-size="13" font-weight="600" fill="#14171f">Archivio</text>
+    <rect x="184" y="152" width="1176" height="220" rx="28" fill="url(#heroG)"/>
+    <text x="224" y="214" font-size="12" font-weight="700" fill="#ffffff" fill-opacity=".8">CONTINUA DA DOVE ERI</text>
+    <text x="224" y="262" class="serif" font-size="38" font-weight="600" fill="#ffffff">1.3 Orologi Logici di Lamport</text>
+    <rect x="224" y="300" width="190" height="44" rx="22" fill="#ffffff"/>
+    <rect x="980" y="190" width="330" height="150" rx="20" fill="#ffffff" fill-opacity=".14"/>
+    <text x="184" y="432" class="serif" font-size="28" font-weight="600" fill="#14171f">I tuoi corsi</text>
+    <rect x="184" y="468" width="228" height="292" rx="24" fill="#e8f0ff"/>
+    <rect x="190" y="566" width="216" height="188" rx="19" fill="#ffffff"/>
+    <rect x="428" y="468" width="228" height="292" rx="24" fill="#fdf1dc"/>
+    <rect x="434" y="566" width="216" height="188" rx="19" fill="#ffffff"/>
+    <rect x="672" y="468" width="228" height="292" rx="24" fill="#e6f5ec"/>
+    <rect x="678" y="566" width="216" height="188" rx="19" fill="#ffffff"/>
+    <rect x="924" y="468" width="436" height="292" rx="24" fill="#ffffff"/>
+  </g>
+  <rect width="1440" height="900" fill="#0f1830" fill-opacity=".42"/>
+
+  <!-- ============ ARCHIVIO VAULT MODAL ============ -->
+  <g class="sans">
+    <rect x="170" y="84" width="1160" height="752" rx="28" fill="#ffffff" filter="url(#shModal)"/>
+
+    <!-- sidebar -->
+    <g clip-path="url(#modalClip)">
+      <rect x="170" y="158" width="270" height="678" fill="#f8f7f3"/>
+    </g>
+    <path d="M440 158 V836" stroke="#ece8de"/>
+
+    <!-- header -->
+    <path d="M200 114 a4 4 0 0 1 4 -4 h8 l4 4 h14 a4 4 0 0 1 4 4 v14 a4 4 0 0 1 -4 4 h-26 a4 4 0 0 1 -4 -4z" fill="#e8f0ff" stroke="#1565f2" stroke-width="1.7" stroke-linejoin="round"/>
+    <path d="M200 120 h34" stroke="#1565f2" stroke-width="1.5"/>
+    <text x="246" y="132" class="serif" font-size="29" font-weight="600" fill="#14171f">Archivio</text>
+    <rect x="392" y="110" width="124" height="24" rx="12" fill="#eef4ff"/>
+    <text x="454" y="126" text-anchor="middle" class="mono" font-size="10.5" font-weight="700" letter-spacing=".8" fill="#1565f2">VAULT · OBSIDIAN</text>
+
+    <rect x="800" y="102" width="362" height="40" rx="20" fill="#f6f5f1" stroke="#e6e2d8"/>
+    <circle cx="824" cy="121" r="6" fill="none" stroke="#7a8193" stroke-width="1.7"/>
+    <path d="M828.5 125.5 l4 4" stroke="#7a8193" stroke-width="1.7" stroke-linecap="round"/>
+    <text x="842" y="126.5" font-size="13.5" fill="#8a90a0">Cerca appunti o file</text>
+    <rect x="1100" y="111" width="50" height="22" rx="7" fill="#ffffff" stroke="#e1ddd2"/>
+    <text x="1125" y="126" text-anchor="middle" class="mono" font-size="10.5" fill="#7a8193">Ctrl K</text>
+
+    <rect x="1176" y="102" width="118" height="40" rx="20" fill="#14171f"/>
+    <path d="M1197 116 l10 10 M1207 116 l-10 10" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/>
+    <text x="1216" y="126.5" font-size="13" font-weight="600" fill="#ffffff">Chiudi</text>
+    <path d="M170 158 H1330" stroke="#ece8de"/>
+
+    <!-- folder tree -->
+    <text x="194" y="194" class="mono" font-size="10.5" letter-spacing="1.2" fill="#9aa0ad">CORSI</text>
+    <rect x="186" y="206" width="238" height="36" rx="12" fill="#ffffff" stroke="#dfe7f6" filter="url(#shS)"/>
+    <rect x="186" y="214" width="3" height="20" rx="1.5" fill="#1565f2"/>
+    <path d="M198 221 l4 4 l4 -4" fill="none" stroke="#5a6275" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M214 219 a2.5 2.5 0 0 1 2.5 -2.5 h4.5 l2.5 2.5 h8 a2.5 2.5 0 0 1 2.5 2.5 v8 a2.5 2.5 0 0 1 -2.5 2.5 h-15 a2.5 2.5 0 0 1 -2.5 -2.5z" fill="#1565f2"/>
+    <text x="242" y="229" font-size="13.5" font-weight="700" fill="#14171f">Sistemi Distribuiti</text>
+    <text x="410" y="229" text-anchor="end" class="mono" font-size="11" fill="#1565f2">9</text>
+
+    <path d="M222 246 V330" stroke="#e3dfd4" stroke-width="1.5"/>
+    <path d="M222 266 h10 M222 298 h10 M222 330 h10" stroke="#e3dfd4" stroke-width="1.5"/>
+    <!-- child: I miei appunti -->
+    <path d="M240 272 l1 -4 l8 -8 l3 3 l-8 8z" fill="none" stroke="#c98a12" stroke-width="1.5" stroke-linejoin="round"/>
+    <text x="262" y="270.5" font-size="13" fill="#3a4152">I miei appunti</text>
+    <text x="410" y="270.5" text-anchor="end" class="mono" font-size="11" fill="#9aa0ad">1</text>
+    <!-- child: Note generate -->
+    <use href="#spk" transform="translate(246 298) scale(.6)" fill="#1565f2"/>
+    <text x="262" y="302.5" font-size="13" fill="#3a4152">Note generate</text>
+    <text x="410" y="302.5" text-anchor="end" class="mono" font-size="11" fill="#9aa0ad">4</text>
+    <!-- child: Slide e allegati -->
+    <rect x="239" y="324" width="14" height="11" rx="2.5" fill="none" stroke="#248a5c" stroke-width="1.5"/>
+    <path d="M246 335 v3 M242 338 h8" stroke="#248a5c" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="262" y="334.5" font-size="13" fill="#3a4152">Slide e allegati</text>
+    <text x="410" y="334.5" text-anchor="end" class="mono" font-size="11" fill="#9aa0ad">4</text>
+
+    <path d="M200 370 l4 4 l-4 4" fill="none" stroke="#7a8193" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" transform="translate(0 -4)"/>
+    <path d="M214 365 a2.5 2.5 0 0 1 2.5 -2.5 h4.5 l2.5 2.5 h8 a2.5 2.5 0 0 1 2.5 2.5 v8 a2.5 2.5 0 0 1 -2.5 2.5 h-15 a2.5 2.5 0 0 1 -2.5 -2.5z" fill="none" stroke="#c98a12" stroke-width="1.5"/>
+    <text x="242" y="375" font-size="13.5" font-weight="500" fill="#2a2f3a">Algoritmi e Strutture Dati</text>
+    <path d="M200 406 l4 4 l-4 4" fill="none" stroke="#7a8193" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" transform="translate(0 -4)"/>
+    <path d="M214 401 a2.5 2.5 0 0 1 2.5 -2.5 h4.5 l2.5 2.5 h8 a2.5 2.5 0 0 1 2.5 2.5 v8 a2.5 2.5 0 0 1 -2.5 2.5 h-15 a2.5 2.5 0 0 1 -2.5 -2.5z" fill="none" stroke="#248a5c" stroke-width="1.5"/>
+    <text x="242" y="411" font-size="13.5" font-weight="500" fill="#2a2f3a">Crittografia Applicata</text>
+
+    <path d="M194 440 H416" stroke="#ece8de"/>
+    <text x="194" y="470" class="mono" font-size="10.5" letter-spacing="1.2" fill="#9aa0ad">ETICHETTE</text>
+    <rect x="194" y="484" width="78" height="24" rx="12" fill="#ffffff" stroke="#e6e2d8"/>
+    <text x="233" y="500" text-anchor="middle" class="mono" font-size="11" fill="#3a4152">#lamport</text>
+    <rect x="280" y="484" width="64" height="24" rx="12" fill="#ffffff" stroke="#e6e2d8"/>
+    <text x="312" y="500" text-anchor="middle" class="mono" font-size="11" fill="#3a4152">#clock</text>
+    <rect x="194" y="516" width="78" height="24" rx="12" fill="#ffffff" stroke="#e6e2d8"/>
+    <text x="233" y="532" text-anchor="middle" class="mono" font-size="11" fill="#3a4152">#verifica</text>
+    <rect x="280" y="516" width="64" height="24" rx="12" fill="#ffffff" stroke="#e6e2d8"/>
+    <text x="312" y="532" text-anchor="middle" class="mono" font-size="11" fill="#3a4152">#esame</text>
+
+    <!-- obsidian export -->
+    <rect x="186" y="724" width="238" height="96" rx="16" fill="#ffffff" stroke="#e6e2d8"/>
+    <path d="M212 742 l10 6 l2 14 l-10 8 l-10 -6 l-1 -12z" fill="#7a5af5"/>
+    <path d="M212 742 l2 14 l10 -8z" fill="#a58bff"/>
+    <path d="M214 756 l-10 8 l10 6z" fill="#5a3fd1"/>
+    <text x="236" y="754" font-size="13" font-weight="700" fill="#14171f">Esporta in Obsidian</text>
+    <text x="236" y="771" font-size="11.5" fill="#7a8193">9 file .md con cartelle</text>
+    <circle cx="402" cy="756" r="12" fill="#f4f1ea"/>
+    <path d="M402 750 v10 M398 756.5 l4 4 l4 -4" fill="none" stroke="#2a2f3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M202 788 H408" stroke="#f0ede6"/>
+    <circle cx="206" cy="804" r="3.5" fill="#48c788"/>
+    <text x="216" y="808" class="mono" font-size="10.5" fill="#248a5c">Sincronizzato · 2 min fa</text>
+
+    <!-- ===== main area ===== -->
+    <text x="476" y="198" font-size="12.5" fill="#9aa0ad">Archivio</text>
+    <path d="M533 190 l4 4 l-4 4" fill="none" stroke="#b5bac6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="546" y="198" font-size="12.5" font-weight="600" fill="#2a2f3a">Sistemi Distribuiti</text>
+    <rect x="1222" y="180" width="72" height="28" rx="14" fill="#f4f1ea"/>
+    <rect x="1225" y="183" width="33" height="22" rx="11" fill="#ffffff" filter="url(#shS)"/>
+    <g fill="#1565f2"><rect x="1235" y="188" width="5" height="5" rx="1.2"/><rect x="1243" y="188" width="5" height="5" rx="1.2"/><rect x="1235" y="196" width="5" height="5" rx="1.2"/><rect x="1243" y="196" width="5" height="5" rx="1.2"/></g>
+    <path d="M1270 189 h12 M1270 194 h12 M1270 199 h12" stroke="#7a8193" stroke-width="1.5" stroke-linecap="round"/>
+
+    <text x="476" y="242" class="serif" font-size="23" font-weight="600" fill="#14171f">Cartelle</text>
+
+    <!-- folder tile 1: I miei appunti -->
+    <rect x="476" y="258" width="259" height="128" rx="18" fill="#fdf6e7" stroke="#f1e3c2"/>
+    <g transform="translate(496 290)">
+      <use href="#fBack" fill="#e2a93a"/>
+      <rect x="10" y="4" width="40" height="30" rx="3" fill="#ffffff" transform="rotate(-6 30 19)"/>
+      <rect x="24" y="2" width="42" height="30" rx="3" fill="#fffaf0" stroke="#f1e3c2"/>
+      <path d="M30 10 h26 M30 16 h18" stroke="#e2c88f" stroke-width="1.6" stroke-linecap="round"/>
+      <use href="#fFront" fill="#f6c860"/>
+      <path d="M31 48 l1.4 -5 l11 -11 l3.6 3.6 l-11 11z" fill="#ffffff"/>
+    </g>
+    <text x="588" y="306" font-size="14.5" font-weight="700" fill="#14171f">I miei appunti</text>
+    <text x="588" y="326" font-size="12.5" fill="#7a8193">1 file · oggi</text>
+    <rect x="588" y="340" width="76" height="22" rx="11" fill="#f8e7bf"/>
+    <text x="626" y="355" text-anchor="middle" font-size="11" font-weight="600" fill="#8a5a00">Personali</text>
+
+    <!-- folder tile 2: Note generate -->
+    <rect x="755" y="258" width="259" height="128" rx="18" fill="#eef4ff" stroke="#d6e3fb"/>
+    <g transform="translate(775 290)">
+      <use href="#fBack" fill="#1565f2"/>
+      <rect x="10" y="4" width="40" height="30" rx="3" fill="#ffffff" transform="rotate(-6 30 19)"/>
+      <rect x="24" y="2" width="42" height="30" rx="3" fill="#f5f8ff" stroke="#d6e3fb"/>
+      <path d="M30 10 h26 M30 16 h18" stroke="#a9c8ff" stroke-width="1.6" stroke-linecap="round"/>
+      <use href="#fFront" fill="#4b8dff"/>
+      <use href="#spk" transform="translate(38 40) scale(.85)" fill="#ffffff"/>
+      <circle cx="52" cy="31" r="2.4" fill="#8af5c4"/>
+    </g>
+    <text x="867" y="306" font-size="14.5" font-weight="700" fill="#14171f">Note generate</text>
+    <text x="867" y="326" font-size="12.5" fill="#7a8193">4 file · 15 nov</text>
+    <rect x="867" y="340" width="92" height="22" rx="11" fill="#dce8ff"/>
+    <use href="#spk" transform="translate(880 351) scale(.42)" fill="#1565f2"/>
+    <text x="890" y="355" font-size="11" font-weight="600" fill="#1554c8">Da TutorAI</text>
+
+    <!-- folder tile 3: Slide e allegati -->
+    <rect x="1034" y="258" width="260" height="128" rx="18" fill="#ecf7f1" stroke="#cfeadb"/>
+    <g transform="translate(1054 290)">
+      <use href="#fBack" fill="#248a5c"/>
+      <rect x="10" y="4" width="40" height="30" rx="3" fill="#ffffff" transform="rotate(-6 30 19)"/>
+      <rect x="24" y="2" width="42" height="30" rx="3" fill="#f3fbf6" stroke="#cfeadb"/>
+      <rect x="30" y="8" width="20" height="13" rx="2" fill="#bfe8d2"/>
+      <use href="#fFront" fill="#48c788"/>
+      <rect x="27" y="32" width="22" height="15" rx="2.5" fill="none" stroke="#ffffff" stroke-width="2"/>
+      <path d="M38 47 v4 M33 51 h10" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+      <path d="M56 28 v14 a4 4 0 0 1 -8 0 v-10" fill="none" stroke="#14532d" stroke-opacity=".5" stroke-width="1.6" stroke-linecap="round"/>
+    </g>
+    <text x="1146" y="306" font-size="14.5" font-weight="700" fill="#14171f">Slide e allegati</text>
+    <text x="1146" y="326" font-size="12.5" fill="#7a8193">4 file · 12 nov</text>
+    <rect x="1146" y="340" width="86" height="22" rx="11" fill="#d3efdf"/>
+    <text x="1189" y="355" text-anchor="middle" class="mono" font-size="10.5" font-weight="600" fill="#1d6b47">PDF · PPTX</text>
+
+    <!-- section: appunti e spiegazioni -->
+    <text x="476" y="434" class="serif" font-size="23" font-weight="600" fill="#14171f">Appunti e spiegazioni</text>
+    <rect x="1054" y="414" width="56" height="28" rx="14" fill="#14171f"/>
+    <text x="1082" y="432.5" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff">Tutti</text>
+    <rect x="1118" y="414" width="72" height="28" rx="14" fill="#f4f1ea"/>
+    <text x="1154" y="432.5" text-anchor="middle" font-size="12" font-weight="600" fill="#4a5163">Appunti</text>
+    <rect x="1198" y="414" width="96" height="28" rx="14" fill="#f4f1ea"/>
+    <text x="1246" y="432.5" text-anchor="middle" font-size="12" font-weight="600" fill="#4a5163">Spiegazioni</text>
+
+    <!-- card 1 -->
+    <rect x="476" y="454" width="259" height="188" rx="18" fill="#ffffff" stroke="#e8e4da"/>
+    <rect x="494" y="472" width="86" height="22" rx="11" fill="#fdf1dc"/>
+    <path d="M504 488 l.9 -3.4 l6 -6 l2.5 2.5 l-6 6z" fill="#c98a12"/>
+    <text x="518" y="487" font-size="11" font-weight="600" fill="#8a5a00">Appunti · v1</text>
+    <text x="494" y="522" class="serif" font-size="17" font-weight="600" fill="#14171f">1.3 Orologi Logici</text>
+    <text x="494" y="542" class="serif" font-size="17" font-weight="600" fill="#14171f">di Lamport</text>
+    <text x="494" y="566" font-size="12" fill="#6b7180">Ogni nodo ha un orologio fisico:</text>
+    <text x="494" y="583" font-size="12" fill="#6b7180">i clock logici ordinano gli eventi.</text>
+    <path d="M494 600 H717" stroke="#f0ede6"/>
+    <text x="494" y="622" class="mono" font-size="10.5" fill="#8a90a0">1.3 · oggi 19:48</text>
+    <rect x="679" y="609" width="38" height="20" rx="6" fill="#f2efff"/>
+    <text x="698" y="623" text-anchor="middle" class="mono" font-size="10.5" font-weight="700" fill="#6a4be0">.md</text>
+
+    <!-- card 2 -->
+    <rect x="755" y="454" width="259" height="188" rx="18" fill="#ffffff" stroke="#e8e4da"/>
+    <rect x="773" y="472" width="94" height="22" rx="11" fill="#e8f0ff"/>
+    <use href="#spk" transform="translate(786 483) scale(.42)" fill="#1565f2"/>
+    <text x="796" y="487" font-size="11" font-weight="600" fill="#1554c8">Spiegazione</text>
+    <text x="773" y="522" class="serif" font-size="17" font-weight="600" fill="#14171f">1.1 Modello di sistema</text>
+    <text x="773" y="542" class="serif" font-size="17" font-weight="600" fill="#14171f">asincrono</text>
+    <text x="773" y="566" font-size="12" fill="#6b7180">Nessun limite sui tempi di</text>
+    <text x="773" y="583" font-size="12" fill="#6b7180">consegna né sulle velocità.</text>
+    <path d="M773 600 H996" stroke="#f0ede6"/>
+    <text x="773" y="622" class="mono" font-size="10.5" fill="#8a90a0">1.1 · 14 nov</text>
+    <rect x="958" y="609" width="38" height="20" rx="6" fill="#f2efff"/>
+    <text x="977" y="623" text-anchor="middle" class="mono" font-size="10.5" font-weight="700" fill="#6a4be0">.md</text>
+
+    <!-- card 3 -->
+    <rect x="1034" y="454" width="260" height="188" rx="18" fill="#ffffff" stroke="#e8e4da"/>
+    <rect x="1052" y="472" width="88" height="22" rx="11" fill="#e6f5ec"/>
+    <path d="M1061 483 l3 3 l5.5 -6" fill="none" stroke="#248a5c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="1075" y="487" font-size="11" font-weight="600" fill="#1d6b47">Verificata</text>
+    <text x="1052" y="522" class="serif" font-size="17" font-weight="600" fill="#14171f">1.2 Relazione</text>
+    <text x="1052" y="542" class="serif" font-size="17" font-weight="600" fill="#14171f">Happened-Before</text>
+    <text x="1052" y="566" font-size="12" fill="#6b7180">a → b se a precede b nello stesso</text>
+    <text x="1052" y="583" font-size="12" fill="#6b7180">processo o tramite un messaggio.</text>
+    <path d="M1052 600 H1276" stroke="#f0ede6"/>
+    <text x="1052" y="622" class="mono" font-size="10.5" fill="#8a90a0">1.2 · 15 nov</text>
+    <rect x="1238" y="609" width="38" height="20" rx="6" fill="#f2efff"/>
+    <text x="1257" y="623" text-anchor="middle" class="mono" font-size="10.5" font-weight="700" fill="#6a4be0">.md</text>
+
+    <!-- attachments -->
+    <text x="476" y="678" font-size="13.5" font-weight="700" fill="#2a2f3a">Allegati recenti</text>
+    <text x="1294" y="678" text-anchor="end" font-size="12.5" font-weight="600" fill="#1565f2">Vedi tutti →</text>
+    <rect x="476" y="692" width="818" height="50" rx="14" fill="#fbfaf7" stroke="#eeeae1"/>
+    <path d="M494 702 h16 l7 7 v24 a3 3 0 0 1 -3 3 h-20 a3 3 0 0 1 -3 -3 v-28 a3 3 0 0 1 3 -3z" fill="#ffffff" stroke="#e5484d" stroke-width="1.4" transform="translate(0 -1)"/>
+    <text x="503.5" y="728" text-anchor="middle" class="mono" font-size="7.5" font-weight="700" fill="#e5484d">PDF</text>
+    <text x="534" y="714" font-size="13.5" font-weight="600" fill="#14171f">Lezione 03 · Clock logici.pdf</text>
+    <text x="534" y="731" font-size="11.5" fill="#8a90a0">18 slide · 2,4 MB · caricato il 12 nov</text>
+    <rect x="1150" y="706" width="56" height="22" rx="11" fill="#e6f5ec"/>
+    <text x="1178" y="721" text-anchor="middle" font-size="11" font-weight="600" fill="#1d6b47">Slide</text>
+    <text x="1262" y="721.5" text-anchor="end" font-size="12.5" font-weight="600" fill="#2a2f3a">Apri</text>
+    <path d="M1272 712 l5 5 l-5 5" fill="none" stroke="#2a2f3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <rect x="476" y="750" width="818" height="50" rx="14" fill="#fbfaf7" stroke="#eeeae1"/>
+    <path d="M494 760 h16 l7 7 v24 a3 3 0 0 1 -3 3 h-20 a3 3 0 0 1 -3 -3 v-28 a3 3 0 0 1 3 -3z" fill="#ffffff" stroke="#7a5af5" stroke-width="1.4" transform="translate(0 -1)"/>
+    <text x="503.5" y="786" text-anchor="middle" class="mono" font-size="7.5" font-weight="700" fill="#7a5af5">MD</text>
+    <text x="534" y="772" font-size="13.5" font-weight="600" fill="#14171f">Esercizi Lamport.md</text>
+    <text x="534" y="789" font-size="11.5" fill="#8a90a0">Obsidian · 3 KB · modificato il 14 nov</text>
+    <rect x="1140" y="764" width="66" height="22" rx="11" fill="#fdf1dc"/>
+    <text x="1173" y="779" text-anchor="middle" font-size="11" font-weight="600" fill="#8a5a00">Appunti</text>
+    <text x="1262" y="779.5" text-anchor="end" font-size="12.5" font-weight="600" fill="#2a2f3a">Apri</text>
+    <path d="M1272 770 l5 5 l-5 5" fill="none" stroke="#2a2f3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
