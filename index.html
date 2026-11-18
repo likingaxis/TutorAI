@@ -325,7 +325,7 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .rail-icon-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.85; stroke-linecap: round; stroke-linejoin: round; }
 
 @media (hover: hover) and (pointer: fine) {
-  .rb[data-tip]::after, .rail-icon-btn[data-tip]::after {
+  .rail-icon-btn[data-tip]::after {
     content: attr(data-tip);
     position: absolute;
     left: 60px; top: 50%;
@@ -343,7 +343,7 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
     transition: opacity 0.15s, transform 0.18s;
     z-index: 90;
   }
-  .rb[data-tip]:hover::after, .rail-icon-btn[data-tip]:hover::after { opacity: 1; transform: translate(0, -50%); }
+  .rail-icon-btn[data-tip]:hover::after { opacity: 1; transform: translate(0, -50%); }
 }
 
 .tslider {
@@ -411,17 +411,6 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
   border-color: var(--blue);
   color: var(--rail-pill-ink);
 }
-.rail-av-clock {
-  position: absolute;
-  right: -3px; bottom: -2px;
-  width: 14px; height: 14px;
-  border-radius: 50%;
-  background: var(--rail-pill);
-  color: var(--rail-pill-ink);
-  border: 1.5px solid rgba(12, 24, 54, 0.8);
-  display: grid; place-items: center;
-}
-.rail-av-clock svg { width: 8px; height: 8px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
 /* ============================================================================
    2. COLLAPSIBLE COURSE SIDEBAR
@@ -2846,7 +2835,6 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
   <button class="rail-profile" id="railProfileBtn" data-view="attivita" onclick="setView('attivita')" data-tip="Profilo e cronologia" aria-label="Profilo e cronologia">
     <span class="rail-av">
       <span id="railAvatarContents" aria-hidden="true">L</span>
-      <span class="rail-av-clock" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg></span>
     </span>
     <span class="rail-profile-lbl">Profilo</span>
   </button>
@@ -2958,20 +2946,20 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
                 <line x1="42" y1="35" x2="318" y2="35" stroke="rgba(255,255,255,0.34)" stroke-width="1.35"/>
                 <line x1="42" y1="68" x2="318" y2="68" stroke="rgba(255,255,255,0.34)" stroke-width="1.35"/>
                 <line x1="42" y1="101" x2="318" y2="101" stroke="rgba(255,255,255,0.34)" stroke-width="1.35"/>
-                <path d="M78 35 L154 65" stroke="#8af5c4" stroke-width="1.9" marker-end="url(#home-hero-arr-m)" fill="none"/>
+                <path class="hero-msg-flow" d="M78 35 L154 65" stroke="#8af5c4" stroke-width="1.9" marker-end="url(#home-hero-arr-m)" fill="none"/>
                 <path d="M168 65 L220 38" stroke="rgba(255,255,255,0.9)" stroke-width="1.5" marker-end="url(#home-hero-arr-w)" fill="none"/>
                 <path d="M168 72 L274 98" stroke="rgba(255,255,255,0.9)" stroke-width="1.5" marker-end="url(#home-hero-arr-w)" fill="none"/>
                 <circle cx="78" cy="35" r="5" fill="#ffffff"/>
                 <circle cx="110" cy="68" r="4.8" fill="#ffffff" fill-opacity="0.92"/>
                 <circle cx="126" cy="101" r="4.8" fill="#ffffff" fill-opacity="0.92"/>
-                <circle cx="162" cy="68" r="13.5" fill="#8af5c4" fill-opacity="0.26"/>
+                <circle class="hero-pulse-ring" cx="162" cy="68" r="13.5" fill="#8af5c4" fill-opacity="0.26"/>
                 <circle cx="162" cy="68" r="7.2" fill="#48c788" stroke="#ffffff" stroke-width="2.2"/>
                 <rect x="140" y="81" width="44" height="17" rx="8.5" fill="#ffffff"/>
                 <text x="162" y="92.5" text-anchor="middle" font-family="var(--mono)" font-size="9.5" font-weight="700" fill="#1565f2">C=2</text>
                 <circle cx="226" cy="35" r="5" fill="#ffffff"/>
                 <circle cx="280" cy="101" r="5" fill="#ffffff"/>
-                <path d="M312 15 L314 20.5 L319.5 22.5 L314 24.5 L312 30 L310 24.5 L304.5 22.5 L310 20.5 Z" fill="#8af5c4"/>
-                <path d="M296 112 L297.2 115 L300.2 116.2 L297.2 117.4 L296 120.4 L294.8 117.4 L291.8 116.2 L294.8 115 Z" fill="#ffffff" fill-opacity="0.88"/>
+                <path class="hero-spark" d="M312 15 L314 20.5 L319.5 22.5 L314 24.5 L312 30 L310 24.5 L304.5 22.5 L310 20.5 Z" fill="#8af5c4"/>
+                <path class="hero-spark hero-spark-alt" d="M296 112 L297.2 115 L300.2 116.2 L297.2 117.4 L296 120.4 L294.8 117.4 L291.8 116.2 L294.8 115 Z" fill="#ffffff" fill-opacity="0.88"/>
               </svg>
             </div>
           </section>
@@ -3373,6 +3361,7 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
               <svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M11 4l1.7 4.6L17.3 10.3l-4.6 1.7L11 16.6l-1.7-4.6L4.7 10.3l4.6-1.7z" fill="#ffffff"/><path d="M19 3l.6 1.6 1.6.6-1.6.6-.6 1.6-.6-1.6-1.6-.6 1.6-.6z" fill="#8af5c4"/></svg>
             </span>
             <span class="explain-sel-kicker">Chiedi al tutor</span>
+            <span class="explain-sel-sub mono">selezione</span>
           </div>
         </div>
         <button type="button" class="explain-sel-close" aria-label="Chiudi" onclick="hideExplainSelPop()">✕</button>
@@ -4621,11 +4610,11 @@ function renderHomeView() {
             <small>${c.percorso === 'lezione' ? 'Lezione per lezione' : 'Preparazione esame'}</small>
           </span>
           <span class="course-card-progress">
-            <span class="course-progress-segments" style="--segments:${c.units.length}" aria-hidden="true">${c.units.map(lesson => `<i class="${lesson.stato === 'dimostrato' ? 'verified' : ''}"></i>`).join('')}</span>
+            <span class="course-progress-segments" style="--segments:${c.units.length}" aria-hidden="true">${c.units.map(lesson => `<i class="${lesson.stato === 'dimostrato' ? 'verified' : lesson.stato === 'in_corso' ? 'in-progress' : ''}"></i>`).join('')}</span>
             <span><b>${verified}</b> di ${c.units.length} unità verificate</span>
           </span>
           ${needsReview ? '<span class="course-card-status"><span class="course-recall">Da ripassare</span></span>'
-            : reminderLabel ? `<span class="course-card-status"><span class="course-cal-foot">${icon('i-calendar')} Richiamo · ${escapeCourseText(reminderLabel)}</span></span>` : ''}
+            : reminderLabel ? `<span class="course-card-status"><span class="course-cal-foot">${icon('i-calendar')} Richiamo · ${escapeCourseText(reminderLabel)}</span>${nextReminder.date === todayKey ? '<span class="course-cal-dot" aria-hidden="true"></span>' : ''}</span>` : ''}
         </span>
       </button>`;
   }).join('') || '<p class="library-empty">Nessun corso corrisponde alla ricerca.</p>';
@@ -5141,6 +5130,7 @@ function renderOnboardingPickers() {
   document.getElementById('wizardIconHintText').textContent = `Icona suggerita · ${iconName}`;
   const appearance = `${kind}:${col}`;
   if (preview.dataset.appearance === appearance) return;
+  const hadPrevAppearance = Boolean(preview.dataset.appearance);
   preview.dataset.appearance = appearance;
   const colorNames = ['Cobalto', 'Smeraldo', 'Ambra', 'Viola', 'Corallo', 'Petrolio'];
   const colorName = colorNames[COURSE_COLORS.indexOf(col)];
@@ -5158,6 +5148,15 @@ function renderOnboardingPickers() {
     preview.innerHTML = `${courseCoverArt({ kind, accent: col })}<span class="course-banner-icon wizard-cover-preview-badge"></span>`;
   }
   preview.querySelector('.wizard-cover-preview-badge').innerHTML = subjectIcon;
+  if (hadPrevAppearance) {
+    const previewCard = document.querySelector('#wizardPreviewStage .wizard-preview-card');
+    if (previewCard) {
+      previewCard.classList.remove('is-popping');
+      void previewCard.offsetWidth;
+      previewCard.classList.add('is-popping');
+      previewCard.addEventListener('animationend', () => previewCard.classList.remove('is-popping'), { once: true });
+    }
+  }
   iconBox.innerHTML = STEM_ICONS.map(ic => `
     <button type="button" class="icon-opt ${ic.id === kind ? 'on' : ''}" title="${ic.label}" aria-label="${ic.label}" aria-pressed="${ic.id === kind}" onclick="setOnboardingIcon('${ic.id}')">
       ${renderSubjectSvg(ic.id, ic.id === kind ? col : 'var(--mut)')}
@@ -6119,12 +6118,12 @@ function renderStudioDiagram(kind, unitNumber, markerId, activeEvent, interactiv
       <line x1="54" y1="40" x2="554" y2="40" stroke="var(--faint)" stroke-opacity="0.7" stroke-width="1.6" stroke-linecap="round"/>
       <line x1="54" y1="96" x2="554" y2="96" stroke="var(--faint)" stroke-opacity="0.7" stroke-width="1.6" stroke-linecap="round"/>
       <line x1="54" y1="152" x2="554" y2="152" stroke="var(--faint)" stroke-opacity="0.7" stroke-width="1.6" stroke-linecap="round"/>
-      <line x1="126" y1="43" x2="274" y2="91" stroke="var(--green)" stroke-width="2" marker-end="url(#${markerId}-green)"/>
-      <line x1="296" y1="92" x2="395" y2="44" stroke="var(--blue)" stroke-width="2" marker-end="url(#${markerId})"/>
-      <rect x="184" y="48" width="64" height="17" rx="8.5" fill="var(--green-s)" stroke="var(--green)" stroke-opacity="0.32"/>
-      <text x="216" y="60" text-anchor="middle" font-size="10" font-weight="700" font-family="var(--mono)" fill="var(--green-i)">m₁ (t=1)</text>
-      <rect x="334" y="55" width="64" height="17" rx="8.5" fill="var(--card)" stroke="color-mix(in srgb, var(--blue) 32%, var(--line))"/>
-      <text x="366" y="67" text-anchor="middle" font-size="10" font-weight="700" font-family="var(--mono)" fill="var(--blue-i)">m₂ (t=2)</text>
+      <line class="diag-msg-line" x1="126" y1="43" x2="274" y2="91" stroke="var(--green)" stroke-width="2" marker-end="url(#${markerId}-green)"/>
+      <line class="diag-msg-line diag-msg-line-alt" x1="296" y1="92" x2="395" y2="44" stroke="var(--blue)" stroke-width="2" marker-end="url(#${markerId})"/>
+      <rect x="198" y="46" width="64" height="17" rx="8.5" fill="var(--green-s)" stroke="var(--green)" stroke-opacity="0.32"/>
+      <text x="230" y="58" text-anchor="middle" font-size="10" font-weight="700" font-family="var(--mono)" fill="var(--green-i)">m₁ (t=1)</text>
+      <rect x="352" y="72" width="64" height="17" rx="8.5" fill="var(--card)" stroke="color-mix(in srgb, var(--blue) 32%, var(--line))"/>
+      <text x="384" y="84" text-anchor="middle" font-size="10" font-weight="700" font-family="var(--mono)" fill="var(--blue-i)">m₂ (t=2)</text>
       ${LAMPORT_STUDY_EVENTS.map(([id, x, y, label]) => renderSvgNode(id, x, y, label, activeEvent, interactive)).join('')}
     </svg>`;
   return `
@@ -6276,8 +6275,8 @@ function renderLeftPane() {
       ${renderStudioDiagram('lamport', u.num, 'explanation-arrow', app.activeDiagramEvent, true)}
       <div class="diag-readout" aria-live="polite"><span class="diag-dot" aria-hidden="true"></span><span>${diagNotes[app.activeDiagramEvent]}</span></div>
     `, 'Diagramma interattivo') : ''}
-    ${renderPara('p-causa', writingMode === 'diretta' ? 'La causalità impone l’ordine dei timestamp: $a \\to b$ implica $C(a) < C(b)$.' : 'Se $a$ avviene causalmente prima di $b$ ($a \\to b$), allora i timestamp logici soddisfano sempre $C(a) < C(b)$.', 'Slide p. 12', 12)}
-    ${renderPara('p-viceversa', writingMode === 'diretta' ? 'Un timestamp minore non prova la causalità. Senza una catena di messaggi, gli eventi possono essere concorrenti.' : 'Non vale però l\'implicazione inversa: osservare $C(a) < C(b)$ non dimostra che $a \\to b$, perché due eventi privi di messaggi possono essere concorrenti ($a \\parallel b$).', 'Dispensa p. 6', 6, c.units.find(unit => unit.id === 'u12')?.src)}
+    ${renderPara('p-causa', writingMode === 'diretta' ? 'La causalità impone l’ordine dei timestamp: $a \\to b$ implica $C(a) < C(b)$.' : 'Se $a$ avviene causalmente prima di $b$ <span class="math-nowrap">($a \\to b$)</span>, allora i timestamp logici soddisfano sempre $C(a) < C(b)$.', 'Slide p. 12', 12)}
+    ${renderPara('p-viceversa', writingMode === 'diretta' ? 'Un timestamp minore non prova la causalità. Senza una catena di messaggi, gli eventi possono essere concorrenti.' : 'Non vale però l\'implicazione inversa: osservare $C(a) < C(b)$ non dimostra che $a \\to b$, perché due eventi privi di messaggi possono essere concorrenti <span class="math-nowrap">($a \\parallel b$)</span>.', 'Dispensa p. 6', 6, c.units.find(unit => unit.id === 'u12')?.src)}
     <p class="studio-rule-reminder">A ogni evento interno su $P_i$, il contatore avanza di uno: $C_i \\leftarrow C_i + 1$.</p>
     ${renderStudioWritingAid(writingMode, ['Aumenta il contatore locale quando avviene un evento.', 'Alla ricezione, prendi il massimo tra contatore locale e timestamp del messaggio, poi aggiungi uno.', 'Per stabilire la causalità, controlla se gli eventi sono collegati da una catena di messaggi.'], 'Se ricevi un messaggio con timestamp $5$ quando il contatore locale è $3$, il nuovo contatore vale $\\max(3,5)+1=6$.')}
     ${app.depth === 'completa' && !['diretta', 'passaggi'].includes(writingMode) ? `<div class="code-block"><span class="cm"># Regola di aggiornamento alla ricezione di (msg, ts_msg)</span>\n<span class="kw">function</span> onReceive(msg, ts_msg) {\n  clock = Math.max(clock, ts_msg) + 1;\n}</div>` : ''}
@@ -6293,8 +6292,8 @@ function renderSvgNode(id, cx, cy, label, activeEvent, interactive) {
   const pillW = label.length > 4 ? 54 : 44;
   return `<g${interactive ? ` class="diag-node" role="button" tabindex="0" data-event="${id}" aria-pressed="${on}" aria-label="Evento ${id.slice(1).split('').join(', ')}, ${label}" onclick="selectDiagramEvent('${id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectDiagramEvent('${id}', true)}"` : ''}>
     ${interactive ? `<circle cx="${cx}" cy="${cy}" r="23" fill="transparent"/>` : ''}
-    ${on ? `<circle cx="${cx}" cy="${cy}" r="16" fill="var(--blue)" fill-opacity="0.16"/>` : ''}
-    <circle cx="${cx}" cy="${cy}" r="${on ? 8.5 : 6.5}" fill="${on ? 'var(--blue)' : 'var(--card)'}" stroke="${on ? '#ffffff' : 'var(--blue)'}" stroke-width="${on ? 2.5 : 2}"/>
+    ${on ? `<circle class="diag-active-halo" cx="${cx}" cy="${cy}" r="16" fill="var(--blue)" fill-opacity="0.16"/>` : ''}
+    <circle class="diag-node-dot" cx="${cx}" cy="${cy}" r="${on ? 8.5 : 6.5}" fill="${on ? 'var(--blue)' : 'var(--card)'}" stroke="${on ? '#ffffff' : 'var(--blue)'}" stroke-width="${on ? 2.5 : 2}"/>
     ${on ? `<rect x="${cx - pillW / 2}" y="${pillY}" width="${pillW}" height="17" rx="8.5" fill="var(--blue)"/>` : ''}
     <text x="${cx}" y="${textY}" text-anchor="middle" font-size="10.2" font-weight="${on ? '700' : '650'}" font-family="var(--mono)" fill="${on ? '#ffffff' : 'var(--mut)'}">${label}</text>
   </g>`;
@@ -8030,11 +8029,13 @@ function renderRipassoView() {
             <rect x="26" y="109" width="11" height="11" rx="3.2" fill="none" stroke="var(--faint)" stroke-width="1.3"/>
             <rect x="42" y="112.5" width="42" height="4" rx="2" fill="var(--line)"/>
           </g>
-          <circle cx="132" cy="129" r="19" fill="url(#recall-badge-g)" stroke="#ffffff" stroke-width="3.2"/>
-          <path d="M124 129l5.2 5.2 10.5-10.8" stroke="#ffffff" stroke-width="2.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M194 14l1.5 4.2 4.2 1.5-4.2 1.5-1.5 4.2-1.5-4.2-4.2-1.5 4.2-1.5z" fill="#8af5c4"/>
-          <path d="M8 134l.9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9z" fill="#ffffff" fill-opacity="0.9"/>
-          <path d="M196 122l1 2.7 2.7 1-2.7 1-1 2.7-1-2.7-2.7-1 2.7-1z" fill="#ffffff" fill-opacity="0.78"/>
+          <g class="recall-check-badge">
+            <circle cx="132" cy="129" r="19" fill="url(#recall-badge-g)" stroke="#ffffff" stroke-width="3.2"/>
+            <path d="M124 129l5.2 5.2 10.5-10.8" stroke="#ffffff" stroke-width="2.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+          <path class="recall-spark" d="M194 14l1.5 4.2 4.2 1.5-4.2 1.5-1.5 4.2-1.5-4.2-4.2-1.5 4.2-1.5z" fill="#8af5c4"/>
+          <path class="recall-spark recall-spark-b" d="M8 134l.9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9z" fill="#ffffff" fill-opacity="0.9"/>
+          <path class="recall-spark recall-spark-c" d="M196 122l1 2.7 2.7 1-2.7 1-1 2.7-1-2.7-2.7-1 2.7-1z" fill="#ffffff" fill-opacity="0.78"/>
         </svg>
       </div>
     </section>
@@ -8505,7 +8506,7 @@ function renderProfileBrain(entries, selectedIndex) {
     const label = escapeCourseText(entry.course.nome + ' · ' + entry.unit.titolo + ' · ' + entry.state.label);
     return `<button type="button" class="profile-brain-node ${entry.state.tone}" data-brain-node="${entry.index}"
       style="--node-x:${100 * x / 328}%;--node-y:${100 * y / 400}%" tabindex="${active ? 0 : -1}" aria-pressed="${active}"
-      aria-label="${label}" title="${label}"></button>`;
+      aria-label="${label}" title="${label}">${active ? '<span class="brain-node-ring" aria-hidden="true"></span>' : ''}</button>`;
   }).join('');
   const links = visibleEntries.slice(1).map((entry, from) => {
     const previous = visibleEntries[from];
@@ -8514,7 +8515,8 @@ function renderProfileBrain(entries, selectedIndex) {
     const [x1, y1] = points[from];
     const [x2, y2] = points[to];
     const bothVerified = previous.state.tone === 'verified' && entry.state.tone === 'verified';
-    return `<path class="${bothVerified ? 'verified' : ''}" d="M${x1} ${y1} Q${(x1 + x2) / 2} ${Math.min(y1, y2) - 14} ${x2} ${y2}"/>`;
+    const d = `M${x1} ${y1} Q${(x1 + x2) / 2} ${Math.min(y1, y2) - 14} ${x2} ${y2}`;
+    return `<path class="${bothVerified ? 'verified' : ''}" d="${d}"/>${bothVerified ? `<path class="synapse-pulse" d="${d}"/>` : ''}`;
   }).join('');
   const counts = { verified: 0, active: 0, review: 0, unstarted: 0 };
   scoped.forEach(entry => counts[entry.state.tone]++);
@@ -8673,9 +8675,12 @@ function renderAttivitaView() {
         </div>
         ${streak ? `<span class="profile-streak">${icon('i-flame')} ${streak === 1 ? '1 giorno di studio' : 'Serie di ' + streak + ' giorni'}</span>` : ''}
         <div class="profile-id-wrap">
-          <button type="button" class="profile-avatar-lg" aria-label="Modifica profilo" title="Modifica profilo" onclick="openAccountPage('edit')">
-            <span id="profileAvatar" aria-hidden="true"></span>
-          </button>
+          <span class="profile-avatar-shell">
+            <button type="button" class="profile-avatar-lg" aria-label="Modifica profilo" title="Modifica profilo" onclick="openAccountPage('edit')">
+              <span id="profileAvatar" aria-hidden="true"></span>
+            </button>
+            <span class="profile-online-dot" aria-hidden="true"></span>
+          </span>
           <div class="profile-identity">
             <strong id="profileName"></strong>
             <p id="profileProgramme"></p>

@@ -838,6 +838,19 @@
 }
 .studio-seg-spark {
   color: var(--blue);
+  transition: transform 0.24s cubic-bezier(0.22, 1.15, 0.36, 1);
+}
+#tabExplain.on .studio-seg-spark,
+#tabExplain:hover .studio-seg-spark {
+  transform: rotate(15deg) scale(1.12);
+}
+.math-nowrap { white-space: nowrap; }
+@keyframes slide-sheet-in {
+  from { opacity: 0.35; transform: translateY(6px) scale(0.99); }
+  to { opacity: 1; transform: none; }
+}
+#view-studio .slide-frame {
+  animation: slide-sheet-in 0.24s cubic-bezier(0.22, 1.15, 0.36, 1) both;
 }
 #view-studio .studio-depth-pill {
   height: 36px;
@@ -972,6 +985,34 @@
   background: var(--green-s);
   color: var(--green-i);
 }
+@keyframes diag-halo-pulse {
+  0%, 100% { transform: scale(0.94); opacity: 0.72; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+@keyframes diag-line-draw {
+  from { stroke-dashoffset: 220; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes readout-refresh {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+#view-studio .diag-active-halo {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: diag-halo-pulse 2.4s ease-in-out infinite;
+}
+#view-studio .diag-node .diag-node-dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.2s cubic-bezier(0.22, 1.15, 0.36, 1), fill 0.18s ease, stroke 0.18s ease, stroke-width 0.2s ease;
+}
+#view-studio .diag-node:is(:hover, :focus-visible) .diag-node-dot { transform: scale(1.16); }
+#view-studio .diag-msg-line {
+  stroke-dasharray: 220;
+  animation: diag-line-draw 0.42s cubic-bezier(0.22, 0.85, 0.35, 1) both;
+}
+#view-studio .diag-msg-line-alt { animation-delay: 90ms; }
 #view-studio .diag-node:focus-visible { outline: none; }
 #view-studio .diag-node:focus-visible circle:first-child {
   fill: color-mix(in srgb, var(--blue) 15%, transparent);
@@ -988,6 +1029,7 @@
   background: var(--card);
   border: 1px solid var(--studio-rule);
   font: 11.5px/1.4 var(--mono);
+  animation: readout-refresh 0.22s ease-out both;
 }
 .diag-dot {
   width: 8px;
@@ -1041,9 +1083,14 @@
 #view-studio .note-block[data-kind="bullet"]::after {
   content: '•';
   position: absolute;
-  inset: 7px auto auto 0;
-  color: var(--paper-mut);
+  inset: 9px auto auto 0;
+  color: var(--blue);
+  font-size: 16px;
+  line-height: 1;
   pointer-events: none;
+}
+#view-studio .note-page .note-block.has-obs {
+  border-radius: 12px;
 }
 #view-studio .note-page .note-block[data-kind="code"],
 #view-studio .note-page .note-block[data-kind="formula"].note-block-editing {
@@ -1100,11 +1147,22 @@
   background: #21273a;
   border-color: rgba(110, 149, 255, 0.26);
 }
+#view-studio .paper-dock-wrap:not(.is-pinned) .dock-btn {
+  transition: background-color 0.16s ease, color 0.16s ease, transform 0.2s cubic-bezier(0.22, 1.15, 0.36, 1), box-shadow 0.2s ease;
+}
+#view-studio .paper-dock-wrap:not(.is-pinned) .dock-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: translateY(-1px);
+}
 #view-studio .paper-dock-wrap:not(.is-pinned) .dock-btn.accent {
   background: #165bd4;
   color: #ffffff;
   border-radius: 999px;
   padding: 0 12px;
+}
+#view-studio .paper-dock-wrap:not(.is-pinned) .dock-btn.accent:hover {
+  background: #1e6ef5;
+  box-shadow: 0 4px 14px -4px rgba(21, 101, 242, 0.65);
 }
 #view-studio .paper-dock-wrap:not(.is-pinned) .dock-add summary {
   border-radius: 50%;
@@ -1114,6 +1172,7 @@
   color: #ffffff;
   border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow: 0 14px 32px -10px rgba(10, 15, 28, 0.45);
+  transition: transform 0.2s cubic-bezier(0.22, 1.15, 0.36, 1), background-color 0.18s ease;
 }
 #view-studio .note-bottom-bar .btn.blue-pri {
   background: #1565f2;
@@ -1122,10 +1181,19 @@
   border-radius: 999px;
   padding-inline: 16px;
   box-shadow: none;
+  transition: transform 0.2s cubic-bezier(0.22, 1.15, 0.36, 1), box-shadow 0.2s ease, filter 0.16s ease;
+}
+#view-studio .note-bottom-bar .btn.blue-pri:hover {
+  transform: translateY(-1.5px);
+  box-shadow: 0 8px 18px -8px rgba(21, 101, 242, 0.55);
+  filter: brightness(1.06);
 }
 :root[data-theme="sepia"] #view-studio .note-bottom-bar .btn.blue-pri {
   background: #5c4535;
   color: #fcf6ea;
+}
+:root[data-theme="sepia"] #view-studio .note-bottom-bar .btn.blue-pri:hover {
+  box-shadow: 0 8px 18px -8px rgba(52, 36, 22, 0.45);
 }
 .note-footer-actions {
   display: flex;
@@ -1144,8 +1212,9 @@
   #view-studio .splitter::before { width: 8px; height: 40px; border: 1px solid var(--studio-rule); background: var(--studio-sheet); opacity: 1; }
   #view-studio .splitter:is(:hover, :focus-visible, .drag)::before { border-color: var(--blue); }
   #view-studio .pane-top { min-height: 48px; padding-inline: clamp(15px, 2.2vw, 32px); }
+  #view-studio .left-pane .pane-top { border-bottom-color: transparent; background: var(--studio-sheet); padding-top: 10px; }
   #view-studio .paper-pane .pane-top { border-bottom-color: transparent; background: var(--studio-desk); }
-  #view-studio .doc-sheet { padding: 17px clamp(17px, 2.1vw, 31px) 30px; }
+  #view-studio .doc-sheet { padding: 10px clamp(17px, 2.1vw, 31px) 30px; }
   #view-studio .note-scroll { padding: 17px clamp(17px, 1.8vw, 27px) 15px; }
   #view-studio .paper-pane:has(.paper-dock-wrap.is-pinned) .note-scroll { padding-bottom: 32px; }
   #view-studio .note-page { padding: 36px clamp(22px, 3.25vw, 47px) 34px; }
@@ -1210,7 +1279,7 @@
 
 /* Elevated REVISION2000 Ask-Tutor Popover across Light / Sepia / Dark */
 @keyframes explain-pop-in {
-  from { opacity: 0.98; transform: translateY(4px) scale(0.988); }
+  from { opacity: 0; transform: translateY(6px) scale(0.96); }
   to { opacity: 1; transform: none; }
 }
 #view-studio .explain-sel-pop {
@@ -1221,8 +1290,12 @@
   border-radius: 16px;
   padding: 13px 14px;
   box-shadow: 0 20px 44px -14px rgba(14, 24, 52, 0.24), 0 4px 12px rgba(14, 24, 52, 0.08);
-  animation: explain-pop-in 0.14s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation: explain-pop-in 0.18s cubic-bezier(0.22, 1.15, 0.36, 1) both;
   isolation: isolate;
+}
+#view-studio :is(.note-style-pop, .note-share-pop):not(.hidden),
+#view-studio #noteSelectionPop:not(.hidden) {
+  animation: explain-pop-in 0.18s cubic-bezier(0.22, 1.15, 0.36, 1) both;
 }
 #view-studio .explain-sel-pop::before {
   background: #ffffff;
@@ -1255,13 +1328,14 @@
   width: 26px;
   height: 26px;
   border-radius: 8px;
-  background: #1565f2;
+  background: linear-gradient(135deg, #2a8bff, #1565f2);
   color: #ffffff;
   display: grid;
   place-items: center;
   flex: none;
 }
 #view-studio .explain-sel-kicker { font-size: 13px; color: var(--ink); }
+.explain-sel-sub { font-size: 10.5px; color: var(--mut); margin-left: 2px; }
 #view-studio .explain-sel-quote {
   margin: 0 0 8px;
   padding: 5px 10px;
@@ -1297,13 +1371,22 @@
   filter: brightness(1.06);
 }
 #view-studio .explain-sel-context {
-  margin-top: 4px;
-  gap: 0 3px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  gap: 4px;
 }
 #view-studio .explain-sel-context button {
-  background: transparent;
+  background: var(--surface);
+  color: var(--ink-2);
   font-size: 11.5px;
   min-height: 27px;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+#view-studio .explain-sel-context button:hover {
+  background: var(--blue-s);
+  color: var(--blue-i);
 }
 #view-studio .explain-sel-ask { margin-top: 9px; padding-top: 0; border-top: 0; }
 #view-studio .explain-sel-ask input {
@@ -1379,4 +1462,22 @@
   text-transform: uppercase;
   color: var(--paper-mut);
   margin-bottom: 6px;
+}
+@media (prefers-reduced-motion: reduce) {
+  #view-studio .slide-frame,
+  #view-studio .diag-active-halo,
+  #view-studio .diag-msg-line,
+  #view-studio .diag-readout,
+  #view-studio .explain-sel-pop,
+  #view-studio :is(.note-style-pop, .note-share-pop):not(.hidden),
+  #view-studio #noteSelectionPop:not(.hidden) {
+    animation: none !important;
+  }
+  #tabExplain.on .studio-seg-spark,
+  #tabExplain:hover .studio-seg-spark,
+  #view-studio .diag-node:is(:hover, :focus-visible) .diag-node-dot,
+  #view-studio .paper-dock-wrap:not(.is-pinned) .dock-btn:hover,
+  #view-studio .note-bottom-bar .btn.blue-pri:hover {
+    transform: none !important;
+  }
 }

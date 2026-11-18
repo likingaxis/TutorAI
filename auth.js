@@ -203,9 +203,12 @@
       '<span class="tutor-auth-avatar-chip tutor-auth-emblem is-mint"><svg viewBox="0 0 24 24"><path d="M6 19c1-7 3-11 12-14 2 7-1 14-12 14Zm0 0L15 9"/></svg></span>';
 
     var themeButtonsHtml = THEMES.map(function (t) {
+      var indicator = t.id === 'light'
+        ? '<svg class="tutor-auth-theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>'
+        : '<span class="tutor-auth-theme-dot ' + t.id + '" aria-hidden="true"></span>';
       return (
         '<button type="button" class="tutor-auth-theme-btn" data-auth-theme="' + t.id + '" data-auth-theme-pos="' + t.pos + '" aria-pressed="false">' +
-        '<span class="tutor-auth-theme-dot ' + t.id + '" aria-hidden="true"></span>' +
+        indicator +
         '<span>' + t.label + '</span>' +
         '</button>'
       );
@@ -455,7 +458,7 @@
             '<div class="tutor-auth-panel-foot">' +
               '<span class="tutor-auth-storage-note">' + lockIcon + ' Dati salvati localmente nel prototipo</span>' +
               '<button type="button" class="tutor-auth-guest-btn" data-auth-dismiss="guest">' +
-                'Continua come ospite →' +
+                'Continua come ospite <span class="tutor-auth-arrow" aria-hidden="true">→</span>' +
               '</button>' +
             '</div>' +
           '</section>' +

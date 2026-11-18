@@ -826,6 +826,23 @@
 }
 .profile-banner .profile-identity p { color: var(--mut); }
 .profile-banner .profile-id-wrap { max-width: min(100%, 250px); }
+.profile-avatar-shell {
+  position: relative;
+  display: inline-grid;
+  flex: none;
+}
+.profile-online-dot {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #48c788;
+  border: 2.5px solid var(--bg);
+  pointer-events: none;
+}
+:root[data-theme="dark"] .profile-online-dot { border-color: #0c0d10; }
 .profile-banner .profile-avatar-lg {
   width: 53px; height: 53px; border: 1px solid var(--blue); border-radius: 16px;
   background: var(--blue-s); color: var(--blue-i); font: italic 600 28px/1 var(--serif);
@@ -875,7 +892,7 @@
 .profile-activity-link:is(:hover,:focus-visible) .profile-activity-symbol { transform: rotate(-5deg); }
 .profile-activity-description b { font: 580 16px/1.15 var(--serif); }
 .profile-activity-description small, .profile-activity-time { font-size: 11px; }
-.profile-activity-subpill { padding: 4px 7px; border: 0; border-radius: 99px; background: var(--surface); font-size: 10px; }
+.profile-activity-subpill { padding: 4px 7px; border: 0; border-radius: 99px; background: var(--surface); font-size: 10px; white-space: nowrap; }
 .profile-activity-subpill.ok { background: var(--green-s); }
 .profile-activity-subpill.err { background: var(--red-s); }
 .profile-next-recall {
@@ -888,12 +905,13 @@
 .profile-next-recall h3 + p { margin-top: 6px; color: var(--mut); font-size: 12px; }
 .profile-recall-kicker { display: flex; align-items: center; gap: 7px; color: var(--green-i); font: 600 10px/1 var(--mono); letter-spacing: .075em; text-transform: uppercase; }
 .profile-recall-kicker::before, .profile-verified-pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
-.profile-recall-action { position: relative; z-index: 1; margin-top: 14px; border: 0; border-radius: 999px; color: var(--pri-ink); background: var(--pri); }
-.profile-recall-action:hover { color: var(--pri-ink); background: var(--pri); filter: brightness(1.13); }
+.profile-recall-action { position: relative; z-index: 1; margin-top: 14px; border: 0; border-radius: 999px; color: var(--pri-ink); background: var(--pri); transition: transform .2s cubic-bezier(.22, 1.15, .36, 1), filter .16s ease; }
+.profile-recall-action:hover { color: var(--pri-ink); background: var(--pri); filter: brightness(1.13); transform: translateY(-1px); }
 :root[data-theme="dark"] .profile-recall-action { color: #0c0d10; background: var(--blue); }
 .profile-recall-art {
   position: absolute; right: 16px; bottom: 15px; display: grid; place-items: center; width: 47px; height: 47px;
   color: var(--green-i); border: 1px dashed var(--green); border-radius: 50%; opacity: .72; pointer-events: none;
+  animation: brain-node-pulse 4s ease-in-out infinite;
 }
 .profile-recall-art .ic { width: 19px; height: 19px; }
 .profile-brain-card { background: radial-gradient(ellipse at 50% 43%, var(--journal-tint), var(--journal-paper) 64%); }
@@ -904,27 +922,70 @@
   display: inline-flex; align-items: center; gap: 6px; border: 1px solid color-mix(in srgb, var(--green) 42%, var(--journal-rule));
   padding: 6px 9px; border-radius: 999px; color: var(--green-i); background: var(--green-s); font: 600 10px/1 var(--mono);
 }
-.profile-brain-figure { position: relative; width: min(100%, 306px); aspect-ratio: 328 / 400; margin: 13px auto 2px; }
+.profile-brain-figure { position: relative; isolation: isolate; width: min(100%, 306px); aspect-ratio: 328 / 400; margin: 13px auto 2px; }
+.profile-brain-figure::before {
+  content: "";
+  position: absolute;
+  inset: 8% 4%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(110, 149, 255, 0.22), transparent 68%);
+  pointer-events: none;
+  animation: brain-aura-breathe 6.5s ease-in-out infinite;
+}
 .profile-brain-figure img, .profile-brain-links { position: absolute; inset: 0; display: block; width: 100%; height: 100%; pointer-events: none; }
 .profile-brain-links path { fill: none; stroke: #91aaff; stroke-opacity: .4; stroke-width: 1.4px; }
 .profile-brain-links path.verified { stroke: #48c788; stroke-opacity: .82; stroke-width: 2px; }
+.profile-brain-links path.synapse-pulse {
+  stroke: #8af5c4;
+  stroke-width: 2.2px;
+  stroke-dasharray: 6 12;
+  stroke-linecap: round;
+  stroke-opacity: 0.92;
+  animation: synapse-flow 2.8s linear infinite;
+}
+@keyframes brain-aura-breathe {
+  0%, 100% { transform: scale(0.95); opacity: 0.65; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+@keyframes synapse-flow {
+  from { stroke-dashoffset: 36; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes brain-ring-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes brain-node-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.12); opacity: 1; }
+}
 .profile-brain-node {
   --node-tone: #7890cd;
   display: grid; place-items: center; position: absolute; left: var(--node-x); top: var(--node-y);
   width: 30px; height: 30px; padding: 0; border: 1px solid transparent; border-radius: 50%; transform: translate(-50%, -50%);
   background: transparent; outline-offset: 0;
+  transition: transform 0.2s cubic-bezier(0.22, 1.15, 0.36, 1), outline-color 0.16s ease;
 }
-.profile-brain-node::before { content: ""; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--node-tone); background: #152040; }
+.profile-brain-node::before { content: ""; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--node-tone); background: #152040; transition: transform 0.2s ease; }
 .profile-brain-node::after { content: ""; position: absolute; width: 5px; height: 5px; border-radius: 50%; background: var(--node-tone); }
 .profile-brain-node.active { --node-tone: #85a9ff; }
 .profile-brain-node.verified { --node-tone: #8bffbf; }
+.profile-brain-node.verified::before { animation: brain-node-pulse 3.2s ease-in-out infinite; }
 .profile-brain-node.review { --node-tone: #ffba62; }
 .profile-brain-node:is(.verified,.review)::before { background: var(--node-tone); box-shadow: 0 0 12px var(--node-tone); }
 .profile-brain-node:is(.verified,.review)::after { background: #173035; }
 .profile-brain-node.unstarted::before { border-style: dashed; }
 .profile-brain-node.unstarted::after { display: none; }
-.profile-brain-node[aria-pressed="true"] { border: 1px dashed #ecf4ff; }
-.profile-brain-node:is(:hover, :focus-visible) { outline: 2px solid #ecf4ff; z-index: 1; }
+.brain-node-ring {
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  border: 1.4px dashed #ecf4ff;
+  pointer-events: none;
+  animation: brain-ring-spin 12s linear infinite;
+}
+.profile-brain-node:is(:hover, :focus-visible) { transform: translate(-50%, -50%) scale(1.22); outline: 2px solid #ecf4ff; z-index: 1; }
+.profile-brain-node[aria-pressed="true"]:is(:hover, :focus-visible) { transform: translate(-50%, -50%) scale(1.12); }
 .profile-brain-controls { display: flex; align-items: center; gap: 7px 10px; flex-wrap: wrap; margin-top: 12px; }
 .profile-brain-course {
   display: flex; align-items: center; gap: 5px; min-width: 0; max-width: 100%; width: max-content;
@@ -946,6 +1007,7 @@
 .profile-brain-selection {
   display: grid; gap: 11px; padding: 11px 14px 12px; scroll-margin-block: 12px;
   border: 1px solid color-mix(in srgb, var(--blue) 45%, var(--journal-rule)); background: var(--journal-gutter); border-radius: 15px;
+  animation: item-in 0.22s cubic-bezier(0.22, 1.15, 0.36, 1) both;
 }
 .profile-brain-selection.review { border-color: color-mix(in srgb, var(--amber) 45%, var(--journal-rule)); }
 .profile-brain-selection.verified { border-color: color-mix(in srgb, var(--green) 45%, var(--journal-rule)); }
@@ -979,14 +1041,29 @@
 .profile-insights { grid-template-rows: auto 1fr; align-content: stretch; gap: 18px; padding: 0; border: 0; background: none; }
 .profile-insights h2 { font-size: 23px; }
 .profile-insight-card p { color: var(--mut); font-size: 11.5px; }
+@keyframes bar-grow-y {
+  from { transform: scaleY(0); opacity: 0.4; }
+  to { transform: scaleY(1); opacity: 1; }
+}
+@keyframes mastery-seg-pop {
+  from { transform: scaleX(0.4); opacity: 0.35; }
+  to { transform: scaleX(1); opacity: 1; }
+}
 .profile-week { gap: 4px; border: 0; margin-top: 14px; }
-.profile-week-day { gap: 5px; padding: 7px 1px 5px; border: 1px solid var(--journal-rule); border-radius: 9px; background: var(--journal-gutter); }
+.profile-week-day { gap: 5px; padding: 7px 1px 5px; border: 1px solid var(--journal-rule); border-radius: 9px; background: var(--journal-gutter); transition: background-color 0.16s ease, border-color 0.16s ease, transform 0.18s ease; }
+.profile-week-day:hover { border-color: color-mix(in srgb, var(--blue) 42%, var(--journal-rule)); transform: translateY(-1.5px); }
 .profile-week-day:last-child { border-inline-end: 1px solid var(--journal-rule); }
 .profile-week-day.today { color: var(--blue-i); background: var(--blue-s); box-shadow: inset 0 0 0 1px var(--blue); }
 .profile-week-day time { font-family: var(--serif); }
 .profile-week-day b.has-entries { border: 0; color: var(--green-i); }
 .profile-week-meter { display: flex; align-items: end; justify-content: center; width: 100%; height: 50px; }
-.profile-week-meter i { width: 8px; height: var(--activity-share); min-height: 4px; border-radius: 8px; background: var(--blue); }
+.profile-week-meter i { width: 8px; height: var(--activity-share); min-height: 4px; border-radius: 8px; background: var(--blue); transform-origin: bottom; animation: bar-grow-y 0.45s cubic-bezier(0.22, 1.15, 0.36, 1) backwards; }
+.profile-week-day:nth-child(2) .profile-week-meter i { animation-delay: 30ms; }
+.profile-week-day:nth-child(3) .profile-week-meter i { animation-delay: 60ms; }
+.profile-week-day:nth-child(4) .profile-week-meter i { animation-delay: 90ms; }
+.profile-week-day:nth-child(5) .profile-week-meter i { animation-delay: 120ms; }
+.profile-week-day:nth-child(6) .profile-week-meter i { animation-delay: 150ms; }
+.profile-week-day:nth-child(7) .profile-week-meter i { animation-delay: 180ms; }
 .profile-week-day:not(:has(b.has-entries)) .profile-week-meter i { width: 4px; background: var(--mut); }
 .profile-week-day.today .profile-week-meter i { background: var(--blue-i); }
 .profile-insight-card .profile-week-total { margin-top: 15px; }
@@ -1003,7 +1080,12 @@
   border-radius: 50%; color: var(--ink); background: var(--journal-paper); font: 550 11px/1 var(--mono);
 }
 .profile-mastery-segments { display: flex; gap: min(3px, calc(21% / var(--mastery-unit-count, 1))); margin-bottom: 14px; }
-.profile-mastery-segments span { flex: 1; min-width: 0; height: 7px; border-radius: 99px; background: var(--profile-state-color); }
+.profile-mastery-segments span { flex: 1; min-width: 0; height: 7px; border-radius: 99px; background: var(--profile-state-color); transform-origin: left; animation: mastery-seg-pop 0.3s cubic-bezier(0.22, 1.15, 0.36, 1) backwards; }
+.profile-mastery-segments span:nth-child(2) { animation-delay: 25ms; }
+.profile-mastery-segments span:nth-child(3) { animation-delay: 50ms; }
+.profile-mastery-segments span:nth-child(4) { animation-delay: 75ms; }
+.profile-mastery-segments span:nth-child(5) { animation-delay: 100ms; }
+.profile-mastery-segments span:nth-child(n+6) { animation-delay: 125ms; }
 .profile-mastery-segments .unstarted { background: var(--journal-rule); }
 .profile-course-scores { display: grid; gap: 6px; padding-top: 8px; border-top: 1px solid var(--journal-rule); }
 .profile-course-score { display: grid; gap: 5px; padding: 5px 0; border-radius: 4px; text-align: left; font-size: 12px; }
@@ -1275,6 +1357,12 @@
   opacity: .95;
   pointer-events: none;
 }
+@keyframes recall-wave-drift {
+  from { transform: translateY(-4px); }
+  to { transform: translateY(5px); }
+}
+.recall-hero-waves path { transform-box: fill-box; transform-origin: center; animation: recall-wave-drift 17s ease-in-out infinite alternate; }
+.recall-hero-waves path:nth-of-type(2) { animation-duration: 21s; animation-direction: alternate-reverse; }
 
 #view-ripasso .recall-hero-today h2 {
   font-family: var(--serif);
@@ -1328,7 +1416,9 @@
   border-radius: 50%;
   color: var(--recall-action-text);
   background: var(--recall-action-bg);
+  transition: transform 0.22s cubic-bezier(0.22, 1.15, 0.36, 1);
 }
+#view-ripasso .recall-hero-cta:is(:hover, :focus-visible) .ic.recall-hero-next { transform: translateX(3px); }
 #view-ripasso .btn.blue-pri.recall-hero-cta:hover:not(:disabled) { background: #fff; opacity: 1; }
 #view-ripasso .recall-hero-today .btn:focus-visible { outline-color: var(--atlas-ink); }
 #view-ripasso .recall-hero-today .btn .ic:not(.recall-hero-next) { width: 14px; height: 14px; }
@@ -1352,11 +1442,35 @@
   filter: drop-shadow(0 7px 8px rgb(4 20 60 / .24));
 }
 .recall-index-svg > svg { display: block; width: 100%; height: 180px; overflow: visible; transform: translateX(-8px) scale(1.15); }
+@keyframes recall-notebook-float {
+  0%, 100% { transform: translateX(-8px) scale(1.15) translateY(0px); }
+  50% { transform: translateX(-8px) scale(1.15) translateY(-4px); }
+}
+@keyframes recall-spark-twinkle {
+  0%, 100% { opacity: 0.55; transform: scale(0.88) rotate(-6deg); }
+  50% { opacity: 1; transform: scale(1.08) rotate(8deg); }
+}
 
 @media (prefers-reduced-motion: no-preference) {
-  #view-ripasso .recall-index-svg { transition: transform .24s ease; }
+  #view-ripasso .recall-index-svg { transition: transform .24s cubic-bezier(0.22, 1.15, 0.36, 1); }
+  #view-ripasso .recall-index-svg > svg { animation: recall-notebook-float 5.5s ease-in-out infinite; }
+  #view-ripasso .recall-spark {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: recall-spark-twinkle 3.4s ease-in-out infinite;
+  }
+  #view-ripasso .recall-spark-b { animation-duration: 4.2s; animation-delay: -1.4s; }
+  #view-ripasso .recall-spark-c { animation-duration: 4.8s; animation-delay: -2.2s; }
+  #view-ripasso .recall-check-badge {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 0.25s cubic-bezier(0.22, 1.15, 0.36, 1);
+  }
   #view-ripasso .recall-hero-today:has(.recall-hero-cta:is(:hover, :focus-visible)) .recall-index-svg {
     transform: translateY(-3px) rotate(-2deg);
+  }
+  #view-ripasso .recall-hero-today:has(.recall-hero-cta:is(:hover, :focus-visible)) .recall-check-badge {
+    transform: scale(1.08) rotate(5deg);
   }
 }
 
@@ -1413,19 +1527,33 @@
   border: 1px solid var(--line);
   border-radius: 21px;
   background: var(--paper);
+  animation: item-in 0.28s cubic-bezier(0.22, 1.15, 0.36, 1) backwards;
+  transition: transform 0.22s cubic-bezier(0.22, 1.15, 0.36, 1), background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.22s ease;
 }
+#view-ripasso .recall-course-grid .recall-course-choice:nth-child(2) { animation-delay: 50ms; }
+#view-ripasso .recall-course-grid .recall-course-choice:nth-child(3) { animation-delay: 100ms; }
 #view-ripasso .recall-course-grid .recall-course-choice:is(:hover, :focus-visible) {
   background: color-mix(in srgb, var(--recall-course-accent) 7%, var(--paper));
   border-color: color-mix(in srgb, var(--recall-course-accent) 34%, var(--line));
+  transform: translateY(-3px);
+  box-shadow: var(--sh);
 }
-#view-ripasso .recall-course-grid .recall-item-icon { width: 44px; height: 44px; border-radius: 13px; }
+#view-ripasso .recall-course-grid .recall-item-icon {
+  width: 44px; height: 44px; border-radius: 13px;
+  transition: transform 0.24s cubic-bezier(0.22, 1.15, 0.36, 1);
+}
+#view-ripasso .recall-course-grid .recall-course-choice:is(:hover, :focus-visible) .recall-item-icon {
+  transform: translateY(-2px) rotate(-3deg) scale(1.06);
+}
 #view-ripasso .recall-course-grid .recall-item-icon svg { width: 30px; height: 30px; }
 #view-ripasso .recall-course-grid .recall-arrow {
   min-width: 24px; height: 24px;
   display: grid; place-items: center;
   border-radius: 50%; background: var(--surface);
   line-height: 1;
+  transition: transform 0.2s cubic-bezier(0.22, 1.15, 0.36, 1), color 0.16s ease;
 }
+#view-ripasso .recall-course-grid .recall-course-choice:is(:hover, :focus-visible) .recall-arrow { transform: translateX(3px); }
 .recall-course-grid .recall-course-choice > strong { grid-column: 1 / -1; align-self: end; max-inline-size: 16ch; line-height: 1.2; }
 .recall-course-meta { grid-column: 1 / -1; display: flex; align-items: center; gap: 4px 8px; justify-content: space-between; flex-wrap: wrap; }
 #view-ripasso .recall-course-meta small { margin: 0; }
@@ -1446,6 +1574,9 @@
 :is(.recall-course-meta progress, .recall-day-progress)::-moz-progress-bar { background: var(--green); border-radius: inherit; }
 
 #view-ripasso .recall-agenda {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
   padding: clamp(13px, 1.7vw, 23px);
   border: 1px solid var(--line);
   border-radius: 23px;
@@ -1476,6 +1607,11 @@
 #view-ripasso #recallAgendaJump:is(:hover, :focus-visible) { color: var(--blue-i); }
 
 #view-ripasso .recall-cal-strip { gap: 8px; padding: 0; margin-bottom: 17px; border: 0; background: transparent; }
+@keyframes recall-day-pop {
+  0% { transform: scale(0.95); }
+  60% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
 #view-ripasso .recall-cal-day {
   min-height: 80px;
   grid-template-rows: auto auto 7px;
@@ -1483,14 +1619,16 @@
   gap: 3px;
   border-radius: 16px;
   background: var(--surface);
+  transition: transform 0.2s cubic-bezier(0.22, 1.15, 0.36, 1), background-color 0.16s ease, box-shadow 0.18s ease;
 }
 
 #view-ripasso .recall-cal-day small { margin: 0; font: 550 10px/1.2 var(--mono); letter-spacing: .04em; }
 #view-ripasso .recall-cal-day b { font-size: 23px; font-weight: 750; }
-#view-ripasso .recall-cal-day[aria-pressed="false"]:is(:hover, :focus-visible) { background: var(--blue-s); color: var(--blue-i); }
+#view-ripasso .recall-cal-day[aria-pressed="false"]:is(:hover, :focus-visible) { background: var(--blue-s); color: var(--blue-i); transform: translateY(-2px); }
 #view-ripasso .recall-cal-day[aria-pressed="true"] {
   background: var(--recall-gradient); color: var(--atlas-ink);
   box-shadow: 0 5px 14px -8px var(--recall-action-bg);
+  animation: recall-day-pop 0.24s cubic-bezier(0.22, 1.15, 0.36, 1);
 }
 #view-ripasso .recall-cal-day[aria-pressed="true"] small { color: var(--atlas-sub); }
 #view-ripasso .recall-cal-dot.scheduled { background: var(--blue); }
@@ -1519,7 +1657,13 @@ progress.recall-day-progress { margin-inline-start: auto; width: clamp(40px, 11v
   min-height: 56px;
   padding: 7px 12px;
   border-radius: 13px;
+  animation: item-in 0.24s cubic-bezier(0.22, 1.15, 0.36, 1) backwards;
+  transition: transform 0.2s cubic-bezier(0.22, 1.15, 0.36, 1), border-color 0.18s ease, box-shadow 0.2s ease, background-color 0.18s ease;
 }
+#view-ripasso .recall-agenda .recall-check-row:nth-child(2) { animation-delay: 40ms; }
+#view-ripasso .recall-agenda .recall-check-row:nth-child(3) { animation-delay: 80ms; }
+#view-ripasso .recall-agenda .recall-check-row:hover { transform: translateY(-1.5px); }
+.recall-check-btn[aria-checked="true"] { animation: recall-day-pop 0.24s cubic-bezier(0.22, 1.15, 0.36, 1); }
 .recall-check-row.priority {
   border-color: color-mix(in srgb, var(--blue) 34%, var(--line));
   box-shadow: 0 4px 12px -8px var(--blue);
@@ -1546,10 +1690,16 @@ progress.recall-day-progress { margin-inline-start: auto; width: clamp(40px, 11v
   border: 1px solid var(--line);
   background: var(--paper);
   text-align: left;
+  animation: item-in 0.3s cubic-bezier(0.22, 1.15, 0.36, 1) backwards;
+  transition: transform 0.22s cubic-bezier(0.22, 1.15, 0.36, 1), background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.22s ease;
 }
+.recall-result-entry:nth-child(2) { animation-delay: 55ms; }
+.recall-result-entry:nth-child(3) { animation-delay: 110ms; }
 .recall-result-entry:is(:hover, :focus-visible) {
   background: color-mix(in srgb, var(--blue-s) 34%, var(--paper));
   border-color: color-mix(in srgb, var(--blue) 28%, var(--line));
+  transform: translateY(-3px);
+  box-shadow: var(--sh);
 }
 .recall-entry-copy { display: grid; gap: 5px; min-width: 0; overflow-wrap: anywhere; }
 .recall-entry-copy strong { font-size: 13.5px; line-height: 1.22; }
@@ -1647,12 +1797,22 @@ progress.recall-day-progress { margin-inline-start: auto; width: clamp(40px, 11v
   font-size: 12.5px;
 }
 .recall-workbench-topbar > span { overflow-wrap: anywhere; }
-.recall-back {
+#view-ripasso .recall-back {
   border-radius: 999px;
-  background: var(--surface);
-  color: var(--ink-2);
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: var(--sh-s);
+  color: var(--ink);
+  padding: 0 13px;
+  min-height: 36px;
+  transition: transform 0.2s cubic-bezier(0.22, 1.15, 0.36, 1), background-color 0.16s ease, border-color 0.16s ease;
 }
-.recall-back .ic { transform: rotate(180deg); }
+#view-ripasso .recall-back:is(:hover, :focus-visible) {
+  background: var(--surface);
+  border-color: color-mix(in srgb, var(--blue) 35%, var(--line));
+  transform: translateY(-1px);
+}
+#view-ripasso .recall-back .ic { transform: rotate(180deg); }
 
 #view-ripasso .recall-workbench-banner {
   --workbench-padding: clamp(17px, 3.3vw, 28px);
@@ -1717,6 +1877,17 @@ progress.recall-day-progress { margin-inline-start: auto; width: clamp(40px, 11v
   padding: clamp(15px, 3vw, 26px);
   border-radius: 22px;
   background: var(--paper);
+  animation: item-in 0.24s cubic-bezier(0.22, 1.15, 0.36, 1) both;
+}
+@keyframes recall-qopt-pop {
+  0% { transform: scale(0.985); }
+  55% { transform: scale(1.012); }
+  100% { transform: scale(1); }
+}
+@keyframes recall-score-pop {
+  0% { transform: scale(0.82); opacity: 0.4; }
+  65% { transform: scale(1.06); opacity: 1; }
+  100% { transform: scale(1); }
 }
 #view-ripasso .focus-stage h2 {
   font: 560 clamp(25px, 3.4vw, 37px)/1.06 var(--serif);
@@ -1814,6 +1985,9 @@ progress.recall-day-progress { margin-inline-start: auto; width: clamp(40px, 11v
   border: 1px solid color-mix(in srgb, var(--mut) 50%, var(--line));
   border-radius: 50%;
 }
+#view-ripasso .focus-options .qopt.sel {
+  animation: recall-qopt-pop 0.24s cubic-bezier(0.22, 1.15, 0.36, 1);
+}
 #view-ripasso .focus-options .qopt.sel .focus-option-check {
   border-color: var(--blue);
   background: radial-gradient(circle, var(--blue) 37%, transparent 43%);
@@ -1864,6 +2038,7 @@ progress.recall-day-progress { margin-inline-start: auto; width: clamp(40px, 11v
   outline: 1px solid var(--atlas-ctrl-border);
   outline-offset: 4px;
   font: 700 clamp(15px, 2.8vw, 26px)/1 var(--mono);
+  animation: recall-score-pop 0.45s cubic-bezier(0.22, 1.15, 0.36, 1) both;
 }
 .recall-result .recall-result-mark.incorrect, .recall-result .recall-result-mark.complete {
   background: radial-gradient(closest-side, var(--paper) 76%, transparent 78%),
@@ -2014,4 +2189,45 @@ progress.recall-day-progress { margin-inline-start: auto; width: clamp(40px, 11v
   .recall-result-entry .recall-entry-score { grid-area: 1 / 1 / span 2; width: 44px; height: 44px; font-size: 12px; }
   .recall-result-entry .recall-entry-copy { grid-area: 1 / 2; }
   .recall-result-entry .recall-entry-footer { grid-area: 2 / 2; padding: 0; border: 0; justify-content: flex-start; max-width: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .profile-recall-art,
+  .profile-brain-figure::before,
+  .profile-brain-links path.synapse-pulse,
+  .profile-brain-node.verified::before,
+  .brain-node-ring,
+  .profile-brain-selection,
+  .profile-week-meter i,
+  .profile-mastery-segments span,
+  .recall-hero-waves path,
+  #view-ripasso .recall-index-svg > svg,
+  #view-ripasso .recall-spark,
+  #view-ripasso .recall-course-grid .recall-course-choice,
+  #view-ripasso .recall-cal-day[aria-pressed="true"],
+  #view-ripasso .recall-agenda .recall-check-row,
+  .recall-check-btn[aria-checked="true"],
+  .recall-result-entry,
+  #view-ripasso .focus-stage,
+  #view-ripasso .focus-options .qopt.sel,
+  #view-ripasso .recall-result .recall-workbench-banner .recall-result-mark {
+    animation: none !important;
+  }
+  .profile-recall-action:hover,
+  .profile-week-day:hover,
+  #view-ripasso .recall-hero-cta:is(:hover, :focus-visible) .ic.recall-hero-next,
+  #view-ripasso .recall-hero-today:has(.recall-hero-cta:is(:hover, :focus-visible)) .recall-index-svg,
+  #view-ripasso .recall-hero-today:has(.recall-hero-cta:is(:hover, :focus-visible)) .recall-check-badge,
+  #view-ripasso .recall-course-grid .recall-course-choice:is(:hover, :focus-visible),
+  #view-ripasso .recall-course-grid .recall-course-choice:is(:hover, :focus-visible) .recall-item-icon,
+  #view-ripasso .recall-course-grid .recall-course-choice:is(:hover, :focus-visible) .recall-arrow,
+  #view-ripasso .recall-cal-day[aria-pressed="false"]:is(:hover, :focus-visible),
+  #view-ripasso .recall-agenda .recall-check-row:hover,
+  .recall-result-entry:is(:hover, :focus-visible),
+  #view-ripasso .recall-back:is(:hover, :focus-visible) {
+    transform: none !important;
+  }
+  .profile-brain-node:is(:hover, :focus-visible),
+  .profile-brain-node[aria-pressed="true"]:is(:hover, :focus-visible) {
+    transform: translate(-50%, -50%) !important;
+  }
 }

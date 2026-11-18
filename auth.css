@@ -74,9 +74,21 @@
     border-color 0.25s ease;
 }
 
+@keyframes tutor-auth-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.975);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 #tutorAuthGate.is-open .tutor-auth-card {
   transform: translateY(0) scale(1);
   opacity: 1;
+  animation: tutor-auth-card-in 0.28s cubic-bezier(0.22, 1.15, 0.36, 1) both;
 }
 
 /* ============================================================================
@@ -136,6 +148,27 @@
 .tutor-auth-wave-bg stop,
 .tutor-auth-wave-bg path {
   transition: stop-color 0.35s ease, fill 0.35s ease, opacity 0.35s ease;
+}
+
+@keyframes tutor-auth-wave-drift {
+  from { transform: translateY(-5px); }
+  to { transform: translateY(6px); }
+}
+
+.tutor-auth-wave-bg path {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: tutor-auth-wave-drift 18s ease-in-out infinite alternate;
+}
+
+.tutor-auth-wave-bg path:nth-of-type(2) {
+  animation-duration: 22s;
+  animation-direction: alternate-reverse;
+}
+
+.tutor-auth-wave-bg path:nth-of-type(3) {
+  animation-duration: 20s;
+  animation-delay: -5s;
 }
 
 .tutor-auth-showcase > :not(.tutor-auth-wave-bg) {
@@ -249,6 +282,30 @@
   flex: none;
 }
 
+.tutor-auth-theme-sun {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.24s cubic-bezier(0.22, 1.15, 0.36, 1), color 0.18s ease;
+}
+
+.tutor-auth-theme-sun circle {
+  fill: currentColor;
+}
+
+.tutor-auth-theme-btn[aria-pressed="true"] .tutor-auth-theme-sun {
+  color: #1565f2;
+}
+
+.tutor-auth-theme-btn:hover .tutor-auth-theme-sun {
+  transform: rotate(18deg) scale(1.08);
+}
+
 .tutor-auth-theme-dot.light { background: #ffffff; }
 .tutor-auth-theme-dot.sepia { background: #efdfc0; }
 .tutor-auth-theme-dot.dark { background: #1e273d; border-color: rgba(255, 255, 255, 0.35); }
@@ -310,6 +367,11 @@
   flex: none;
 }
 
+@keyframes tutor-auth-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+
 .tutor-auth-book-preview {
   position: relative;
   display: grid;
@@ -320,6 +382,7 @@
   display: block;
   width: min(500px, 100%);
   height: auto;
+  animation: tutor-auth-float 7.5s ease-in-out infinite;
 }
 .tutor-auth-scene-card,
 .tutor-auth-scene-formula {
@@ -335,8 +398,15 @@
   border-radius: 16px;
   box-shadow: 0 9px 19px rgb(6 38 100 / .26);
 }
-.tutor-auth-scene-mastery { inset: 5px auto auto 0; }
-.tutor-auth-scene-result { inset: auto 0 38px auto; color: #1c6b48; }
+.tutor-auth-scene-mastery {
+  inset: 5px auto auto 0;
+  animation: tutor-auth-float 5.2s ease-in-out -0.8s infinite;
+}
+.tutor-auth-scene-result {
+  inset: auto 0 38px auto;
+  color: #1c6b48;
+  animation: tutor-auth-float 6.2s ease-in-out -2.4s infinite;
+}
 .tutor-auth-scene-card b, .tutor-auth-scene-card small { display: block; }
 .tutor-auth-scene-card b { font: 700 11px/1.25 var(--mono, monospace); }
 .tutor-auth-scene-card small { margin-top: 3px; font-size: 10px; color: #687187; }
@@ -369,6 +439,7 @@
   border: 1px solid rgb(255 255 255 / .36);
   border-radius: 999px;
   font: 700 11px/1.2 var(--mono, monospace);
+  animation: tutor-auth-float 6.8s ease-in-out -3.7s infinite;
 }
 
 /* Avatar Strip Preview Card */
@@ -410,7 +481,17 @@
   color: #ffffff;
   font-size: 12px;
   font-weight: 800;
+  transition: transform 0.22s cubic-bezier(0.22, 1.15, 0.36, 1);
 }
+
+.tutor-auth-avatar-chip:hover,
+.tutor-auth-avatar-stack:hover .tutor-auth-avatar-chip {
+  transform: translateY(-2.5px) scale(1.06);
+}
+
+.tutor-auth-avatar-stack:hover .tutor-auth-avatar-chip:nth-child(2) { transition-delay: 25ms; }
+.tutor-auth-avatar-stack:hover .tutor-auth-avatar-chip:nth-child(3) { transition-delay: 50ms; }
+.tutor-auth-avatar-stack:hover .tutor-auth-avatar-chip:nth-child(4) { transition-delay: 75ms; }
 
 .tutor-auth-avatar-chip:first-child {
   margin-left: 0;
@@ -442,8 +523,9 @@
   color: #1552cc;
   font-size: 18px;
   font-weight: 700;
+  transition: transform 0.2s cubic-bezier(0.22, 1.15, 0.36, 1), background-color 0.16s ease;
 }
-.tutor-auth-avatar-return:hover { background: #e9f1ff; }
+.tutor-auth-avatar-return:hover { background: #e9f1ff; transform: translateX(3px); }
 
 .tutor-auth-saved-meta {
   display: grid;
@@ -546,7 +628,7 @@
   background: var(--card, #ffffff);
   box-shadow: var(--sh-s, 0 1px 3px rgba(20, 20, 28, 0.05));
   pointer-events: none;
-  transition: transform 0.32s cubic-bezier(0.3, 1.2, 0.4, 1), width 0.32s cubic-bezier(0.3, 1.2, 0.4, 1);
+  transition: transform 0.34s cubic-bezier(0.25, 1.18, 0.4, 1), width 0.34s cubic-bezier(0.25, 1.18, 0.4, 1);
 }
 
 .tutor-auth-seg-tab {
@@ -995,6 +1077,11 @@
   background: rgb(255 255 255 / .16);
   color: #fff;
   font-size: 19px;
+  transition: transform 0.2s cubic-bezier(0.22, 1.15, 0.36, 1), background-color 0.16s ease;
+}
+#tutorAuthGate .tutor-auth-quick-primary:hover:not(:disabled) .tutor-auth-quick-arrow {
+  transform: translateX(3px);
+  background: rgb(255 255 255 / .24);
 }
 #tutorAuthGate .tutor-auth-submit-secondary:not(.is-success) {
   min-height: 47px;
@@ -1138,12 +1225,22 @@
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
+  transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+}
+
+.tutor-auth-guest-btn .tutor-auth-arrow {
+  display: inline-block;
+  transition: transform 0.2s cubic-bezier(0.22, 1.15, 0.36, 1);
 }
 
 .tutor-auth-guest-btn:hover {
   background: var(--card, #ffffff);
   border-color: var(--faint, #9898a3);
   color: var(--ink, #16161a);
+}
+
+.tutor-auth-guest-btn:hover .tutor-auth-arrow {
+  transform: translateX(3px);
 }
 
 /* Inline Status / Standalone Fallback Toast */
@@ -1552,15 +1649,35 @@
 @media (prefers-reduced-motion: reduce) {
   #tutorAuthGate,
   .tutor-auth-card,
+  #tutorAuthGate.is-open .tutor-auth-card,
   .tutor-auth-seg-knob,
   .tutor-auth-tabpanel,
   .tutor-auth-avatar-chip,
+  .tutor-auth-avatar-return,
+  .tutor-auth-theme-sun,
+  .tutor-auth-book-preview img,
+  .tutor-auth-scene-card,
+  .tutor-auth-scene-mastery,
+  .tutor-auth-scene-result,
+  .tutor-auth-scene-formula,
   .tutor-auth-submit,
   .tutor-auth-quick-btn,
+  .tutor-auth-quick-primary .tutor-auth-quick-arrow,
+  .tutor-auth-guest-btn,
+  .tutor-auth-guest-btn .tutor-auth-arrow,
   .tutor-auth-toast,
   .tutor-auth-wave-bg stop,
   .tutor-auth-wave-bg path {
+    animation: none !important;
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+  }
+  .tutor-auth-theme-btn:hover .tutor-auth-theme-sun,
+  .tutor-auth-avatar-chip:hover,
+  .tutor-auth-avatar-stack:hover .tutor-auth-avatar-chip,
+  .tutor-auth-avatar-return:hover,
+  #tutorAuthGate .tutor-auth-quick-primary:hover:not(:disabled) .tutor-auth-quick-arrow,
+  .tutor-auth-guest-btn:hover .tutor-auth-arrow {
+    transform: none !important;
   }
 }
