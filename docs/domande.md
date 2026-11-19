@@ -1,15 +1,26 @@
-# Decisioni per la valutazione di TutorAI
+# Decisioni consolidate e parametri operativi aperti
 
-Le proposte di riferimento sono nella [specifica tecnica](SPECIFICA.md). Le risposte servono a fissare perimetro, soglie e condizioni del pilota.
+La revisione tecnica dual-model (Gemini 4 Neon + GPT 6.2 Astra) ha chiuso l'architettura descritta in [Specifica v3](SPECIFICA.md), [Architettura v3](ARCHITETTURA.md), [Contratti e dati v3](CONTRATTI_E_DATI.md) e [Piano di sviluppo v3](PIANO.md). Restano da fissare soltanto i **parametri operativi e di business** per avviare Fase 0 e pilota.
 
-| Decisione | Domanda per il team | Base proposta e conseguenza |
+## 1. Decisioni di prodotto e architettura chiuse
+
+| Area | Decisione finale consolidata (v3) |
+| --- | --- |
+| Autonomia e mobilità | App web (PWA) 100% autonoma per PC, tablet e telefono in mobilità (appunti/quiz in autobus). Eventuale plugin Obsidian solo come estensione separata futura. |
+| Visibilità fonti | Badge inline **nascosti di default** con toggle rapido `Mostra fonti` (menu/shortcut/Impostazioni). Citazioni sempre tracciate server-side e accessibili da selezione, diff ed esiti; contrasti/mancanze sempre visibili. |
+| Sync multi-dispositivo | **Dexie (IndexedDB) + protocollo ottimistico server** (`baseRevisionId`, `clientMutationId`, `clientSequence`, `409` con confronto esplicito) in Fase 1–2 per atomicità reale sul merge. Yjs rinviato a Fasi 3–4 solo se serve editing simultaneo o collaborazione. |
+| Verifica matematica e codice | `MathLive` + `CortexJS` solo per UX locale; **verifica autorevole server-side** su esercizi a dominio dichiarato con **3 esiti (`corretto`, `errato`, `indeterminato`)** e micro-servizio **SymPy sandboxed**. Pyodide solo in Web Worker isolato opzionale (Fase 3+). |
+| OCR e import | Limiti cumulativi anti-abuse su `ZIP`/`PDF`/raster, **`pypdfium2`** server-side, contratto **`DocumentParserProvider`** con **1 percorso OCR Managed** in Fase 1 (distinguendo `verified_region`, `text_ok_region_uncertain`, `page_only`). BYOK e Locale in Fase 2. Audit licenze obbligatorio per `(codice, checkpoint, dipendenze)`. |
+| Recupero e ricerca | Recupero **per attività** (diretto → sezione/albero → ibrido → lezione intera) misurato a `8k/20k/40k`; reranker solo su evidenza. **Indice simbolico dedicato** per operatori matematici (`<`, `>`, `→`, `∥`) accanto a `pg_trgm` (solo termini testuali). |
+| Schizzi Excalidraw | Scena originale **sempre modificabile** (+ asset binari referenziati + SVG deterministico) in Fase 1; pulizia AI come **variante separata su `sourceSceneHash`** in Fase 2 con verifica semantica su pedici/frecce. |
+| Foto esercizi e calibrazione | Flusso a 2 stadi in Fase 2: **trascrizione riga-per-riga correggibile** → verifica a 3 esiti (segni illeggibili = `indeterminato`, rettifica ricalcola FSRS). La confidenza metacognitiva non amplifica mai esiti `indeterminato`. |
+| Accesso, Ospite e privacy | **Niente SSO Ateneo in MVP** (Better Auth pronto per futuro IDEM SAML). Fase 1: Email+Password + 1 OAuth. Fase 2: Passkey + **Ospite blindato** (corso demo + max 3 chiarimenti Tier 1 + tetto giornaliero globale + migrazione consumo). **Matrice compliance `provider×endpoint×regione×retention`** obbligatoria; telemetria Langfuse di soli metadati di default; `public_share` rimuove asset protetti del docente. |
+
+## 2. Parametri operativi ancora da fissare prima del pilota
+
+| Parametro | Domanda operativa | Cosa sblocca |
 | --- | --- | --- |
-| Materiali reali | Quali due lezioni autorizzate possiamo usare e chi indica pagine, figure, risposte corrette e omissioni attese? | Scegliere una lezione con diagrammi e una con formule su più pagine. Servono per valutare estrazione, retrieval e accuratezza prima della scelta dei modelli. |
-| Formati | Gli studenti hanno trascrizioni pronte, registrazioni, scansioni, PPTX con note del relatore o slide esportate in PDF? | PDF digitale, trascrizioni testuali e Markdown con allegati nella prima prova. Audio, OCR e PPTX richiedono pipeline e campioni distinti. |
-| Dispositivi | Quali tablet, telefoni e versioni Android usano i primi studenti? Sono essenziali penna a mano libera o distribuzione su Play Store? | Proporre PWA e test su dispositivi reali. La penna con tratti modificabili implica un modello dei dati dedicato. Il requisito store apre la valutazione di Capacitor. |
-| Offline | Serve solo leggere e scrivere offline, oppure anche interrogare il tutor e sostenere prove? I dispositivi possono essere condivisi? | Lezione scaricabile e scrittura locale con sincronizzazione. Inferenza offline, protezione dei download e prove offline richiedono decisioni ulteriori. |
-| Dati | Quali materiali e risposte possono essere inviati al provider? Quali regione, conservazione, cancellazione e gestione dei backup sono ammesse? | Originali privati e invio dei soli passaggi o ritagli necessari. Confermare condizioni contrattuali e impostazioni prima del pilota con dati reali. |
-| Budget | Quanti studenti, lezioni al mese, pagine per corso e operazioni simultanee? Quale costo per lezione e quale attesa sono accettabili? | Misurare costo e latenza per attività e per sessione. Le risposte fissano quote, modello, parallelismo dei worker e capacità necessaria. |
-| Visuali | Quali tre figure devono riuscire particolarmente bene e cosa deve poter fare lo studente con ciascuna? | Confrontare ritaglio, SVG composto e componente interattivo sugli stessi obiettivi. Individuare chi valuta correttezza scientifica e leggibilità. |
-| Valutazione | Quali errori impediscono il rilascio e chi decide le soglie didattiche? | Proporre come bloccanti una patch applicata alla revisione sbagliata, la perdita di una bozza confermata e una citazione che apre un'altra pagina. Concordare soglie di recupero, falsi positivi e correttezza con i valutatori. |
-| Fonti esterne | Il tutor può cercare sul web quando i materiali sono insufficienti? | Partire da integrazioni esplicitamente richieste ed etichettate. La risposta decide strumenti disponibili, priorità delle fonti e trattamento delle domande senza evidenze. |
+| Campioni reali Fase 0 | Quali 2–3 lezioni reali autorizzate (slide con formule sottili/figure/rotazioni, trascrizione, dispensa, 5+ temi d'esame, foto esercizio manoscritto) usiamo come ground truth? | Avvia subito i 4 benchmark di Fase 0 (OCR, recupero `8k/20k/40k`, ricerca simbolica, SymPy). |
+| Target economico e margine | Quanti studenti pilota prevediamo e qual è il budget/ricavo netto target per studente attivo/mese (coprendo **p95** in settimana pre-esame e quota ospiti)? | Chiude la sostenibilità unitaria sulla matrice degli endpoint conformi e fissa il tetto globale giornaliero. |
+| Dispositivi di riferimento | Su quali tablet e smartphone Android di fascia media verifichiamo Fase 1–2 (input `MathLive`, `Excalidraw`, PDF, PWA in mobilità)? | Definisce la matrice minima di test reali su hardware. |
+| Estensioni opzionali Fase 2 | Il **PPTX nativo** (note del relatore) e la **ricerca web esterna su richiesta** entrano in Fase 2 o slittano dopo il pilota? | Congela il perimetro operativo della Fase 2 senza scope creep. |

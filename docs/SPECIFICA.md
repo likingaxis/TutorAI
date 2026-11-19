@@ -1,251 +1,272 @@
 # TutorAI specifica di prodotto
 
-Stato: base di progetto, con proposte e scelte aperte distinte di seguito.
+Stato: **versione finale consolidata (v3)** — chiusa a seguito di progettazione tecnica, revisione critica dual-model (Gemini 4 Neon + GPT 6.2 Astra) e allineamento con le decisioni dell'autore.
 
-Per le scelte tecniche leggere [Architettura](ARCHITETTURA.md) e [Contratti e dati](CONTRATTI_E_DATI.md). Il [mockup](../index.html) resta esplorativo e non approvato integralmente.
+Per l'architettura implementativa, i contratti di integrità e il piano di verifica leggere [Architettura](ARCHITETTURA.md), [Contratti e dati](CONTRATTI_E_DATI.md), [Piano di sviluppo](PIANO.md) e [Decisioni e perimetro](domande.md). Il [mockup](../index.html) e [auth.js](../auth.js) restano riferimenti interattivi esplorativi con backend simulato.
 
-TutorAI accompagna uno studente universitario STEM dalla prima comprensione alla preparazione dell'esame. Organizza i materiali, fornisce spiegazioni collegate alle fonti e chiede allo studente di elaborare i concetti nei propri appunti. La revisione individua possibili incomprensioni, propone domande e produce modifiche accettabili o rifiutabili. Le verifiche successive registrano ciò che lo studente riesce a fare senza aiuti nell'app.
+TutorAI accompagna uno studente universitario STEM dalla prima comprensione alla preparazione dell'esame in un'applicazione **autonoma e multi-dispositivo** (desktop, tablet e telefono). Organizza i materiali del corso, fornisce spiegazioni collegate alle fonti, lascia allo studente la proprietà dei propri appunti e individua incomprensioni tramite domande mirate, correzioni verificabili, verifiche senza aiuti e ripassi cadenzati.
 
-La misura di successo è la capacità di comprendere, ricordare e applicare autonomamente, da valutare nel tempo. La quantità di testo generato e la bellezza degli appunti non bastano a dimostrarla.
+La misura di successo è la capacità di comprendere, ricordare e applicare autonomamente nel tempo. La quantità di testo generato e l'estetica degli appunti non bastano a dimostrarla.
 
 ## 1 Stato dei requisiti
 
 | Livello | Significato |
 | --- | --- |
-| V Visione | Indicato nelle idee dell'autore, nelle slide o nella richiesta attuale |
-| C Consolidato | Requisito consolidato e coerente con la visione; mantenuto come base di lavoro |
-| P Proposta | Dettaglio operativo introdotto in questa revisione per rendere realizzabile e verificabile il prodotto |
-| A Aperto | Scelta da motivare e concordare nel team di progetto |
+| V Visione | Obiettivo di prodotto indicato dall'autore, nelle slide o nel mockup interattivo |
+| C Consolidato | Comportamento di prodotto o vincolo di integrità approvato e vincolante |
+| P Proposta | Scelta implementativa/tecnologica adottata come baseline di fase, verificabile e sostituibile tramite prove di Fase 0 |
+| A Aperto | Parametro operativo o di business da fissare prima del pilota (campioni reali, budget/margine, dispositivi) |
 
-V e C costituiscono la base di progetto. P è una proposta modificabile: non equivale a una nuova approvazione dell'autore. Il team deve evidenziare gli eventuali cambiamenti a V e C. Le scelte tecniche non discendono automaticamente dai nomi di strumenti citati negli appunti.
+Regola di separazione: **V e C fissano il comportamento richiesto**, mai una libreria specifica. Le librerie, i motori OCR e le strategie infrastrutturali restano **P** e si congelano per ogni fase al superamento delle prove di verifica.
 
-## 2 Utente e contesto
+## 2 Utente, contesto e mobilità
 
-**V/C.** Lo studente prepara corsi universitari STEM con slide, PDF, trascrizioni, appunti, programma, esercizi del docente e temi d'esame. Servono formule, notazione LaTeX, codice leggibile, figure e dimostrazioni. Si parte da un ambiente desktop con spazio sufficiente per leggere e scrivere insieme; l'adattamento a schermi piccoli mantiene lo stesso processo.
+**V/C.** Lo studente prepara corsi universitari STEM con slide, PDF, trascrizioni, appunti, programma, esercizi del docente e temi d'esame. Servono formule, notazione LaTeX, codice leggibile, figure, diagrammi interattivi, schizzi rapidi e dimostrazioni.
 
-Il prodotto deve aiutare sia chi incontra un argomento per la prima volta sia chi lo ha già studiato. Il percorso scelto non prova il livello di conoscenza: anche durante la preparazione d'esame un concetto può richiedere una spiegazione completa.
+**V/C.** TutorAI è un prodotto **completamente autonomo** rispetto a strumenti terzi: custodisce internamente corsi, appunti, spiegazioni, allegati e storico verifiche, navigabili tramite Archivio a cartelle (`Ctrl+K`). Parte da una postazione desktop/tablet a due pannelli affiancati e garantisce un **passaggio fluido tra dispositivi** fino al **telefono in mobilità** (consultazione di appunti/spiegazioni e ripassi rapidi in autobus prima dell'esame, anche con connettività discontinua). Un eventuale plugin Obsidian è un'estensione futura separata, senza vincoli sul formato canonico interno.
+
+Il prodotto aiuta sia chi affronta un argomento per la prima volta sia chi prepara l'esame. Il percorso scelto non certifica il livello di conoscenza: anche in preparazione d'esame un concetto può richiedere una spiegazione completa.
 
 ## 3 Due percorsi di ingresso
 
 ### Lezione per lezione
 
-**V/C.** Avvio breve: scegliere il percorso, identificare il corso, aggiungere il materiale disponibile e aprire una prima unità utile. La mappa del corso è inizialmente modificabile e può essere completata durante lo studio. Le domande sui prerequisiti compaiono quando servono a capire il contenuto, senza un lungo esame iniziale obbligatorio.
+**V/C.** Avvio breve: scegliere il percorso, identificare il corso, caricare i materiali disponibili (anche più file o archivio `.zip` soggetto a limiti di sicurezza) e aprire una prima unità utile. La mappa del corso resta modificabile. I prerequisiti compaiono quando servono, senza diagnosi iniziale obbligatoria.
 
-Il materiale può essere parziale o mancare. In quel caso si richiede almeno un argomento e, se disponibile, il programma. Le ricostruzioni basate su conoscenze esterne o generate dall'AI sono mostrate come provvisorie e non attribuite al docente.
+Se il materiale manca o è parziale, si richiede almeno un argomento e, se disponibile, il programma. Le spiegazioni non fondate su fonti del docente sono segnalate come provvisorie.
 
 ### Preparazione esame
 
-**V/C.** Ingresso più approfondito: programma, data se nota, modalità dell'esame, tempo disponibile e materiali. Una diagnosi rappresentativa tramite domande o problemi distingue conoscenze dichiarate, non verificate e dimostrate. Il sistema propone priorità, lacune e piano di studio modificabile.
+**V/C.** Ingresso approfondito: programma, data se nota, modalità d'esame, disponibilità oraria, materiali e **temi d'esame degli appelli passati**. Una diagnosi rappresentativa distingue conoscenze dichiarate, non verificate e dimostrate, proponendo priorità, lacune e piano modificabile.
 
-I dati sconosciuti restano sconosciuti. Un argomento saltato nella diagnosi non diventa “conosciuto”. La pianificazione può essere ricalcolata quando lo studente aggiunge la data o cambia disponibilità.
+**C/P.** *Analisi dei temi d'esame (Fase 2):* caricando file con ruolo `temi_esame`, il sistema estrae mappa di frequenza dei concetti, tipologie ricorrenti e insidie tipiche del docente per pesare le priorità del piano e generare tracce coerenti con l'appello reale.
+
+Un argomento non testato nella diagnosi resta “non verificato”. Il piano si ricalcola quando cambiano scadenza, disponibilità o esiti.
 
 ## 4 Ciclo di studio comune
 
 | Fase | Esperienza dello studente | Risultato conservato |
 | --- | --- | --- |
-| Preparazione | Vede obiettivo, posizione nel corso e prerequisiti rilevanti | Unità e riferimenti alle fonti |
-| Spiegazione | Legge a sinistra e seleziona passaggi per chiedere chiarimenti | Spiegazione, fonti e chiarimenti contestuali |
-| Elaborazione | Scrive e struttura gli appunti a destra | Bozza personale con revisioni |
-| Revisione | Preme “Verifica i miei appunti” e risponde alle domande pertinenti | Problemi rilevati, risposte e aiuti usati |
-| Merge | Esamina e accetta, rifiuta o modifica le proposte | Nuova revisione dell'appunto e decisioni sulle modifiche |
-| Verifica e ripasso | Ricorda, spiega o risolve senza risposte visibili nell'app | Evidenze, stato del concetto e attività successive |
+| Preparazione | Vede obiettivo, posizione nel corso e prerequisiti rilevanti | Unità, prerequisiti e riferimenti alle fonti |
+| Spiegazione | Legge a sinistra (fonti nascoste di default con toggle rapido), adatta stile/dettaglio, esplora diagrammi/slide e chiede chiarimenti su selezione | Spiegazione versionata, fonti validate e chiarimenti ancorati |
+| Elaborazione | Scrive appunti a destra, trasferisce formule/diagrammi/ritagli dalla sinistra, evidenzia, segna blocchi `Dubbio` e disegna schizzi | Bozza con salvataggio confermato, revisioni e provenienza per blocco |
+| Revisione | Preme “Verifica i miei appunti”: il tutor parte dai `Dubbi` aperti e dagli errori concettuali con domande ancorate | Snapshot immutabile confermato, questioni rilevate, risposte e aiuti usati |
+| Merge | Esamina proposte come diff con motivo e fonte; accetta, rifiuta o modifica manualmente | Nuova revisione dell'appunto e storico delle decisioni |
+| Verifica e ripasso | Svolge quiz focus (scelta multipla, scritta, mista), invia foto di svolgimenti su carta (con trascrizione verificabile) o usa modalità Feynman | Evidenze immutabili, eventuale esito deterministico server, calibrazione e calendario FSRS |
 
-**V/C.** La spiegazione sta a sinistra; gli appunti dello studente a destra. Non si inserisce automaticamente una prima stesura AI negli appunti. La struttura del documento appartiene allo studente. I chiarimenti restano legati al passaggio che li ha originati.
+**V/C.** La spiegazione sta a sinistra; gli appunti dello studente a destra. L'AI non inserisce automaticamente una bozza negli appunti: la struttura appartiene allo studente. È invece previsto il **trasferimento attivo curato dallo studente** (drag & drop o pulsante `+ Appunti`) di formule chiave, diagrammi interattivi, brevi estratti e ritagli di slide nel punto scelto del foglio. Ogni blocco importato conserva il proprio attributo di provenienza così che la revisione AI distingua il lavoro personale dello studente dagli asset copiati dalle fonti.
 
-La revisione ordinaria inizia su richiesta al termine dell'unità. Non interrompe la scrittura con continue domande automatiche. Se lo studente è bloccato o la pagina è vuota, il tutor offre una spiegazione e uno spunto per iniziare; una soglia di parole non può diventare una barriera arbitraria.
+La revisione inizia su richiesta esplicita al termine dell'unità e non interrompe la digitazione. Se la pagina è vuota o lo studente è bloccato, il tutor offre spiegazione e spunto senza soglie arbitrarie di parole.
 
-Le domande affrontano errori o omissioni importanti. Sugli argomenti nuovi si forniscono spiegazioni esplicite ed esempi svolti. Negli esercizi già tentati si possono offrire indizi progressivi; se non bastano, una spiegazione completa. Una prova dichiarata senza aiuti rende indisponibili nell'app gli aiuti fino alla consegna.
+**V/C.** Durante la scrittura lo studente può inserire blocchi **`Dubbio`** dedicati (prioritari alla revisione) e blocchi **schizzo a mano libera** (scena vettoriale sempre modificabile con esportazione SVG deterministica). Nella Fase 2 può chiedere esplicitamente all'AI una **variante ripulita** dello schizzo da confrontare e accettare, conservando sempre la scena originale e i suoi asset in forma reversibile.
+
+Sugli argomenti nuovi si forniscono spiegazioni esplicite ed esempi svolti. Sugli esercizi già tentati (nell'app o da foto su carta) si offrono indizi progressivi senza regalare subito l'intera soluzione. Una verifica dichiarata senza aiuti nasconde appunti e aiuti nell'app fino alla consegna.
 
 ## 5 Requisiti funzionali
 
-Gli ID servono a collegare progettazione, sviluppo e scenari di accettazione.
+Gli ID collegano progettazione, sviluppo e scenari di accettazione (`AC01–AC18`).
 
 | ID | Livello | Comportamento richiesto |
 | --- | --- | --- |
-| F01 | V/C | Creare un corso, scegliere uno dei due percorsi e riprendere una sessione |
-| F02 | V/C | Differenziare onboarding breve e diagnosi d'esame approfondita |
-| F03 | C | Importare più fonti, mostrare lo stato di elaborazione e conservare nome e posizione di provenienza |
-| F04 | V/C | Organizzare corso, moduli, lezioni, unità concettuali e prerequisiti in una mappa correggibile |
-| F05 | V/C | Fornire spiegazioni coerenti con le fonti e con il livello del singolo argomento |
-| F06 | V | Selezionare testo a sinistra e chiedere approfondimento, riformulazione, esempio o fonte |
-| F07 | V/C | Scrivere appunti liberi a destra con titoli, elenchi, formule, blocchi di codice e immagini pertinenti |
-| F08 | V/C | Salvare bozze, revisioni, posizione di lettura e unità attiva; ripristinarle alla riapertura |
-| F09 | V/C | Avviare una revisione esplicita e ancorare le domande ai punti pertinenti della bozza |
-| F10 | V/C | Registrare risposte e aiuti; adattare il feedback evitando una legenda di categorie da imparare |
-| F11 | V/C | Mostrare correzioni come diff con motivo e fonte; consentire accettazione, rifiuto e modifica manuale |
-| F12 | V/C | Conservare separatamente gli appunti consolidati e le evidenze di apprendimento |
-| F13 | V/C | Proporre verifiche aperte, problemi e almeno una verifica senza aiuti nell'app |
-| F14 | V/C | Usare le lacune per ripassi e attività, dando priorità agli esercizi del docente disponibili |
-| F15 | V/C | Mostrare obiettivi settimanali e attività gestibili; aggiornare il piano in base al progresso e al tempo disponibile |
-| F16 | C | Esportare appunti e consentire cancellazione dei dati di studio secondo il modello di distribuzione scelto |
-| F17 | V/C | Distinguere fonti del corso, integrazioni esterne ed esempi AI; rendere visibili i disaccordi rilevanti |
+| F01 | V/C | Creare un corso, scegliere uno dei due percorsi, accedere (senza SSO Ateneo in MVP) e riprendere il lavoro tra desktop, tablet e telefono |
+| F02 | V/C | Differenziare onboarding breve e diagnosi d'esame approfondita, includendo l'analisi dei temi d'esame passati quando disponibili |
+| F03 | C | Importare più fonti (PDF, Markdown, trascrizioni, `.zip` con limiti di sicurezza), mostrare stato per file/pagina e conservare ruolo e provenienza |
+| F04 | V/C | Organizzare corso, moduli, lezioni, unità concettuali e prerequisiti in una mappa correggibile, con Archivio a cartelle (`Ctrl+K`) e Knowledge Brain |
+| F05 | V/C | Fornire spiegazioni coerenti con le fonti, adattabili per dettaglio/stile e adeguate al livello del singolo argomento |
+| F06 | V/C | Selezionare testo a sinistra per approfondimento, semplificazione, esempio o fonte, e trasferire attivamente formule, diagrammi o ritagli negli appunti |
+| F07 | V/C | Scrivere appunti liberi a destra con titoli, elenchi, evidenziatore multi-colore, formule LaTeX/visuali, codice, blocchi `Dubbio`, immagini e schizzi modificabili (con variante AI pulita in Fase 2) |
+| F08 | V/C | Salvare bozze, revisioni, posizione di lettura e unità attiva con sincronizzazione affidabile tra dispositivi e recupero esplicito dei conflitti |
+| F09 | V/C | Avviare una revisione esplicita su snapshot confermato, prioritizzando i `Dubbi` aperti e ancorando le domande ai punti pertinenti della bozza |
+| F10 | V/C | Registrare risposte, aiuti e calibrazione di sicurezza; adattare il feedback evitando tassonomie pedagogiche da imparare |
+| F11 | V/C | Mostrare correzioni come diff con motivo e fonte; consentire accettazione, rifiuto e modifica manuale senza sovrascritture silenziose |
+| F12 | V/C | Conservare separatamente appunti consolidati ed evidenze immutabili di apprendimento, con storico delle verifiche consultabile |
+| F13 | V/C | Proporre verifiche focus (scelta multipla, scritta, mista, foto di esercizi con trascrizione verificabile e modalità Feynman) con almeno una verifica senza aiuti nell'app |
+| F14 | V/C | Usare lacune, calibrazione di sicurezza e prerequisiti per guidare ripassi e dare priorità agli esercizi del docente disponibili |
+| F15 | V/C | Mostrare obiettivi, calendario interattivo dei richiami (scheduler FSRS + agenda manuale) e attività aggiornate a progresso e scadenza |
+| F16 | C | Esportare gli appunti (distinguendo export personale da condivisione sicura priva di materiali protetti del docente) e cancellare completamente dati, indici, derivati e copie gestite |
+| F17 | V/C | Tracciare e validare sempre fonti del corso, integrazioni esterne ed esempi AI; nascondere i badge inline di default con toggle rapido `Mostra fonti`, mantenendo espliciti contrasti rilevanti o assenza di fonti |
 
 ### Formati e contenuti
 
-**C.** Il perimetro generale comprende PDF, slide, testi, trascrizioni e programma. Per figure, formule e codice l'estrazione non deve fingere una qualità che non possiede: conservare il file e la posizione originali permette di controllare il passaggio.
+**C.** Il perimetro comprende PDF, slide esportate in PDF, TXT/Markdown, trascrizioni, programma, esercizi/temi d'esame e foto di svolgimenti manoscritti (Fase 2). Per figure, formule e codice l'estrazione dichiara i propri limiti: l'originale e la posizione verificata restano sempre consultabili.
 
-**P/A.** Per il primo rilascio si propone PDF con testo selezionabile, slide esportate in PDF, TXT/Markdown e testo incollato. Il team deve decidere se il PPTX nativo entra subito, esplicitando il costo della scelta. Scansioni con OCR, registrazioni audio e video sono estensioni da valutare; non dichiararle supportate attraverso una semplice estensione di file.
+**P.** Per Fase 1: PDF con testo selezionabile e PDF STEM tramite un **unico percorso OCR gestito** (con fallback a pagina originale), TXT/Markdown, trascrizioni e testo incollato. In Fase 2: archivi `.zip` protetti da limiti di espansione, foto di esercizi su carta e, dietro il medesimo contratto di parsing, eventuali modalità OCR aggiuntive (BYOK e Locale) e valutazione PPTX nativo (note del relatore). Audio lezioni e simulatore orale rientrano nelle Fasi 3–4.
 
-**V/C.** La spiegazione può incorporare ritagli delle slide, figure originali e schemi. La sezione 11.5 propone di provare già nella prima lezione una figura generata e un'interazione scientifica circoscritta. Visualizzare codice e formule non richiede esecuzione arbitraria del codice o compilazione di progetti LaTeX.
+## 6 Fonti, visibilità, sicurezza e copyright
 
-## 6 Fonti e comportamento del tutor
+**C.** *Visibilità pulita in lettura:* il backend valida e persiste ogni citazione (file, versione, `pageIndex` fisico, `pageLabel` stampato, passaggio o `regionId`). In Studio i badge inline delle fonti sono **nascosti di default** e attivabili con un **toggle rapido `Mostra fonti`** (menu lettura, scorciatoia o Impostazioni). Le fonti restano sempre raggiungibili dal popup di selezione (`Fonte`), dai diff e dagli esiti delle verifiche (`Vedi fonte`). Contrasti sostanziali tra fonti o unità provvisorie senza materiali restano comunque segnalati in modo discreto (`F17`).
 
-Il materiale del corso definisce programma, terminologia e aspettative del docente. Le integrazioni esterne chiariscono e verificano, ma non sostituiscono silenziosamente quel contesto. Un contrasto sostanziale viene mostrato con i due riferimenti e una spiegazione dell'incertezza.
+**C.** *Protezione del copyright delle slide in export e condivisione:* i materiali caricati dal docente sono **strettamente privati per account**. Poiché un appunto personale può incorporare ritagli delle slide (`curated_from_slide`), il sistema **distingue rigidamente**:
+* **Export personale privato** (solo per il proprietario dell'account): può includere i ritagli e i riferimenti collegati;
+* **Condivisione esterna (`Share` / link nota):** applica la policy per singolo asset incorporato ed **esclude o sostituisce con riferimento testuale** qualunque ritaglio o file appartenente alle slide del docente, condividendo solo testo, formule e schizzi originali dello studente.
 
-**P.** Ogni citazione verificabile collega un contenuto a un file e a una pagina, slide o sezione identificata. Per un PDF, distinguere l'indice fisico della pagina dal numero stampato sul foglio. L'AI può citare solo posizioni effettivamente presenti nel materiale recuperato. Se manca una fonte adeguata, lo indica e non inventa un riferimento.
+**C/P.** *Sicurezza anti-prompt-injection e limiti di import:* ogni contenuto nei file caricati è dato non fidato, mai comando eseguibile. L'import di PDF e `.zip` applica limiti cumulativi durante estrazione e rendering (numero file, byte espansi, controllo path traversal *Zip Slip*, numero pagine, pixel totali e tempo CPU) isolando il singolo job fallito.
 
-**A.** Stabilire se la ricerca sul web sia automatica, su richiesta o assente nel primo rilascio. Resta obbligatoria la distinzione tra corso, integrazione ed esempio generato. Una ricerca esterna non deve bloccare ogni apertura di unità.
+## 7 Stati, integrità ed evidenze
 
-**C/P.** Le istruzioni trovate dentro file caricati sono contenuto del corso, non comandi per il tutor o per l'applicazione. Nessun file può autorizzare l'accesso ad altri corsi, l'invio di dati o la modifica degli appunti. Le azioni sugli appunti seguono il flusso di revisione dell'app.
+Questa sezione definisce le invarianti vincolanti di integrità (**C** salvo dettagli tecnici **P**).
 
-## 7 Stati e regole di integrità proposti
+### Bozza, sincronizzazione sequenziale e merge atomico
 
-Questa sezione è **P**, salvo la separazione tra appunti ed evidenze, che è V/C. Descrive comportamenti richiesti ai componenti; Il team sceglierà come implementarli.
+Stati principali della sessione: preparazione, studio, revisione, proposta di merge, verifica senza aiuti, pausa e conclusione. La bozza rimane editabile anche durante attese AI o cadute di rete.
 
-### Sessione e revisione
+**C/P.** *Scelta Fase 1–2 (Dexie + protocollo server ottimistico):* per garantire atomicità reale su revisioni e merge senza introdurre ambiguità di ordinamento tra database SQL e CRDT live, la persistenza locale usa **Dexie (IndexedDB)** con coda mutazioni (`baseRevisionId`, `clientMutationId`, `clientSequence`). Il server aggiorna la testa della nota **solo se `baseRevisionId` coincide**, gestisce duplicati in modo idempotente e su base divergente conserva entrambe le versioni presentando un confronto esplicito (mai sovrascrittura silenziosa). “Verifica i miei appunti” parte solo dopo conferma della bozza visibile, creando uno snapshot immutabile (`revisionId`). L'adozione di Yjs è rinviata solo se il pilota mostrerà reale necessità di editing simultaneo multi-device o collaborazione tra studenti.
 
-Stati principali: preparazione, studio, revisione, proposta di merge, verifica senza aiuti, pausa e conclusione. Una bozza può continuare a essere salvata durante attese o errori dell'AI. La conclusione di una sessione non certifica tutti i concetti.
-
-Il comando di revisione crea una fotografia della bozza. Domande e proposte di modifica si riferiscono a quella revisione. Se lo studente cambia successivamente il passaggio, il sistema verifica la compatibilità: una proposta obsoleta non viene applicata sopra il testo nuovo.
-
-Per il merge conservare: revisione di base, passaggio originale, testo proposto, motivo, fonti e decisione. L'accettazione produce una nuova revisione. Rifiutare una proposta preserva l'appunto; annullare una modifica non cancella la cronologia. Operazioni ritentate non devono duplicare domande, patch o evidenze.
+Ogni merge registra: `baseRevisionId`, ancoraggio, `expectedBlockHash`, contenuto precedente/proposto, motivo, fonti e decisione. Una modifica concorrente sullo stesso passaggio produce **`409 PATCH_CONFLICT`** con confronto fra base, corrente e proposta. Il merge non promuove mai automaticamente la conoscenza dimostrata.
 
 ### Ancoraggi al testo
 
-Un popup deve poter ritrovare il passaggio dopo una riapertura. Conservare un riferimento alla revisione del documento, all'unità o al blocco e al testo selezionato con un contesto sufficiente. Non dipendere solo dalle coordinate sullo schermo. Se il passaggio non si ritrova in modo univoco, mostrare il collegamento come da ricontrollare, senza attribuirlo a una frase diversa.
+Conservare documento, `revisionId`, `blockId` (o nodo atomico), intervallo UTF-16 `[inizio, fine)`, citazione esatta, contesto adiacente e hash di precondizione, senza dipendere dalle coordinate a schermo. Stati: `exact`, `mapped`, `ambiguous`, `missing`. Se ambiguo o mancante, mostrare il passaggio originale come *da ricollegare*.
 
-### Stato di conoscenza
+### Stato di conoscenza, autorità della verifica e foto esercizi
 
 | Stato | Significato |
 | --- | --- |
 | Non studiato | Nessuna attività di studio registrata |
 | In corso | Unità avviata e attività non conclusa |
-| Studiato da verificare | Lavoro svolto, senza evidenza indipendente sufficiente |
-| Da ripassare | Errore, incertezza o richiamo successivo da affrontare |
-| Dimostrato senza aiuti | Evidenza registrata in una verifica priva di aiuti nell'app |
+| Studiato da verificare | Studio o revisione svolti, senza evidenza indipendente sufficiente |
+| Da ripassare | Errore, misconception ad alta sicurezza o richiamo scaduto |
+| Dimostrato senza aiuti | Evidenza registrata in una verifica priva di aiuti attestabile lato server |
 
-Conservare autore della risposta, momento, concetti coinvolti, domanda o problema, risposta, valutazione e aiuti usati. “Dimostrato senza aiuti” riguarda le condizioni osservabili nell'app, non certifica l'assenza di strumenti esterni. Una risposta aiutata o l'accettazione di un merge non produce automaticamente questo stato.
+**C.** *Autorità della valutazione ed esito ternario:*
+* Il browser fornisce feedback locale immediato (`MathLive` + `CortexJS Compute Engine`), ma **non è mai fonte autorevole per promuovere un concetto o aggiornare FSRS**.
+* Le verifiche persistenti usano validazione **ripetibile lato server** su tracce versionate con **dominio matematico dichiarato** (es. `x/x` e `1` differiscono per `x = 0`) e **tre esiti espliciti: `corretto`, `errato`, `indeterminato`**.
+* *Foto di esercizi su carta (Fase 2):* il flusso separa obbligatoriamente **(1) trascrizione visiva riga-per-riga** (esposta e **correggibile dallo studente** in caso di errore OCR) da **(2) verifica matematica e feedback**. Un segno illeggibile produce esito **`indeterminato`**; ogni rettifica ricalcola evidenza, progresso e richiamo FSRS evitando che errori di lettura diventino false lacune.
+* *Calibrazione metacognitiva:* il livello di sicurezza dichiarato (`low`, `medium`, `high`) amplifica la priorità **solo** su esiti confermati (`corretto` o `errato`), mai su esiti `indeterminato`.
+* *Quiz offline e mobilità (scenario autobus):* una sessione svolta offline su telefono ha `attemptId` stabile e traccia versionata; se la condizione *senza aiuti* non è attestabile in modo sincronizzato col server (o se un aiuto è stato aperto su un altro dispositivo), al rientro online l'attività viene salvata come **esercitazione / ripasso guidato** con al massimo un singolo aggiornamento logico coerente dello scheduler, senza corrompere le verifiche certificate `Dimostrato senza aiuti`.
 
-## 8 Modello logico dei dati proposto
+## 8 Modello logico dei dati
 
-Nomi descrittivi, indipendenti dal database. Le relazioni possono essere implementate senza un database a grafo.
+Implementabile integralmente in PostgreSQL relazionale (senza database a grafo).
 
 | Entità | Informazioni essenziali e relazioni |
 | --- | --- |
-| Corso | Nome, percorso scelto, programma e impostazioni; contiene fonti, struttura e piano |
-| Fonte e versione | File o testo, tipo, stato di estrazione, impronta/versione; appartiene al corso |
-| Passaggio della fonte | Testo o figura, fonte e versione, pagina/slide/sezione, eventuale area della figura |
-| Concetto | Obiettivi e relazioni di prerequisito; collegato a unità ed evidenze |
-| Modulo e lezione | Struttura ordinata e modificabile del corso; contengono unità |
-| Unità | Obiettivo coerente, concetti, spiegazioni e riferimenti; non un numero fisso di minuti |
-| Piano e attività | Disponibilità dichiarata, scadenza eventuale, priorità e attività settimanali |
-| Sessione | Percorso, unità, fase, posizione nei pannelli e ripresa |
-| Spiegazione e chiarimento | Contenuto, versione, citazioni; chiarimento ancorato al passaggio |
-| Appunto e revisione | Documento dello studente, versioni e stato di salvataggio; può coprire più unità |
-| Revisione didattica | Fotografia della bozza, questioni rilevate, domande, risposte e aiuti |
-| Proposta di modifica | Base, ancoraggio, testo precedente/successivo, motivazione, fonti e decisione |
-| Evidenza | Compito, risposta, concetti, valutazione, aiuti e data; separata dall'appunto |
-| Progresso e lacuna | Stato per concetto, evidenze collegate e problemi ricorrenti |
-| Attività di ripasso | Concetti, ragione, priorità, finestra proposta ed esito |
+| Utente e profilo | Identità (email/password, OAuth, Passkey in Fase 2, sessione Ospite con budget tracciato), preferenze tema/lettura |
+| Corso | Nome, percorso, programma, copertina/icona, scadenza esame e impostazioni |
+| Fonte e versione | File/testo, formato, ruolo didattico (`slide`, `trascrizione`, `dispensa`, `appunti`, `esercizi`, `temi_esame`), hash, versione, limiti import e stato per pagina |
+| Albero, passaggi e regioni | Nodi gerarchici (sezione/teorema/slide), passaggi con testo + rappresentazione simbolica ricercabile, `pageIndex`/`pageLabel`, `regionId` con stato confidenza (`verified`, `uncertain`, `page_only`) |
+| Profilo d'esame | Frequenza concetti, tipologie d'esercizio e insidie estratti dai `temi_esame` (Fase 2) |
+| Concetto | Obiettivi e relazioni `prerequisito_ids` |
+| Modulo, lezione e unità | Struttura ordinata e modificabile del corso con spiegazioni versionate e fonti |
+| Sessione e stato di lettura | Percorso, unità, fase, posizione nei pannelli e ripresa sequenziale tra dispositivi |
+| Appunto e revisione | Revisioni JSON canoniche immutabili con `blockId`, `origin`, blocchi `Dubbio`, evidenziati, formule, asset trascinati e `sketchBlock` (scena Excalidraw + asset binari + variante AI legata a `sourceSceneHash`) |
+| Revisione didattica e patch | Snapshot base, `Dubbi` prioritari, domande, risposte, aiuti, proposte con hash/citazioni e decisioni |
+| Verifica ed evidenza | `attemptId`, versione traccia, stato indipendenza server (`withoutAid`), trascrizione foto modificabile, esito ternario (`corretto`/`errato`/`indeterminato`), confidenza, valutazione rivedibile |
+| Progresso, stato FSRS e agenda | Stato per concetto, parametri `ts-fsrs`, richiami automatici/manuali e `completedBy` (`quiz` vs `manual`) |
+| Operazioni, tentativi e budget | `operationId`, `providerAttempts` separati per contabilizzazione retry, prenotazione atomica budget per account/globale, export e richieste di cancellazione |
 
-Il formato in `esempi/sessione_lamport.json` illustra i collegamenti, senza imporre API, schema fisico o linguaggio di programmazione.
+## 9 Perimetro delle fasi di prodotto
 
-## 9 Perimetro del primo prodotto
+### Fase 1 — Prima lezione integrata (uscita strettamente verificabile)
+* **Ingresso e continuità:** accesso persistente (Email+Password + 1 OAuth), ripresa sequenziale PC ↔ telefono e **Dexie + salvataggio ottimistico server** con recupero bozza e gestione conflitti.
+* **Materiali e fonti:** 1 lezione multifonte reale (PDF slide, trascrizione, Markdown) tramite **1 percorso OCR gestito** dietro contratto `DocumentParserProvider` (con stato `testo ok / regione incerta` e fallback pagina originale); badge fonti nascosti di default + toggle `Mostra fonti`.
+* **Studio e appunti:** spiegazione a sinistra, editor Tiptap a destra con `MathLive`, blocco `Dubbio`, evidenziatore, trasferimento curato di 1 formula/ritaglio con provenienza, **Excalidraw editabile + export SVG deterministico**, revisione ancorata su snapshot e diff con `409 PATCH_CONFLICT`.
+* **Verifica, ripasso e controllo costi:** 1 provider AI (via Vercel AI SDK) con prenotazione atomica del budget, telemetria metadati (senza contenuti sensibili di default), verifica senza aiuti (MCQ + risposta aperta su regole/dominio espliciti a 3 esiti) e 1 richiamo **`ts-fsrs`** fruibile su telefono.
+* **Criterio di uscita Fase 1:** una lezione multifonte completata da uno studente su due dispositivi (PC + telefono) in cui il team ricostruisce con precisione *quali fonti hanno sostenuto la risposta, quale testo è cambiato, perché è cambiato il progresso e quanto è costata l'intera sessione*.
 
-**C.** L'MVP completo comprende entrambi i percorsi, importazione di più fonti, struttura navigabile, spiegazioni con provenienza, spazio a due pannelli, salvataggio e ripresa, revisione mirata, diff approvato dallo studente, progresso per concetto, verifica senza aiuti e un piano/ripasso di base.
+### Fase 2 — MVP completo a due percorsi
+* Percorso *Preparazione esame* completo con diagnosi e **analisi dei `temi_esame`**;
+* **Pulizia AI degli schizzi Excalidraw** (variante separata legata a `sourceSceneHash` con operazioni controllate + verifica preservazione pedici/frecce);
+* **Foto esercizi su carta** con flusso a 2 stadi (*trascrizione correggibile* → *verifica a 3 esiti*);
+* **Modalità Feynman**, **calibrazione metacognitiva**, formato quiz misto e **Knowledge Brain** con root-cause sui prerequisiti;
+* **Modalità Ospite sicura** (corso demo pre-elaborato + 3 chiarimenti Tier 1 + tetto globale giornaliero + migrazione account che conserva il consumo già maturato) e **Passkey**;
+* Estensione del contratto `DocumentParserProvider` a **OCR BYOK** (con cifratura, revoca e limiti) e **OCR Locale** (pairing sicuro + validazione manifest), più eventuale PPTX nativo;
+* **Archivio `Ctrl+K`**, cache PWA per appunti/esercitazioni in mobilità, export personale (**Markdown**, **Typst WASM PDF**, **Anki `.apkg`**) e condivisione sicura priva di asset protetti del docente.
 
-**P.** La prima dimostrazione integrata può concentrarsi su una lezione e un errore concettuale: incrocia slide PDF, trascrizione e Markdown, spiega con un ritaglio citato, lascia scrivere, interroga la bozza, propone una correzione e registra un richiamo successivo. Questa tappa non sostituisce l'MVP a due percorsi.
+### Fasi 3–4 — Estensioni post-pilota (solo su evidenza)
+* Editing simultaneo real-time (**Yjs**) se il pilota dimostra modifiche concorrenti frequenti o collaborazione fra studenti;
+* Esecuzione codice **Pyodide** in Web Worker isolato (per corsi Python) e **PGlite** (per Basi di Dati);
+* **Visual RAG** cross-corso (`ColQwen2.5` + Qdrant) se il recupero su grandi archivi di slide grafiche lo giustifica;
+* **Audio lezioni** (`WhisperX` / `Deepgram Nova-3`) + allineamento audio ↔ slide e **simulatore orale real-time** (`LiveKit Agents` / `Pipecat`);
+* **SSO Ateneo federato** (`IDEM GARR` SAML 2.0), packaging **Capacitor** / **Tauri 2** e plugin separato per **Obsidian**.
 
-Successivamente: OCR esteso, audio/video, simulazione orale completa, sincronizzazione dei calendari, ottimizzazione FSRS, collaborazione tra studenti, ampi cataloghi di diagrammi scientifici specialistici e personalizzazione delle pause basata sul comportamento. Pagamenti, portale docenti, voti ufficiali e addestramento di un modello dedicato non sono necessari per validare il ciclo iniziale.
+## 10 Qualità, conformità dati e parametri operativi aperti
 
-## 10 Qualità e scelte ancora aperte
+**C/P (Privacy, Retention e GDPR):**
+* Distinzione netta tra **residenza dati UE**, **esclusione dall'addestramento** e **Zero Data Retention (ZDR)**. Prima dell'attivazione di qualsiasi endpoint AI (inclusi eventuali endpoint Batch, che presso alcuni provider non supportano ZDR), il team compila e approva la **matrice `provider × endpoint × modello × regione × retention`**; le stime economiche usano esclusivamente endpoint conformi.
+* **Telemetria privacy-by-design:** i trace di produzione (Langfuse/log) memorizzano di default **solo ID, versioni, tempi, token e costi**, non testo di slide, foto o risposte dello studente. Eventuali campioni diagnostici richiedono dataset autorizzati/anonimizzati e TTL esplicito.
+* **Cancellazione e dispositivi condivisi:** la cancellazione di un corso/account copre database, R2, indici e derivati; logout, cambio account e riconnessione di un dispositivo offline dopo cancellazione invalidano e ripuliscono la cache locale.
 
-Il prodotto conserva le bozze durante gli errori, rende leggibili le formule, permette di controllare le fonti e non richiede una tassonomia di feedback da imparare. Le proposte tecniche di accessibilità, prestazioni e recupero sono nel documento di interfaccia e nel piano di verifica.
+Restano **A** (raccolti in [domande.md](domande.md)): selezione delle 2–3 lezioni reali autorizzate per Fase 0, target economico/margine mensile per studente (media e p95 tra uso ordinario e pre-esame), dispositivi Android di test e inclusione di PPTX/ricerca web in Fase 2.
 
-Restano **A**: distribuzione web/desktop/locale, modello dei dati e autenticazione, elaborazione locale o cloud, fornitori e modelli AI, editor e formato canonico, formati iniziali di importazione, budget e scala, soglie di valutazione dell'apprendimento. Le proposte di architettura e i contratti del repository descrivono motivazioni e condizioni che farebbero cambiare scelta.
+## 11 Progetto tecnico consolidato (baseline di Fase 0–2)
 
-## 11 Progetto tecnico proposto per la valutazione
+**P.** Stack unificato TypeScript: PWA **React + TypeScript + Vite**, **TanStack Query**, **Tiptap/ProseMirror** (estensioni MIT + **MathLive** + **Excalidraw**), **Dexie** (Fase 1–2), **Fastify** (o **Hono**) + **Zod** + **Drizzle ORM**, **PostgreSQL** (`FTS` + campo simbolico dedicato + `pg_trgm` + `pgvector`), **`pg-boss`**, **Better Auth**, **Cloudflare R2** (o Supabase), **Vercel AI SDK** e **Langfuse** (metadati di default).
 
-**P.** La configurazione candidata è una web app installabile, con client React/TypeScript, editor Tiptap, API Fastify, PostgreSQL con pgvector, storage privato degli originali e worker per i lavori persistenti. Il client serve desktop, tablet Android e telefono. Il server custodisce le credenziali AI e decide accesso alle fonti, condizioni della prova e applicazione delle patch. Il prototipo dovrà dimostrare una lezione completa con slide, trascrizione e due Markdown con ruoli diversi. Le decisioni da approvare sono in [domande.md](domande.md).
+### 11.1 Materiali, sicurezza import e OCR gestito (Fase 1) → pluggable (Fase 2)
 
-### 11.1 Dal caricamento al materiale citabile
+1. **Upload sicuro con limiti cumulativi:** validazione autorizzazione, MIME reale e limiti su numero file, byte espansi (protezione *Zip Slip* / *zip bomb*), pagine massime, pixel totali e timeout CPU per job.
+2. **Rendering server-side (`pypdfium2`):** rasterizzazione veloce e fedele di pagine e ritagli in WebP/PNG (Apache 2.0/BSD); `PDF.js` resta il visualizzatore interattivo lato client.
+3. **Contratto `DocumentParserProvider`:** estrazione digitale nativa su testi/PDF puliti + **1 percorso OCR gestito** in Fase 1 sulle pagine complesse/scansionate. L'output distingue per ogni blocco/figura: `verified_region`, `text_ok_region_uncertain` (utile alla ricerca, non a un ritaglio automatico) e `page_only` (mostra esplicitamente la pagina originale).
+4. **Audit obbligatorio delle licenze:** nessuna assunzione generica: per ogni motore candidato (Docling, MinerU, `allenai/olmOCR-2-7B-1025`, VLM gestito) si registra la licenza esatta di **codice, singolo checkpoint e dipendenze** (es. catalogo modelli misto di Docling, obblighi di attribuzione online/soglie di MinerU, Apache-2.0 dello specifico checkpoint olmOCR).
+5. **Estensione Fase 2 (`BYOK` e `Locale`):** aggiunte dietro lo stesso contratto solo dopo aver chiuso cifratura/revoca/limiti delle chiavi esterne (BYOK) e pairing sicuro worker↔account con validazione rigorosa dei manifest (Locale).
 
-1. Lo studente assegna al file un ruolo correggibile (slide, trascrizione, dispensa, appunti personali, esercizi o soluzioni). Il ruolo didattico e il formato sono campi distinti. L'API verifica accesso al corso, tipo effettivo, dimensione e integrità dell'upload. Registra originale privato, hash, versione e job. Un duplicato nello stesso corso può riusare l'estrazione mantenendo l'associazione alla lezione.
-2. Il worker PDF.js legge pagine, etichette, testo e geometria. Per pagine complesse il worker documentale candidato usa Docling per ordine di lettura, tabelle e figure. Sulle scansioni si registra la necessità di OCR e si conserva la pagina consultabile. Un testo matematico sospetto rimanda al ritaglio originale. L'interfaccia espone per file lo stato ricevuto, in elaborazione, pronto, parziale o fallito e le pagine coinvolte. [PDF.js](https://mozilla.github.io/pdf.js/examples/) · [Estrazione di figure con Docling](https://docling-project.github.io/docling/_generated/examples/export_figures/)
-3. Il parser Markdown lavora sull'albero del documento e conserva percorso, titoli, codice e formule. Risolve immagini e link relativi soltanto tra gli asset importati nel corso. Il parser delle trascrizioni conserva ordine e testo dei segmenti, parlante e intervallo temporale se presenti. Una trascrizione ricevuta in PDF mantiene anche i riferimenti di pagina. La produzione della trascrizione da audio è un job distinto, subordinato alla decisione sui formati.
-4. Ogni passaggio conserva corso, versione, ID, ordine, sezione superiore, ruolo e posizione. La posizione è una pagina con eventuale rettangolo, un blocco Markdown oppure un segmento con tempi facoltativi. Figure e didascalie hanno collegamenti espliciti. Il chunk per la ricerca punta a uno o più passaggi contigui. Una dimostrazione spezzata mantiene il riferimento all'intera sezione. Le associazioni tra trascrizione e slide distinguono riferimento esplicito, abbinamento inferito e conferma dello studente.
-5. Il worker costruisce indice lessicale ed embedding per i blocchi cambiati. Registra hash del contenuto indicizzato, versione del parser, modello e dimensione dei vettori. Pubblica il manifest con i suoi indici in modo coerente. Un fallimento di indicizzazione semantica lascia disponibile la ricerca testuale con stato degradato. Una sostituzione crea una nuova versione, mentre le citazioni storiche aprono quella già mostrata finché è conservata. Alla cancellazione si revocano accessi e si eliminano anche indici e derivati.
+### 11.2 Recupero del contesto per attività e ricerca simbolica
 
-### 11.2 Recupero del contesto su più fonti
+Il recupero è governato dall'**attività**, non da una soglia fissa di token, e applica sempre prima i filtri di utente, corso, versioni autorizzate e fase (escludendo soluzioni/aiuti non consentiti dal prefisso cachato):
 
-Il RAG recupera evidenze dal corso per una singola attività. Il server applica prima i vincoli di utente, corso, versioni autorizzate e fase della sessione. Una selezione o un richiamo esplicito alla slide apre direttamente il passaggio. Per una domanda libera, il worker combina ricerca testuale PostgreSQL (titoli, lessico del corso e termini esatti) e similarità pgvector (parafrasi, anche tra registro orale e formale). Simboli e identificatori di codice hanno anche un campo letterale ricercabile. Per la prima prova si possono prendere venti candidati per ramo, fonderne le posizioni con reciprocal rank fusion, deduplicare i passaggi e ampliare i vicini solo dove servono premesse, didascalie o definizioni. Le quantità sono parametri del benchmark. [Ricerca ibrida in pgvector](https://github.com/pgvector/pgvector#hybrid-search)
+1. **Riferimento diretto:** se lo studente seleziona un passaggio o richiede una slide/figura nota (`regionId`), carica direttamente quel blocco con il suo intorno minimo (costo recupero quasi nullo).
+2. **Sezione completa con premesse:** per spiegazioni o dimostrazioni legate a un teorema/unità, naviga l'**albero strutturale** del documento (modello ispirato a `PageIndex`) mantenendo integre premesse e definizioni.
+3. **Ricerca ibrida tra sezioni:** combina `FTS` PostgreSQL, **`pg_trgm` per nomi/termini testuali** (non per operatori, poiché `pg_trgm` ignora i caratteri non alfanumerici), una **rappresentazione simbolica normalizzata dedicata** per formule/codice (che preserva operatori come `<`, `>`, `→`, `∥`, così `C(a) < C(b)` resta distinto da `C(a) > C(b)`) e **`pgvector`**. Nessun reranker in Fase 1 salvo evidenza sul benchmark che i passaggi giusti siano presenti nei top-20 ma scartati dal contesto finale.
+4. **Lezione intera (con Prompt Caching):** usata quando serve copertura globale (revisione ampia o sintesi) e confermata vantaggiosa dal benchmark `8k / 20k / 40k` a freddo e a caldo.
 
-Una spiegazione generale campiona le sezioni collegate agli obiettivi. Un chiarimento parte dal blocco selezionato. Una revisione confronta bozza e obiettivi per trovare anche omissioni. I materiali del docente e gli appunti personali sono presentati con il loro ruolo. In caso di disaccordo il tutor collega le due affermazioni alle rispettive fonti. Se il contesto è insufficiente, l'operazione può chiedere un recupero aggiuntivo entro il budget, quindi espone il limite. In verifica senza aiuti il backend respinge chiarimenti e accesso alle soluzioni attraverso i comandi dell'app durante il tentativo.
-
-### 11.3 Esempio completo: mostrare la figura della slide indicata
-
-Nel mockup la finestra della fonte riceve nome e numero, e la scheda Slide costruisce il contenuto da esempi locali. Nel prodotto la navigazione trasporta l'identità della fonte. Anche la pillola nella spiegazione e il riferimento nel diff usano la stessa risoluzione. [Mockup](../index.html) · [Contratto illustrativo delle regioni](../esempi/harness_visuale.json)
+### 11.3 Esempio completo: dalla slide alla spiegazione fino agli appunti
 
 | Passo | Responsabilità e dati |
 | --- | --- |
-| Catalogazione | Nell'esempio fittizio la versione `fonte-v1` ha indice fisico 13 da zero ed etichetta “14”. Il passaggio `passaggio-14` e la regione `regione-demo-14` rimandano a quella pagina. Il rettangolo normalizzato si riferisce alla pagina visibile orientata e include la didascalia pertinente. La pagina intera ha un riferimento anche se manca una regione. |
-| Richiesta “mostrami la slide 14” | L'app risolve documento attivo ed etichetta nel manifest. Con più documenti o numerazioni ambigue offre le corrispondenze con titolo e miniatura. L'apertura della pagina è deterministica e costa zero chiamate al modello. Un PDF con più slide per foglio richiede regioni identificate per distinguere la singola slide. |
-| Contesto per una spiegazione | Il server prepara un catalogo breve con ID, titolo, testo, pagina e regioni disponibili. Se la domanda riguarda frecce, assi o colori, il worker renderizza il ritaglio e invia i pixel come input immagine associato all'ID. L'ID da solo permette di richiedere o mostrare una figura. Per interpretarne dettagli visivi il modello deve ricevere l'immagine leggibile. [Input visivi](https://developers.openai.com/api/docs/guides/images-vision) |
-| Risposta | Il modello produce blocchi ordinati secondo schema, come nell'esempio sotto. Il backend risolve gli ID attraverso il catalogo di quella operazione, controlla appartenenza, versioni, abbinamento tra passaggio e regione e autorizzazioni, poi assegna gli ID persistenti dei blocchi. Un riferimento sconosciuto richiede correzione entro budget o esito incompleto. La validazione degli ID garantisce la destinazione della citazione. L'aderenza dell'affermazione alla fonte si valuta separatamente. |
-| Figura nella spiegazione | Il client riceve dal server metadati e riferimento al derivato autorizzato. Mostra un'immagine con didascalia, origine e azione “Apri pagina originale”. Se manca un ritaglio valido, mostra esplicitamente la pagina intera. A risorsa indisponibile espone l'errore sul blocco interessato. |
-| Apertura e ritorno | PDF.js apre la versione autorizzata con `getPage(pageIndex + 1)`, usa il viewport orientato e sovrappone la regione tenendo conto dello zoom. File e immagini sono serviti previa autorizzazione o con URL a breve scadenza, rinnovabile dopo controllo. Il client conserva blocco di provenienza, posizione di lettura e bozza. |
+| Catalogazione | `fonte-v1`, `pageIndex = 13`, `pageLabel = "14"`. `passaggio-14` e `regione-demo-14` sono registrati con stato `verified_region`. Se il parser non certifica il riquadro, registra `text_ok_region_uncertain` e apre la pagina intera. |
+| Richiesta “slide 14” | Risoluzione deterministica nel manifest (**0 chiamate AI**). |
+| Contesto e risposta | Il modello riceve catalogo ID + testo (e raster WebP della regione solo se servono dettagli visivi) e produce JSON validato da Zod. I badge inline restano nascosti in Studio salvo toggle `Mostra fonti`. |
+| Trasferimento curato | Drag & drop (`Pragmatic Drag and Drop` + `Dropcursor`) o click `+ Appunti` inserisce un nodo atomico con `origin: "curated_from_explanation"` o `"curated_from_slide"`. |
+| Export vs Condivisione | L'export personale conserva il riferimento; la condivisione esterna rimuove/sostituisce gli asset del docente tutelando il copyright. |
 
-Esempio di output applicativo proposto, con identificatori illustrativi:
+Esempio di output applicativo strutturato con identificatori illustrativi:
 
 ```json
 {
   "blocks": [
-    {"kind":"paragraph","text":"La relazione causale implica un ordine dei timestamp. Dai soli timestamp non si ricava il percorso causale.","citationIds":["passaggio-14"]},
-    {"kind":"sourceFigure","regionId":"regione-demo-14","citationIds":["passaggio-14"],"caption":"Passaggio della slide sugli orologi logici."}
+    {
+      "kind": "paragraph",
+      "text": "La relazione causale implica un ordine dei timestamp. Dai soli timestamp non si ricava il percorso causale.",
+      "citationIds": ["passaggio-14"]
+    },
+    {
+      "kind": "sourceFigure",
+      "regionId": "regione-demo-14",
+      "citationIds": ["passaggio-14"],
+      "caption": "Passaggio della slide sugli orologi logici."
+    }
   ]
 }
 ```
 
-Il server associa i riferimenti temporanei del modello a citazioni persistenti della specifica versione della spiegazione. Titolo reale, pagina, posizione, URL e attributo di provenienza arrivano dal database. Un blocco di tipo `aiIllustration` conserva invece la specifica o l'SVG generato, le evidenze di supporto, la descrizione accessibile e la versione dell'asset.
+### 11.4 Harness, oracolo server, budget atomico e telemetria
 
-### 11.4 Harness, modelli e chiamate API
+* **SDK agnostico:** **Vercel AI SDK** (Apache 2.0) con schemi **Zod** condivisi. In Fase 1 si parte con **1 provider e 1 profilo principale** più escalation controllata per dimostrazioni/revisioni difficili, evitando routing multilivello complesso prima dei benchmark.
+* **Controllo economico e retry:** prenotazione atomica del **costo massimo stimato** prima di accodare ogni job (tetto per account + **tetto globale giornaliero**), riconciliazione a consuntivo, e tracciamento di ogni singolo `providerAttemptId` sotto lo stesso `operationId` (distinguendo timeout a esito sconosciuto da fallimento certo prima di ritentare).
+* **Oracolo matematico autorevole:** feedback immediato client-side con `CortexJS Compute Engine`, verifica autorevole **server-side** su esercizi a dominio dichiarato con esito ternario (`corretto`, `errato`, `indeterminato`) tramite micro-servizio **SymPy sandboxed** (espressioni strutturate, allowlist operazioni, limiti rigidi di CPU/RAM/timeout). Eventuale esecuzione Python in browser tramite **Pyodide** solo in **Web Worker isolato** (separato da credenziali/stato app) nelle fasi successive.
+* **Telemetria ed eval (Langfuse):** metadati di default (ID, versioni, token, cache, tempi, costi); eval offline su dataset autorizzati per *Grounded Citation Precision*, *No-Spoiling Rate*, *Socratic Precision* e *Adversarial Prompt-Injection Resistance*.
 
-Il backend possiede il workflow. Ogni operazione lega identità, attività, snapshot, fonti, versione di prompt/schema, modello effettivo, limiti di spesa ed esito. Candidato per il primo adattatore: SDK TypeScript ufficiale OpenAI e Responses API con output strutturati e input visivi. Prevedere un profilo economico per chiarimenti locali, uno multimodale con ragionamento per figure e revisioni difficili, e un modello di embedding versionato per l'indice. Per il benchmark del 17 novembre 2026 proporre gpt-6-luna sui chiarimenti e gpt-6.2-sol come confronto comune su chiarimenti, figure e revisioni. Valutare gpt-6.2-astra sul sottoinsieme di dimostrazioni difficili per quantificare il beneficio marginale. Più profili possono puntare allo stesso modello. Selezionare gli ID disponibili nell'account con una prova comparativa, fissarli nel deployment e registrare ogni cambio. Il confronto usa gli stessi materiali e domande. [Catalogo modelli](https://developers.openai.com/api/docs/models) · [Output strutturati](https://developers.openai.com/api/docs/guides/structured-outputs)
+### 11.5 Schizzi Excalidraw, figure e visuali scientifiche
 
-| Azione | Ingresso e risultato persistito | Chiamate di generazione previste |
-| --- | --- | --- |
-| Preparare il corso | Programma e titoli delle fonti → proposta di struttura con concetti, prerequisiti e riferimenti. Lo studente può modificarla. | Una per proposta o per modulo esplicitamente delimitato. Embedding contabilizzati a parte. |
-| Spiegare o chiarire | Obiettivo, passaggi e immagini necessarie, selezione versionata per un chiarimento → blocchi citati. | Una nel percorso ordinario. Riapertura e consultazione delle fonti non richiedono generazione. |
-| Rivedere la bozza | Snapshot salvato, obiettivi e materiali → domande ancorate ai blocchi o omissioni ancorate alla sezione. | Una per sezione dichiarata. Dopo la risposta dello studente una seconda operazione propone la patch mirata. |
-| Verificare e ripassare | Compito, rubrica, risposta immutabile e condizioni registrate → giudizio motivato per concetto. | Una per valutare una risposta aperta. Il server calcola stato e priorità di ripasso dalle evidenze. |
-| Produrre un visuale originale | Obiettivo, dati del problema e fonti → figura con versione e testo alternativo. | Budget distinto per generazione, eventuale ispezione visiva e correzione. Zoom e interazione successiva sono locali. |
+1. **Ritaglio verificato della fonte originale** (`pypdfium2` → WebP).
+2. **Schizzo Excalidraw (MIT):** in Fase 1 lo studente disegna/modifica liberamente e il nodo conserva la scena originale + tutti gli asset binari referenziati + export SVG deterministico. In Fase 2 la pulizia AI produce una **variante separata** agganciata a `sourceSceneHash` (proponendo preferibilmente operazioni strutturate di riallineamento/etichettatura o SVG pulito) con verifica su schemi STEM che pedici, nodi e versi delle frecce restino intatti.
+3. **SVG validato e componenti tipizzati:** parser XML stretto con allowlist per SVG generati; componenti interattivi deterministici introdotti gradualmente (**React Flow + ELK.js** / **Mafs** / **Mermaid o D2** solo dove giustificati dal corso, senza OpenUI in MVP).
 
-Flusso API proposto: `POST /api/v1/units/:id/explanations` riceve obiettivo e chiave di idempotenza e restituisce HTTP 202 con `operationId`. Il worker carica il contesto, invoca il provider e tratta esplicitamente timeout, risposta incompleta e rifiuto. Lo streaming può mostrare stato e testo provvisorio. Solo un risultato completo e validato diventa una revisione consultabile. Alla riconnessione il client legge `GET /api/v1/operations/:id`. La lettura della spiegazione restituisce blocchi e riferimenti. `GET /api/v1/citations/:id` risolve una posizione salvata e `GET /api/v1/regions/:id/image` consegna il derivato o lo stato del job. Entrambe verificano i permessi. Il merge usa la transazione separata descritta nei [contratti](CONTRATTI_E_DATI.md).
+### 11.6 Mobilità, accesso e continuità tra dispositivi
 
-Il context composer colloca istruzioni e schema stabili all'inizio, poi obiettivo, snapshot, passaggi e immagini selezionati. Per il benchmark valgono i tetti per attività dell'[architettura](ARCHITETTURA.md), con una variante compatta entro 2 mila token di input per i chiarimenti locali. Si contano schemi, tool, testo, immagini e riserva per output/ragionamento. Se la revisione eccede il tetto, si salva la copertura per sezione. Il modello può chiedere un approfondimento mirato. Proposta iniziale: al massimo un passaggio supplementare per attività ordinaria, condiviso fra recupero, riparazione e retry. Interruzioni transitorie usano backoff nel budget residuo. Un cambio di modello è una scelta registrata con costo massimo, mai un ciclo aperto.
+* **Desktop, Tablet e Telefono:** split-view su schermi ampi; viste rapide e diff verticale su telefono; `MathLive` e pulsante `+ Appunti` per usabilità touch completa; **cache PWA selettiva** per appunti, spiegazioni ed esercitazioni rapide in autobus.
+* **Accesso (Better Auth, senza SSO Ateneo in MVP):** Fase 1 con Email+Password + 1 OAuth e ripresa sequenziale PC↔telefono; Fase 2 con **Passkey (WebAuthn)** e **Modalità Ospite** (corso demo già elaborato, tetto rigido chiarimenti Tier 1, 1 job concorrente, tetto giornaliero globale e migrazione del consumo all'account registrato; nessuno stato residuo esposto dopo logout su PC condivisi).
 
-Per ogni tentativo registrare uso restituito dal provider, separando input ordinario, cache e output secondo il tariffario versionato, senza contare due volte ragionamento o immagini già inclusi. Sommare anche embedding, OCR eventuale, rendering e storage con le loro unità. Confrontare costo per lezione completata, latenza p50/p95, richieste fallite e costo per revisione corretta. Per il RAG misurare la presenza dei passaggi attesi nei primi risultati e la correttezza delle citazioni finali. Il riuso di spiegazioni riguarda la versione vista dallo studente. I derivati grafici sono riutilizzabili per fonte, regione e parametri nel perimetro autorizzato.
+### 11.7 Decisioni chiuse dalla revisione dual-model (sintesi)
 
-### 11.5 Figure originali e interazione
+La revisione comparativa (Gemini 4 Neon + GPT 6.2 Astra) ha chiuso tutti e 6 i nodi architetturali v2:
 
-L'harness espone tre risultati: ritaglio annotabile del docente, SVG originale composto dal modello, componente scientifico interattivo controllato dall'app. Per un disegno originale il worker riceve obiettivo, relazione da illustrare, vincoli di lettura e stile. Analizza l'SVG con parser XML, ammette soltanto elementi e attributi grafici previsti, impone limiti a dimensioni e complessità ed esclude script, eventi, HTML incorporato e risorse esterne. Renderizza in isolamento, verifica ritagli e leggibilità a larghezza tablet e telefono, consente una correzione entro il budget e salva asset e descrizione. Se il visuale fallisce, la spiegazione indica il limite e resta leggibile con testo e fonti. Per la figura statica il client usa un'immagine. Le interazioni risiedono in componenti React con azioni tipizzate. [SVG come immagine](https://developer.mozilla.org/en-US/docs/Web/SVG/Guides/SVG_as_an_image)
-
-Esempio: per Lamport il modello propone processi, eventi ordinati e messaggi. Il componente valida riferimenti, ordine locale, direzione invio/ricezione e assenza di cicli, calcola gli orologi e la raggiungibilità sul grafo, poi disegna le linee temporali. Lo studente tocca due eventi per evidenziare un cammino causale o leggere perché sono concorrenti. Per una curva numerica il componente calcola coordinate, scala e valori a partire da un'espressione matematica ammessa. Per una spiegazione illustrativa libera l'accuratezza richiede valutazione didattica su esempi annotati. Mermaid resta un backend facoltativo per diagrammi di flusso. OpenUI può comporre un pannello usando componenti consentiti: confrontarlo con blocchi React tipizzati su identico contenuto, includendo token del catalogo e tempi di resa. Editor, prove, citazioni e comandi di merge rimangono componenti applicativi.
-
-### 11.6 Tablet, telefono e continuità del lavoro
-
-Il tablet è una postazione di studio completa. Due pannelli si affiancano quando consentono lettura e scrittura anche con tastiera aperta. Su una superficie stretta si passa tra spiegazione, fonte e appunti conservando blocco, cursore e scorrimento per vista. Su telefono il diff è verticale, una figura si apre a tutto schermo e i comandi contestuali sono disponibili con tocco sul blocco oltre alla selezione. Durante la rotazione una domanda in bozza e una patch pendente conservano identità.
-
-La PWA scarica su scelta una lezione con manifest di versioni, spiegazioni e asset selezionati. Service worker per shell e risorse scaricate, IndexedDB per snapshot locali e coda delle modifiche con ID di mutazione. Separare i dati per account. Prima del logout, segnalare bozze in attesa e consentire sincronizzazione o esportazione. Eliminare le copie gestite dopo la risoluzione delle modifiche pendenti. Esporre spazio insufficiente e stato della sincronizzazione. Offline sono disponibili materiali scaricati e scrittura. Le attività AI richiedono rete. Al ritorno online l'ACK del server identifica l'ultima modifica sincronizzata. Su una base divergente si conserva la bozza e si apre un confronto. Il secondo dispositivo riprende dall'ultima revisione confermata. La verifica senza aiuti è avviabile online con stato condiviso fra dispositivi. [Quote e persistenza locale](https://developer.mozilla.org/en-US/docs/Web/API/Storage_API/Storage_quotas_and_eviction_criteria)
-
-### 11.7 Prova di accettazione integrata
-
-Usare materiali autorizzati con risposte attese annotate: un PDF con copertina e numeri stampati diversi dagli indici, una trascrizione, un Markdown di esercizi e uno di appunti personali. Ripetere con una pagina ruotata, due documenti aventi la stessa etichetta “14” e una domanda cui i materiali non rispondono.
-
-| Azione osservabile | Evidenza richiesta in valutazione |
+| Nodo v2 | Decisione finale consolidata (v3) |
 | --- | --- |
-| Spiegare un passaggio che richiede slide e trascrizione | Passaggi attesi recuperati e ruoli visibili. Un revisore controlla che entrambi sostengano effettivamente la spiegazione. |
-| Chiedere la figura e aprire la pagina dal testo e dal diff | Lo stesso ID risolve versione, pagina e regione corrette a ogni zoom e rotazione. Sostituire il PDF conserva la destinazione storica. Un ID di altro corso è rifiutato. |
-| Toccare due eventi e poi confrontare la figura con la fonte | Risultato coerente con l'ordine causale, etichette leggibili, origine della figura esplicita. Registrare tempi e costo di produzione. |
-| Scrivere sul tablet con tastiera aperta, interrompere la rete, ruotare e riprendere da telefono | La bozza locale sopravvive alla riapertura. Dopo l'ACK, il telefono recupera la versione confermata. Una modifica concorrente e una patch obsoleta producono confronto. Eseguire anche su hardware Android reale. |
-| Interrompere una generazione e ritentare | Editor utilizzabile, un solo risultato applicativo persistito, tentativi e consumo osservabili. Riaprire figura, fonte o spiegazione salvata produce zero chiamate di generazione. |
+| 1. Sync (Yjs vs Dexie) | **Dexie + protocollo ottimistico server** (`baseRevisionId`, `mutationId`, `clientSequence`) in Fase 1–2 per atomicità reale con merge `409`; Yjs rinviato solo se emergerà editing simultaneo reale. |
+| 2. Oracolo STEM (Pyodide vs Server) | **CortexJS** locale solo per UX; **verifica autorevole server-side** con dominio esplicito ed esito ternario (`corretto`/`errato`/`indeterminato`) + SymPy sandboxed server; Pyodide solo in Web Worker isolato opzionale (Fase 3+). |
+| 3. OCR (3 modalità + licenze) | Contratto unico `DocumentParserProvider` + **1 solo percorso Managed** in Fase 1 (con stato `text_ok_region_uncertain`); **BYOK e Locale** in Fase 2; audit di licenza obbligatorio per `(codice, checkpoint, dipendenze)`. |
+| 4. Cache vs RAG e `pg_trgm` | Strategia **per attività** (diretto → sezione → ibrido → lezione intera) misurata a `8k/20k/40k`; reranker solo su evidenza; **campo simbolico dedicato** per operatori matematici accanto a `pg_trgm` (solo termini testuali). |
+| 5. Excalidraw → SVG | **Originale editabile + asset binari + SVG deterministico** in Fase 1; pulizia AI come variante separata su `sourceSceneHash` in Fase 2 con verifica semantica su pedici/frecce. |
+| 6. ZDR/Batch, Costi e Ospite | **Matrice `provider×endpoint×regione×retention`** obbligatoria prima di contare su Batch; stima media + p95 (ordinario vs pre-esame); **prenotazione atomica budget** + tetto globale; Ospite su corso demo + max 3 chiarimenti Tier 1. |

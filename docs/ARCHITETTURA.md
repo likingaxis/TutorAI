@@ -1,154 +1,131 @@
 # TutorAI architettura e harness di studio
 
-Raccomandazione tecnica corrente. Lo stato è **P proposta**: team, budget, scala e necessità di offline restano da precisare. Il [mockup](../index.html) dà indicazioni di interazione e non è approvato integralmente.
+Stato: **versione finale consolidata (v3)** — allineata alla [Specifica di prodotto v3](SPECIFICA.md), ai [Contratti e dati](CONTRATTI_E_DATI.md) e al [Piano di sviluppo](PIANO.md) dopo revisione tecnica dual-model (Gemini 4 Neon + GPT 6.2 Astra).
 
-Leggere [Specifica](SPECIFICA.md), [Contratti e dati](CONTRATTI_E_DATI.md) e [Piano di sviluppo](PIANO.md) per i requisiti e i criteri di verifica. Le fonti tecniche riportate sono state consultate durante la valutazione del 17 novembre 2026 e non sostituiscono prove d'integrazione.
-
-| Ambito | Scelta iniziale | Cosa introdurre soltanto se serve |
+| Ambito | Baseline consolidata (Fase 1 → Fase 2) | Cosa rinviare a Fasi 3–4 (solo su evidenza) |
 | --- | --- | --- |
-| 1 Applicazione e stack | PWA per desktop, tablet Android e telefono, React/TypeScript, Tiptap, Fastify e worker Node | Desktop locale se offline è vincolante; Python se migliora davvero la pipeline documentale |
-| 2 Dati | PostgreSQL, ricerca ibrida pgvector e storage privato | Indice vettoriale dedicato soltanto dopo misure di scala |
-| 3 Contesto e API | Context composer per attività, budget, un provider e consumo osservabile | Più modelli, contesti più grandi o retrieval più complesso dopo misure |
-| 4 Harness e visuali | Workflow applicativo, ritagli PDF, SVG validati e componenti scientifici interattivi | OpenUI per comporre pannelli e Mermaid per i flussi dove risultano adeguati |
+| 1 App, editor e sync | PWA autonoma React/TS/Vite, TanStack Query, Tiptap (MIT) + MathLive + Excalidraw editabile, **Dexie + protocollo ottimistico server**, Fastify/Hono + Zod + Drizzle, Better Auth (senza SSO) | Yjs/Hocuspocus (editing simultaneo), Capacitor (store), Tauri 2 (desktop offline), SSO IDEM SAML, plugin Obsidian separato |
+| 2 Dati, storage e OCR | PostgreSQL (`FTS` + **indice simbolico** + `pg_trgm` + `pgvector`), `pg-boss`, Cloudflare R2 (o Supabase), `pypdfium2` + `DocumentParserProvider` (**1 percorso Managed** in Fase 1; BYOK/Locale in Fase 2) | Visual RAG cross-corso (`ColQwen2.5` + Qdrant), reranker obbligatorio (solo se giustificato dal benchmark), ParadeDB BM25 |
+| 3 AI, oracolo STEM e budget | Vercel AI SDK (1 provider principale + escalation), recupero **per attività** + Prompt Caching, **verifica matematica autorevole server-side** (esito ternario, SymPy sandboxed), prenotazione atomica budget, Langfuse (metadati) | Routing multilivello automatico, Batch API (solo se conforme alla matrice ZDR/retention), Pyodide Web Worker (esercizi Python), PGlite SQL |
+| 4 Harness, visuali ed export | Funzioni di dominio TS, ritagli WebP, Excalidraw (SVG deterministico in F1; variante AI su `sourceSceneHash` in F2), `ts-fsrs`, foto esercizi a 2 stadi (F2), Typst WASM + Anki (F2) | Audio lezioni (`WhisperX` / `Deepgram Nova-3`), simulatore orale real-time (`LiveKit Agents` / `Pipecat` + Silero VAD), cataloghi diagrammi estesi |
 
-## 1 Tecnologie e distribuzione
+## 1 Tecnologie, sync sequenziale e accesso
 
-### Distribuzione e struttura
+### Stack applicativo unificato (TypeScript end-to-end)
 
-La base raccomandata è una **web app**, utilizzabile senza installazione e pensata per leggere e scrivere affiancati. React con TypeScript e Vite compone l'interfaccia; Tiptap/ProseMirror gestisce il documento; Fastify espone comandi e letture; un worker Node svolge estrazione, rendering e chiamate lunghe. API e worker condividono dominio e contratti nello stesso repository. La versione del runtime va bloccata dopo la prova d'integrazione, partendo da Node 24 LTS come candidato da verificare nella combinazione scelta.
+La base è una **web app autonoma e installabile (PWA)** progettata per studio a due pannelli su desktop/tablet e consultazione/ripasso rapido su telefono in mobilità (es. in autobus prima di un esame).
 
-Gli appunti usano JSON strutturato canonico con ID dei blocchi, formule atomiche e revisioni. Markdown è un formato di scambio. L'editor rimane utilizzabile mentre l'AI lavora. Snapshot, sequenze di salvataggio e patch seguono il protocollo del documento Contratti e dati.
+* **Frontend:** React + TypeScript + Vite, **TanStack Query** (caching, retry, stato di rete), **cmdk** (Archivio `Ctrl+K` in Fase 2), **Motion** (micro-interazioni con `prefers-reduced-motion`).
+* **Editor STEM:** **Tiptap / ProseMirror** con estensioni **MIT** (`UniqueID`, `Mathematics`, `Highlight` multicolore, `Dropcursor`, `BubbleMenu`), **KaTeX** per il rendering, **MathLive** per input visuale di formule su desktop/tablet (sorgente LaTeX canonica), **Excalidraw** (MIT) come blocco schizzo editabile e **Pragmatic Drag and Drop** (+ pulsante `+ Appunti` per touch/tastiera).
+* **Backend e contratti:** **Fastify** (`fastify-type-provider-zod`) o **Hono** + **Zod** come singola fonte di verità condivisa fra database, API, structured outputs AI e client + **Drizzle ORM** (SQL esplicito, migrazioni trasparenti, zero vendor lock-in).
+* **Worker e job:** worker Node + **`pg-boss`** su PostgreSQL per job persistenti, isolati e riprendibili senza Redis/Kafka in MVP.
+* **Autenticazione (senza SSO Ateneo in MVP):** **Better Auth** integrato nel backend applicativo:
+  * *Fase 1:* Email+Password + 1 provider OAuth per validare subito continuità e ripresa PC ↔ telefono;
+  * *Fase 2:* **Passkey (WebAuthn)** per rientro rapido a 1 click su dispositivi personali e plugin **Anonymous** per la modalità *Ospite* blindata (corso dimostrativo già elaborato + budget rigido + migrazione del consumo all'account registrato).
+  * *Fase 4 (istituzionale):* attivazione **SSO Ateneo (IDEM GARR / SAML 2.0)** via `@better-auth/sso` o broker Keycloak senza toccare il modello di dominio.
 
-Supabase è il candidato operativo per PostgreSQL, autenticazione e file privati; non è il modello del dominio. Tenere query, migrazioni e riferimenti agli asset espliciti rende possibile cambiare hosting. Un worker con pg-boss è adatto quando i job devono sopravvivere a riavvii e ritentativi; non introdurre altre code o servizi distribuiti nella prima lezione integrata.
+### Sync multi-dispositivo: perché Dexie + protocollo server in Fase 1–2
 
-### Quando aggiungere Python
+Il caso d'uso reale di uno studente singolo è il **passaggio sequenziale** tra dispositivi (PC → tablet → telefono). Un CRDT live (Yjs/Hocuspocus) introdurrebbe un secondo stato autorevole fuori dalla transazione PostgreSQL, rompendo l'atomicità promessa sul merge delle patch quando un dispositivo offline si riconnette dopo una patch accettata su un altro dispositivo.
 
-Non occorre Python soltanto per ottenere immagini dalle slide: Mozilla pubblica un esempio di rendering PDF → PNG in Node tramite PDF.js e la sua canvas factory. Bisogna provare anche font, CMap, WASM e dipendenze native nella build scelta. [Esempio ufficiale PDF.js per Node](https://github.com/mozilla/pdf.js/blob/master/examples/node/pdf2png/pdf2png.mjs).
+* **Scelta consolidata Fase 1–2:** **Dexie (IndexedDB)** per bozza locale e coda mutazioni (`baseRevisionId`, `clientMutationId`, `clientSequence`). Il server aggiorna la testa della nota in transazione ACID **solo se `baseRevisionId` coincide**, gestisce retry duplicati in modo idempotente e su divergenza conserva entrambe le versioni aprendo un confronto esplicito.
+* **Mobilità (autobus):** Service Worker PWA + cache locale per appunti, spiegazioni ed esercitazioni offline (distinte dalle verifiche certificate lato server; vedi [Contratti e dati](CONTRATTI_E_DATI.md)).
+* **Condizione per riaprire Yjs (Fase 3–4):** solo se il pilota misura modifiche concorrenti frequenti su due dispositivi attivi contemporaneamente o se entra la collaborazione tra studenti, accompagnato da un protocollo formale di serializzazione dei merge.
 
-Il confronto utile è fra **pipeline documentali complete**, non fra due librerie considerate equivalenti. PDF.js renderizza ed espone testo/geometria; la ricostruzione di lettura, figure e significato STEM richiede altro lavoro. Docling è un candidato per struttura e regioni, da provare anche sui PDF digitali complessi. La sua documentazione distingue estrazione di immagini native e ritagli del rendering. [Opzioni Docling](https://docling-project.github.io/docling/usage/advanced_options/).
+### Pipeline documentale, sicurezza import e OCR
 
-Se Docling migliora il campione necessario al prodotto, aggiungere un worker Python documentale dietro un contratto: riceve versione della fonte e restituisce un manifest di pagine, passaggi, regioni e avvisi. Il backend rimane proprietario dello stato. Per rendering Python, pypdfium2 è una possibile alternativa; runtime, binari e relative licenze vanno verificati nella build. [API pypdfium2](https://pypdfium2.readthedocs.io/en/stable/python_api.html), [licenze del progetto](https://github.com/pypdfium2-team/pypdfium2#licensing).
+1. **Difesa in profondità sull'import (`ZIP` e `PDF`):** prima di qualunque coda AI, il worker applica limiti cumulativi durante decompressione e rendering: numero massimo di file, byte massimi espansi, controllo anti *Zip Slip* sui percorsi, limite pagine, limite megapixel raster e timeout CPU per singolo job. Un file anomalo fallisce in isolamento senza degradare altri corsi.
+2. **Rendering server-side (`pypdfium2`) + viewer client (`PDF.js`):** **`pypdfium2`** (Apache 2.0/BSD) genera raster e ritagli WebP/PNG sul server in modo rapido e fedele anche su PDF Beamer/LaTeX (evitando fragilità di `node-canvas` e la licenza AGPL di PyMuPDF); **`PDF.js`** gestisce il viewer interattivo e l'overlay delle regioni nel browser.
+3. **Contratto `DocumentParserProvider` (1 modalità in Fase 1, 3 in Fase 2):**
+   * *Fase 1:* estrazione digitale nativa su testi/PDF puliti + **un solo percorso OCR gestito (Managed)** sulle pagine complesse/scansionate. L'output dichiara sempre se la posizione è `verified_region`, `text_ok_region_uncertain` (utilizzabile per la ricerca ma non per un ritaglio automatico affidabile) oppure `page_only` (mostra la pagina intera originale).
+   * *Fase 2:* estensione dietro lo stesso contratto a **BYOK** (con cifratura envelope, revoca immediata, limiti spesa e chiarezza sulle condizioni dell'account esterno) e **Locale** (pairing autenticato worker↔account, versioning e validazione rigorosa dei manifest restituiti).
+4. **Audit di licenza per singolo artefatto:** la scelta del motore Managed si chiude in Fase 0 su pagine STEM annotate a mano, verificando la licenza esatta di **codice, checkpoint e dipendenze distribuite** (tenendo conto che il catalogo modelli di Docling include pesi con licenze diverse da MIT, che MinerU prevede obbligo di attribuzione online e clausole commerciali distinte, e che checkpoint specifici come `allenai/olmOCR-2-7B-1025` dichiarano Apache-2.0).
 
-Se il team è prevalentemente Python, FastAPI può sostituire Fastify; se materiali e AI devono restare offline, rivalutare Tauri/SQLite e modello locale. Queste sono varianti determinate dai vincoli, non componenti da mantenere tutte insieme.
+## 2 Gestione dei dati, storage e recupero per attività
 
-## 2 Gestione dei dati
-
-### Tre classi con responsabilità diverse
+### Tre classi con responsabilità distinte
 
 | Classe | Contenuti | Regola |
 | --- | --- | --- |
-| Originali e asset | PDF, testi importati, immagini, versioni dei file | Storage privato con hash e permessi; una fonte aggiornata crea una nuova versione |
-| Stato e storia autorevoli | Corsi, unità, note, revisioni, spiegazioni, domande, risposte, evidenze, specifiche degli schemi | PostgreSQL con relazioni e transazioni; conservare esattamente ciò che lo studente ha visto e deciso |
-| Derivati ricostruibili | Indici, embedding eventuali, miniature, ritagli e SVG renderizzati | Identificare input, versione della pipeline e parametri; ricostruire senza cambiare gli originali |
+| Originali e asset privati | PDF, file estratti, foto esercizi, asset binari Excalidraw | **Cloudflare R2** (egress zero, ideale per ritagli WebP e slide) o Storage privato Supabase; URL firmati brevi per utente/corso; nessuna condivisione cross-account delle slide |
+| Stato e storia autorevoli | Utenti, corsi, albero fonti, revisioni JSON, `Dubbi`, patch, evidenze, trascrizioni foto, `ts-fsrs`, budget e `providerAttempts` | PostgreSQL con transazioni ACID; appunti ed evidenze sempre separati |
+| Derivati ricostruibili | Indici testuali/simbolici/vettoriali, miniature, ritagli WebP, varianti SVG | Versionati per input + pipeline; purgati integralmente alla cancellazione del corso |
 
-Una spiegazione o una specifica grafica prodotta dall'AI va conservata come versione: rigenerare con il modello non garantisce lo stesso risultato. È il rendering dello schema conservato a essere ricostruibile, non necessariamente la sua ideazione.
+### Recupero governato dall'attività e ricerca simbolica
 
-Le citazioni collegano corso, fonte, versione, pagina fisica/etichetta e passaggio o regione. Gli appunti corretti e la conoscenza dimostrata hanno tabelle e regole distinte. Il browser non può promuovere un concetto né applicare una patch attraverso un semplice flag.
+Anziché imporre una soglia fissa di token per decidere tra Prompt Caching e RAG, il recupero segue un ordine determinato dal compito (escludendo sempre soluzioni e aiuti proibiti nella fase corrente dal prefisso cachato):
 
-### Ricerca e consistenza
+1. **Riferimento diretto:** selezione o `regionId` noto → caricamento diretto con contesto locale minimo.
+2. **Sezione completa con premesse:** navigazione dell'**albero strutturale** in PostgreSQL (ispirato a `PageIndex`) per preservare teoremi, ipotesi e dimostrazioni intere.
+3. **Ricerca ibrida tra sezioni:**
+   * **`FTS`** PostgreSQL per lessico e titoli;
+   * **`pg_trgm`** *esclusivamente* per termini testuali, nomi di teoremi e identificatori alfanumerici (poiché `pg_trgm` ignora i caratteri non alfanumerici);
+   * **campo simbolico normalizzato dedicato** che codifica esplicitamente operatori e relazioni (`<`, `>`, `<=`, `->`, `||`, pedici/struttura LaTeX/MathJSON) in token ricercabili, così `C(a) < C(b)` e `C(a) > C(b)` non collidono mai;
+   * **`pgvector`** (HNSW) per parafrasi e registro orale/formale, da attivare dopo confronto sulla baseline testuale.
+   * **Reranker:** escluso in Fase 1; introdotto solo se il benchmark dimostra che il passaggio corretto entra spesso nei top-20 candidati ma viene perso nella selezione finale.
+4. **Lezione intera (con Prompt Caching):** impiegata quando serve copertura globale e supportata dal benchmark comparativo `8k / 20k / 40k` token a freddo e a caldo.
 
-Per la prima unità partire dai materiali già collegati alla lezione, da riferimenti espliciti e dalla ricerca testuale PostgreSQL. Confrontare questa baseline con una variante semantica; progettare il ramo pgvector della ricerca ibrida e misurarne il contributo su domande reali. Se adottato, ogni vettore porta modello, dimensione e versione dell'indice. Gli embedding restano quindi un'aggiunta da giustificare con il confronto sul corpus.
+## 3 Layer AI, oracolo STEM, conformità ZDR e costi
 
-Salvataggi e decisioni passano dal server, con autorizzazione per utente/corso. Le revisioni sono immutabili; gli ACK identificano la precisa modifica salvata. Una patch controlla revisione, blocco e precondizioni e fallisce con un conflitto quando il bersaglio è cambiato. Una formula si modifica nella sua rappresentazione matematica canonica, non nel markup renderizzato. Copie locali di recupero, backup di database e backup dei file hanno scopi distinti.
+### SDK agnostico, budget atomico e idempotenza dei tentativi
 
-## 3 Context window e chiamate API
+* **Vercel AI SDK** (Apache 2.0) con schemi **Zod** unificati: consente di cambiare provider senza riscrivere il dominio. In Fase 1 si usa **1 provider e 1 profilo principale** + eventuale escalation offline/mirata per il benchmark, rimandando routing automatico complesso a dopo le misure.
+* **Prenotazione atomica del budget:** prima di accodare un job AI/OCR, il backend riserva atomicamente il costo massimo stimato verificando sia il **tetto per account** sia il **tetto globale giornaliero**, poi riconcilia sul consumo effettivo restituito dal provider.
+* **Retry senza doppi effetti e senza costi ciechi:** ogni `operationId` traccia separatamente i singoli `providerAttempts`. Dopo un timeout di rete (esito sconosciuto, potenzialmente già fatturato dal provider) rispetto a un errore certo (`4xx`/`5xx`), il retry verifica la disponibilità di budget residuo prima di ripartire.
 
-### Un context composer per ciascuna attività
+### Conformità dati: matrice obbligatoria prima dei calcoli economici
 
-Il context composer è un modulo applicativo: legge dati autorizzati, seleziona evidenze, misura l'ingresso e prepara la richiesta. Il modello riceve soltanto gli strumenti pertinenti al compito.
+Residenza UE, esclusione dall'addestramento e **Zero Data Retention (ZDR)** sono proprietà indipendenti e variano per endpoint (es. gli endpoint `/v1/batches` di alcuni provider non supportano ZDR).
+* Prima di fissare il budget del pilota si compila la **matrice `provider × endpoint × modello × regione × retention`**.
+* L'uso di Batch API o Prompt Caching è ammesso **solo** sulle combinazioni conformi alla policy approvata; il modello economico (media e **p95**, separando **uso ordinario** e **settimana pre-esame**) viene calcolato esclusivamente su percorsi legali e conformi.
 
-| Parte del contesto | Contenuto |
-| --- | --- |
-| Policy stabile | Ruolo didattico, controllo dello studente, contratti di output e regole sulle fonti |
-| Attività | Obiettivo dell'unità, percorso, fase corrente e modalità degli aiuti |
-| Evidenze | Passaggi con ID e provenienza, parti pertinenti di bozza/risposta e precedenti esiti necessari |
-| Visuali | Solo ritagli o pagine utili, con riferimenti agli asset e limiti espliciti |
-| Compito preciso | Spiega, chiarisci, rivedi, proponi una correzione, valuta o pianifica |
+### Oracolo matematico autorevole (server) vs feedback UX (browser)
 
-La bozza analizzata deve essere una revisione identificata. I riepiloghi facilitano il recupero ma non sostituiscono fonti o evidenze. Se un dettaglio è decisivo, il sistema recupera il passaggio originale. I contenuti caricati restano dati, non istruzioni che possano cambiare permessi o workflow.
+| Livello | Tecnologia | Ruolo e autorità |
+| --- | --- | --- |
+| **Client UX (non autorevole)** | `MathLive` + `CortexJS Compute Engine` | Validazione sintattica istantanea, anteprima espressioni e comodità input su tablet. **Mai** usato per promuovere concetti o aggiornare FSRS. |
+| **Verifica autorevole (server)** | Micro-servizio **SymPy sandboxed** + regole su dominio esplicito | Esegue equivalenze simboliche e controlli di dominio (es. `x/x` vs `1` con `x ≠ 0`) su famiglie di esercizi dichiarate, accettando espressioni strutturate e operazioni in allowlist con limiti rigidi di CPU/RAM/timeout. Restituisce **3 esiti: `corretto`, `errato`, `indeterminato`**. |
+| **Foto esercizi (Fase 2)** | VLM trascrizione → revisione utente → verifica server | Separa trascrizione (modificabile dallo studente) da valutazione; segni illeggibili danno `indeterminato`; ogni correzione ricalcola evidenza e FSRS. |
+| **Codice Python (opzionale Fase 3+)** | `Pyodide` in **Web Worker isolato** | Sandbox opzionale client-side separata da credenziali/DOM principale con terminazione su timeout; non sostituisce la verifica server sulle prove certificate. |
 
-### Budget iniziali da provare
+### Osservabilità privacy-by-design (Langfuse)
 
-Proposta per il primo benchmark, **non soglie pedagogiche né dimensioni obbligatorie delle lezioni**:
+* **Default di produzione (solo metadati):** ogni trace registra `operationId`, `providerAttemptId`, versioni prompt/schema/parser, token input/cache/output, latenza p50/p95, esito e costo — **senza** testo integrale di slide, risposte o foto dello studente.
+* **Eval pedagogici offline:** suite dedicata su dataset autorizzati/anonimizzati per misurare *Grounded Citation Precision*, *No-Spoiling Rate*, *Socratic Precision* e resistenza a prompt injection.
 
-| Attività | Tetto di ingresso indicativo | Riserva complessiva risposta e ragionamento | Immagini iniziali |
-| --- | --- | --- | --- |
-| Chiarimento su selezione | 4–6 mila token | 2–4 mila token | Nessuna, oppure una pertinente |
-| Spiegazione di unità | 8–12 mila token | 4–8 mila token | Fino a due pertinenti |
-| Revisione della bozza | 12–20 mila token | 4–8 mila token | Solo se necessarie al controllo |
-| Valutazione di un tentativo | 6–10 mila token | 3–6 mila token | Materiale necessario al problema |
-
-Il costo token delle immagini dipende da modello e rappresentazione: contare due immagini non ne misura il costo. La riserva deve includere il ragionamento quando previsto e può dover aumentare se il modello termina senza un output utile. La finestra massima è un limite; il budget operativo è una scelta da misurare. La documentazione OpenAI distingue ingresso, uscita e ragionamento nella finestra. [Gestione del contesto](https://developers.openai.com/api/docs/guides/conversation-state).
-
-Prima dell'invio: misurare istruzioni, schemi, tool, testo e immagini; lasciare un margine rispetto al limite effettivo. Se il materiale supera il budget, restringere la revisione a una sezione esplicita o procedere per passaggi con risultati collegati. Non troncare silenziosamente una dimostrazione, omettere metà bozza dichiarandola interamente revisionata o inventare una risposta quando mancano fonti.
-
-### Continuità cache e costo
-
-Una microconversazione di chiarimento può aggiungere turni mantenendo il prefisso stabile. Al cambio di attività, oppure a un checkpoint di compattazione, comporre nuovamente il contesto dai dati persistiti. Non mantenere una conversazione illimitata come memoria dell'intero corso. Conservare i risultati utili, non richiedere o archiviare catene di ragionamento interne del modello. [Continuità del prefisso](https://developers.openai.com/api/docs/guides/preserved-reasoning).
-
-La cache riusa prefissi compatibili; una sessione da sola non garantisce un hit. Stabilire breakpoint adatti al modello, evitando di scrivere in cache materiale che cambia continuamente. Misurare riuso e tariffazione; non allungare artificialmente i prompt per superare la soglia di cache. Input ordinario, letture di cache e scritture di cache sono categorie tariffarie distinte: la scrittura non è una maggiorazione da sommare una seconda volta all'input già conteggiato. [Prompt caching OpenAI](https://developers.openai.com/api/docs/guides/prompt-caching).
-
-Anche `previous_response_id` non rende gratuita la storia precedente. Registrare per attività input ordinario, cache, output fatturato, ritentativi, immagini, strumenti, latenza e risultato. Imporre quote per operazione/sessione e permettere di continuare a scrivere quando la generazione non è disponibile. [Costo della storia nelle richieste concatenate](https://developers.openai.com/api/docs/guides/conversation-state).
-
-Usare inizialmente un provider con un modello configurabile, senza instradamento automatico fra molti fornitori. Il confronto fra modelli usa gli stessi compiti e misura correttezza, fonti, falsi positivi, costo e attesa. Un modello più costoso è un'escalation deliberata per casi difficili, non un passaggio obbligatorio di ogni unità.
-
-## 4 Costruzione dell harness e degli strumenti visuali
-
-### Il workflow controlla il modello
-
-Per harness si intende l'insieme di stato, contesto, strumenti, validatori e gestione degli errori che trasforma un modello in un tutor utilizzabile.
+## 4 Harness applicativo, schizzi Excalidraw ed export sicuro
 
 ```mermaid
 flowchart LR
-    A[Materiali e corso] --> B[Contesto della unità]
-    B --> C[Spiegazione e visuali]
-    C --> D[Scrittura dello studente]
-    D --> E[Revisione dello snapshot]
-    E --> F[Domande e risposte]
-    F --> G[Proposte di modifica]
-    G --> H[Decisione dello studente]
-    H --> I[Verifiche e ripasso]
+    A[Fonti e limiti import] --> B[Parser e Albero]
+    B --> C[Recupero per attivita]
+    C --> D[Spiegazione e Visuali]
+    D --> E[Appunti Dexie, Dubbi, Excalidraw]
+    E --> F[Snapshot confermato e Revisione]
+    F --> G[Domande e Merge 409]
+    G --> H[Verifica Server e Oracolo 3 esiti]
+    H --> I[Evidenze, ts-fsrs e Agenda]
 ```
 
-Implementare le transizioni come funzioni di dominio TypeScript, con operazioni persistite e job riprendibili. Una libreria di macchine a stati è facoltativa; un framework agentico va introdotto solo per un bisogno concreto di workflow dinamico. Nessuno dei due sostituisce autorizzazioni, versioni e transazioni.
-
-| Strumento o operazione | Cosa riceve e restituisce | Chi controlla |
+| Operazione | Ingresso → Risultato | Controllo autorevole |
 | --- | --- | --- |
-| `retrievePassages` | Query e unità → passaggi/regioni autorizzati con ID | Il server limita corso, versioni e quantità |
-| `renderSourceRegion` | ID di una regione nota → asset e provenienza | Il renderer risolve coordinate già validate |
-| `buildDiagram` | Specifica grafica limitata → risultato o errore | Validazione, compilatore e renderer |
-| `explainUnit` / `clarifySelection` | Contesto e selezione versionata → spiegazione citata | Validatori delle citazioni e budget |
-| `reviewSnapshot` / `proposePatch` | Bozza salvata e risposte → domande/proposte | Nessuna applicazione diretta del modello |
-| `evaluateAttempt` / `suggestPlan` | Tentativo e condizioni → valutazione/piano proposto | Evidenze e regole applicative distinte dall'output AI |
+| `retrieveContext` | Attività, selezione/query, fase → contesto e `regionId` | Server filtra tenant, versioni e blocca aiuti in verifica |
+| `renderSourceRegion` | `regionId` verificato → URL firmato WebP (o pagina intera se incerto) | Worker `pypdfium2` su coordinate validate |
+| `cleanSketchVariant` (F2) | Rappresentazione compatta scena + `sourceSceneHash` (+ raster se freehand) → variante riallineata/SVG | Legata all'hash iniziale; verifica semantica nodi/frecce/pedici |
+| `reviewSnapshot` / `proposePatch` | Snapshot confermato + `Dubbi` → domande/patch con hash | Nessuna mutazione diretta; merge atomico in transazione Postgres |
+| `verifyAttemptServer` | Risposta/foto (trascrizione confermata) + dominio + confidenza → esito ternario | Regole server + SymPy sandboxed + `ts-fsrs` |
+| `exportOrShareNote` | Nota + modalità (`personal_export` vs `public_share`) → Markdown/Typst/Anki | Policy per asset: `public_share` rimuove/sostituisce asset del docente |
 
-Solo il comando dello studente può confermare il merge. Il risultato del modello è validato strutturalmente e nel dominio: JSON conforme non significa concetto corretto. Errori e timeout non producono patch o promozioni parziali; i ritentativi rispettano idempotenza e budget.
+### Gestione degli schizzi Excalidraw
 
-L'[esempio degli strumenti](../esempi/harness_visuale.json) mostra una regione risolta dal server, una chiamata con il solo `regionId`, uno schema e un piano di contesto. Dati e coordinate sono fittizi, collegati all'esempio di sessione; non descrivono operazioni già eseguite.
+* **Fase 1:** blocco Excalidraw nativo sempre modificabile; salvataggio atomico della scena JSON + **tutti gli asset binari referenziati** + generazione deterministica dell'anteprima SVG.
+* **Fase 2 (pulizia AI opzionale):** produce una **variante separata** agganciata a `sourceSceneHash`. Invece di inviare l'intero JSON grezzo (pesante su tratti a mano libera), invia una descrizione strutturata compatta di nodi, testi e collegamenti (più raster solo se necessario) facendo proporre **operazioni circoscritte di allineamento/etichettatura** rese poi dal renderer (o SVG pulito validato), così è verificabile che nodi, pedici e versi delle frecce non siano stati alterati.
 
-### Come ottenere automaticamente immagini dalle slide
+## Prove di Fase 0 che chiudono i parametri tecnici
 
-Il processo usa il **file PDF**, senza fotografare lo schermo dell'utente:
-
-1. Importare la fonte e conservarne versione e hash. Renderizzare una pagina alla risoluzione dichiarata con PDF.js nel worker Node.
-2. Creare un catalogo di regioni da selezione dell'utente o pipeline di layout. Per le figure automatiche usare la pipeline che supera il campione di prova; Docling è il candidato se servono riconoscimento e struttura.
-3. Assegnare `regionId`, pagina e rettangolo normalizzato rispetto alla **pagina visibile orientata**, con origine in alto a sinistra. Convertire esplicitamente eventuali coordinate PDF/Docling con cropbox, origine e rotazione. Il modello sceglie un ID esistente, non quattro numeri inventati.
-4. Trasformare il rettangolo in pixel del raster effettivo, ritagliare includendo didascalie necessarie e salvare PNG o WebP con provenienza. Se la regione non è affidabile, usare la pagina intera o chiedere una selezione.
-5. Memorizzare il derivato per hash della fonte, regione, parametri e versione del renderer, mantenendo controllo degli accessi. La citazione apre sempre anche la pagina originale.
-
-Per il ritaglio basta una seconda canvas di dimensioni controllate e la copia del rettangolo dal raster; non richiede un'altra chiamata AI. Il rilevamento della figura, invece, richiede layout o una selezione e non deriva dal solo rendering. Docling documenta esportazione di pagine e figure, ma la qualità delle regioni rimane da misurare. [Esportazione delle figure](https://docling-project.github.io/docling/_generated/examples/export_figures/).
-
-Distinguere l'immagine nativa incorporata nel PDF dal ritaglio di una regione composta: frecce vettoriali, etichette e formule possono essere oggetti separati. Usare il ritaglio del rendering quando serve preservare la composizione visibile.
-
-### Come generare schemi SVG
-
-Per la proposta di rendering attuale leggere la sezione 11.5 della [specifica](SPECIFICA.md). Il renderer supporta ritagli annotati, SVG composti dal modello con validazione e componenti scientifici a dati tipizzati. Per semplici relazioni si può compilare il DiagramSpec di esempio in Mermaid. Il catalogo delle figure conserva separatamente dati dell’esempio, provenienza, descrizione accessibile e asset visualizzato.
-
-## Prove che decidono le adozioni
-
-| Prova | Cosa confrontare | Conseguenza |
+| Prova | Cosa confrontare su materiali reali annotati | Decisione chiusa |
 | --- | --- | --- |
-| Materiali e visuali | Stessi PDF STEM difficili: pipeline semplice e strutturata; regioni, formule, rotazioni, crop e diagrammi standard | Decide Docling/Python, perimetro dei formati e scelta tra ritaglio, SVG generato e componente scientifico |
-| Integrità dello studio | Revisione mentre testo/formule cambiano, rete interrotta, riapertura e patch concorrenti | Nessuna modifica al punto sbagliato o perdita di testo salvato; chiarimenti su nodi atomici verificati |
-| Costo e qualità didattica | Stessi compiti con riferimenti/FTS e variante semantica, diversi budget e modelli | Decide embedding, budget e modello; controllare errori e fonti, non soltanto il prezzo medio |
-
-La prima dimostrazione comprende slide PDF, una trascrizione, due Markdown, un ritaglio citabile e una figura didattica interattiva, scrittura persistente, domanda sulla bozza, diff approvato e verifica separata. PPTX nativo, scansioni estese e diagrammi specialistici entrano quando il campione ne giustifica il costo. Le capacità descritte sono da implementare e provare; non sono test già superati dal mockup.
+| 1. OCR STEM e licenze | Pagine con formule sottili, figure vettoriali, scansioni e rotazioni: errori matematici, accuratezza `regionId`, cold start, costo/50 pagine accettate (inclusi retry/avvio GPU) e audit licenze per `(codice, checkpoint, dipendenze)` | Scelta del singolo motore OCR Managed di Fase 1 |
+| 2. Continuità Dexie e merge `409` | Scenario tablet offline + patch accettata su PC + riconnessione + interruzione server prima/dopo commit | Verifica zero perdita lavoro e tenuta ancoraggi `AC08/AC12` |
+| 3. Recupero, cache e simboli | Confronto `8k / 20k / 40k` token a freddo/caldo per attività, verifica ricerca simbolica (`C(a)<C(b)` vs `C(a)>C(b)`) e test recall@20 per decidere il reranker | Politica di recupero, necessità reranker e budget reali |
+| 4. Conformità, costi e SymPy | Compilazione matrice `provider×endpoint×regione×retention`, simulazione costi media/p95 (ordinario vs pre-esame) e test SymPy sandboxed (timeout, memoria, dominio `x/x` vs `1`) | Endpoint ammessi, sostenibilità economica e famiglie d'esercizio Fase 1 |

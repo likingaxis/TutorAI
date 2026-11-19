@@ -21,9 +21,9 @@ Gli SVG sono illustrazioni del flusso. La presentazione contiene anche numeri ra
 
 ## Valutazione tecnica
 
-Le scelte sono state confrontate con il supporto di GPT-6 Astra e di una successiva revisione High su contesto ridotto. Il confronto ha favorito una base più semplice: web e dominio TypeScript, ricerca testuale iniziale, Python e vettori subordinati alle prove, Mermaid per i primi schemi. Il documento di architettura collega le affermazioni tecniche alle fonti ufficiali consultate.
+Le scelte architetturali v3 consolidano il confronto tecnico dual-model tra **Gemini 4 Neon** (proposta architetturale v2 e integrazione delle meccaniche del mockup) e **GPT 6.2 Astra** (revisione avversaria su atomicità sync/merge, autorità della verifica matematica, licenze OCR, ricerca simbolica oltre `pg_trgm`, conflitto ZDR/Batch, limiti di sicurezza e perimetro snello di Fase 1).
 
-Prima di adottare una dipendenza, fissarne la versione e verificare compatibilità e condizioni d'uso nella combinazione reale. Le fonti consultate non dimostrano da sole accuratezza dell'estrazione, qualità didattica o recupero dagli errori.
+Prima di adottare una dipendenza o un modello, fissarne la versione esatta, verificare la licenza di codice/checkpoint/dipendenze e compilare la matrice `provider×endpoint×regione×retention`. Le fonti consultate non sostituiscono i 4 benchmark di Fase 0.
 
 ## Esempi condivisi
 

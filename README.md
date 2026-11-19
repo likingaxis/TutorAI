@@ -40,18 +40,18 @@ Per iniziare, leggere **Specifica** e **Architettura**. Gli altri documenti appr
 | [Domande per il team](docs/domande.md) | Scelte per la valutazione e condizioni del pilota |
 | [Riferimenti](docs/RIFERIMENTI.md) | Presentazione, illustrazioni e origine delle scelte |
 
-## Stack proposto
+## Stack consolidato (v3)
 
-| Area | Base di lavoro |
+| Area | Baseline Fase 1 → Fase 2 |
 | --- | --- |
-| Interfaccia | React, TypeScript, Vite |
-| Appunti | Tiptap/ProseMirror, documento JSON versionato, export Markdown |
-| Backend | Fastify e worker Node |
-| Dati e file | PostgreSQL, autenticazione e storage privato; Supabase come candidato gestito |
-| Materiali e schemi | PDF.js, ritagli di fonte, SVG validati e componenti scientifici interattivi |
-| Tutor | Provider API configurabile, contesto composto per attività e strumenti autorizzati |
+| Interfaccia e mobilità | PWA autonoma React, TypeScript, Vite, TanStack Query, `cmdk` (`Ctrl+K` in F2) |
+| Appunti e visuali STEM | Tiptap/ProseMirror (MIT), MathLive + KaTeX, Excalidraw (scena editabile + SVG deterministico in F1; variante AI in F2), drag & drop, export personale Markdown / Typst WASM / Anki e condivisione sanitizzata |
+| Sync e accesso | **Dexie + protocollo ottimistico server** (`baseRevisionId`, `mutationId`, `409`); Better Auth (Email + 1 OAuth in F1; Passkey e Ospite blindato in F2; no SSO in MVP) |
+| Backend e dati | Fastify/Hono + Zod + Drizzle ORM, worker `pg-boss`, PostgreSQL (`FTS`, **indice simbolico**, `pg_trgm`, `pgvector`), Cloudflare R2 (o Supabase) |
+| Materiali e OCR | Limiti cumulativi `ZIP`/`PDF`, `pypdfium2` server-side + PDF.js client; `DocumentParserProvider` (**1 percorso OCR Managed** in F1; BYOK/Locale in F2) |
+| Tutor, oracolo e ripasso | Vercel AI SDK (1 provider principale + escalation), recupero per attività + Prompt Caching, **verifica matematica autorevole server-side** (esito ternario, SymPy sandboxed), budget atomico, `ts-fsrs`, Langfuse (metadati) |
 
-Sono proposte da validare. Il pilota confronta ricerca testuale e ibrida con pgvector, estrazione PDF.js e Docling, figure originali e schemi generati. L'architettura descrive anche le alternative per vincoli di offline o competenze diverse del team.
+L'architettura v3 è stata consolidata dopo revisione critica dual-model (Gemini 4 Neon + GPT 6.2 Astra). I 4 benchmark di Fase 0 chiudono motore OCR, matrice di conformità `provider×endpoint×regione×retention`, politica di recupero e costi reali media/p95. Estensioni come Yjs (editing simultaneo), Pyodide (Web Worker), Visual RAG, audio/orale, SSO Ateneo e plugin Obsidian restano nelle Fasi 3–4.
 
 ## Struttura del repository
 
