@@ -1,28 +1,85 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 328 280">
-  <title>Atlante delle lezioni a due emisferi</title>
+  <title>Atlante cognitivo a costellazione a due emisferi</title>
   <defs>
-    <linearGradient id="ink" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
-      <stop stop-color="#304d99"/><stop offset=".55" stop-color="#253b79"/><stop offset="1" stop-color="#192c60"/>
+    <radialGradient id="atlasAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#7ea4ff" stop-opacity=".24"/>
+      <stop offset="58%" stop-color="#537cf0" stop-opacity=".08"/>
+      <stop offset="100%" stop-color="#0f1738" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="hemiFill" x1=".15" y1=".05" x2=".85" y2=".95" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#182654"/>
+      <stop offset="56%" stop-color="#131e46"/>
+      <stop offset="100%" stop-color="#0f1738"/>
     </linearGradient>
-    <path id="lobe" d="M157 46Q157 22 135 24Q116 24 103 39L84 40Q60 41 53 65L47 82Q24 93 24 119L24 142Q13 163 26 180L42 196Q40 218 62 227L84 232Q98 253 119 249L140 245Q157 240 157 220Z"/>
+    <linearGradient id="axisGrad" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#7ea4ff" stop-opacity="0"/>
+      <stop offset="22%" stop-color="#9cb8ff" stop-opacity=".62"/>
+      <stop offset="50%" stop-color="#d4e3ff" stop-opacity=".9"/>
+      <stop offset="78%" stop-color="#9cb8ff" stop-opacity=".62"/>
+      <stop offset="100%" stop-color="#7ea4ff" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="constellationDots" width="12" height="12" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r=".8" fill="#9cb8ff" fill-opacity=".20"/>
+    </pattern>
+    <path id="lobe" d="M156 56C156 31 134 25 108 30C79 36 53 58 41 92C25 128 25 170 43 206C58 235 88 249 119 248C142 247 156 234 156 214C153 162 153 108 156 56Z"/>
+    <clipPath id="lobeClip">
+      <use href="#lobe"/>
+    </clipPath>
     <g id="hemisphere">
-      <use href="#lobe" transform="translate(0 4)" fill="#142657" opacity=".22"/>
-      <use href="#lobe" fill="url(#ink)" stroke="#7094ef" stroke-width="1.6"/>
-      <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M146 47Q145 36 135 36Q121 37 106 52L86 53Q69 53 64 70L56 91Q36 100 36 118" stroke="#b7d1ff" opacity=".55"/>
-        <path d="M144 167v44q0 19-15 23l-15 4q-12 2-22-12l-5-6-20-6" stroke="#81a7ef" opacity=".48"/>
-        <g stroke="#a1b9fc" opacity=".39">
-          <path d="M55 111h15l16-16V72m15-12v25l13 13h22"/>
-          <path d="M40 171h21l18-18h23l15-15v-21"/>
-          <path d="M71 199h21l14-14h31m-25 35v-15l9-9"/>
+      <use href="#lobe" fill="none" stroke="#7ea4ff" stroke-opacity=".18" stroke-width="5"/>
+      <use href="#lobe" fill="url(#hemiFill)" stroke="#7ea4ff" stroke-opacity=".86" stroke-width="1.35"/>
+      <g clip-path="url(#lobeClip)">
+        <use href="#lobe" fill="url(#constellationDots)"/>
+        <g fill="none" stroke="#9cb8ff" stroke-opacity=".26" stroke-width=".95" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M128 48L97 69L64 88L57 136L63 186L100 216L136 212L144 154L138 96Z"/>
+          <path d="M128 48L138 96L97 69L116 153L138 96"/>
+          <path d="M64 88L116 153L57 136"/>
+          <path d="M63 186L116 153L100 216"/>
+          <path d="M116 153L144 154M116 153L136 212"/>
         </g>
-      </g>
-      <g fill="#b7ccff" opacity=".67">
-        <circle cx="55" cy="111" r="2"/><circle cx="136" cy="98" r="2"/>
-        <circle cx="117" cy="117" r="2"/><circle cx="71" cy="199" r="2"/>
+        <g fill="#9cb8ff" fill-opacity=".18">
+          <circle cx="128" cy="48" r="3.4"/>
+          <circle cx="64" cy="88" r="3.2"/>
+          <circle cx="138" cy="96" r="3.4"/>
+          <circle cx="144" cy="154" r="3.6"/>
+          <circle cx="63" cy="186" r="3.2"/>
+          <circle cx="136" cy="212" r="3.2"/>
+        </g>
+        <g fill="#c9dcff" fill-opacity=".86">
+          <circle cx="128" cy="48" r="1.5"/>
+          <circle cx="64" cy="88" r="1.4"/>
+          <circle cx="138" cy="96" r="1.6"/>
+          <circle cx="144" cy="154" r="1.7"/>
+          <circle cx="63" cy="186" r="1.4"/>
+          <circle cx="136" cy="212" r="1.5"/>
+        </g>
+        <g fill="#9cb8ff" fill-opacity=".42">
+          <circle cx="97" cy="69" r="1.4"/>
+          <circle cx="57" cy="136" r="1.4"/>
+          <circle cx="116" cy="153" r="1.4"/>
+          <circle cx="100" cy="216" r="1.4"/>
+        </g>
       </g>
     </g>
   </defs>
+
+  <ellipse cx="164" cy="140" rx="154" ry="126" fill="url(#atlasAura)"/>
+
+  <g fill="none">
+    <ellipse cx="164" cy="140" rx="150" ry="86" transform="rotate(-14 164 140)" stroke="#8fb3ff" stroke-opacity=".28" stroke-width="1" stroke-dasharray="4 6"/>
+    <ellipse cx="164" cy="140" rx="145" ry="78" transform="rotate(15 164 140)" stroke="#7ea4ff" stroke-opacity=".22" stroke-width="1" stroke-dasharray="3 7"/>
+  </g>
+
   <use href="#hemisphere"/>
   <use href="#hemisphere" transform="translate(328 0) scale(-1 1)"/>
+
+  <g fill="none" stroke-linecap="round">
+    <path d="M138 96Q164 89 190 96" stroke="#9cb8ff" stroke-opacity=".28" stroke-width="1"/>
+    <path d="M148 124Q164 119 180 124" stroke="#8af5c4" stroke-opacity=".34" stroke-width="1.05"/>
+    <path d="M144 154Q164 147 184 154" stroke="#7ea4ff" stroke-opacity=".42" stroke-width="1.1"/>
+    <path d="M142 188Q164 182 186 188" stroke="#9cb8ff" stroke-opacity=".26" stroke-width="1"/>
+    <line x1="164" y1="36" x2="164" y2="244" stroke="url(#axisGrad)" stroke-width="1.35"/>
+  </g>
+  <circle cx="164" cy="140" r="4.6" fill="#7ea4ff" fill-opacity=".22"/>
+  <circle cx="164" cy="140" r="2" fill="#dce8ff" fill-opacity=".92"/>
 </svg>

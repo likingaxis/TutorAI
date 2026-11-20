@@ -891,13 +891,10 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .unit-row:is(:hover, :focus-visible) .unit-chevron { transform: translateX(3px); }
 
 .file-finder {
-  padding: 0; width: min(1050px, calc(100vw - 28px)); max-width: none;
-  max-height: calc(100dvh - 28px); color: var(--ink); background: var(--card);
-  border: 1px solid var(--desk-rule); border-radius: 18px; box-shadow: var(--sh-l); overflow: auto;
+  padding: 0; width: 100%; max-width: none;
+  color: var(--ink); background: var(--card);
+  border: 1px solid var(--desk-rule); border-radius: 24px; box-shadow: var(--sh); overflow: hidden;
 }
-.file-finder[open] { animation: finder-enter .22s ease both; }
-.file-finder::backdrop { background: rgb(23 23 27 / .41); backdrop-filter: blur(3px); }
-@keyframes finder-enter { from { opacity: 0; transform: translateY(8px) scale(.985); } to { opacity: 1; transform: none; } }
 .finder-top {
   display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
   position: sticky; top: 0; z-index: 3; padding: 12px 19px; background: var(--card);
@@ -928,7 +925,7 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .finder-tree button:hover .ic { transform: translateY(-1px) rotate(-7deg); }
 .finder-tree button:hover, .finder-file:hover, .finder-crumb:hover { background: var(--sunken); }
 .finder-branch small { margin-inline-start: auto; color: var(--mut); font-size: 10px; font-variant-numeric: tabular-nums; }
-.finder-course-select { display: none; }
+.finder-course-select, .finder-course-select-wrap, .finder-select-chevron { display: none; }
 .finder-content { padding: 18px 23px 26px; min-width: 0; }
 .finder-breadcrumb { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; color: var(--mut); margin: 0 0 16px; font-size: 12.5px; }
 .finder-crumb { border-radius: 6px; padding: 3px 5px; color: var(--ink-2); font-weight: 650; overflow-wrap: anywhere; }
@@ -1737,7 +1734,7 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: clamp(14px, 1.7vw, 24px) clamp(14px, 1.8vw, 26px) 72px;
+  padding: clamp(14px, 1.7vw, 24px) clamp(14px, 1.8vw, 26px) 108px;
   background-color: var(--studio-desk);
   transition: background-color .22s, box-shadow .22s;
 }
@@ -2667,7 +2664,7 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
   #view-studio .mobile-switch :is(button,.seg-knob) { border-radius: 5px; }
   .page-scroll { padding: 16px 14px 36px; border-radius: 20px; }
   .doc-sheet { padding: 21px 17px 26px; }
-  .note-scroll { padding: 11px 10px 70px; }
+  .note-scroll { padding: 11px 10px 98px; }
   .note-page { padding: 18px 15px 27px; }
   .sidebar { left: 8px; bottom: 68px; top: 8px; }
   .demo-drawer { left: 10px; right: 10px; bottom: 72px; width: auto; }
@@ -2791,8 +2788,8 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
       <span class="rb-dot" id="railRipassoDot" title="Verifica in programma"></span>
     </button>
 
-    <button type="button" class="rb rail-archive" data-tip="Archivio" aria-label="Archivio" aria-haspopup="dialog" aria-controls="fileFinder" onclick="openFileFinder()">
-      <svg class="ic" aria-hidden="true"><use href="#i-study-folder"/></svg>
+    <button type="button" class="rb" data-view="archivio" data-tip="Archivio e Vault Obsidian" aria-label="Archivio" onclick="openFileFinder()">
+      <svg viewBox="0 0 24 24"><path class="rb-ar-back" d="M3.5 7.5a2 2 0 0 1 2-2h4.2l2 2H18.5a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/><path class="rb-ar-sheet" d="M7.5 10h9"/><rect class="rb-ar-front" x="3.5" y="10.5" width="17" height="8.5" rx="2"/></svg>
       <span>Archivio</span>
     </button>
   </div>
@@ -2890,10 +2887,13 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
               <path d="M0 206 C 260 174 470 236 740 192 S 1030 146 1180 188" fill="none" stroke="#8af5c4" stroke-opacity="0.28" stroke-width="1.5"/>
             </svg>
             <div class="resume-copy">
+              <span class="resume-kicker"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> Continua ultima lezione</span>
               <h2 id="resumeUnitTitle"></h2>
               <p id="resumeCourseName"></p>
               <div class="resume-actions">
-                <button type="button" class="btn pri resume-pill-cta" onclick="openLastStudiedInStudio()">Riprendi lezione <span class="resume-cta-icon" aria-hidden="true"><svg class="ic"><use href="#i-course-arrow"/></svg></span></button>
+                <button type="button" class="btn pri resume-circle-cta" onclick="openLastStudiedInStudio()" aria-label="Riprendi lezione" title="Riprendi lezione">
+                  <svg class="ic" aria-hidden="true"><use href="#i-course-arrow"/></svg>
+                </button>
                 <div class="resume-course-progress">
                   <span>Unità verificate</span><b id="resumeProgressLabel"></b>
                   <progress id="resumeProgress" aria-hidden="true"></progress>
@@ -2947,6 +2947,16 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
           <div class="card" id="wizStep1">
             <div class="wizard-setup">
               <h3 tabindex="-1">Come vuoi studiare?</h3>
+              <div class="wizard-live-identity" id="wizardLiveIdentity" aria-live="polite">
+                <span class="wizard-id-badge" id="wizardIdentityIcon" aria-hidden="true"></span>
+                <div class="wizard-id-copy">
+                  <strong id="wizardIdentityName">Il tuo nuovo corso</strong>
+                  <small id="wizardIdentityMeta">Lezione per lezione · Cobalto</small>
+                </div>
+                <span class="wizard-id-auto hidden" id="wizardIdentityAuto">
+                  <svg class="ic" aria-hidden="true"><use href="#i-study-spark"/></svg> Icona suggerita
+                </span>
+              </div>
               <label for="obCourseName" class="wizard-label">Nome del corso</label>
               <div class="wizard-name-field">
                 <input id="obCourseName" class="input-field" type="text" maxlength="90" placeholder="Es. Reti di Calcolatori" oninput="onCourseNameChange()">
@@ -3090,18 +3100,27 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
           <details class="studio-reading" id="studioReading">
             <summary class="studio-control studio-depth-pill">
               <svg viewBox="0 0 18 16" width="14" height="13" fill="none" aria-hidden="true"><path d="M2 3.5h14M2 8h14M2 12.5h14" stroke="var(--mut)" stroke-width="1.5" stroke-linecap="round"/><circle cx="11.5" cy="3.5" r="2.2" fill="var(--card)" stroke="var(--blue)" stroke-width="1.5"/><circle cx="6" cy="8" r="2.2" fill="var(--card)" stroke="var(--blue)" stroke-width="1.5"/><circle cx="12.5" cy="12.5" r="2.2" fill="var(--card)" stroke="var(--blue)" stroke-width="1.5"/></svg>
-              <span>Dettaglio</span>
+              <span>Lettura</span>
               <span aria-hidden="true">▾</span>
             </summary>
             <div class="depth-pop">
-              <div role="group" aria-label="Livello di dettaglio">
+              <div class="depth-pop-label">Livello di dettaglio</div>
+              <div class="studio-depth-pills" role="group" aria-label="Livello di dettaglio">
                 <button type="button" data-depth="sintesi" aria-pressed="false" onclick="setDepth('sintesi')">Sintesi</button>
                 <button type="button" data-depth="guidata" aria-pressed="false" onclick="setDepth('guidata')">Guidata</button>
                 <button type="button" data-depth="completa" aria-pressed="true" onclick="setDepth('completa')">Completa</button>
               </div>
+              <div class="depth-pop-label">Modalità di lettura</div>
+              <div class="studio-depth-modes" role="group" aria-label="Modalità di lettura">
+                <button type="button" data-reading-mode="guidata" aria-pressed="true" onclick="setStudioReadingMode('guidata')">Guidata</button>
+                <button type="button" data-reading-mode="passaggi" aria-pressed="false" onclick="setStudioReadingMode('passaggi')">Passaggi</button>
+                <button type="button" data-reading-mode="diretta" aria-pressed="false" onclick="setStudioReadingMode('diretta')">Essenziale</button>
+                <button type="button" data-reading-mode="socratica" aria-pressed="false" onclick="setStudioReadingMode('socratica')">Socratica</button>
+              </div>
               <div class="study-source-option">
-                <button type="button" id="studioSourcesToggle" onclick="toggleStudioSources()">Mostra fonti</button>
-                <button type="button" id="studioWritingStyleButton" onclick="openStudioWritingStyle()">Stile della spiegazione</button>
+                <button type="button" id="studioFocusToggle" aria-pressed="false" onclick="toggleStudioFocusMode()">Modalità Focus</button>
+                <button type="button" id="studioSourcesToggle" aria-pressed="false" onclick="toggleStudioSources()">Mostra fonti</button>
+                <button type="button" id="studioWritingStyleButton" onclick="openStudioWritingStyle()">Adatta stile al tutor…</button>
               </div>
               <div class="depth-size-row" role="group" aria-label="Dimensione testo lettura">
                 <span>Testo</span>
@@ -3111,6 +3130,7 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
                   <button type="button" onclick="adjustStudyFontSize(1)" aria-label="Ingrandisci testo">+</button>
                 </div>
               </div>
+              <button type="button" class="studio-depth-settings-link" onclick="openReadingPreferencesFromStudio()">Tutte le opzioni di lettura →</button>
             </div>
           </details>
         </div>
@@ -3165,7 +3185,12 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
                     <label class="note-appearance-option">
                       <input type="radio" name="notePattern" value="grid">
                       <svg class="note-pattern-sample" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4h.01M8 4h.01M12 4h.01M4 8h.01M8 8h.01M12 8h.01M4 12h.01M8 12h.01M12 12h.01" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.7"/></svg>
-                      Griglia
+                      Puntinato
+                    </label>
+                    <label class="note-appearance-option">
+                      <input type="radio" name="notePattern" value="lined">
+                      <svg class="note-pattern-sample" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 5h10M3 8.5h10M3 12h10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.4"/></svg>
+                      Righe
                     </label>
                   </div>
                 </fieldset>
@@ -3210,7 +3235,8 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
           </div>
         </div>
 
-        <div class="note-scroll" id="noteScrollArea" tabindex="-1" ondragover="allowStudyAssetDrop(event)" ondrop="dropStudyAsset(event)" onmouseup="handleNoteTextSelection()" onkeyup="handleNoteTextSelection()"></div>
+        <div class="note-scroll" id="noteScrollArea" tabindex="-1" onclick="handleNoteScrollClick(event)" ondragover="allowStudyAssetDrop(event)" ondrop="dropStudyAsset(event)" onmouseup="handleNoteTextSelection()" onkeyup="handleNoteTextSelection()"></div>
+        <div class="note-slash-pop hidden" id="noteSlashPop" role="listbox" aria-label="Comandi rapidi negli appunti" onmousedown="event.preventDefault()"></div>
         <div class="note-selection-pop hidden" id="noteSelectionPop" role="toolbar" aria-label="Evidenzia o formatta selezione" onmousedown="event.preventDefault()">
           <button type="button" title="Evidenzia giallo" onclick="highlightNoteSelection('amber')"><i class="hl-dot amber"></i></button>
           <button type="button" title="Evidenzia azzurro" onclick="highlightNoteSelection('blue')"><i class="hl-dot blue"></i></button>
@@ -3306,9 +3332,10 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
           <label>Come vuoi leggere?
             <select class="input-field" name="writingMode" id="studioWritingMode" autofocus>
               <option value="adatta">Adatta dalle indicazioni</option>
-              <option value="originale">Stile originale</option>
-              <option value="diretta">Più diretta</option>
+              <option value="guidata">Guidata · Completa</option>
               <option value="passaggi">Per passaggi</option>
+              <option value="diretta">Essenziale e diretta</option>
+              <option value="socratica">Socratica interattiva</option>
               <option value="esempi">Con un esempio</option>
             </select>
           </label>
@@ -3342,6 +3369,43 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
   <section class="view" id="view-attivita">
     <div class="page-scroll">
       <div class="home-container" id="attivitaContainer"></div>
+    </div>
+  </section>
+
+  <!-- =======================================================================
+       VIEW 6: ARCHIVIO / VAULT OBSIDIAN
+       ======================================================================= -->
+  <section class="view" id="view-archivio">
+    <div class="page-scroll vault-page-scroll">
+      <div id="fileFinder" class="file-finder vault-workspace" aria-labelledby="finderTitle">
+        <header class="finder-top">
+          <div class="finder-title-group">
+            <button type="button" class="btn ghost vault-back-btn hidden" id="vaultBackBtn" onclick="closeFileFinder()">← Torna</button>
+            <span class="finder-brand"><svg class="ic" aria-hidden="true"><use href="#i-study-folder"/></svg></span>
+            <div>
+              <h1 id="finderTitle" tabindex="-1">Archivio</h1>
+            </div>
+            <span class="finder-local">Vault Obsidian</span>
+          </div>
+          <div class="finder-top-actions">
+            <label class="search-pill finder-search">
+              <svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
+              <input id="finderSearchInput" type="search" aria-label="Cerca appunti, etichette o file" aria-keyshortcuts="Control+K Meta+K" placeholder="Cerca appunti, #tag o file..." oninput="filterFinder(this.value)">
+              <kbd class="finder-search-key" aria-hidden="true">Ctrl K</kbd>
+            </label>
+            <div class="vault-quick-actions">
+              <input type="file" id="vaultUploadInput" multiple accept=".pdf,.txt,.md" class="hidden" onchange="vaultHandleFileUpload(this.files);this.value=''">
+              <button type="button" class="btn vault-action-pill" onclick="vaultCreateQuickNote()">+ Nuova nota</button>
+              <button type="button" class="btn vault-action-pill" onclick="document.getElementById('vaultUploadInput').click()">+ Carica file</button>
+            </div>
+          </div>
+        </header>
+        <div class="finder-grid" id="finderGrid">
+          <nav id="finderCourses" class="finder-nav" aria-label="Corsi, cartelle ed etichette"></nav>
+          <div id="finderContent" class="finder-content"></div>
+          <aside id="finderInspector" class="vault-inspector hidden" aria-label="Anteprima e modifica documento"></aside>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -3487,7 +3551,8 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
       </div>
       <div class="shortcuts-kbd-strip">
         <span><kbd>Seleziona testo</kbd> Chiedi al tutor</span>
-        <span>Corsi → Archivio</span>
+        <span><kbd>Ctrl K</kbd> Apri Archivio</span>
+        <span><kbd>/</kbd> Comandi rapidi appunti</span>
         <span><kbd>Esc</kbd> Chiudi pannelli</span>
       </div>
     </div>
@@ -3513,30 +3578,9 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
   </div>
 </div>
 
-<dialog id="fileFinder" class="file-finder" aria-labelledby="finderTitle">
-  <header class="finder-top">
-    <div class="finder-title-group">
-      <span class="finder-brand"><svg class="ic" aria-hidden="true"><use href="#i-study-folder"/></svg></span>
-      <h2 id="finderTitle" tabindex="-1" autofocus>Archivio</h2>
-      <span class="finder-local">Locale</span>
-    </div>
-    <div class="finder-top-actions">
-      <label class="search-pill finder-search">
-        <svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
-        <input id="finderSearchInput" type="search" aria-label="Cerca nel corso selezionato" aria-keyshortcuts="Control+K Meta+K" placeholder="Cerca appunti o file" oninput="filterFinder(this.value)">
-        <kbd class="finder-search-key" aria-hidden="true">Ctrl K</kbd>
-      </label>
-      <form method="dialog"><button type="submit" class="btn pri"><span aria-hidden="true">×</span> Chiudi</button></form>
-    </div>
-  </header>
-  <div class="finder-grid">
-    <nav id="finderCourses" class="finder-nav" aria-label="Cartelle dei corsi"></nav>
-    <div id="finderContent" class="finder-content"></div>
-  </div>
-</dialog>
-
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<script src="knowledge-brain.js"></script>
 <script>
 /* ============================================================================
    COURSE DATA, PER-UNIT TOPIC ENGINE & ISOLATED NOTEBOOKS
@@ -3844,11 +3888,24 @@ function makeInitialState() {
     notePattern: 'plain',
     noteFont: 'serif',
     studyFontSize: 17,
+    readingMode: 'guidata',
+    studioWritingStyle: { mode: 'guidata', instruction: '' },
+    studyReadingFont: 'serif',
+    studyLineHeight: 'normal',
+    studyReadingWidth: 'standard',
+    studyFocusMode: false,
+    studyHighlightMath: true,
+    noteSlashCommands: true,
+    studioSidebarWidth: 248,
     startPage: 'corso',
     noteSpellcheck: false,
     finderQuery: '',
     finderLayout: 'grid',
     finderType: 'all',
+    finder: { courseId: 'sistemi', folder: '', index: null, tag: '' },
+    finderReturnView: null,
+    finderEditingNote: false,
+    finderSlidePage: 1,
     ripassoSelectedDate: recallDateKey(new Date()),
     ripassoWindowDate: recallDateKey(new Date()),
     ripassoAgenda: loadRipassoAgenda(),
@@ -3953,6 +4010,7 @@ function makeInitialState() {
     profileAvatarChoice: 'initial',
     profileBrainUnit: null,
     profileBrainCourse: '',
+    profileBrainMode: 'constellation',
     attivitaFilter: 'tutto',
     onboardingDiagStates: {},
     addLessonSelectedFile: '',
@@ -4140,6 +4198,8 @@ function recordStudyActivity(cid, uid, actionLabel, kind = 'studio', subText = '
 function setView(v) {
   app.view = v;
   hideExplainSelPop();
+  hideNoteSlashPop?.();
+  if (v !== 'attivita' && typeof stopAsciiBrainLoop === 'function') stopAsciiBrainLoop();
   if (v === 'attivita') app.accountPage = app.demoSessionOpen ? 'activity' : 'login';
   if (v !== 'studio' || window.innerWidth <= 960) app.sidebarOpen = false;
   if (v === 'studio') recordStudyActivity(app.courseId, app.unitId, 'Studio in corso', 'studio');
@@ -4267,13 +4327,18 @@ function setMobilePane(side) {
   const splitter = document.getElementById('sidebarSplitter');
   const desktop = matchMedia('(min-width: 961px)');
   const minimum = Number(splitter.getAttribute('aria-valuemin'));
+  const defaultWidth = 248;
   const widthLimit = () => Math.min(420, Math.floor(window.innerWidth * 0.3));
-  const setWidth = width => {
+  const setWidth = (width, persist = false) => {
     const limit = widthLimit();
     const next = Math.max(minimum, Math.min(Math.round(width), limit));
     sidebar.style.setProperty('--outline-width', next + 'px');
     splitter.setAttribute('aria-valuemax', String(limit));
     splitter.setAttribute('aria-valuenow', String(next));
+    if (persist && typeof app !== 'undefined' && app) {
+      app.studioSidebarWidth = next;
+      if (typeof saveStudyPreferences === 'function') saveStudyPreferences();
+    }
   };
   let drag;
   splitter.addEventListener('pointerdown', event => {
@@ -4291,20 +4356,28 @@ function setMobilePane(side) {
     drag = null;
     sidebar.classList.remove('resizing');
     splitter.classList.remove('drag');
+    setWidth(Number(splitter.getAttribute('aria-valuenow')), true);
   };
   window.addEventListener('pointerup', finish);
   window.addEventListener('pointercancel', finish);
   splitter.addEventListener('lostpointercapture', finish);
+  splitter.addEventListener('dblclick', () => {
+    setWidth(defaultWidth, true);
+    if (typeof showToast === 'function') showToast('Larghezza indice ripristinata');
+  });
   splitter.addEventListener('keydown', event => {
     const width = Number(splitter.getAttribute('aria-valuenow'));
     const targets = { ArrowLeft: width - 16, ArrowRight: width + 16, Home: minimum, End: widthLimit() };
     if (!Object.hasOwn(targets, event.key)) return;
     event.preventDefault();
-    setWidth(targets[event.key]);
+    setWidth(targets[event.key], true);
   });
   window.addEventListener('resize', () => {
     if (desktop.matches) setWidth(Number(splitter.getAttribute('aria-valuenow')));
   });
+  window.applySavedSidebarWidth = width => {
+    if (desktop.matches) setWidth(Number(width) || defaultWidth);
+  };
   if (desktop.matches) setWidth(Number(splitter.getAttribute('aria-valuenow')));
 })();
 
@@ -4523,11 +4596,12 @@ function renderHomeView() {
   const figure = document.getElementById('resumeLessonFigure');
   const diagram = getUnitStudyDiagram(unit);
   figure.classList.toggle('hidden', !diagram);
-  if (figure.dataset.diagram !== (diagram || '')) {
-    figure.dataset.diagram = diagram || '';
+  const sig = diagram ? `${diagram}:${unit?.id || ''}` : '';
+  if (figure.dataset.diagram !== sig) {
+    figure.dataset.diagram = sig;
     const title = diagram === 'lamport' ? 'Eventi e messaggi tra processi' : STUDY_DIAGRAMS[diagram]?.title;
     figure.innerHTML = title
-      ? `${renderStudioDiagram(diagram, unit.num, 'home-study-arrow', 'e22')}<figcaption>${escapeCourseText(title)}</figcaption>`
+      ? `${renderHeroBlueprintDiagram(diagram, unit, course)}<figcaption>${escapeCourseText(title)}</figcaption>`
       : '';
   }
 
@@ -4604,6 +4678,76 @@ function noteExcerpt(note) {
   return note?.blocks.find(block => !block.studyKind && block.text.trim())?.text.replace(/^•\s*/, '') || '';
 }
 
+function renderHeroBlueprintDiagram(kind, unit, course) {
+  if (kind === 'lamport') {
+    return `<svg class="hero-blueprint-svg" viewBox="0 0 460 156" width="100%" role="img" aria-label="Schema messaggi ed eventi tra processi P1, P2 e P3">
+      <defs>
+        <pattern id="hero-bp-dots" width="16" height="16" patternUnits="userSpaceOnUse">
+          <circle cx="2" cy="2" r="0.9" fill="rgba(255,255,255,0.22)"/>
+        </pattern>
+        <marker id="hero-bp-mint" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1.5 9 5 1 8.5" fill="none" stroke="#7ef7c5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+        <marker id="hero-bp-white" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1.5 9 5 1 8.5" fill="none" stroke="rgba(255,255,255,0.92)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+      </defs>
+      <rect x="2" y="2" width="456" height="152" rx="12" fill="url(#hero-bp-dots)" stroke="rgba(255,255,255,0.12)"/>
+      <g font-family="var(--mono)" font-size="10.5" font-weight="700">
+        <rect x="12" y="24" width="32" height="22" rx="7" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.24)"/><text x="28" y="39" text-anchor="middle" fill="#fff">P₁</text>
+        <rect x="12" y="68" width="32" height="22" rx="7" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.24)"/><text x="28" y="83" text-anchor="middle" fill="#fff">P₂</text>
+        <rect x="12" y="112" width="32" height="22" rx="7" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.24)"/><text x="28" y="127" text-anchor="middle" fill="#fff">P₃</text>
+      </g>
+      <g stroke="rgba(255,255,255,0.28)" stroke-width="1.4" stroke-linecap="round">
+        <line x1="52" y1="35" x2="438" y2="35"/><line x1="52" y1="79" x2="438" y2="79"/><line x1="52" y1="123" x2="438" y2="123"/>
+      </g>
+      <path class="hero-msg-flow" d="M108 38 L224 76" stroke="#7ef7c5" stroke-width="2" fill="none" marker-end="url(#hero-bp-mint)"/>
+      <path class="hero-msg-flow hero-msg-flow-alt" d="M236 77 L334 38" stroke="rgba(255,255,255,0.92)" stroke-width="2" fill="none" marker-end="url(#hero-bp-white)"/>
+      <rect x="148" y="42" width="56" height="16" rx="8" fill="rgba(126,247,197,0.16)" stroke="rgba(126,247,197,0.45)"/>
+      <text x="176" y="53" text-anchor="middle" font-size="9" font-weight="700" font-family="var(--mono)" fill="#9effd6">m₁ (t=1)</text>
+      <rect x="298" y="54" width="56" height="16" rx="8" fill="rgba(255,255,255,0.14)" stroke="rgba(255,255,255,0.28)"/>
+      <text x="326" y="65" text-anchor="middle" font-size="9" font-weight="700" font-family="var(--mono)" fill="#fff">m₂ (t=2)</text>
+      <circle cx="104" cy="35" r="5" fill="#fff" stroke="#184fc8" stroke-width="2"/>
+      <circle cx="152" cy="79" r="5" fill="#fff" stroke="#184fc8" stroke-width="2"/>
+      <circle class="hero-pulse-ring" cx="232" cy="79" r="13" fill="rgba(126,247,197,0.24)"/>
+      <circle class="hero-spark" cx="232" cy="79" r="6" fill="#7ef7c5" stroke="#0d2f7e" stroke-width="2"/>
+      <circle cx="342" cy="35" r="5" fill="#fff" stroke="#184fc8" stroke-width="2"/>
+      <circle cx="284" cy="123" r="5" fill="rgba(255,255,255,0.85)" stroke="#184fc8" stroke-width="2"/>
+      <g font-family="var(--mono)" font-size="9.5" font-weight="700" fill="#fff">
+        <rect x="86" y="10" width="36" height="16" rx="8" fill="rgba(8,25,68,0.52)" stroke="rgba(255,255,255,0.2)"/><text x="104" y="21" text-anchor="middle">C=1</text>
+        <rect x="210" y="92" width="44" height="17" rx="8.5" fill="#7ef7c5"/><text x="232" y="104" text-anchor="middle" fill="#09235c">C=2</text>
+        <rect x="324" y="10" width="36" height="16" rx="8" fill="rgba(8,25,68,0.52)" stroke="rgba(255,255,255,0.2)"/><text x="342" y="21" text-anchor="middle">C=3</text>
+        <rect x="260" y="132" width="48" height="15" rx="7.5" fill="rgba(8,25,68,0.45)" stroke="rgba(126,247,197,0.42)"/><text x="284" y="143" text-anchor="middle" fill="#9effd6">C=1 (∥)</text>
+      </g>
+    </svg>`;
+  }
+  const spec = STUDY_DIAGRAMS[kind];
+  if (spec) {
+    const scaleX = x => Math.round(x * 460 / 560);
+    const scaleY = y => Math.round(y * 150 / 170);
+    const halfW = 58;
+    const edges = spec.edges.map(([from, to, label]) => {
+      const a = spec.nodes[from], b = spec.nodes[to];
+      const x1 = scaleX(a.x) + halfW + 2, y1 = scaleY(a.y);
+      const x2 = scaleX(b.x) - halfW - 4, y2 = scaleY(b.y);
+      return `<path class="hero-msg-flow" d="M${x1} ${y1} L${x2} ${y2}" stroke="#7ef7c5" stroke-width="2" fill="none" marker-end="url(#hero-bp-topic-arr)"/>
+        ${label ? `<text x="${(x1 + x2) / 2}" y="${(y1 + y2) / 2 - 7}" text-anchor="middle" font-size="11" font-weight="700" fill="#9effd6">${escapeCourseText(label)}</text>` : ''}`;
+    }).join('');
+    const nodes = spec.nodes.map(({ x, y, label, detail }, idx) => {
+      const cx = scaleX(x), cy = scaleY(y);
+      const isLast = idx === spec.nodes.length - 1;
+      return `<rect x="${cx - halfW}" y="${cy - 20}" width="${halfW * 2}" height="40" rx="10" fill="${isLast ? 'rgba(126,247,197,0.18)' : 'rgba(255,255,255,0.12)'}" stroke="${isLast ? 'rgba(126,247,197,0.56)' : 'rgba(255,255,255,0.24)'}"/>
+        <text x="${cx}" y="${cy + (detail ? -2 : 4)}" text-anchor="middle" font-size="11.5" font-weight="700" fill="#fff">${escapeCourseText(label)}</text>
+        ${detail ? `<text x="${cx}" y="${cy + 12}" text-anchor="middle" font-size="9.5" fill="rgba(255,255,255,0.78)">${escapeCourseText(detail)}</text>` : ''}`;
+    }).join('');
+    return `<svg class="hero-blueprint-svg" viewBox="0 0 460 150" width="100%" role="img" aria-label="${escapeCourseText(spec.description)}">
+      <defs>
+        <pattern id="hero-bp-topic-dots" width="15" height="15" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.9" fill="rgba(255,255,255,0.2)"/></pattern>
+        <marker id="hero-bp-topic-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1.5 9 5 1 8.5" fill="none" stroke="#7ef7c5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+      </defs>
+      <rect x="2" y="2" width="456" height="146" rx="12" fill="url(#hero-bp-topic-dots)" stroke="rgba(255,255,255,0.12)"/>
+      ${edges}${nodes}
+    </svg>`;
+  }
+  return renderStudioDiagram(kind, unit?.num || '', 'home-study-arrow', 'e22');
+}
+
 function renderDeskNote(recent) {
   const slot = document.getElementById('deskNoteSlot');
   const refs = [...app.studyHistory.filter(entry => entry.kind === 'appunti'), recent];
@@ -4628,7 +4772,10 @@ function renderDeskNote(recent) {
   slot.innerHTML = `
     <div class="desk-note-head">
       <h2 class="desk-note-label" id="deskNoteTitle">${icon('i-pencil')} Ultimo appunto</h2>
-      <button type="button" class="desk-note-all" aria-label="Tutti gli appunti di ${escapeCourseText(course.nome)}" onclick="openFileFinder('${courseId}', 'notes')">Tutti ›</button>
+      <div class="desk-note-head-actions">
+        <button type="button" class="desk-note-md" title="Esporta in Markdown Obsidian" aria-label="Esporta ${escapeCourseText(note.title)} in Markdown" onclick="exportFinderMarkdown('${courseId}', '${unitId}', 'notes')">.md ↓</button>
+        <button type="button" class="desk-note-all" aria-label="Tutti gli appunti di ${escapeCourseText(course.nome)}" onclick="openFileFinder('${courseId}', 'notes')">Tutti ›</button>
+      </div>
     </div>
     <div class="desk-note-stack">
       <button type="button" class="desk-note-paper" onclick="openDeskNote('${courseId}', '${unitId}')">
@@ -4716,28 +4863,92 @@ const FINDER_FOLDERS = [
   { id: 'sources', title: 'Slide e allegati', icon: 'i-file' }
 ];
 
-function openFileFinder(courseId = app.courseId, folder = '') {
-  const finder = document.getElementById('fileFinder');
-  app.finder = { courseId, folder, index: null };
+const VAULT_TAGS = [
+  ['verificata', 'Verificata'],
+  ['da-ripassare', 'Da ripassare'],
+  ['appunti', 'Appunti'],
+  ['formule', 'Formule'],
+  ['pdf', 'PDF']
+];
+
+function openFileFinder(courseId = app.courseId, folder = '', tag = '') {
+  if (app.view && app.view !== 'archivio') app.finderReturnView = app.view;
+  const scopedCourse = courseId === 'all' || COURSES_DATA[courseId] ? courseId : (app.courseId || 'sistemi');
+  app.finder = { courseId: scopedCourse, folder: folder || '', index: null, tag: tag || '', selected: null };
   app.finderQuery = '';
   app.finderType = 'all';
-  document.getElementById('finderSearchInput').value = '';
-  renderFileFinder();
-  if (!finder.open) finder.showModal();
+  app.finderEditingNote = false;
+  app.finderSlidePage = 1;
+  const search = document.getElementById('finderSearchInput');
+  if (search) search.value = '';
+  if (app.view !== 'archivio') setView('archivio');
+  else renderFileFinder();
+  requestAnimationFrame(() => document.getElementById('finderTitle')?.focus({ preventScroll: true }));
 }
 
-function navigateFinder(courseId, folder = '', index = null) {
-  if (app.finder.courseId !== courseId) app.finderType = 'all';
-  app.finder = { courseId, folder, index };
+function closeFileFinder() {
+  releaseFinderObjectUrl();
+  const target = app.finderReturnView && app.finderReturnView !== 'archivio' ? app.finderReturnView : 'corso';
+  app.finderReturnView = null;
+  setView(target);
+}
+
+function navigateFinder(courseId = 'all', folder = '', index = null) {
+  const prev = app.finder || {};
+  if (prev.courseId !== courseId) app.finderType = 'all';
+  app.finderEditingNote = false;
+  app.finderSlidePage = 1;
+  const hasSelection = index !== null && courseId !== 'all' && folder;
+  app.finder = {
+    courseId: courseId || 'all',
+    folder: folder || '',
+    index,
+    tag: '',
+    selected: hasSelection ? { courseId, folder, index } : null
+  };
   app.finderQuery = '';
-  document.getElementById('finderSearchInput').value = '';
+  const search = document.getElementById('finderSearchInput');
+  if (search) search.value = '';
   renderFileFinder();
-  document.getElementById('finderContent').querySelector('[data-finder-focus]')?.focus();
+  document.getElementById('finderContent').querySelector('[data-finder-focus]')?.focus({ preventScroll: true });
+}
+
+function setFinderTag(tag) {
+  const current = app.finder.tag || '';
+  app.finder.tag = current === tag ? '' : tag;
+  app.finder.selected = null;
+  app.finderEditingNote = false;
+  renderFileFinder();
+}
+
+function selectFinderEntry(courseId, folder, index) {
+  app.finder.selected = { courseId, folder, index };
+  app.finderEditingNote = false;
+  const course = COURSES_DATA[courseId];
+  const entry = folder === 'sources' ? course?.sources[index]
+    : folder === 'notes' ? finderCourseNotes(course)[index]
+    : course?.units[index];
+  app.finderSlidePage = courseId === 'sistemi' && entry?.nome?.includes('Lez05') ? 12 : 1;
+  renderFileFinder();
+}
+
+function clearFinderSelection() {
+  app.finder.selected = null;
+  app.finderEditingNote = false;
+  renderFileFinder();
 }
 
 function filterFinder(value) {
   app.finderQuery = value;
-  app.finder.index = null;
+  const trimmed = (value || '').trim();
+  if (trimmed.startsWith('#')) {
+    const tagMatch = VAULT_TAGS.find(([id]) => id.startsWith(trimmed.slice(1).toLowerCase()));
+    if (tagMatch && !trimmed.slice(1).includes(' ')) {
+      app.finder.tag = tagMatch[0];
+    }
+  } else if (!trimmed && app.finder.tag) {
+    // Keep manual tag unless cleared explicitly
+  }
   renderFileFinder();
 }
 
@@ -4753,11 +4964,10 @@ function setFinderType(type) {
   document.querySelector('.finder-type-filter [aria-pressed="true"]')?.focus({ preventScroll: true });
 }
 
-function openFinderInStudio(unitId, destination) {
-  const { courseId } = app.finder;
-  document.getElementById('fileFinder').close();
-  selectCourse(courseId);
-  selectUnit(unitId);
+function openFinderInStudio(unitId, destination, selCourseId) {
+  const courseId = selCourseId || (app.finder.courseId !== 'all' ? app.finder.courseId : app.courseId);
+  if (COURSES_DATA[courseId]) selectCourse(courseId);
+  if (unitId) selectUnit(unitId);
   setLeftTab(destination === 'sources' ? 'slides' : 'explain');
   setMobilePane(destination === 'notes' ? 'right' : 'left');
 }
@@ -4784,6 +4994,7 @@ function finderNoteMarkdown(note, heading = '#') {
 }
 
 function finderCourseNotes(course) {
+  if (!course) return [];
   return course.units.filter(unit => {
     const note = app.unitNotes[course.id + ':' + unit.id];
     return note && !note.noteBlank && note.blocks.length > 0;
@@ -4815,22 +5026,44 @@ function releaseFinderObjectUrl() {
   app.finderObjectUrl = '';
 }
 
-function describeFinderEntry(course, folder, entry) {
-  if (folder === 'sources') return { title: entry.nome, meta: entry.info };
+function getFinderEntryTags(course, folder, entry) {
+  if (folder === 'sources') return ['pdf', ...(entry.ok === false ? ['da-ripassare'] : [])];
   const note = app.unitNotes[course.id + ':' + entry.id];
-  return folder === 'notes'
-    ? { title: note.title, excerpt: noteExcerpt(note), meta: `Appunti · ${note.version}` }
-    : { title: entry.titolo, excerpt: getUnitTopicProfile(course, entry).para, meta: 'Spiegazione' };
+  const prof = folder === 'generated' ? getUnitTopicProfile(course, entry) : null;
+  const hasMath = folder === 'notes'
+    ? Boolean(note?.blocks?.some(b => b.kind === 'formula' || b.studyKind === 'formula' || String(b.text || '').includes('$')))
+    : Boolean(prof?.formula && prof.formula.includes('$'));
+  return [
+    ...(folder === 'notes' ? ['appunti'] : []),
+    ...(entry.stato === 'dimostrato' ? ['verificata'] : entry.stato === 'da_ripassare' ? ['da-ripassare'] : []),
+    ...(hasMath ? ['formule'] : [])
+  ];
 }
 
-function renderFinderDocument(course, folder, entry, index) {
-  const { title, excerpt, meta } = describeFinderEntry(course, folder, entry);
+function describeFinderEntry(course, folder, entry) {
+  const tags = getFinderEntryTags(course, folder, entry);
+  if (folder === 'sources') return { title: entry.nome, meta: entry.info, tags };
+  const note = app.unitNotes[course.id + ':' + entry.id];
+  return folder === 'notes'
+    ? { title: note.title, excerpt: noteExcerpt(note), meta: `Appunti · ${note.version}`, tags }
+    : { title: entry.titolo, excerpt: getUnitTopicProfile(course, entry).para, meta: 'Spiegazione', tags };
+}
+
+function isFinderSelected(courseId, folder, index) {
+  const sel = app.finder.selected;
+  return Boolean(sel && sel.courseId === courseId && sel.folder === folder && sel.index === index);
+}
+
+function renderFinderDocument(course, folder, entry, index, showCourse = false) {
+  const { title, excerpt, meta, tags } = describeFinderEntry(course, folder, entry);
   const verified = folder === 'generated' && entry.stato === 'dimostrato';
-  return `<article class="finder-doc-card ${folder}">
-    <button type="button" class="finder-document ${folder}" onclick="navigateFinder('${course.id}', '${folder}', ${index})">
-      <span class="finder-document-kind${verified ? ' verified' : ''}">${icon(folder === 'notes' ? 'i-pencil' : verified ? 'i-check' : 'i-study-spark')} ${verified ? 'Verificata' : escapeCourseText(meta)}</span>
+  const selected = isFinderSelected(course.id, folder, index);
+  return `<article class="finder-doc-card ${folder}${selected ? ' is-selected' : ''}">
+    <button type="button" class="finder-document ${folder}" aria-pressed="${selected}" onclick="selectFinderEntry('${course.id}', '${folder}', ${index})">
+      <span class="finder-document-kind${verified ? ' verified' : ''}">${icon(folder === 'notes' ? 'i-pencil' : verified ? 'i-check' : 'i-study-spark')} ${showCourse ? escapeCourseText(course.nome) + ' · ' : ''}${verified ? 'Verificata' : escapeCourseText(meta)}</span>
       <strong>${escapeCourseText(title)}</strong>
       ${excerpt ? `<span class="finder-document-excerpt">${escapeCourseText(excerpt)}</span>` : ''}
+      ${tags.length ? `<span class="vault-card-tags">${tags.slice(0, 3).map(t => `<i>#${escapeCourseText(t)}</i>`).join('')}</span>` : ''}
     </button>
     <div class="finder-document-footer"><small>Lezione ${escapeCourseText(entry.num)}</small>
       <button type="button" class="finder-doc-export" aria-label="Esporta ${escapeCourseText(title)} in Markdown" onclick="exportFinderMarkdown('${course.id}', '${entry.id}', '${folder}')">.md</button>
@@ -4838,65 +5071,379 @@ function renderFinderDocument(course, folder, entry, index) {
   </article>`;
 }
 
-function renderFinderSource(courseId, source, index) {
+function renderFinderSource(courseId, source, index, showCourse = false) {
   const extension = source.nome.match(/\.([a-z\d]{1,5})$/i)?.[1].toUpperCase() || 'FILE';
-  return `<button class="finder-file finder-attachment" type="button" onclick="navigateFinder('${courseId}', 'sources', ${index})">
+  const selected = isFinderSelected(courseId, 'sources', index);
+  const course = COURSES_DATA[courseId];
+  return `<button class="finder-file finder-attachment${selected ? ' is-selected' : ''}" type="button" aria-pressed="${selected}" onclick="selectFinderEntry('${courseId}', 'sources', ${index})">
     <span class="finder-attachment-icon ${extension === 'PDF' ? 'pdf' : ''}">${icon('i-file')}<span>${escapeCourseText(extension)}</span></span>
-    <span><strong>${escapeCourseText(source.nome)}</strong><small>${escapeCourseText(source.info)}</small></span>
-    <span class="finder-attachment-open" aria-hidden="true">Apri ${icon('i-course-arrow')}</span>
+    <span><strong>${escapeCourseText(source.nome)}</strong><small>${showCourse && course ? escapeCourseText(course.nome) + ' · ' : ''}${escapeCourseText(source.info)}</small></span>
+    <span class="finder-attachment-open" aria-hidden="true">Anteprima ${icon('i-course-arrow')}</span>
   </button>`;
+}
+
+function vaultCreateQuickNote() {
+  const targetCourseId = app.finder.courseId && app.finder.courseId !== 'all' && COURSES_DATA[app.finder.courseId]
+    ? app.finder.courseId
+    : (app.courseId || 'sistemi');
+  const course = COURSES_DATA[targetCourseId];
+  if (!course) return;
+  const idx = course.units.length + 1;
+  const uid = 'note-' + Date.now().toString(36);
+  const newUnit = {
+    id: uid,
+    num: `${idx}.1`,
+    short: 'Nota rapida',
+    titolo: `Nota rapida · ${course.nome}`,
+    stato: 'in_corso',
+    src: course.sources[0]?.nome || `${slugify(course.nome)}.pdf`
+  };
+  course.units.push(newUnit);
+  app.unitNotes[course.id + ':' + uid] = {
+    title: 'Nuova nota di studio',
+    version: 'v1',
+    inspectingVersion: 'v1',
+    rightPhase: 'write',
+    noteBlank: false,
+    clarified: {},
+    blocks: [{ id: nextNoteBlockId(), sec: 'Appunti', text: 'Scrivi qui i concetti chiave, formule LaTeX ($...$) o collegamenti rapidi.' }]
+  };
+  const notesList = finderCourseNotes(course);
+  const noteIdx = notesList.findIndex(u => u.id === uid);
+  app.finder = {
+    courseId: course.id,
+    folder: 'notes',
+    index: null,
+    tag: '',
+    selected: { courseId: course.id, folder: 'notes', index: Math.max(0, noteIdx) }
+  };
+  app.finderEditingNote = true;
+  renderSidebar();
+  renderHomeView();
+  renderFileFinder();
+  requestAnimationFrame(() => document.getElementById('finderNoteTitleInput')?.focus());
+  showToast('Nuova nota creata nel Vault');
+}
+
+function vaultHandleFileUpload(fileList) {
+  const files = [...(fileList || [])];
+  if (!files.length) return;
+  const targetCourseId = app.finder.courseId && app.finder.courseId !== 'all' && COURSES_DATA[app.finder.courseId]
+    ? app.finder.courseId
+    : (app.courseId || 'sistemi');
+  const course = COURSES_DATA[targetCourseId];
+  if (!course) return;
+  let lastIdx = course.sources.length;
+  for (const f of files) {
+    const kb = Math.max(1, Math.round(f.size / 1024));
+    course.sources.push({ nome: f.name, info: `${kb} KB · Caricato ora`, ok: true, file: f });
+    lastIdx = course.sources.length - 1;
+  }
+  app.finder = {
+    courseId: course.id,
+    folder: 'sources',
+    index: null,
+    tag: '',
+    selected: { courseId: course.id, folder: 'sources', index: lastIdx }
+  };
+  app.finderEditingNote = false;
+  app.finderSlidePage = 1;
+  renderHomeView();
+  renderCourseDetailView();
+  renderFileFinder();
+  showToast(plural(files.length, 'file caricato', 'file caricati') + ` in ${course.nome}`);
+}
+
+function toggleFinderNoteEdit(editing) {
+  app.finderEditingNote = Boolean(editing);
+  renderFileFinder();
+  if (app.finderEditingNote) requestAnimationFrame(() => document.getElementById('finderNoteTitleInput')?.focus());
+}
+
+function stepFinderSlide(delta) {
+  app.finderSlidePage = Math.max(1, (app.finderSlidePage || 1) + delta);
+  renderFileFinder();
+}
+
+function saveFinderInlineNote(event, courseId, unitId) {
+  event.preventDefault();
+  const note = app.unitNotes[courseId + ':' + unitId];
+  if (!note) return;
+  const titleEl = document.getElementById('finderNoteTitleInput');
+  const bodyEl = document.getElementById('finderNoteBodyInput');
+  note.title = (titleEl?.value || '').trim() || note.title;
+  const preservedAssets = (note.blocks || []).filter(b => b.studyKind);
+  const rawLines = (bodyEl?.value || '').split(/\r?\n/);
+  let currentSec = note.blocks?.[0]?.sec || 'Appunti';
+  const parsedBlocks = [];
+  for (const raw of rawLines) {
+    const trimmed = raw.trim();
+    if (!trimmed) continue;
+    if (trimmed.startsWith('## ')) {
+      currentSec = trimmed.slice(3).trim() || currentSec;
+      continue;
+    }
+    const isBullet = /^[-•*]\s+/.test(trimmed);
+    const isQuote = /^>\s+/.test(trimmed);
+    const isFormula = /^\$\$[\s\S]*\$\$$/.test(trimmed);
+    parsedBlocks.push({
+      id: nextNoteBlockId(),
+      sec: currentSec,
+      kind: isFormula ? 'formula' : isQuote ? 'quote' : isBullet ? 'bullet' : 'paragraph',
+      text: isBullet ? trimmed.replace(/^[-•*]\s+/, '') : isQuote ? trimmed.slice(2).trim() : trimmed
+    });
+  }
+  note.noteBlank = parsedBlocks.length === 0 && preservedAssets.length === 0;
+  note.blocks = [...parsedBlocks, ...preservedAssets];
+  app.finderEditingNote = false;
+  syncActiveNoteAlias();
+  if (app.courseId === courseId && app.unitId === unitId) renderRightPane();
+  renderHomeView();
+  renderFileFinder();
+  showSaveFeedback();
+  showToast('Appunto aggiornato');
+}
+
+function finderEditablePlainText(note) {
+  if (!note?.blocks?.length) return '';
+  let lastSec = null;
+  const out = [];
+  for (const block of note.blocks) {
+    if (block.studyKind) continue;
+    if (block.sec && block.sec !== lastSec) {
+      out.push(`## ${block.sec}`);
+      lastSec = block.sec;
+    }
+    if (block.kind === 'bullet') out.push(`- ${block.text}`);
+    else if (block.kind === 'quote') out.push(`> ${block.text}`);
+    else out.push(block.text);
+  }
+  return out.join('\n');
+}
+
+function renderFinderInspectorContent(inspector, sel) {
+  if (!sel || !COURSES_DATA[sel.courseId]) {
+    inspector.innerHTML = `
+      <div class="vault-inspector-body">
+        <div class="vault-inspector-empty">
+          <span class="vault-inspector-art" aria-hidden="true">${icon('i-study-folder')}</span>
+          <h3>Ispettore rapido</h3>
+          <p>Seleziona un appunto, una spiegazione TutorAI o un allegato per leggerlo, modificarlo al volo o aprirlo in Studio.</p>
+          <div class="vault-inspector-empty-actions">
+            <button type="button" class="btn blue-pri" onclick="vaultCreateQuickNote()">+ Nuova nota</button>
+            <button type="button" class="btn" onclick="document.getElementById('vaultUploadInput').click()">+ Carica file</button>
+          </div>
+        </div>
+      </div>`;
+    return;
+  }
+
+  const course = COURSES_DATA[sel.courseId];
+  const noteUnits = finderCourseNotes(course);
+  const folderFiles = sel.folder === 'notes' ? noteUnits
+    : sel.folder === 'generated' ? course.units
+    : course.sources;
+  const file = folderFiles[sel.index];
+  if (!file) {
+    app.finder.selected = null;
+    renderFinderInspectorContent(inspector, null);
+    return;
+  }
+
+  const folderInfo = FINDER_FOLDERS.find(item => item.id === sel.folder);
+  const note = sel.folder === 'notes' ? app.unitNotes[course.id + ':' + file.id] : null;
+  const profile = sel.folder === 'generated' ? getUnitTopicProfile(course, file) : null;
+  const currentUnitId = course.id === app.courseId ? app.unitId : app.lastStudied?.unitId;
+  const linkedUnit = sel.folder === 'sources'
+    ? course.units.find(u => u.id === currentUnitId && u.src === file.nome) || course.units.find(u => u.src === file.nome) || course.units[0]
+    : file;
+  const title = sel.folder === 'sources' ? file.nome : note?.title || file.titolo;
+  const tags = getFinderEntryTags(course, sel.folder, file);
+
+  let bodyHtml = '';
+  if (sel.folder === 'notes' && note) {
+    if (app.finderEditingNote) {
+      bodyHtml = `
+        <form id="finderInlineEditForm" class="vault-inline-form" onsubmit="saveFinderInlineNote(event, '${course.id}', '${file.id}')">
+          <label class="vault-inline-field">Titolo appunto
+            <input id="finderNoteTitleInput" class="input-field" required maxlength="100" value="${escapeCourseText(note.title)}">
+          </label>
+          <label class="vault-inline-field">Contenuto (supporta ## Sezione, -, &gt;, formule LaTeX)
+            <textarea id="finderNoteBodyInput" class="input-field" rows="9">${escapeCourseText(finderEditablePlainText(note))}</textarea>
+          </label>
+          <div class="vault-inline-actions">
+            <button type="button" class="btn ghost" onclick="toggleFinderNoteEdit(false)">Annulla</button>
+            <button type="submit" class="btn blue-pri">${icon('i-check')} Salva nota</button>
+          </div>
+        </form>`;
+    } else {
+      const blocksHtml = note.blocks.map(block => {
+        if (block.studyKind === 'diagram') {
+          return `<div class="vault-inspector-diagram">${renderStudioDiagram(block.diagram, block.unitNumber || file.num, 'vault-note-diag-' + block.id)}</div>`;
+        }
+        if (block.kind === 'bullet') return `<ul class="finder-preview-list"><li>${escapeCourseText(block.text)}</li></ul>`;
+        if (block.kind === 'quote') return `<blockquote class="vault-quote">${escapeCourseText(block.text)}</blockquote>`;
+        if (block.kind === 'code') return `<pre class="vault-code-block"><code>${escapeCourseText(block.text)}</code></pre>`;
+        return `<p>${escapeCourseText(block.text)}</p>`;
+      }).join('');
+      bodyHtml = `
+        ${blocksHtml || '<p class="muted">Appunto vuoto.</p>'}
+        <div class="finder-preview-actions">
+          <button type="button" class="btn" onclick="toggleFinderNoteEdit(true)">${icon('i-pencil')} Modifica rapida</button>
+          <button type="button" class="btn blue-pri" onclick="openFinderInStudio('${file.id}', 'notes', '${course.id}')">Apri in Studio →</button>
+          <button type="button" class="btn ghost" onclick="exportFinderMarkdown('${course.id}', '${file.id}', 'notes')">Esporta .md</button>
+        </div>`;
+    }
+  } else if (sel.folder === 'generated' && profile) {
+    const diagKind = getUnitStudyDiagram(file) || 'flow';
+    bodyHtml = `
+      ${profile.formula ? `<div class="vault-formula-box">${escapeCourseText(profile.formula)}</div>` : ''}
+      <div class="vault-inspector-diagram">${renderStudioDiagram(diagKind, file.num, 'vault-gen-diag-' + file.id)}</div>
+      <p>${escapeCourseText(profile.para)}</p>
+      <ol class="vault-steps-list">${profile.steps.map(s => `<li>${escapeCourseText(s.replace(/^\d+\.\s*/, ''))}</li>`).join('')}</ol>
+      <div class="finder-preview-actions">
+        <button type="button" class="btn blue-pri" onclick="openFinderInStudio('${file.id}', 'generated', '${course.id}')">Apri spiegazione in Studio →</button>
+        <button type="button" class="btn ghost" onclick="exportFinderMarkdown('${course.id}', '${file.id}', 'generated')">Esporta .md</button>
+      </div>`;
+  } else if (sel.folder === 'sources') {
+    const slideProf = linkedUnit ? getUnitTopicProfile(course, linkedUnit) : null;
+    const totalSlides = linkedUnit?.slides || 24;
+    const pg = Math.max(1, Math.min(totalSlides, app.finderSlidePage || 1));
+    const slideCopy = slideProf
+      ? `${slideProf.slides[((pg - 1) % 2) + 1]}<br><br>${slideProf.para}`
+      : `<p>${escapeCourseText(file.info)}</p>`;
+    bodyHtml = `
+      ${file.file ? '<div id="finderAttachment" class="vault-real-attachment"></div>' : `
+        <div class="vault-slide-deck">
+          <div class="vault-slide-bar">
+            <span>Slide ${pg} / ${totalSlides}</span>
+            <div class="vault-slide-nav">
+              <button type="button" class="btn ghost" ${pg <= 1 ? 'disabled' : ''} aria-label="Slide precedente" onclick="stepFinderSlide(-1)">‹</button>
+              <button type="button" class="btn ghost" ${pg >= totalSlides ? 'disabled' : ''} aria-label="Slide successiva" onclick="stepFinderSlide(1)">›</button>
+            </div>
+          </div>
+          <div class="vault-slide-card">
+            <small>${escapeCourseText(course.nome)}${linkedUnit ? ' · ' + escapeCourseText(linkedUnit.titolo) : ''}</small>
+            <div>${slideCopy}</div>
+          </div>
+        </div>`}
+      <div class="finder-preview-actions">
+        ${linkedUnit ? `<button type="button" class="btn blue-pri" onclick="openFinderInStudio('${linkedUnit.id}', 'sources', '${course.id}')">Apri slide in Studio →</button>` : ''}
+      </div>`;
+  }
+
+  inspector.innerHTML = `
+    <div class="vault-inspector-head">
+      <button type="button" class="btn ghost vault-inspector-back" onclick="clearFinderSelection()">← Elenco</button>
+      <div class="vault-inspector-meta">${escapeCourseText(course.nome)} · ${escapeCourseText(folderInfo?.title || '')}</div>
+      <button type="button" class="vault-inspector-btn" aria-label="Chiudi anteprima" onclick="clearFinderSelection()">×</button>
+    </div>
+    <div class="vault-inspector-body">
+      <h3 class="vault-inspector-title">${escapeCourseText(title)}</h3>
+      ${tags.length ? `<div class="vault-inspector-tags">${tags.map(t => `<button type="button" class="vault-tag-chip" onclick="setFinderTag('${t}')">#${escapeCourseText(t)}</button>`).join('')}</div>` : ''}
+      ${bodyHtml}
+    </div>`;
+  renderMath(inspector);
+
+  if (sel.folder === 'sources' && file.file) {
+    const attachment = document.getElementById('finderAttachment');
+    if (attachment && /\.pdf$/i.test(file.nome)) {
+      const url = URL.createObjectURL(new Blob([file.file], { type: 'application/pdf' }));
+      const preview = document.createElement('iframe');
+      preview.title = 'Anteprima ' + file.nome;
+      preview.src = url;
+      attachment.append(preview);
+      app.finderObjectUrl = url;
+    } else if (attachment) {
+      const preview = document.createElement('pre');
+      attachment.append(preview);
+      file.file.text().then(text => { preview.textContent = text; }).catch(() => {
+        preview.textContent = 'Anteprima del file non disponibile.';
+      });
+    }
+  }
 }
 
 function renderFileFinder() {
   releaseFinderObjectUrl();
-  const { courseId, folder, index } = app.finder;
-  const course = COURSES_DATA[courseId];
-  const noteUnits = finderCourseNotes(course);
-  const filesByFolder = { notes: noteUnits, generated: course.units, sources: course.sources };
-  const folderInfo = FINDER_FOLDERS.find(item => item.id === folder);
-  const query = (app.finderQuery || '').trim().toLowerCase();
-  const files = filesByFolder[folder] || [];
-  const file = files[index];
+  const { courseId = 'sistemi', folder = '', tag = '', selected = null } = app.finder || {};
+  const backBtn = document.getElementById('vaultBackBtn');
+  if (backBtn) backBtn.classList.toggle('hidden', !app.finderReturnView || app.finderReturnView === 'archivio');
 
   const courses = Object.values(COURSES_DATA);
+  const isAll = courseId === 'all';
+  const course = isAll ? courses[0] : (COURSES_DATA[courseId] || courses[0]);
+  const activeCourseId = isAll ? 'all' : course.id;
+  const scopedCourses = isAll ? courses : [course];
+
+  const folderCounts = cid => {
+    const c = COURSES_DATA[cid];
+    const nLen = finderCourseNotes(c).length;
+    return { notes: nLen, generated: c.units.length, sources: c.sources.length, total: nLen + c.units.length + c.sources.length };
+  };
+  const allTotal = courses.reduce((sum, c) => sum + folderCounts(c.id).total, 0);
+
   document.getElementById('finderCourses').innerHTML = `
-    <select class="finder-course-select" aria-label="Corso nell’archivio" onchange="navigateFinder(this.value)">
-      ${courses.map(c => `<option value="${c.id}"${c.id === courseId ? ' selected' : ''}>${escapeCourseText(c.nome)}</option>`).join('')}
-    </select>
-    <span class="finder-tree-label">Corsi</span>
+    <div class="finder-course-select-wrap">
+      <select class="finder-course-select" aria-label="Corso nell’archivio" onchange="navigateFinder(this.value)">
+        <option value="all"${isAll ? ' selected' : ''}>Tutti i corsi (${allTotal})</option>
+        ${courses.map(c => `<option value="${c.id}"${c.id === activeCourseId ? ' selected' : ''}>${escapeCourseText(c.nome)}</option>`).join('')}
+      </select>
+      <svg class="finder-select-chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 6.5 8 10l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <span class="finder-tree-label">Esplora</span>
     <ul class="finder-tree">
+      <li>
+        <button type="button" class="${isAll ? 'finder-course-active' : ''}"${isAll && !folder && !tag ? ' aria-current="page"' : ''} onclick="navigateFinder('all')">
+          <span class="finder-tree-arrow" aria-hidden="true">${isAll ? '⌄' : '›'}</span>
+          ${icon('i-book')} <span>Tutti i corsi</span>
+          <small>${allTotal}</small>
+        </button>
+      </li>
       ${courses.map(c => {
-        const active = c.id === courseId;
+        const active = c.id === activeCourseId;
+        const cnt = folderCounts(c.id);
         return `<li style="--tree-accent:${c.accent}">
-          <button type="button" class="${active ? 'finder-course-active' : ''}"${active && !folder ? ' aria-current="page"' : ''} onclick="navigateFinder('${c.id}')">
+          <button type="button" class="${active ? 'finder-course-active' : ''}"${active && !folder && !tag ? ' aria-current="page"' : ''} onclick="navigateFinder('${c.id}')">
             <span class="finder-tree-arrow" aria-hidden="true">${active ? '⌄' : '›'}</span>
             ${icon(active ? 'i-study-folder' : 'i-folder')} <span>${escapeCourseText(c.nome)}</span>
-            ${active ? `<small>${noteUnits.length + course.units.length + course.sources.length}</small>` : ''}
+            <small>${cnt.total}</small>
           </button>
           ${active ? `<ul class="finder-branch">${FINDER_FOLDERS.map(item => `
             <li><button type="button" class="${item.id}"${item.id === folder ? ' aria-current="page"' : ''} onclick="navigateFinder('${c.id}', '${item.id}')">
-              ${icon(item.icon)} <span>${item.title}</span><small aria-label="${filesByFolder[item.id].length} file">${filesByFolder[item.id].length}</small>
+              ${icon(item.icon)} <span>${item.title}</span><small aria-label="${cnt[item.id]} file">${cnt[item.id]}</small>
             </button></li>`).join('')}</ul>` : ''}
         </li>`;
       }).join('')}
     </ul>
-    ${noteUnits.length ? `<button type="button" class="finder-course-export" onclick="exportFinderCourseNotes('${courseId}')">
+    <div class="vault-tags-block">
+      <span class="finder-tree-label">Etichette</span>
+      <div class="vault-tag-cloud">
+        ${VAULT_TAGS.map(([id, label]) => `
+          <button type="button" class="vault-tag-chip${tag === id ? ' on' : ''}" aria-pressed="${tag === id}" onclick="setFinderTag('${id}')">#${id}</button>`).join('')}
+      </div>
+    </div>
+    ${!isAll && folderCounts(course.id).notes ? `<button type="button" class="finder-course-export" onclick="exportFinderCourseNotes('${course.id}')">
       <span class="finder-export-figure">${icon('i-file')}</span>
-      <span><strong>Esporta gli appunti</strong><small>${plural(noteUnits.length, 'nota', 'note')} in un file Markdown</small></span>
+      <span><strong>Esporta gli appunti</strong><small>${plural(folderCounts(course.id).notes, 'nota', 'note')} in Markdown</small></span>
       <span class="finder-export-arrow" aria-hidden="true">↓</span>
     </button>` : ''}`;
 
+  const folderInfo = FINDER_FOLDERS.find(item => item.id === folder);
+  const query = (app.finderQuery || '').trim().toLowerCase();
   const content = document.getElementById('finderContent');
   content.dataset.layout = app.finderLayout;
   content.innerHTML = `
     <div class="finder-content-bar">
       <nav class="finder-breadcrumb" aria-label="Posizione in archivio">
-        <span class="finder-crumb-home">Archivio</span><span aria-hidden="true">›</span>
-        <button class="finder-crumb" type="button" data-finder-focus onclick="navigateFinder('${courseId}')">${escapeCourseText(course.nome)}</button>
+        <button class="finder-crumb" type="button" data-finder-focus onclick="navigateFinder('all')">Archivio</button>
+        ${!isAll ? `<span aria-hidden="true">›</span>
+          <button class="finder-crumb" type="button" onclick="navigateFinder('${course.id}')">${escapeCourseText(course.nome)}</button>` : `<span aria-hidden="true">›</span><span class="finder-crumb-home">Tutti i corsi</span>`}
         ${folderInfo ? `<span aria-hidden="true">›</span>
-          <button class="finder-crumb" type="button" onclick="navigateFinder('${courseId}', '${folder}')">${folderInfo.title}</button>` : ''}
+          <button class="finder-crumb" type="button" onclick="navigateFinder('${course.id}', '${folder}')">${folderInfo.title}</button>` : ''}
+        ${tag ? `<button type="button" class="vault-active-tag" onclick="setFinderTag('${tag}')" title="Rimuovi filtro tag">#${escapeCourseText(tag)} ×</button>` : ''}
       </nav>
-      ${!file && !query && folder !== 'sources' ? `<div class="finder-layout" role="group" aria-label="Vista archivio">
+      ${folder !== 'sources' ? `<div class="finder-layout" role="group" aria-label="Vista archivio">
         <button type="button" aria-label="Griglia" title="Griglia" aria-pressed="${app.finderLayout === 'grid'}" onclick="setFinderLayout('grid')">
           <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg>
         </button>
@@ -4904,101 +5451,75 @@ function renderFileFinder() {
       </div>` : ''}
     </div>`;
 
-  if (query && !file) {
-    const matches = FINDER_FOLDERS.flatMap(fInfo => filesByFolder[fInfo.id].map((entry, i) => ({
-      fInfo, i, ...describeFinderEntry(course, fInfo.id, entry)
-    }))).filter(item => `${item.title} ${item.meta} ${item.excerpt || ''} ${item.fInfo.title}`.toLowerCase().includes(query));
-    content.insertAdjacentHTML('beforeend', matches.map(({ fInfo, i, title, meta }) => `
-      <button class="finder-file" type="button" onclick="navigateFinder('${courseId}', '${fInfo.id}', ${i})">
-        ${icon(fInfo.icon)} <span><strong>${escapeCourseText(title)}</strong><small>${escapeCourseText(fInfo.title + ' · ' + meta)}</small></span>
-        <span aria-hidden="true">›</span>
-      </button>`).join('') || '<p class="finder-empty">Nessun risultato per questa ricerca.</p>');
-    return;
-  }
+  const gatherFolder = fId => scopedCourses.flatMap(c => {
+    const arr = fId === 'notes' ? finderCourseNotes(c) : fId === 'generated' ? c.units : c.sources;
+    return arr.map((entry, idx) => ({ course: c, folder: fId, entry, index: idx, ...describeFinderEntry(c, fId, entry) }));
+  });
 
-  if (!folderInfo) {
-    const notePreviews = app.finderType === 'generated' ? [] : app.finderType === 'notes' ? noteUnits : noteUnits.slice(0, 2);
-    const previews = notePreviews.map((entry, i) => renderFinderDocument(course, 'notes', entry, i));
-    const generated = course.units.map((entry, i) => ({ entry, i }));
-    const generatedPreviews = (app.finderType === 'notes' ? []
-      : app.finderType === 'generated' ? generated
-        : generated.filter(({ entry }) => !notePreviews.includes(entry)).slice(0, 3 - previews.length))
-      .map(({ entry, i }) => renderFinderDocument(course, 'generated', entry, i));
-    const sourceTypes = [...new Set(course.sources.map(source => source.nome.match(/\.([a-z\d]{1,5})$/i)?.[1].toUpperCase()).filter(Boolean))];
-    content.insertAdjacentHTML('beforeend', `<h3 class="finder-section-title">Cartelle</h3>
-      <div class="finder-folders">${FINDER_FOLDERS.map(item => `
-      <button type="button" class="finder-folder ${item.id}" onclick="navigateFinder('${courseId}', '${item.id}')">
-        <span class="finder-folder-art" aria-hidden="true"><span></span></span>
-        <span class="finder-folder-copy"><strong>${item.title}</strong><small>${filesByFolder[item.id].length} file</small>
-          ${item.id === 'sources' && !sourceTypes.length ? '' : `<span class="finder-folder-kind">${item.id === 'notes' ? 'Personali' : item.id === 'generated' ? 'Da TutorAI' : escapeCourseText(sourceTypes.join(' · '))}</span>`}
-        </span>
-      </button>`).join('')}</div>
+  if (query || tag) {
+    const cleanQ = query.startsWith('#') ? query.slice(1) : query;
+    const pool = (folderInfo ? [folderInfo] : FINDER_FOLDERS).flatMap(f => gatherFolder(f.id));
+    const matches = pool.filter(item => {
+      if (tag && !item.tags.includes(tag)) return false;
+      if (!cleanQ) return true;
+      const haystack = `${item.title} ${item.meta} ${item.excerpt || ''} ${item.course.nome} ${item.tags.map(t => '#' + t).join(' ')}`.toLowerCase();
+      return haystack.includes(cleanQ) || haystack.includes(query);
+    });
+    const docs = matches.filter(m => m.folder !== 'sources');
+    const srcs = matches.filter(m => m.folder === 'sources');
+    content.insertAdjacentHTML('beforeend',
+      (docs.length ? `<div class="finder-documents">${docs.map(m => renderFinderDocument(m.course, m.folder, m.entry, m.index, isAll)).join('')}</div>` : '')
+      + (srcs.length ? `<div class="finder-attachments">${srcs.map(m => renderFinderSource(m.course.id, m.entry, m.index, isAll)).join('')}</div>` : '')
+      + (!docs.length && !srcs.length ? '<p class="finder-empty">Nessun risultato per i filtri selezionati.</p>' : '')
+    );
+  } else if (!folderInfo) {
+    const allNotes = gatherFolder('notes');
+    const allGen = gatherFolder('generated');
+    const allSrc = gatherFolder('sources');
+    const docsHtml = [
+      ...(app.finderType === 'generated' ? [] : allNotes),
+      ...(app.finderType === 'notes' ? [] : allGen)
+    ].map(m => renderFinderDocument(m.course, m.folder, m.entry, m.index, isAll)).join('');
+
+    content.insertAdjacentHTML('beforeend', `${!isAll ? `<h3 class="finder-section-title">Cartelle</h3>
+      <div class="finder-folders">${FINDER_FOLDERS.map(item => {
+        const list = item.id === 'notes' ? allNotes : item.id === 'generated' ? allGen : allSrc;
+        return `<button type="button" class="finder-folder ${item.id}" onclick="navigateFinder('${course.id}', '${item.id}')">
+          <span class="finder-folder-art" aria-hidden="true"><span></span></span>
+          <span class="finder-folder-copy"><strong>${item.title}</strong><small>${list.length} file</small>
+            <span class="finder-folder-kind">${item.id === 'notes' ? 'Personali' : item.id === 'generated' ? 'Da TutorAI' : 'PDF e testi'}</span>
+          </span>
+        </button>`;
+      }).join('')}</div>` : ''}
       <div class="finder-section-head">
-        <h3 class="finder-section-title">Appunti e spiegazioni</h3>
+        <h3 class="finder-section-title">${isAll ? 'Tutti i documenti nel Vault' : 'Appunti e spiegazioni'}</h3>
         <div class="finder-type-filter" role="group" aria-label="Filtra i documenti">
           ${[['all', 'Tutti'], ['notes', 'Appunti'], ['generated', 'Spiegazioni']].map(([id, label]) =>
             `<button type="button" aria-pressed="${id === app.finderType}" onclick="setFinderType('${id}')">${label}</button>`
           ).join('')}
         </div>
       </div>
-      ${previews.length || generatedPreviews.length ? `<div class="finder-documents">${previews.concat(generatedPreviews).join('')}</div>` : '<p class="finder-empty">Questa raccolta è ancora vuota.</p>'}
-      ${course.sources.length ? `<section class="finder-attachments">
-        <div class="finder-section-head"><h3>Allegati</h3><button class="finder-see-all" type="button" onclick="navigateFinder('${courseId}', 'sources')">Vedi tutti ${icon('i-course-arrow')}</button></div>
-        ${course.sources.slice(0, 2).map((source, i) => renderFinderSource(courseId, source, i)).join('')}
+      ${docsHtml ? `<div class="finder-documents">${docsHtml}</div>` : '<p class="finder-empty">Questa raccolta è ancora vuota.</p>'}
+      ${allSrc.length ? `<section class="finder-attachments">
+        <div class="finder-section-head"><h3>Slide e allegati</h3>${!isAll ? `<button class="finder-see-all" type="button" onclick="navigateFinder('${course.id}', 'sources')">Vedi tutti ${icon('i-course-arrow')}</button>` : ''}</div>
+        ${(isAll ? allSrc : allSrc.slice(0, 3)).map(m => renderFinderSource(m.course.id, m.entry, m.index, isAll)).join('')}
       </section>` : ''}`);
-    renderMath(content);
-    return;
+  } else {
+    const items = gatherFolder(folder);
+    const html = folder === 'sources'
+      ? items.map(m => renderFinderSource(m.course.id, m.entry, m.index, isAll)).join('')
+      : `<div class="finder-documents">${items.map(m => renderFinderDocument(m.course, folder, m.entry, m.index, isAll)).join('')}</div>`;
+    content.insertAdjacentHTML('beforeend', items.length ? html : '<p class="finder-empty">Questa cartella è ancora vuota.</p>');
   }
 
-  if (!file) {
-    const items = folder === 'sources'
-      ? files.map((entry, i) => renderFinderSource(courseId, entry, i)).join('')
-      : `<div class="finder-documents">${files.map((entry, i) => renderFinderDocument(course, folder, entry, i)).join('')}</div>`;
-    content.insertAdjacentHTML('beforeend', files.length ? items : '<p class="finder-empty">Questa cartella è ancora vuota.</p>');
-    renderMath(content);
-    return;
-  }
-
-  const note = folder === 'notes' ? app.unitNotes[courseId + ':' + file.id] : null;
-  const profile = folder === 'generated' ? getUnitTopicProfile(course, file) : null;
-  const currentUnitId = courseId === app.courseId ? app.unitId : app.lastStudied?.unitId;
-  const linkedUnit = folder === 'sources'
-    ? course.units.find(u => u.id === currentUnitId && u.src === file.nome) || course.units.find(u => u.src === file.nome)
-    : file;
-  const title = folder === 'sources' ? file.nome : note?.title || file.titolo;
-  const excerpt = folder === 'sources' ? [file.info] : note ? note.blocks.map(block => block.text) : [profile.para, ...profile.steps];
-  const isList = folder !== 'sources' && excerpt.some(t => t.startsWith('• ') || /^\d+\./.test(t));
-  content.insertAdjacentHTML('beforeend', `
-    <section class="finder-preview ${folder}">
-      <p class="finder-preview-category">${folderInfo.title}</p>
-      <h3>${escapeCourseText(title)}</h3>
-      ${isList
-        ? `<ul class="finder-preview-list">${excerpt.map(text => `<li>${escapeCourseText(text.replace(/^•\s*/, ''))}</li>`).join('')}</ul>`
-        : excerpt.map(text => `<p>${escapeCourseText(text)}</p>`).join('')}
-      ${folder === 'sources' && file.file ? '<div id="finderAttachment"></div>' : ''}
-      <div class="finder-preview-actions">
-        ${linkedUnit ? `<button type="button" class="btn pri" onclick="openFinderInStudio('${linkedUnit.id}', '${folder}')">${folder === 'sources' ? 'Apri slide in Studio' : folder === 'notes' ? 'Apri appunti in Studio' : 'Apri spiegazione in Studio'} →</button>` : ''}
-        ${folder !== 'sources' && linkedUnit ? `<button type="button" class="btn" onclick="exportFinderMarkdown('${courseId}', '${linkedUnit.id}', '${folder}')">Esporta .md Obsidian</button>` : ''}
-      </div>
-    </section>`);
   renderMath(content);
 
-  if (folder === 'sources' && file.file) {
-    const attachment = document.getElementById('finderAttachment');
-    if (/\.pdf$/i.test(file.nome)) {
-      const url = URL.createObjectURL(new Blob([file.file], { type: 'application/pdf' }));
-      const preview = document.createElement('iframe');
-      preview.title = 'Anteprima ' + file.nome;
-      preview.src = url;
-      attachment.append(preview);
-      app.finderObjectUrl = url;
-    } else {
-      const preview = document.createElement('pre');
-      attachment.append(preview);
-      file.file.text().then(text => { preview.textContent = text; }).catch(() => {
-        preview.textContent = 'Anteprima del file non disponibile.';
-      });
-    }
+  const grid = document.getElementById('finderGrid');
+  const inspector = document.getElementById('finderInspector');
+  if (inspector) {
+    inspector.classList.remove('hidden');
+    if (grid) grid.classList.toggle('has-selection', Boolean(selected));
+    renderFinderInspectorContent(inspector, selected);
   }
 }
 
@@ -5078,11 +5599,29 @@ function renderOnboardingPickers() {
   const col = app.onboardingColor || '#2f65d8';
   const kind = app.onboardingIcon || 'nodes';
   const iconName = STEM_ICONS.find(item => item.id === kind).label.split(' / ')[0];
+  const colorNames = ['Cobalto', 'Smeraldo', 'Ambra', 'Viola', 'Corallo', 'Petrolio'];
+  const colorName = colorNames[COURSE_COLORS.indexOf(col)] || 'Personalizzato';
+
+  const idIcon = document.getElementById('wizardIdentityIcon');
+  const idName = document.getElementById('wizardIdentityName');
+  const idMeta = document.getElementById('wizardIdentityMeta');
+  const idAuto = document.getElementById('wizardIdentityAuto');
+  const idCard = document.getElementById('wizardLiveIdentity');
+  if (idCard) idCard.style.setProperty('--wizard-accent', col);
+  if (idIcon) {
+    idIcon.style.background = softTint(col);
+    idIcon.innerHTML = renderSubjectSvg(kind, col);
+  }
+  if (idName) idName.textContent = name || 'Il tuo nuovo corso';
+  if (idMeta) {
+    const pathLabel = app.onboardingPath === 'esame' ? `Prepara esame · ${app.onboardingHours} h/sett.` : 'Lezione per lezione';
+    idMeta.textContent = `${pathLabel} · ${colorName}`;
+  }
+  if (idAuto) idAuto.classList.toggle('hidden', Boolean(app.onboardingCustomLook || !name));
+
   const appearance = `${kind}:${col}`;
   if (iconBox.dataset.appearance === appearance) return;
   iconBox.dataset.appearance = appearance;
-  const colorNames = ['Cobalto', 'Smeraldo', 'Ambra', 'Viola', 'Corallo', 'Petrolio'];
-  const colorName = colorNames[COURSE_COLORS.indexOf(col)];
   document.getElementById('wizStep1').style.setProperty('--wizard-accent', col);
   document.getElementById('wizardIconCaption').textContent = `${iconName} · selezionata`;
   document.getElementById('wizardColorCaption').textContent = colorName;
@@ -5092,6 +5631,21 @@ function renderOnboardingPickers() {
     </button>`).join('');
   colorBox.innerHTML = COURSE_COLORS.map((hex, index) => `
     <button type="button" class="color-swatch ${hex === col ? 'on' : ''}" style="--swatch-color:${hex}" aria-pressed="${hex === col}" aria-label="${colorNames[index]}" title="${colorNames[index]}" onclick="setOnboardingColor('${hex}')">${hex === col ? icon('i-check') : ''}</button>`).join('');
+}
+
+function setOnboardingHours(hours) {
+  const value = Math.max(4, Math.min(24, Number(hours) || 10));
+  app.onboardingHours = value;
+  renderOnboardingDetails();
+  renderOnboardingPickers();
+}
+
+function wizardCadenceText(examDate, hours) {
+  const sessions = Math.max(2, Math.round((hours * 60) / 50));
+  const ms = Date.parse(examDate) - Date.now();
+  const weeks = ms > 0 ? Math.max(1, Math.round(ms / (7 * 86400000))) : null;
+  const base = `${sessions} sessioni da 50 min/sett.`;
+  return weeks ? `${base} · ~${hours * weeks} h totali in ${weeks} settimane` : `${base} · ritmo settimanale continuo`;
 }
 
 function onCourseNameChange() {
@@ -5147,11 +5701,12 @@ function renderOnboardingDetails() {
     const hours = app.onboardingHours;
     const minHours = 4;
     const maxHours = 24;
+    const presets = [[6, 'Leggero'], [12, 'Costante'], [18, 'Intensivo']];
     box.innerHTML = `
       <div class="wizard-exam-fields">
         <div>
           <label for="obDateInp" class="wizard-label">Data esame</label>
-          <input id="obDateInp" type="date" class="input-field" value="${app.onboardingExamDate}" onchange="app.onboardingExamDate=this.value">
+          <input id="obDateInp" type="date" class="input-field" value="${app.onboardingExamDate}" onchange="app.onboardingExamDate=this.value;document.getElementById('obCadenceNote').textContent=wizardCadenceText(this.value,app.onboardingHours)">
         </div>
         <div class="wizard-hours-field">
           <div class="wizard-hours-heading">
@@ -5160,16 +5715,28 @@ function renderOnboardingDetails() {
           </div>
           <input id="obHrsInp" type="range" min="${minHours}" max="${maxHours}" value="${hours}" aria-valuetext="${hours} ore alla settimana" style="--hour-fill:${100 * (hours - minHours) / (maxHours - minHours)}%">
           <div class="wizard-hours-limits" aria-hidden="true"><span>${minHours} h</span><span>${maxHours} h</span></div>
+          <div class="wizard-hours-presets" role="group" aria-label="Ritmo settimanale rapido">
+            ${presets.map(([val, lbl]) => `<button type="button" class="chip${hours === val ? ' on' : ''}" aria-pressed="${hours === val}" onclick="setOnboardingHours(${val})">${val}h · ${lbl}</button>`).join('')}
+          </div>
         </div>
-      </div>`;
+      </div>
+      <p class="wizard-cadence-note" id="obCadenceNote">${wizardCadenceText(app.onboardingExamDate, hours)}</p>`;
     const range = box.querySelector('#obHrsInp');
     const output = box.querySelector('#obHours');
+    const cadenceEl = box.querySelector('#obCadenceNote');
     range.addEventListener('input', () => {
       const value = range.valueAsNumber;
       app.onboardingHours = value;
       range.style.setProperty('--hour-fill', `${100 * (value - minHours) / (maxHours - minHours)}%`);
       range.setAttribute('aria-valuetext', `${value} ore alla settimana`);
       output.value = `${value} h / sett.`;
+      cadenceEl.textContent = wizardCadenceText(app.onboardingExamDate, value);
+      box.querySelectorAll('.wizard-hours-presets .chip').forEach((btn, idx) => {
+        const match = presets[idx][0] === value;
+        btn.classList.toggle('on', match);
+        btn.setAttribute('aria-pressed', String(match));
+      });
+      renderOnboardingPickers();
     });
   }
 }
@@ -5655,24 +6222,118 @@ function stepStudySlide(page, direction) {
   (button?.disabled ? alternate : button)?.focus({ preventScroll: true });
 }
 
+const READING_MODE_OPTIONS = [
+  ['guidata', 'Guidata', 'Equilibrio tra teoria, diagrammi e intuizione'],
+  ['passaggi', 'Per passaggi', 'Scompone ogni spiegazione in passi numerati'],
+  ['diretta', 'Essenziale', 'Sintesi immediata con formule e nuclei chiave'],
+  ['socratica', 'Socratica', 'Verifica attiva con domande inline mentre studi']
+];
+
+function applyStudyReadingPreferences() {
+  const studioView = document.getElementById('view-studio');
+  const size = Math.min(22, Math.max(13, Number(app.studyFontSize) || 17));
+  app.studyFontSize = size;
+  const lineHMap = { compact: '1.48', normal: '1.68', airy: '1.92' };
+  const widthMap = { narrow: '560px', standard: '680px', wide: '820px' };
+  const fontVal = (app.studyReadingFont || 'serif') === 'sans' ? 'var(--font)' : 'var(--serif)';
+  if (studioView) {
+    studioView.style.setProperty('--study-font-size', size + 'px');
+    studioView.style.setProperty('--study-line-height', lineHMap[app.studyLineHeight || 'normal'] || '1.68');
+    studioView.style.setProperty('--study-reading-width', widthMap[app.studyReadingWidth || 'standard'] || '680px');
+    studioView.style.setProperty('--study-reading-font', fontVal);
+    studioView.style.setProperty('--study-reading', fontVal);
+    studioView.dataset.readingFont = app.studyReadingFont || 'serif';
+    studioView.dataset.lineHeight = app.studyLineHeight || 'normal';
+    studioView.dataset.readingWidth = app.studyReadingWidth || 'standard';
+    studioView.dataset.focusMode = String(Boolean(app.studyFocusMode));
+    studioView.dataset.highlightMath = String(app.studyHighlightMath !== false);
+  }
+  const label = document.getElementById('studyFontSizeLabel');
+  if (label) label.textContent = size + 'px';
+  const sizeOut = document.getElementById('settingsStudySizeVal');
+  if (sizeOut) sizeOut.textContent = size + ' px';
+  const preview = document.getElementById('settingsReadingPreview');
+  if (preview) {
+    const lh = lineHMap[app.studyLineHeight || 'normal'] || '1.68';
+    preview.style.setProperty('--study-font-size', size + 'px');
+    preview.style.setProperty('--study-line-height', lh);
+    preview.style.setProperty('--study-reading-width', widthMap[app.studyReadingWidth || 'standard'] || '680px');
+    preview.style.setProperty('--study-reading-font', fontVal);
+    preview.style.setProperty('--preview-font', fontVal);
+    preview.style.setProperty('--preview-size', size + 'px');
+    preview.style.setProperty('--preview-lh', lh);
+    preview.dataset.readingFont = app.studyReadingFont || 'serif';
+    preview.dataset.highlightMath = String(app.studyHighlightMath !== false);
+  }
+  if (typeof window.applySavedSidebarWidth === 'function' && app.studioSidebarWidth) {
+    window.applySavedSidebarWidth(app.studioSidebarWidth);
+  }
+}
+
 function setDepth(d) {
   app.depth = d;
   saveStudyPreferences();
   const menu = document.getElementById('studioReading');
-  if (menu.open) {
+  if (menu?.open) {
     menu.open = false;
-    menu.querySelector('summary').focus();
+    menu.querySelector('summary')?.focus();
   }
   renderLeftPane();
+  if (app.view === 'attivita' && app.accountPage === 'settings') renderAttivitaView();
+}
+
+function setStudioReadingMode(mode) {
+  if (!READING_MODE_OPTIONS.some(([id]) => id === mode)) return;
+  app.readingMode = mode;
+  app.studioWritingStyle = { mode, instruction: app.studioWritingStyle?.instruction || '' };
+  saveStudyPreferences();
+  const menu = document.getElementById('studioReading');
+  if (menu?.open) {
+    menu.open = false;
+    menu.querySelector('summary')?.focus();
+  }
+  renderLeftPane();
+  if (app.view === 'attivita' && app.accountPage === 'settings') renderAttivitaView();
+  const meta = READING_MODE_OPTIONS.find(([id]) => id === mode);
+  if (meta) showToast(`Modalità lettura: ${meta[1]}`);
+}
+
+function toggleStudioFocusMode() {
+  app.studyFocusMode = !app.studyFocusMode;
+  applyStudyReadingPreferences();
+  saveStudyPreferences();
+  const menu = document.getElementById('studioReading');
+  if (menu?.open) {
+    menu.open = false;
+    menu.querySelector('summary')?.focus();
+  }
+  renderLeftPane();
+  if (app.view === 'attivita' && app.accountPage === 'settings') renderAttivitaView();
+  showToast(app.studyFocusMode ? 'Modalità Focus attiva in Studio' : 'Modalità Focus disattivata');
+}
+
+function openReadingPreferencesFromStudio() {
+  const menu = document.getElementById('studioReading');
+  if (menu) menu.open = false;
+  app.demoSessionOpen = true;
+  app.accountPage = 'settings';
+  setView('attivita');
+  requestAnimationFrame(() => {
+    document.getElementById('profileStudioTitle')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 }
 
 function adjustStudyFontSize(delta) {
   app.studyFontSize = Math.min(22, Math.max(13, (app.studyFontSize || 17) + delta));
-  const studioView = document.getElementById('view-studio');
-  if (studioView) studioView.style.setProperty('--study-font-size', app.studyFontSize + 'px');
-  const label = document.getElementById('studyFontSizeLabel');
-  if (label) label.textContent = app.studyFontSize + 'px';
-  if (delta) saveStudyPreferences();
+  applyStudyReadingPreferences();
+  if (delta) {
+    saveStudyPreferences();
+    if (app.view === 'attivita' && app.accountPage === 'settings') {
+      const slider = document.getElementById('settingsFontSizeRange');
+      if (slider) slider.value = String(app.studyFontSize);
+      renderSettingsLivePreviewBody();
+    }
+  }
 }
 
 function selectDiagramEvent(evId, restoreFocus = false) {
@@ -5684,18 +6345,18 @@ function toggleStudioSources() {
   app.showStudioSources = !app.showStudioSources;
   saveStudyPreferences();
   const menu = document.getElementById('studioReading');
-  menu.open = false;
+  if (menu) menu.open = false;
   renderLeftPane();
-  menu.querySelector('summary').focus();
+  menu?.querySelector('summary')?.focus();
 }
 
 function openStudioWritingStyle() {
   const menu = document.getElementById('studioReading');
-  menu.open = false;
+  if (menu) menu.open = false;
   const dialog = document.getElementById('studioStyleDialog');
-  document.getElementById('studioWritingMode').value = app.studioWritingStyle?.mode || 'adatta';
+  document.getElementById('studioWritingMode').value = app.studioWritingStyle?.mode || app.readingMode || 'adatta';
   document.getElementById('studioWritingInstruction').value = app.studioWritingStyle?.instruction || '';
-  dialog.addEventListener('close', () => menu.querySelector('summary').focus(), { once: true });
+  dialog.addEventListener('close', () => menu?.querySelector('summary')?.focus(), { once: true });
   dialog.showModal();
 }
 
@@ -5705,6 +6366,8 @@ function applyStudioWritingStyle(event) {
   const mode = writingMode.value;
   const instruction = writingInstruction.value.trim().slice(0, 240);
   app.studioWritingStyle = { mode, instruction };
+  if (READING_MODE_OPTIONS.some(([id]) => id === mode)) app.readingMode = mode;
+  saveStudyPreferences();
   document.getElementById('studioStyleDialog').close();
   renderLeftPane();
   showToast('Stile aggiornato per questa sessione');
@@ -5712,19 +6375,57 @@ function applyStudioWritingStyle(event) {
 
 function getStudioWritingMode() {
   const choice = app.studioWritingStyle;
-  if (!choice) return 'originale';
+  if (!choice) return app.readingMode || 'guidata';
   if (choice.mode !== 'adatta') return choice.mode;
-  if (!choice.instruction) return 'originale';
+  if (!choice.instruction) return app.readingMode || 'guidata';
   if (/\b(?:esempi[o]?|concreto|applicazion\w*)\b/i.test(choice.instruction)) return 'esempi';
-  if (/\b(?:semplic\w*|breve|sintes\w*|concis\w*|dirett\w*)\b/i.test(choice.instruction)) return 'diretta';
+  if (/\b(?:socratic\w*|domand\w*)\b/i.test(choice.instruction)) return 'socratica';
+  if (/\b(?:semplic\w*|breve|sintes\w*|concis\w*|dirett\w*|essenzial\w*)\b/i.test(choice.instruction)) return 'diretta';
   return 'passaggi';
 }
 
-function renderStudioWritingAid(mode, steps, example) {
+function answerSocraticCheck(unitId, chosenIdx, correctIdx, btn) {
+  const wrap = btn.closest('.socratic-inline-check');
+  if (!wrap) return;
+  wrap.querySelectorAll('.socratic-choice').forEach((b, idx) => {
+    b.classList.toggle('is-picked', idx === chosenIdx);
+    b.classList.toggle('is-ok', idx === correctIdx && idx === chosenIdx);
+    b.classList.toggle('is-ko', idx !== correctIdx && idx === chosenIdx);
+    b.setAttribute('aria-pressed', String(idx === chosenIdx));
+  });
+  const fb = wrap.querySelector('.socratic-feedback');
+  if (fb) {
+    const ok = chosenIdx === correctIdx;
+    fb.className = `socratic-feedback ${ok ? 'is-ok' : 'is-ko'}`;
+    fb.textContent = ok
+      ? 'Esatto: stai applicando correttamente il nesso causale della regola chiave.'
+      : 'Attenzione: verifica i requisiti della definizione nella formula evidenziata sopra.';
+  }
+}
+
+function renderStudioSocraticCheck(course, unit, isLamport) {
+  const q = isLamport
+    ? 'Se $C(e_1) = 2$ su $P_1$ e $C(e_2) = 5$ su $P_3$ senza alcun messaggio tra i due, cosa puoi concludere?'
+    : `Nel tema «${escapeCourseText(unit.short || unit.titolo)}», cosa verifica la condizione chiave?`;
+  const opts = isLamport
+    ? ['Solo che i due eventi potrebbero essere concorrenti ($e_1 \\parallel e_2$)', 'Che $e_1$ è sicuramente la causa di $e_2$ ($e_1 \\to e_2$)']
+    : ['La proprietà strutturale espressa dal modello della lezione', 'Una stima puramente numerica priva di ipotesi'];
+  return `<aside class="socratic-inline-check" aria-label="Verifica socratica in lettura">
+    <div class="socratic-kicker">${icon('i-study-spark')} Domanda socratica in lettura</div>
+    <p class="socratic-q">${q}</p>
+    <div class="socratic-choices">
+      ${opts.map((opt, idx) => `<button type="button" class="socratic-choice" aria-pressed="false" onclick="answerSocraticCheck('${unit.id}', ${idx}, 0, this)">${opt}</button>`).join('')}
+    </div>
+    <p class="socratic-feedback" aria-live="polite"></p>
+  </aside>`;
+}
+
+function renderStudioWritingAid(mode, steps, example, course, unit, isLamport) {
   if (mode === 'passaggi') {
     return `<div class="study-style-steps"><ol>${steps.map(step => `<li>${escapeCourseText(step.replace(/^\s*\d+\.\s*/, ''))}</li>`).join('')}</ol></div>`;
   }
   if (mode === 'esempi') return `<section class="study-style-example"><h2>Esempio</h2><p>${escapeCourseText(example)}</p></section>`;
+  if (mode === 'socratica' && unit) return renderStudioSocraticCheck(course, unit, isLamport);
   return '';
 }
 
@@ -6234,22 +6935,35 @@ function renderLeftPane() {
   const reading = document.getElementById('studioReading');
   reading.hidden = app.leftTab === 'slides';
   if (reading.hidden) reading.open = false;
+  const writingMode = getStudioWritingMode();
   for (const button of reading.querySelectorAll('[data-depth]')) {
     const selected = button.dataset.depth === app.depth;
     button.setAttribute('aria-pressed', String(selected));
     if (selected) {
       const summary = reading.querySelector('summary');
-      summary.setAttribute('aria-label', `Dettaglio: ${button.textContent}`);
-      summary.title = `Dettaglio: ${button.textContent}`;
+      summary.setAttribute('aria-label', `Lettura: ${button.textContent}`);
+      summary.title = `Lettura: ${button.textContent}`;
     }
   }
-  document.getElementById('studioSourcesToggle').textContent = app.showStudioSources ? 'Nascondi fonti' : 'Mostra fonti';
+  for (const button of reading.querySelectorAll('[data-reading-mode]')) {
+    button.setAttribute('aria-pressed', String(button.dataset.readingMode === (app.readingMode || writingMode)));
+  }
+  const focusBtn = document.getElementById('studioFocusToggle');
+  if (focusBtn) {
+    focusBtn.setAttribute('aria-pressed', String(Boolean(app.studyFocusMode)));
+    focusBtn.textContent = app.studyFocusMode ? 'Focus attivo ✓' : 'Modalità Focus';
+  }
+  const srcBtn = document.getElementById('studioSourcesToggle');
+  if (srcBtn) {
+    srcBtn.setAttribute('aria-pressed', String(Boolean(app.showStudioSources)));
+    srcBtn.textContent = app.showStudioSources ? 'Nascondi fonti' : 'Mostra fonti';
+  }
+  applyStudyReadingPreferences();
   const sheet = document.getElementById('leftDocSheet');
   const isLamport = app.courseId === 'sistemi' && u.id === 'u13';
   sheet.classList.toggle('slide-workspace', app.leftTab === 'slides');
   sheet.classList.toggle('lamport-explanation', isLamport && app.leftTab !== 'slides');
   const prof = getUnitTopicProfile(c, u);
-  const writingMode = getStudioWritingMode();
 
   if (app.leftTab === 'slides') {
     const pg = Math.max(1, Math.min(totalSlides, app.slidePage || 1));
@@ -6328,7 +7042,7 @@ function renderLeftPane() {
       ${formula}
       ${app.depth !== 'sintesi' ? renderStudyTransfer('diagram', 'diagram-box', renderStudioDiagram(diagram, u.num), STUDY_DIAGRAMS[diagram]?.title || 'Schema concettuale') : ''}
       ${renderPara('p-custom-' + u.id, paragraph, unitFile, 1, unitFile)}
-      ${renderStudioWritingAid(writingMode, stepLabels, example)}
+      ${renderStudioWritingAid(writingMode, stepLabels, example, c, u, false)}
       ${app.depth === 'completa' && !['diretta', 'passaggi'].includes(writingMode) ? `<div class="code-block"><span class="cm"># Traccia di ragionamento (${u.short})</span>\n${stepLabels.join('\n')}</div>` : ''}
       ${nextUnitFooter}`;
     renderMath(sheet);
@@ -6354,7 +7068,7 @@ function renderLeftPane() {
     ${renderPara('p-causa', writingMode === 'diretta' ? 'La causalità impone l’ordine dei timestamp: $a \\to b$ implica $C(a) < C(b)$.' : 'Se $a$ avviene causalmente prima di $b$ <span class="math-nowrap">($a \\to b$)</span>, allora i timestamp logici soddisfano sempre $C(a) < C(b)$.', 'Slide p. 12', 12)}
     ${renderPara('p-viceversa', writingMode === 'diretta' ? 'Un timestamp minore non prova la causalità. Senza una catena di messaggi, gli eventi possono essere concorrenti.' : 'Non vale però l\'implicazione inversa: osservare $C(a) < C(b)$ non dimostra che $a \\to b$, perché due eventi privi di messaggi possono essere concorrenti <span class="math-nowrap">($a \\parallel b$)</span>.', 'Dispensa p. 6', 6, c.units.find(unit => unit.id === 'u12')?.src)}
     <p class="studio-rule-reminder">A ogni evento interno su $P_i$, il contatore avanza di uno: $C_i \\leftarrow C_i + 1$.</p>
-    ${renderStudioWritingAid(writingMode, ['Aumenta il contatore locale quando avviene un evento.', 'Alla ricezione, prendi il massimo tra contatore locale e timestamp del messaggio, poi aggiungi uno.', 'Per stabilire la causalità, controlla se gli eventi sono collegati da una catena di messaggi.'], 'Se ricevi un messaggio con timestamp $5$ quando il contatore locale è $3$, il nuovo contatore vale $\\max(3,5)+1=6$.')}
+    ${renderStudioWritingAid(writingMode, ['Aumenta il contatore locale quando avviene un evento.', 'Alla ricezione, prendi il massimo tra contatore locale e timestamp del messaggio, poi aggiungi uno.', 'Per stabilire la causalità, controlla se gli eventi sono collegati da una catena di messaggi.'], 'Se ricevi un messaggio con timestamp $5$ quando il contatore locale è $3$, il nuovo contatore vale $\\max(3,5)+1=6$.', c, u, true)}
     ${app.depth === 'completa' && !['diretta', 'passaggi'].includes(writingMode) ? `<div class="code-block"><span class="cm"># Regola di aggiornamento alla ricezione di (msg, ts_msg)</span>\n<span class="kw">function</span> onReceive(msg, ts_msg) {\n  clock = Math.max(clock, ts_msg) + 1;\n}</div>` : ''}
     ${nextUnitFooter}`;
   renderMath(sheet);
@@ -6445,7 +7159,7 @@ function toggleNoteShareMenu(force) {
 
 const NOTE_APPEARANCE_OPTIONS = {
   noteTone: ['neutral', 'warm', 'contrast'],
-  notePattern: ['plain', 'grid'],
+  notePattern: ['plain', 'grid', 'lined'],
   noteFont: ['serif', 'sans', 'mono']
 };
 
@@ -6676,12 +7390,13 @@ function noteBlockContent(block, editing = false) {
     ? block.richHtml : escapeCourseText(block.text).replace(/\n/g, '<br>');
 }
 
-function renderNoteFlowMath(flow) {
+function renderNoteFlowMath(flow, skipLine = null) {
   const note = findEditableNote(flow);
   if (!note || typeof renderMathInElement !== 'function') return;
   for (const asset of flow.querySelectorAll(':scope > .note-transfer-block')) renderMath(asset);
   const blocks = new Map(note.blocks.map(block => [block.id, block]));
   for (const line of flow.querySelectorAll(':scope > .note-block:not(.note-edit-code)')) {
+    if (line === skipLine) continue;
     const block = blocks.get(line.dataset.blockId);
     if (!block || (block.kind !== 'formula' && !block.text.includes('$'))) continue;
     const draftFormula = block.kind === 'formula' && block.text.trim() && !line.querySelector('.note-math');
@@ -6708,6 +7423,122 @@ function renderNoteFlowMath(flow) {
   }
 }
 
+const NOTE_SLASH_COMMANDS = [
+  { id: 'heading', icon: 'H2', title: 'Nuova sezione', hint: 'Intestazione H2', kind: 'heading' },
+  { id: 'bullet', icon: '•', title: 'Elenco puntato', hint: 'Lista a punti (- )', kind: 'bullet' },
+  { id: 'quote', icon: '❝', title: 'Citazione / Nota', hint: 'Blocco evidenziato (> )', kind: 'quote' },
+  { id: 'formula', icon: 'Σ', title: 'Formula LaTeX', hint: 'Equazione matematica ($$)', kind: 'formula' },
+  { id: 'code', icon: '</>', title: 'Blocco codice', hint: 'Pseudocodice (```)', kind: 'code' },
+  { id: 'unitFormula', icon: 'ƒ', title: 'Formula della lezione', hint: 'Inserisci da Studio', kind: 'unitFormula' },
+  { id: 'unitDiagram', icon: '◈', title: 'Schema della lezione', hint: 'Diagramma SVG / Mermaid', kind: 'unitDiagram' }
+];
+let noteSlashState = { open: false, activeIdx: 0, targetLine: null, items: NOTE_SLASH_COMMANDS };
+
+function hideNoteSlashPop() {
+  noteSlashState.open = false;
+  noteSlashState.targetLine = null;
+  document.getElementById('noteSlashPop')?.classList.add('hidden');
+}
+
+function showNoteSlashPop(flow, line, query = '') {
+  const pop = document.getElementById('noteSlashPop');
+  if (!pop || app.noteSlashCommands === false) return;
+  const q = query.trim().toLowerCase();
+  const items = q
+    ? NOTE_SLASH_COMMANDS.filter(item => `${item.title} ${item.hint} ${item.id}`.toLowerCase().includes(q))
+    : NOTE_SLASH_COMMANDS;
+  if (!items.length) {
+    hideNoteSlashPop();
+    return;
+  }
+  noteSlashState = {
+    open: true,
+    activeIdx: Math.min(noteSlashState.activeIdx || 0, items.length - 1),
+    targetLine: line,
+    items
+  };
+  pop.innerHTML = items.map((item, idx) => `
+    <button type="button" role="option" class="note-slash-opt${idx === noteSlashState.activeIdx ? ' is-active' : ''}" aria-selected="${idx === noteSlashState.activeIdx}" onclick="applyNoteSlashAction('${item.id}')">
+      <span class="note-slash-ico">${item.icon}</span>
+      <span class="note-slash-copy"><strong>${item.title}</strong><small>${item.hint}</small></span>
+    </button>`).join('');
+  const rect = line.getBoundingClientRect();
+  pop.classList.remove('hidden');
+  const popH = pop.offsetHeight || 240;
+  const popW = pop.offsetWidth || 256;
+  const top = rect.bottom + popH + 12 <= window.innerHeight ? rect.bottom + 6 : Math.max(12, rect.top - popH - 6);
+  const left = Math.min(window.innerWidth - popW - 14, Math.max(12, rect.left + 8));
+  pop.style.top = top + 'px';
+  pop.style.left = left + 'px';
+}
+
+function applyNoteSlashAction(id) {
+  const flow = document.getElementById('noteFlow');
+  const targetLine = noteSlashState.targetLine || noteFlowLine(flow, window.getSelection()?.focusNode);
+  hideNoteSlashPop();
+  if (!flow) return;
+  if (id === 'unitFormula' || id === 'unitDiagram') {
+    if (targetLine && /^\/\S*$/.test(targetLine.textContent.trim())) targetLine.remove();
+    updateNoteFlow(flow);
+    const kind = id === 'unitFormula' ? 'formula' : 'diagram';
+    if (!insertStudyAsset(kind)) {
+      const course = COURSES_DATA[app.courseId];
+      const unit = course?.units.find(u => u.id === app.unitId);
+      const prof = unit && getUnitTopicProfile(course, unit);
+      if (kind === 'formula' && prof?.formula) {
+        insertNoteBlock('formula');
+        const created = flow.querySelector('.note-block[data-kind="formula"]:last-of-type');
+        if (created) { created.textContent = prof.formula; setNoteCaret(created, true); updateNoteFlow(flow); }
+      }
+    }
+    return;
+  }
+  if (!targetLine || !flow.contains(targetLine)) {
+    insertNoteBlock(id);
+    return;
+  }
+  if (id === 'heading') {
+    const h2 = document.createElement('h2');
+    h2.className = 'note-sec note-edit-name';
+    h2.dataset.sectionId = nextNoteBlockId();
+    h2.textContent = 'Nuova sezione';
+    targetLine.replaceWith(h2);
+    flow.focus();
+    window.getSelection().selectAllChildren(h2);
+    updateNoteFlow(flow);
+    return;
+  }
+  targetLine.textContent = '';
+  targetLine.innerHTML = '<br>';
+  targetLine.dataset.kind = id;
+  targetLine.classList.toggle('note-edit-code', id === 'code');
+  setNoteCaret(targetLine, false);
+  updateNoteFlow(flow);
+  rememberNoteCursor(flow);
+}
+
+function handleNoteScrollClick(event) {
+  if (event.target.closest('button, input, textarea, select, a, .note-inline-review, .note-transfer-block, .note-h1, #noteFlow, #noteSlashPop')) return;
+  const flow = document.getElementById('noteFlow');
+  const note = flow && findEditableNote(flow);
+  if (!flow || !note) return;
+  hideNoteSlashPop();
+  let last = [...flow.children].reverse().find(el => el.classList.contains('note-block'));
+  const needFresh = !last || ['formula', 'code'].includes(last.dataset.kind);
+  if (needFresh) {
+    const tail = document.createElement('div');
+    tail.className = 'note-block';
+    tail.dataset.kind = 'paragraph';
+    tail.dataset.noteTail = 'true';
+    tail.innerHTML = '<br>';
+    flow.append(tail);
+    last = tail;
+  }
+  flow.focus({ preventScroll: true });
+  setNoteCaret(last, true);
+  rememberNoteCursor(flow);
+}
+
 function editNoteMath(flow, math) {
   if (!math || !findEditableNote(flow)) return false;
   flow.focus({ preventScroll: true });
@@ -6724,6 +7555,52 @@ function handleNoteMathPointer(event) {
 }
 
 function handleNoteMathKeydown(event) {
+  const flow = event.currentTarget;
+  if (noteSlashState.open) {
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      noteSlashState.activeIdx = (noteSlashState.activeIdx + 1) % noteSlashState.items.length;
+      showNoteSlashPop(flow, noteSlashState.targetLine, noteSlashState.targetLine?.textContent.slice(1) || '');
+      return;
+    }
+    if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      noteSlashState.activeIdx = (noteSlashState.activeIdx - 1 + noteSlashState.items.length) % noteSlashState.items.length;
+      showNoteSlashPop(flow, noteSlashState.targetLine, noteSlashState.targetLine?.textContent.slice(1) || '');
+      return;
+    }
+    if (event.key === 'Enter' || event.key === 'Tab') {
+      event.preventDefault();
+      const chosen = noteSlashState.items[noteSlashState.activeIdx];
+      if (chosen) applyNoteSlashAction(chosen.id);
+      return;
+    }
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      hideNoteSlashPop();
+      return;
+    }
+  }
+  if (event.key === 'Backspace') {
+    const selection = window.getSelection();
+    const line = noteFlowLine(flow, selection?.focusNode);
+    const atStart = selection?.isCollapsed && (selection.focusOffset === 0);
+    const kind = line?.dataset.kind;
+    const beforeRange = selection?.isCollapsed && line ? (() => {
+      const r = document.createRange();
+      r.selectNodeContents(line);
+      r.setEnd(selection.focusNode, selection.focusOffset);
+      return r.toString().length === 0;
+    })() : false;
+    if (line && ['bullet', 'quote', 'formula', 'code'].includes(kind) && (atStart && beforeRange || !line.textContent.trim())) {
+      event.preventDefault();
+      line.dataset.kind = 'paragraph';
+      line.classList.remove('note-edit-code');
+      setNoteCaret(line, false);
+      updateNoteFlow(flow);
+      return;
+    }
+  }
   if (event.key !== 'F2') return;
   const selection = window.getSelection();
   if (!selection?.isCollapsed || !selection.focusNode) return;
@@ -6731,7 +7608,6 @@ function handleNoteMathKeydown(event) {
   const offset = selection.focusOffset;
   const after = node.nodeType === Node.TEXT_NODE ? offset === node.length && node.nextSibling : node.childNodes[offset];
   const before = node.nodeType === Node.TEXT_NODE ? offset === 0 && node.previousSibling : node.childNodes[offset - 1];
-  const flow = event.currentTarget;
   const line = noteFlowLine(flow, node);
   const nearbyMath = [after, before].find(sibling => sibling?.nodeType === Node.ELEMENT_NODE && sibling.matches('.note-math'));
   const lineFormula = line?.dataset.kind === 'formula' ? line.querySelector('.note-math') : null;
@@ -6749,6 +7625,8 @@ function rememberNoteCursor(flow) {
   if (line?.dataset.blockId) {
     app.noteWriteCursor = { key: flow.closest('.note-page').dataset.noteKey, id: line.dataset.blockId };
   }
+  if (flow && line) renderNoteFlowMath(flow, line);
+  if (noteSlashState.open && (!line || !/^\/\S*$/.test(line.textContent.trim()))) hideNoteSlashPop();
 }
 
 function prepareNoteFlowInput(event) {
@@ -6756,10 +7634,27 @@ function prepareNoteFlowInput(event) {
   const selection = window.getSelection();
   const line = noteFlowLine(flow, selection?.focusNode);
   if (event.inputType !== 'insertParagraph' || !selection?.isCollapsed) return;
+  if (line?.matches('h2.note-sec')) {
+    event.preventDefault();
+    const para = document.createElement('div');
+    para.className = 'note-block';
+    para.dataset.kind = 'paragraph';
+    const tailRange = document.createRange();
+    tailRange.setStart(selection.focusNode, selection.focusOffset);
+    tailRange.setEnd(line, line.childNodes.length);
+    const extracted = tailRange.extractContents();
+    if (extracted.textContent.trim()) para.append(extracted);
+    else para.innerHTML = '<br>';
+    if (!line.textContent.trim()) line.textContent = 'Nuova sezione';
+    line.after(para);
+    setNoteCaret(para, false);
+    updateNoteFlow(flow);
+    return;
+  }
   if (['formula', 'code'].includes(line?.dataset.kind)) {
     event.preventDefault();
     document.execCommand('insertLineBreak');
-  } else if (line?.dataset.kind === 'bullet' && !line.textContent.trim()) {
+  } else if (['bullet', 'quote'].includes(line?.dataset.kind) && !line.textContent.trim()) {
     event.preventDefault();
     line.dataset.kind = 'paragraph';
     updateNoteFlow(flow);
@@ -6794,17 +7689,82 @@ function normalizeNoteFlow(flow) {
 
 const noteFlowRecords = new WeakMap();
 
+function applyMarkdownTriggerOnLine(flow, line) {
+  if (!line || !line.matches('div.note-block, p.note-block, div:not([class])') || line.matches('[contenteditable="false"]')) return;
+  const currentKind = line.dataset.kind || 'paragraph';
+  if (currentKind !== 'paragraph') return;
+  const raw = line.textContent.replace(/\u00a0/g, ' ');
+  if (/^#{1,2}\s/.test(raw)) {
+    const rest = raw.replace(/^#{1,2}\s+/, '');
+    const h2 = document.createElement('h2');
+    h2.className = 'note-sec note-edit-name';
+    h2.dataset.sectionId = nextNoteBlockId();
+    h2.textContent = rest || '';
+    if (!rest) h2.innerHTML = '<br>';
+    line.replaceWith(h2);
+    setNoteCaret(h2, true);
+    hideNoteSlashPop();
+    return;
+  }
+  if (/^(?:[-*•])\s/.test(raw)) {
+    const rest = raw.replace(/^(?:[-*•])\s+/, '');
+    line.dataset.kind = 'bullet';
+    line.textContent = rest;
+    if (!rest) line.innerHTML = '<br>';
+    setNoteCaret(line, true);
+    hideNoteSlashPop();
+    return;
+  }
+  if (/^>\s/.test(raw)) {
+    const rest = raw.replace(/^>\s+/, '');
+    line.dataset.kind = 'quote';
+    line.textContent = rest;
+    if (!rest) line.innerHTML = '<br>';
+    setNoteCaret(line, true);
+    hideNoteSlashPop();
+    return;
+  }
+  if (raw === '$$' || raw.startsWith('$$ ')) {
+    const rest = raw.replace(/^\$\$\s*/, '');
+    line.dataset.kind = 'formula';
+    line.textContent = rest;
+    if (!rest) line.innerHTML = '<br>';
+    setNoteCaret(line, true);
+    hideNoteSlashPop();
+    return;
+  }
+  if (raw === '```' || raw.startsWith('``` ')) {
+    const rest = raw.replace(/^```\s*/, '');
+    line.dataset.kind = 'code';
+    line.classList.add('note-edit-code');
+    line.textContent = rest;
+    if (!rest) line.innerHTML = '<br>';
+    setNoteCaret(line, true);
+    hideNoteSlashPop();
+    return;
+  }
+  const trimmed = raw.trim();
+  if (/^\/\S*$/.test(trimmed) && app.noteSlashCommands !== false) {
+    showNoteSlashPop(flow, line, trimmed.slice(1));
+  } else if (noteSlashState.open) {
+    hideNoteSlashPop();
+  }
+}
+
 function updateNoteFlow(flow, inputType) {
   const note = findEditableNote(flow);
   if (!note) return;
   normalizeNoteFlow(flow);
+  const activeLine = noteFlowLine(flow, window.getSelection()?.focusNode);
   if (inputType === 'insertParagraph') {
-    const line = noteFlowLine(flow, window.getSelection()?.focusNode);
-    const preceding = line?.previousElementSibling;
-    if (line?.matches('div, p') && preceding?.classList.contains('note-block') &&
+    hideNoteSlashPop();
+    const preceding = activeLine?.previousElementSibling;
+    if (activeLine?.matches('div, p') && preceding?.classList.contains('note-block') &&
       (preceding.dataset.kind === 'bullet' || /^•(?:\s|$)/.test(preceding.textContent))) {
-      line.dataset.kind = 'bullet';
+      activeLine.dataset.kind = 'bullet';
     }
+  } else if (activeLine && inputType !== 'historyUndo' && inputType !== 'historyRedo') {
+    applyMarkdownTriggerOnLine(flow, activeLine);
   }
   const records = noteFlowRecords.get(flow) || new Map();
   if (!note.noteBlank) for (const block of note.blocks) records.set(block.id, block);
@@ -6831,9 +7791,10 @@ function updateNoteFlow(flow, inputType) {
       }
       continue;
     }
-    const kind = previous && previous.kind !== 'bullet'
-      ? previous.kind || 'paragraph'
-      : el.dataset.kind === 'bullet' ? 'bullet' : 'paragraph';
+    const domKind = el.dataset.kind;
+    const kind = ['bullet', 'quote', 'formula', 'code', 'paragraph'].includes(domKind)
+      ? domKind
+      : (previous && previous.kind !== 'bullet' ? previous.kind || 'paragraph' : 'paragraph');
     const content = readNoteBlock(el);
     if (el.hasAttribute('data-note-tail') && !content.text && el === flow.lastElementChild) continue;
     el.removeAttribute('data-note-tail');
@@ -8473,12 +9434,20 @@ function openAuthPortal(mode = 'login') {
 
 const STUDY_PREFERENCES_KEY = 'tutorai.preferenze.v1';
 const STUDY_PREFERENCE_VALUES = {
-  startPage: ['corso', 'studio', 'ripasso'],
+  startPage: ['corso', 'studio', 'ripasso', 'archivio'],
   theme: ['light', 'sepia', 'dark'],
   depth: ['sintesi', 'guidata', 'completa'],
-  studyFontSize: Array.from({length: 10}, (_, i) => i + 13),
+  readingMode: ['guidata', 'passaggi', 'diretta', 'socratica'],
+  studyReadingFont: ['serif', 'sans'],
+  studyLineHeight: ['compact', 'normal', 'airy'],
+  studyReadingWidth: ['narrow', 'standard', 'wide'],
+  studyFontSize: Array.from({ length: 10 }, (_, i) => i + 13),
+  studyFocusMode: [false, true],
+  studyHighlightMath: [false, true],
   showStudioSources: [false, true],
+  noteSlashCommands: [false, true],
   noteSpellcheck: [false, true],
+  studioSidebarWidth: Array.from({ length: 241 }, (_, i) => i + 180),
   ...NOTE_APPEARANCE_OPTIONS
 };
 
@@ -8502,7 +9471,59 @@ function setStudyPreference(input) {
   app[input.name] = value;
   if (input.name === 'noteSpellcheck') syncNoteSpellcheck();
   if (input.name === 'showStudioSources') renderLeftPane();
+  if (['studyReadingFont', 'studyLineHeight', 'studyReadingWidth', 'studyFocusMode', 'studyHighlightMath'].includes(input.name)) {
+    applyStudyReadingPreferences();
+    renderLeftPane();
+  }
   saveStudyPreferences();
+  renderSettingsLivePreviewBody();
+}
+
+function setStudyChoice(key, value) {
+  if (!STUDY_PREFERENCE_VALUES[key]?.includes(value)) return;
+  app[key] = value;
+  if (key === 'depth') {
+    saveStudyPreferences();
+    renderLeftPane();
+  } else if (key === 'readingMode') {
+    setStudioReadingMode(value);
+    return;
+  } else if (['noteTone', 'notePattern', 'noteFont'].includes(key)) {
+    renderNoteAppearance();
+    saveStudyPreferences();
+  } else {
+    applyStudyReadingPreferences();
+    renderLeftPane();
+    saveStudyPreferences();
+  }
+  if (app.view === 'attivita' && app.accountPage === 'settings') renderAttivitaView();
+}
+
+function renderSettingsLivePreviewBody() {
+  const box = document.getElementById('settingsReadingPreview');
+  if (!box) return;
+  const mode = app.readingMode || 'guidata';
+  const badgeMap = { guidata: 'Guidata', passaggi: 'Per passaggi', diretta: 'Essenziale', socratica: 'Socratica' };
+  const lead = mode === 'diretta'
+    ? 'La causalità impone l’ordine dei timestamp: se $a \\to b$ allora $C(a) < C(b)$, ma due eventi senza catena di messaggi restano concorrenti ($a \\parallel b$).'
+    : 'Se $a$ avviene causalmente prima di $b$ ($a \\to b$), i timestamp logici soddisfano sempre $C(a) < C(b)$. Osservare un valore minore non basta però da solo a provare la causalità.';
+  const srcChip = app.showStudioSources ? ' <span class="settings-prev-cite">Slide p. 12</span>' : '';
+  const extra = mode === 'passaggi'
+    ? '<ol class="settings-prev-steps"><li>Incrementa $C_i$ ad ogni evento interno.</li><li>Alla ricezione calcola $\\max(C_j, t_m) + 1$.</li></ol>'
+    : mode === 'socratica'
+      ? '<div class="settings-prev-socratic"><strong>Domanda rapida:</strong> se $C(e_1) &lt; C(e_2)$ su processi isolati, vale $e_1 \\to e_2$?</div>'
+      : '';
+  box.innerHTML = `
+    <div class="settings-prev-head">
+      <span class="settings-prev-tag">${badgeMap[mode] || 'Guidata'} · ${app.studyFontSize || 17}px · ${(app.studyReadingFont || 'serif') === 'sans' ? 'Sans' : 'Serif'}</span>
+      ${app.studyFocusMode ? '<span class="settings-prev-focus">Focus ON</span>' : ''}
+    </div>
+    <h4>1.3 Orologi logici di Lamport</h4>
+    <div class="settings-prev-math">$$C_j \\leftarrow \\max(C_j, t_m) + 1$$</div>
+    <p>${lead}${srcChip}</p>
+    ${extra}`;
+  applyStudyReadingPreferences();
+  renderMath(box);
 }
 
 function syncAccountSettings() {
@@ -8518,11 +9539,14 @@ function renderProfileWaves() {
   </svg>`;
 }
 
-function renderProfileScreenHeader(title, backPage, backLabel) {
+function renderProfileScreenHeader(title, backPage, backLabel, subtitle = '') {
   return `<button type="button" class="btn profile-back" onclick="openAccountPage('${backPage}')">← ${backLabel}</button>
     <header class="profile-screen-hero">
       ${renderProfileWaves()}
-      <h1 id="accountHeading" tabindex="-1">${title}</h1>
+      <div class="profile-screen-hero-copy">
+        <h1 id="accountHeading" tabindex="-1">${title}</h1>
+        ${subtitle ? `<p class="profile-hero-sub">${subtitle}</p>` : ''}
+      </div>
     </header>`;
 }
 
@@ -8602,32 +9626,108 @@ function renderAccountScreen(page) {
 
   return `
     <div class="profile-screen">
-      ${renderProfileScreenHeader('Impostazioni', 'activity', 'Profilo')}
+      ${renderProfileScreenHeader('Impostazioni', 'activity', 'Profilo', 'Personalizza lettura, modalità del tutor, appunti Obsidian e aspetto visivo')}
       <div class="profile-settings">
         <section class="profile-settings-section profile-settings-preferences" aria-labelledby="profileStudioTitle">
-          <h2 id="profileStudioTitle"><span class="profile-section-icon">${icon('i-book')}</span> Il tuo spazio di studio</h2>
-          <div class="profile-settings-row">
-            <label for="profileStartPage">Quando apro TutorAI</label>
-            <select class="btn" name="startPage" id="profileStartPage" onchange="setStudyPreference(this)">
-              ${[['corso','I miei corsi'],['studio','Studio'],['ripasso','Ripasso di oggi']].map(([id,label]) => `<option value="${id}"${app.startPage === id ? ' selected' : ''}>${label}</option>`).join('')}
-            </select>
+          <h2 id="profileStudioTitle"><span class="profile-section-icon">${icon('i-book')}</span> Lettura e spiegazioni</h2>
+
+          <div class="settings-block">
+            <span class="settings-block-label">Modalità di lettura del tutor</span>
+            <div class="reading-mode-grid" role="group" aria-label="Modalità di lettura del tutor">
+              ${READING_MODE_OPTIONS.map(([id, label, desc]) => `
+                <button type="button" class="reading-mode-card${(app.readingMode || 'guidata') === id ? ' on' : ''}" aria-pressed="${(app.readingMode || 'guidata') === id}" onclick="setStudyChoice('readingMode','${id}')">
+                  <strong>${label}</strong>
+                  <small>${desc}</small>
+                </button>`).join('')}
+            </div>
           </div>
-          <div class="profile-settings-row">
-            <label for="profileReadingDepth">Dettaglio spiegazione</label>
-            <select class="btn" id="profileReadingDepth" onchange="setDepth(this.value)">
-              ${depths.map(([id, label]) => `<option value="${id}"${app.depth === id ? ' selected' : ''}>${label}</option>`).join('')}
-            </select>
+
+          <div class="settings-grid-controls">
+            <div class="settings-control-item">
+              <span class="settings-block-label">Livello di dettaglio</span>
+              <div class="settings-pill-group" role="group" aria-label="Livello di dettaglio">
+                ${depths.map(([id, label]) => `<button type="button" aria-pressed="${app.depth === id}" onclick="setStudyChoice('depth','${id}')">${label}</button>`).join('')}
+              </div>
+            </div>
+            <div class="settings-control-item">
+              <span class="settings-block-label">Carattere di lettura</span>
+              <div class="settings-pill-group" role="group" aria-label="Carattere di lettura">
+                ${[['serif', 'Serif editoriale'], ['sans', 'Sans pulito']].map(([id, label]) => `<button type="button" aria-pressed="${(app.studyReadingFont || 'serif') === id}" onclick="setStudyChoice('studyReadingFont','${id}')">${label}</button>`).join('')}
+              </div>
+            </div>
+            <div class="settings-control-item">
+              <span class="settings-block-label">Interlinea</span>
+              <div class="settings-pill-group" role="group" aria-label="Interlinea di lettura">
+                ${[['compact', 'Compatta'], ['normal', 'Normale'], ['airy', 'Ariosa']].map(([id, label]) => `<button type="button" aria-pressed="${(app.studyLineHeight || 'normal') === id}" onclick="setStudyChoice('studyLineHeight','${id}')">${label}</button>`).join('')}
+              </div>
+            </div>
+            <div class="settings-control-item">
+              <span class="settings-block-label">Larghezza colonna</span>
+              <div class="settings-pill-group" role="group" aria-label="Larghezza colonna di lettura">
+                ${[['narrow', 'Stretta'], ['standard', 'Bilanciata'], ['wide', 'Ampia']].map(([id, label]) => `<button type="button" aria-pressed="${(app.studyReadingWidth || 'standard') === id}" onclick="setStudyChoice('studyReadingWidth','${id}')">${label}</button>`).join('')}
+              </div>
+            </div>
           </div>
+
+          <div class="profile-settings-row">
+            <label for="settingsFontSizeRange">Dimensione testo in Studio <strong id="settingsStudySizeVal">${app.studyFontSize || 17} px</strong></label>
+            <div class="settings-size-control">
+              <button type="button" class="btn" aria-label="Riduci testo" onclick="adjustStudyFontSize(-1)">−</button>
+              <input id="settingsFontSizeRange" type="range" min="13" max="22" value="${app.studyFontSize || 17}" aria-label="Dimensione testo Studio" oninput="adjustStudyFontSize(this.valueAsNumber - app.studyFontSize)">
+              <button type="button" class="btn" aria-label="Ingrandisci testo" onclick="adjustStudyFontSize(1)">+</button>
+            </div>
+          </div>
+
           ${[
-            ['showStudioSources','Fonti accanto al testo','Mostra il riferimento alla slide nei paragrafi della spiegazione.'],
-            ['noteSpellcheck','Correttore negli appunti','Sottolinea le parole da controllare mentre scrivi.']
+            ['studyFocusMode', 'Modalità Focus in Studio', 'Attenua gli elementi secondari mentre leggi spiegazioni e formule.'],
+            ['studyHighlightMath', 'Evidenzia formule e blocchi LaTeX', 'Mette in risalto equazioni chiave ed esempi rispetto al testo.'],
+            ['showStudioSources', 'Fonti accanto al testo', 'Mostra il riferimento alla slide nei paragrafi della spiegazione.']
           ].map(([key, label, hint]) => `
             <label class="preference-switch-row">
               <span><strong>${label}</strong><small id="${key}Hint">${hint}</small></span>
               <input type="checkbox" role="switch" aria-label="${label}" aria-describedby="${key}Hint" name="${key}" ${app[key] ? 'checked' : ''} onchange="setStudyPreference(this)">
             </label>`).join('')}
-          <details class="preference-appearance">
-            <summary>Aspetto e leggibilità</summary>
+
+          <div class="settings-preview-wrap">
+            <span class="settings-block-label">Anteprima dal vivo</span>
+            <div class="settings-live-preview" id="settingsReadingPreview" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <section class="profile-settings-section" aria-labelledby="profileNotesTitle">
+          <h2 id="profileNotesTitle"><span class="profile-section-icon">${icon('i-pencil')}</span> Appunti &amp; Fogli</h2>
+          <div class="settings-grid-controls">
+            <div class="settings-control-item">
+              <span class="settings-block-label">Tono della carta</span>
+              <div class="settings-pill-group" role="group" aria-label="Tono della carta">
+                ${[['neutral', 'Neutro'], ['warm', 'Caldo'], ['contrast', 'Alto contrasto']].map(([id, label]) => `<button type="button" aria-pressed="${app.noteTone === id}" onclick="setStudyChoice('noteTone','${id}')">${label}</button>`).join('')}
+              </div>
+            </div>
+            <div class="settings-control-item">
+              <span class="settings-block-label">Trama del foglio</span>
+              <div class="settings-pill-group" role="group" aria-label="Trama del foglio">
+                ${[['plain', 'Pulito'], ['grid', 'Puntinato'], ['lined', 'Righe']].map(([id, label]) => `<button type="button" aria-pressed="${app.notePattern === id}" onclick="setStudyChoice('notePattern','${id}')">${label}</button>`).join('')}
+              </div>
+            </div>
+            <div class="settings-control-item">
+              <span class="settings-block-label">Carattere appunti</span>
+              <div class="settings-pill-group" role="group" aria-label="Carattere appunti">
+                ${[['serif', 'Serif'], ['sans', 'Sans'], ['mono', 'Mono']].map(([id, label]) => `<button type="button" aria-pressed="${app.noteFont === id}" onclick="setStudyChoice('noteFont','${id}')">${label}</button>`).join('')}
+              </div>
+            </div>
+          </div>
+          ${[
+            ['noteSlashCommands', 'Comandi rapidi `/` nell’editor', 'Digita `/` a inizio riga per inserire formule, codice, sezioni o schemi della lezione.'],
+            ['noteSpellcheck', 'Correttore ortografico negli appunti', 'Sottolinea le parole da controllare mentre scrivi.']
+          ].map(([key, label, hint]) => `
+            <label class="preference-switch-row">
+              <span><strong>${label}</strong><small id="${key}Hint">${hint}</small></span>
+              <input type="checkbox" role="switch" aria-label="${label}" aria-describedby="${key}Hint" name="${key}" ${app[key] ? 'checked' : ''} onchange="setStudyPreference(this)">
+            </label>`).join('')}
+        </section>
+
+        <section class="profile-settings-section" aria-labelledby="profileAppearanceTitle">
+          <h2 id="profileAppearanceTitle"><span class="profile-section-icon">${icon('i-study-spark')}</span> Tema e avvio</h2>
           <div class="profile-settings-row profile-settings-themes">
             <span id="profileThemeLabel">Tema dell’interfaccia</span>
             <div class="profile-theme-options" role="group" aria-labelledby="profileThemeLabel">
@@ -8639,23 +9739,13 @@ function renderAccountScreen(page) {
             </div>
           </div>
           <div class="profile-settings-row">
-            <label for="profileStudySize">Dimensione del testo in Studio</label>
-            <select class="btn" id="profileStudySize" onchange="adjustStudyFontSize(Number(this.value) - app.studyFontSize)">
-              ${Array.from({length: 10}, (_, i) => i + 13).map(size => `<option value="${size}"${size === app.studyFontSize ? ' selected' : ''}>${size} px</option>`).join('')}
+            <label for="profileStartPage">Schermata all’avvio</label>
+            <select class="btn" name="startPage" id="profileStartPage" onchange="setStudyPreference(this)">
+              ${[['corso', 'I miei corsi'], ['studio', 'Studio'], ['ripasso', 'Ripasso di oggi'], ['archivio', 'Archivio Vault']].map(([id, label]) => `<option value="${id}"${app.startPage === id ? ' selected' : ''}>${label}</option>`).join('')}
             </select>
           </div>
-          ${[
-            ['noteFont', 'Carattere degli appunti', ['Serif', 'Sans', 'Mono']],
-            ['notePattern', 'Trama del foglio', ['Pulito', 'Griglia']]
-          ].map(([field, label, names]) => `
-            <div class="profile-settings-row">
-              <label for="profile-${field}">${label}</label>
-              <select class="btn" id="profile-${field}" name="${field}" onchange="changeNoteAppearance(this)">
-                ${NOTE_APPEARANCE_OPTIONS[field].map((value, i) => `<option value="${value}"${value === app[field] ? ' selected' : ''}>${names[i]}</option>`).join('')}
-              </select>
-            </div>`).join('')}
-          </details>
         </section>
+
         <section class="profile-settings-section" aria-labelledby="profileAccountTitle">
           <h2 id="profileAccountTitle"><span class="profile-section-icon">${icon('i-pencil')}</span> Account</h2>
           <div class="profile-settings-row">
@@ -8761,9 +9851,80 @@ const PROFILE_BRAIN_STATES = {
 const PROFILE_BRAIN_POINTS = [[97, 69], [57, 136], [116, 153], [100, 216], [230, 69], [270, 127], [209, 157], [270, 185], [217, 220]];
 const PROFILE_BRAIN_SPREAD = [0, 4, 2, 5, 1, 7, 3, 6, 8].map(index => PROFILE_BRAIN_POINTS[index]);
 
+let _asciiBrainRaf = 0;
+let _asciiBrainLastTick = 0;
+let _asciiBrainPhase = 0;
+
+function stopAsciiBrainLoop() {
+  if (_asciiBrainRaf) {
+    cancelAnimationFrame(_asciiBrainRaf);
+    _asciiBrainRaf = 0;
+  }
+}
+
+function startAsciiBrainLoop(masteryRatio) {
+  stopAsciiBrainLoop();
+  const pre = document.getElementById('profileBrainAsciiPre');
+  if (!pre || !window.TutorBrainAscii || typeof window.TutorBrainAscii.renderFrame !== 'function') return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    window.TutorBrainAscii.renderFrame(pre, { masteryRatio, phase: 0.4 });
+    return;
+  }
+  const tick = now => {
+    if (app.view !== 'attivita' || app.accountPage !== 'activity' || app.profileBrainMode !== 'ascii') {
+      _asciiBrainRaf = 0;
+      return;
+    }
+    if (now - _asciiBrainLastTick >= 85) {
+      _asciiBrainLastTick = now;
+      _asciiBrainPhase += 0.16;
+      window.TutorBrainAscii.renderFrame(pre, { masteryRatio, phase: _asciiBrainPhase });
+    }
+    _asciiBrainRaf = requestAnimationFrame(tick);
+  };
+  _asciiBrainRaf = requestAnimationFrame(tick);
+}
+
+function setProfileBrainMode(mode) {
+  if (!['constellation', 'graph', 'ascii'].includes(mode)) return;
+  app.profileBrainMode = mode;
+  stopAsciiBrainLoop();
+  renderAttivitaView();
+}
+
+function computeGraphClusterLayout(entries) {
+  const groups = [];
+  for (const e of entries) {
+    let g = groups.find(x => x.course.id === e.course.id);
+    if (!g) { g = { course: e.course, items: [] }; groups.push(g); }
+    g.items.push(e);
+  }
+  const hubs = groups.map((g, gi) => {
+    const angle = (gi / Math.max(1, groups.length)) * Math.PI * 2 - Math.PI / 2;
+    const hx = Math.round(164 + (groups.length === 1 ? 0 : Math.cos(angle) * 66));
+    const hy = Math.round(140 + (groups.length === 1 ? 0 : Math.sin(angle) * 54));
+    return { ...g, hx, hy };
+  });
+  const coords = new Map();
+  const edges = [];
+  hubs.forEach(hub => {
+    hub.items.forEach((entry, idx) => {
+      const a = (idx / Math.max(1, hub.items.length)) * Math.PI * 2 - 0.5;
+      const dist = hubs.length === 1 ? 78 : 52;
+      const nx = Math.max(26, Math.min(302, Math.round(hub.hx + Math.cos(a) * dist)));
+      const ny = Math.max(26, Math.min(254, Math.round(hub.hy + Math.sin(a) * dist)));
+      coords.set(entry.index, [nx, ny]);
+      edges.push({ x1: hub.hx, y1: hub.hy, x2: nx, y2: ny, tone: entry.state.tone });
+    });
+  });
+  return { hubs, coords, edges };
+}
+
 function renderProfileBrain(entries, selectedIndex) {
   const panel = document.getElementById('profileBrainPanel');
   if (!panel || !entries.length) return;
+  stopAsciiBrainLoop();
+  const mode = ['constellation', 'graph', 'ascii'].includes(app.profileBrainMode) ? app.profileBrainMode : 'constellation';
   const courses = [...new Set(entries.map(entry => entry.course))];
   if (!courses.some(course => course.id === app.profileBrainCourse)) app.profileBrainCourse = '';
   const scoped = entries.filter(entry => !app.profileBrainCourse || entry.course.id === app.profileBrainCourse);
@@ -8772,30 +9933,73 @@ function renderProfileBrain(entries, selectedIndex) {
     || scoped[0];
   const perPage = PROFILE_BRAIN_POINTS.length;
   const pageStart = Math.floor(scoped.indexOf(selected) / perPage) * perPage;
-  const visibleEntries = scoped.slice(pageStart, pageStart + perPage);
+  const visibleEntries = mode === 'graph' ? scoped.slice(0, 14) : scoped.slice(pageStart, pageStart + perPage);
   const points = visibleEntries.length === perPage ? PROFILE_BRAIN_POINTS : PROFILE_BRAIN_SPREAD;
   app.profileBrainUnit = selected.key;
-  const nodeButtons = visibleEntries.map((entry, pointIndex) => {
-    const [x, y] = points[pointIndex];
-    const active = entry === selected;
-    const label = escapeCourseText(entry.course.nome + ' · ' + entry.unit.titolo + ' · ' + entry.state.label);
-    return `<button type="button" class="profile-brain-node ${entry.state.tone}" data-brain-node="${entry.index}"
-      style="--node-x:${100 * x / 328}%;--node-y:${100 * y / 280}%" tabindex="${active ? 0 : -1}" aria-pressed="${active}"
-      aria-label="${label}" title="${label}">${active ? '<span class="brain-node-ring" aria-hidden="true"></span>' : ''}</button>`;
-  }).join('');
-  const links = visibleEntries.slice(1).map((entry, from) => {
-    const previous = visibleEntries[from];
-    if (entry.course !== previous.course) return '';
-    const to = from + 1;
-    const [x1, y1] = points[from];
-    const [x2, y2] = points[to];
-    const bothVerified = previous.state.tone === 'verified' && entry.state.tone === 'verified';
-    const d = `M${x1} ${y1} Q${(x1 + x2) / 2} ${Math.min(y1, y2) - 14} ${x2} ${y2}`;
-    return `<path class="${bothVerified ? 'verified' : ''}" d="${d}"/>${bothVerified ? `<path class="synapse-pulse" d="${d}"/>` : ''}`;
-  }).join('');
+
   const counts = { verified: 0, active: 0, review: 0, unstarted: 0 };
   scoped.forEach(entry => counts[entry.state.tone]++);
   document.getElementById('profileBrainProgress').textContent = `${counts.verified}/${scoped.length} verificate`;
+
+  let stageHtml = '';
+  if (mode === 'ascii') {
+    stageHtml = `
+      <div class="brain-ascii-stage" role="region" aria-label="Knowledge Brain in modalità ASCII">
+        <pre class="brain-ascii-pre" id="profileBrainAsciiPre"></pre>
+        <div class="brain-ascii-pills" role="group" aria-label="Seleziona unità nel grafo ASCII">
+          ${scoped.map(entry => `
+            <button type="button" class="brain-ascii-pill ${entry.state.tone}${entry === selected ? ' is-active' : ''}" data-brain-node="${entry.index}" aria-pressed="${entry === selected}">
+              <span>${escapeCourseText(entry.unit.num)}</span> ${escapeCourseText(entry.unit.short || entry.unit.titolo)}
+            </button>`).join('')}
+        </div>
+      </div>`;
+  } else if (mode === 'graph') {
+    const { hubs, coords, edges } = computeGraphClusterLayout(visibleEntries);
+    const graphLinks = edges.map(e => `<line x1="${e.x1}" y1="${e.y1}" x2="${e.x2}" y2="${e.y2}" class="graph-edge ${e.tone}"/>`).join('')
+      + hubs.map(h => `<g class="graph-hub">
+          <circle cx="${h.hx}" cy="${h.hy}" r="14" fill="${softTint(h.course.accent)}" stroke="${h.course.accent}" stroke-width="1.6"/>
+          <text x="${h.hx}" y="${h.hy + 3.5}" text-anchor="middle" font-size="8.5" font-weight="800" fill="var(--ink)">${escapeCourseText(h.course.nome.slice(0, 3).toUpperCase())}</text>
+        </g>`).join('');
+    const graphNodes = visibleEntries.map(entry => {
+      const [x, y] = coords.get(entry.index) || [164, 140];
+      const active = entry === selected;
+      const label = escapeCourseText(entry.course.nome + ' · ' + entry.unit.titolo + ' · ' + entry.state.label);
+      return `<button type="button" class="profile-brain-node ${entry.state.tone}" data-brain-node="${entry.index}"
+        style="--node-x:${100 * x / 328}%;--node-y:${100 * y / 280}%" tabindex="${active ? 0 : -1}" aria-pressed="${active}"
+        aria-label="${label}" title="${label}">${active ? '<span class="brain-node-ring" aria-hidden="true"></span>' : ''}<span class="brain-node-code">${escapeCourseText(entry.unit.num)}</span></button>`;
+    }).join('');
+    stageHtml = `
+      <div class="profile-brain-figure is-graph" role="group" aria-label="Grafo semantico delle unità">
+        <svg class="profile-brain-links" viewBox="0 0 328 280" aria-hidden="true">${graphLinks}</svg>
+        ${graphNodes}
+      </div>`;
+  } else {
+    const nodeButtons = visibleEntries.map((entry, pointIndex) => {
+      const [x, y] = points[pointIndex];
+      const active = entry === selected;
+      const label = escapeCourseText(entry.course.nome + ' · ' + entry.unit.titolo + ' · ' + entry.state.label);
+      return `<button type="button" class="profile-brain-node ${entry.state.tone}" data-brain-node="${entry.index}"
+        style="--node-x:${100 * x / 328}%;--node-y:${100 * y / 280}%" tabindex="${active ? 0 : -1}" aria-pressed="${active}"
+        aria-label="${label}" title="${label}">${active ? '<span class="brain-node-ring" aria-hidden="true"></span>' : ''}<span class="brain-node-code">${escapeCourseText(entry.unit.num)}</span></button>`;
+    }).join('');
+    const links = visibleEntries.slice(1).map((entry, from) => {
+      const previous = visibleEntries[from];
+      if (entry.course !== previous.course) return '';
+      const to = from + 1;
+      const [x1, y1] = points[from];
+      const [x2, y2] = points[to];
+      const bothVerified = previous.state.tone === 'verified' && entry.state.tone === 'verified';
+      const d = `M${x1} ${y1} Q${(x1 + x2) / 2} ${Math.min(y1, y2) - 14} ${x2} ${y2}`;
+      return `<path class="${bothVerified ? 'verified' : ''}" d="${d}"/>${bothVerified ? `<path class="synapse-pulse" d="${d}"/>` : ''}`;
+    }).join('');
+    stageHtml = `
+      <div class="profile-brain-figure" role="group" aria-label="Unità sulla mappa, seleziona con le frecce">
+        <img src="assets/profile-brain.svg" alt="">
+        <svg class="profile-brain-links" viewBox="0 0 328 280" aria-hidden="true">${links}</svg>
+        ${nodeButtons}
+      </div>`;
+  }
+
   panel.innerHTML = `
     <div class="profile-brain-controls">
       <label class="profile-brain-course">
@@ -8805,17 +10009,17 @@ function renderProfileBrain(entries, selectedIndex) {
           ${courses.map(course => `<option value="${course.id}"${course.id === app.profileBrainCourse ? ' selected' : ''}>${escapeCourseText(course.nome)}</option>`).join('')}
         </select>
       </label>
-      ${scoped.length > perPage ? `<div class="profile-brain-pages" role="group" aria-label="Pagine della mappa">
+      <div class="profile-brain-modes" role="group" aria-label="Visualizzazione Knowledge Brain">
+        ${[['constellation', 'Costellazione'], ['graph', 'Grafo'], ['ascii', 'ASCII Live']].map(([id, lbl]) => `
+          <button type="button" aria-pressed="${mode === id}" onclick="setProfileBrainMode('${id}')">${lbl}</button>`).join('')}
+      </div>
+      ${mode === 'constellation' && scoped.length > perPage ? `<div class="profile-brain-pages" role="group" aria-label="Pagine della mappa">
         <button type="button" data-brain-page="-1" aria-label="Lezioni precedenti"${pageStart === 0 ? ' disabled' : ''}>‹</button>
         <span>${pageStart + 1}–${pageStart + visibleEntries.length} di ${scoped.length}</span>
         <button type="button" data-brain-page="1" aria-label="Lezioni successive"${pageStart + perPage >= scoped.length ? ' disabled' : ''}>›</button>
       </div>` : ''}
     </div>
-    <div class="profile-brain-figure" role="group" aria-label="Unità sulla mappa, seleziona con le frecce">
-      <img src="assets/profile-brain.svg" alt="">
-      <svg class="profile-brain-links" viewBox="0 0 328 280" aria-hidden="true">${links}</svg>
-      ${nodeButtons}
-    </div>
+    ${stageHtml}
     <div class="profile-brain-selection ${selected.state.tone}">
       <div>
         <span class="profile-brain-kicker">${selected.state.label}${selected.unit.prereqOk === false ? ' · Prerequisito consigliato' : ''}</span>
@@ -8832,19 +10036,26 @@ function renderProfileBrain(entries, selectedIndex) {
       ${[['verified','Verificate'],['active','In studio'],['review','Da ripassare'],['unstarted','Da iniziare']].map(([tone,label]) => `
         <li class="${tone}"><span>${label}</span><strong>${counts[tone]}</strong></li>`).join('')}
     </ul>`;
+
+  if (mode === 'ascii') {
+    const ratio = scoped.length ? counts.verified / scoped.length : 0.4;
+    startAsciiBrainLoop(ratio);
+  }
+
+  const navEntries = mode === 'ascii' ? scoped : visibleEntries;
   const selectNode = (entry, reveal = false) => {
     renderProfileBrain(entries, entry.index);
     panel.querySelector('[data-brain-node][aria-pressed="true"]')?.focus({ preventScroll: true });
     if (reveal) panel.querySelector('.profile-brain-selection').scrollIntoView({ block: 'nearest' });
   };
   panel.querySelectorAll('[data-brain-node]').forEach((button, position) => {
-    button.addEventListener('click', event => selectNode(visibleEntries[position], event.detail > 0 && window.innerWidth <= 760));
+    button.addEventListener('click', event => selectNode(navEntries[position], event.detail > 0 && window.innerWidth <= 760));
     button.addEventListener('keydown', event => {
       const positions = { ArrowLeft: position - 1, ArrowUp: position - 1, ArrowRight: position + 1,
-        ArrowDown: position + 1, Home: 0, End: visibleEntries.length - 1 };
+        ArrowDown: position + 1, Home: 0, End: navEntries.length - 1 };
       if (!Object.hasOwn(positions, event.key)) return;
       event.preventDefault();
-      selectNode(visibleEntries[Math.max(0, Math.min(visibleEntries.length - 1, positions[event.key]))]);
+      selectNode(navEntries[Math.max(0, Math.min(navEntries.length - 1, positions[event.key]))]);
     });
   });
   panel.querySelectorAll('[data-brain-page]').forEach(button => {
@@ -8912,7 +10123,9 @@ function renderAttivitaView() {
       const em = document.getElementById('profileEmailInput');
       if (em) em.value = app.profileEmail;
     } else {
-      document.getElementById('profileAccountEmail').textContent = app.profileEmail;
+      const emailEl = document.getElementById('profileAccountEmail');
+      if (emailEl) emailEl.textContent = app.profileEmail;
+      renderSettingsLivePreviewBody();
     }
     return;
   }
@@ -9201,6 +10414,7 @@ function renderAll() {
   renderRightPane();
   renderRipassoView();
   renderAttivitaView();
+  renderFileFinder();
   updateDemoJson();
   requestAnimationFrame(() => { moveRailTind(); syncSegKnobs(); });
 }
@@ -9211,6 +10425,7 @@ window.addEventListener('resize', () => {
   if (_lastWidth > 960 && nowW <= 960) app.sidebarOpen = false;
   _lastWidth = nowW;
   hideExplainSelPop();
+  hideNoteSlashPop();
   requestAnimationFrame(() => { moveRailTind(); syncSegKnobs(); renderSidebar(); });
 });
 window.addEventListener('load', window.renderAllMathSafe);
@@ -9222,17 +10437,39 @@ document.addEventListener('keydown', event => {
 document.addEventListener('click', event => {
   const insert = document.getElementById('noteInsert');
   if (insert.open && !insert.contains(event.target)) insert.open = false;
+  const reading = document.getElementById('studioReading');
+  if (reading?.open && !reading.contains(event.target)) reading.open = false;
   if (app.noteMenuOpen) toggleNoteMenu(false);
   if (app.noteStyleMenuOpen) toggleNoteStyleMenu(false);
   if (app.noteShareMenuOpen) toggleNoteShareMenu(false);
   if (app.sbCourseMenuOpen) toggleSidebarCourseMenu(false);
+  if (!event.target.closest?.('#noteSlashPop')) hideNoteSlashPop();
   if (!event.target.closest?.('#noteScrollArea') && !event.target.closest?.('#noteSelectionPop')) hideNoteSelectionPop();
   if (Date.now() - lastExplainSelAt > 240 && !event.target.closest?.('#explainSelPop') && !event.target.closest?.('.para-act')) {
     hideExplainSelPop();
   }
 });
 document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && !e.altKey && e.code === 'KeyK') {
+    e.preventDefault();
+    if (app.view !== 'archivio') openFileFinder();
+    requestAnimationFrame(() => {
+      const inp = document.getElementById('finderSearchInput');
+      if (inp) { inp.focus(); inp.select(); }
+    });
+    return;
+  }
   if (e.key === 'Escape') {
+    if (noteSlashState.open) {
+      e.preventDefault();
+      hideNoteSlashPop();
+      return;
+    }
+    if (app.view === 'archivio' && app.finderEditingNote) {
+      e.preventDefault();
+      toggleFinderNoteEdit(false);
+      return;
+    }
     if (app.noteStyleMenuOpen) {
       e.preventDefault();
       toggleNoteStyleMenu(false, true);
@@ -9260,7 +10497,7 @@ window.addEventListener('DOMContentLoaded', () => {
   restoreStudyPreferences();
   setTheme(app.theme, STUDY_PREFERENCE_VALUES.theme.indexOf(app.theme));
   renderNoteAppearance();
-  adjustStudyFontSize(0);
+  applyStudyReadingPreferences();
   if (window.TutorAuth) {
     window.TutorAuth.mount({
       getProfile: () => ({
@@ -9292,13 +10529,6 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-  document.getElementById('fileFinder').addEventListener('close', releaseFinderObjectUrl);
-  document.getElementById('fileFinder').addEventListener('keydown', event => {
-    if ((event.ctrlKey || event.metaKey) && !event.altKey && event.code === 'KeyK') {
-      event.preventDefault();
-      document.getElementById('finderSearchInput').focus();
-    }
-  });
   const dz = document.getElementById('uploadDropzone');
   if (dz) {
     dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
