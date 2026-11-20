@@ -2,6 +2,7 @@
 <html lang="it" data-theme="light">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/; base-uri 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TutorAI — Studio attivo e appunti personali</title>
 <link rel="icon" type="image/png" href="assets/logo.png">
@@ -711,8 +712,6 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
   border-block: 1px solid var(--desk-rule);
 }
 .resume-copy { min-width: 0; display: grid; justify-items: start; gap: 7px; }
-.resume-kicker { display: inline-flex; align-items: center; gap: 7px; color: var(--mut); font-size: 12px; font-weight: 650; }
-.resume-kicker .ic { width: 14px; height: 14px; }
 .resume-copy h2 { margin: 0; font: 600 clamp(23px, 2.7vw, 35px)/1.09 var(--desk-title); letter-spacing: -.045em; overflow-wrap: anywhere; }
 .resume-copy p { margin: 0; color: var(--ink-2); font-size: 13px; overflow-wrap: anywhere; }
 .resume-hero .btn { flex: none; height: 39px; gap: 9px; padding: 0 11px 0 13px; border-radius: 9px; }
@@ -759,7 +758,6 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .library-create:is(:hover, :focus-visible) .library-create-icon { transform: rotate(9deg) scale(1.07); }
 .course-library { container-type: inline-size; border-block: 1px solid var(--desk-rule); }
 .library-empty { padding: 22px 5px; color: var(--mut); }
-@keyframes course-art-arrival { from { opacity: .22; transform: scale(1.035); } }
 @media (max-width: 850px) {
   .home-catalog { grid-template-columns: minmax(0,1fr); }
 }
@@ -844,12 +842,6 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
   background: color-mix(in srgb,var(--course-accent) 6%,var(--card));
   border: 1px solid var(--desk-rule); border-radius: 12px;
 }
-.course-heading.has-cover { min-height: clamp(124px, 14vw, 173px); padding-inline-end: calc(44% + 12px); }
-.course-heading-cover {
-  position: absolute; inset: 0 0 0 auto; width: 47%; z-index: -1;
-  mask-image: linear-gradient(to right, transparent, #000 23%);
-}
-.course-heading-cover img { display: block; width: 100%; height: 100%; object-fit: cover; animation: course-art-arrival .42s ease-out both; }
 .course-heading-copy { min-width: 0; }
 .course-heading-badge {
   position: relative; display: grid; place-items: center; flex: none;
@@ -1022,8 +1014,6 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .finder-preview-list li + li { margin-top: 5px; }
 .finder-empty { margin: 18px 0; color: var(--mut); font-size: 13px; }
 @media (max-width: 640px) {
-  .course-heading.has-cover { min-height: 0; padding-inline-end: clamp(17px, 2.8vw, 32px); padding-top: 111px; }
-  .course-heading-cover { inset: 0 0 auto; width: auto; height: 94px; mask-image: none; }
   .course-heading-badge { width: 38px; height: 46px; }
   .course-heading-badge svg { width: 19px; height: 19px; }
   .course-heading h1 { font-size: clamp(23px, 6.3vw, 33px); }
@@ -1303,16 +1293,10 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 .wizard-wrap > .card:not(.hidden) { animation: wizard-step-reveal .28s cubic-bezier(.2,.75,.2,1) both; }
 .wizard-wrap .card > h3, .wizard-wrap .wizard-progress-head { font-size: clamp(17px, 2.25vw, 22px); letter-spacing: -.027em; }
 .wizard-wrap h3[tabindex="-1"]:focus { outline: none; }
-.wizard-config { display: grid; grid-template-columns: minmax(0, 1.16fr) minmax(270px, 1fr); gap: clamp(18px, 3vw, 40px); }
-.wizard-config > * { min-width: 0; }
 .wizard-label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; }
 .mode-card b, .mode-card small { display: block; }
 .mode-card small { margin-top: 3px; color: var(--mut); font-size: 12px; }
-.wizard-config .wizard-preview { align-self: start; min-width: 0; }
 .wizard-presets { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 16px; }
-.wizard-cover { position: relative; display: grid; place-items: center; aspect-ratio: 2.36; overflow: hidden; }
-.wizard-cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: course-art-arrival .32s ease-out both; }
-.wizard-cover-preview-badge { position: absolute; left: 10px; bottom: 10px; box-shadow: var(--sh); animation: wizard-step-marker .25s ease-out; }
 .wizard-appearance .icon-opt svg { pointer-events: none; }
 .wizard-appearance .icon-opt:is(:hover, :focus-visible) { transform: translateY(-2px); }
 .wizard-stepper { max-width: 100%; justify-content: center; }
@@ -1337,9 +1321,7 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
 #uploadDropzone strong, #uploadDropzone small { display: block; }
 #uploadDropzone small { color: var(--mut); font-size: 12px; margin-top: 3px; }
 @media (max-width: 720px) {
-  .wizard-config { grid-template-columns: minmax(0, 1fr); }
   .wizard-foot { align-items: center; }
-  .wizard-preview { max-width: 100%; }
 }
 @media (max-width: 390px) {
   .wizard-stepper { padding-inline: 6px; gap: 5px; }
@@ -1352,7 +1334,6 @@ svg.ic { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor
   .wizard-unit-row .input-field { flex-basis: 155px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .wizard-cover img, .wizard-cover-preview-badge, .course-heading-cover img,
   .wizard-wrap > .card:not(.hidden), .wstep.active .wnum, .wizard-demo-options:not(.hidden) { animation: none; }
   .resume-hero .btn:is(:hover, :focus-visible) .resume-cta-icon,
   .library-create:is(:hover, :focus-visible) .library-create-icon,
@@ -1968,7 +1949,6 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
   letter-spacing: -0.04em; overflow-wrap: anywhere;
   color: var(--paper-ink); margin: 0 0 18px; outline: none; border-radius: 8px; padding: 2px 4px; margin-left: -4px;
 }
-.note-h1:focus { background: rgba(130, 130, 140, 0.08); }
 .note-sec { font: 700 18px/1.3 var(--note-font, var(--study-reading)); color: var(--paper-ink); margin: 21px 0 7px; }
 
 .note-block {
@@ -1980,7 +1960,6 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
   color: var(--paper-ink2);
   overflow-wrap: break-word;
 }
-.note-block:focus { outline: none; background: rgba(130, 130, 140, 0.08); }
 .note-block[data-placeholder]:empty::before { content: attr(data-placeholder); color: var(--paper-mut); pointer-events: none; }
 .note-block.has-obs {
   background: var(--amber-s);
@@ -2398,12 +2377,6 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
   display: flex; align-items: center; justify-content: space-between; gap: 14px;
   padding: 7px 0 16px; margin: 8px 0 20px; border-bottom: 1px solid var(--line);
 }
-.profile-hero-badge {
-  width: 40px; height: 40px; border-radius: 11px; flex: none;
-  display: grid; place-items: center; color: var(--ink-2);
-  background: var(--paper); border: 1px solid var(--line);
-}
-.profile-hero-badge .ic { width: 19px; height: 19px; }
 .profile-activity-description { display: grid; min-width: 0; gap: 3px; }
 .profile-activity-description b { font: 500 17px/1.15 Georgia, serif; overflow-wrap: anywhere; }
 .profile-activity-description small, .profile-activity-time { color: var(--mut); font-size: 12px; }
@@ -2817,6 +2790,11 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
       <span>Ripasso</span>
       <span class="rb-dot" id="railRipassoDot" title="Verifica in programma"></span>
     </button>
+
+    <button type="button" class="rb rail-archive" data-tip="Archivio" aria-label="Archivio" aria-haspopup="dialog" aria-controls="fileFinder" onclick="openFileFinder()">
+      <svg class="ic" aria-hidden="true"><use href="#i-study-folder"/></svg>
+      <span>Archivio</span>
+    </button>
   </div>
 
   <div class="rail-grow"></div>
@@ -2885,6 +2863,7 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
      3. MAIN WORKSPACE
      ========================================================================= -->
 <main class="main-wrap">
+  <div class="splitter sidebar-splitter" id="sidebarSplitter" role="separator" aria-orientation="vertical" aria-label="Ridimensiona indice del corso" aria-controls="courseSidebar" aria-valuemin="190" aria-valuemax="420" aria-valuenow="248" tabindex="0"></div>
 
   <!-- =======================================================================
        VIEW 1: HOME LEARNING HUB + TRUE 3-STEP SEQUENTIAL WIZARD
@@ -2901,9 +2880,6 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
             </div>
             <div class="welcome-actions">
               <button type="button" class="btn home-recall-pill hidden" id="homeRecallsChip" onclick="openRipassoLobby(); selectRipassoDay(recallDateKey(new Date()))"></button>
-              <button type="button" class="btn home-vault-shortcut" onclick="openFileFinder()">
-                <svg class="ic" aria-hidden="true"><use href="#i-study-folder"/></svg> Archivio <span class="home-shortcut-chevron" aria-hidden="true">›</span>
-              </button>
             </div>
           </header>
 
@@ -2914,7 +2890,6 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
               <path d="M0 206 C 260 174 470 236 740 192 S 1030 146 1180 188" fill="none" stroke="#8af5c4" stroke-opacity="0.28" stroke-width="1.5"/>
             </svg>
             <div class="resume-copy">
-              <span class="resume-kicker"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg> Continua ultima lezione</span>
               <h2 id="resumeUnitTitle"></h2>
               <p id="resumeCourseName"></p>
               <div class="resume-actions">
@@ -2925,43 +2900,7 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
                 </div>
               </div>
             </div>
-            <div class="resume-mini-diagram" id="resumeLessonPreview" aria-hidden="true">
-              <svg viewBox="0 0 340 136" width="100%" height="100%">
-                <defs>
-                  <pattern id="home-hero-dots" width="13" height="13" patternUnits="userSpaceOnUse">
-                    <circle cx="2" cy="2" r="0.95" fill="rgba(255,255,255,0.24)"/>
-                  </pattern>
-                  <marker id="home-hero-arr-m" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                    <path d="M1 1 L9 5 L1 9" fill="none" stroke="#8af5c4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  </marker>
-                  <marker id="home-hero-arr-w" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                    <path d="M1 1 L9 5 L1 9" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  </marker>
-                </defs>
-                <rect x="0.5" y="0.5" width="339" height="135" rx="18" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.24)"/>
-                <rect x="1" y="1" width="338" height="134" rx="18" fill="url(#home-hero-dots)"/>
-                <text x="18" y="39" font-family="var(--mono)" font-size="10.5" font-weight="600" fill="rgba(255,255,255,0.85)">P₁</text>
-                <text x="18" y="72" font-family="var(--mono)" font-size="10.5" font-weight="600" fill="rgba(255,255,255,0.85)">P₂</text>
-                <text x="18" y="105" font-family="var(--mono)" font-size="10.5" font-weight="600" fill="rgba(255,255,255,0.85)">P₃</text>
-                <line x1="42" y1="35" x2="318" y2="35" stroke="rgba(255,255,255,0.34)" stroke-width="1.35"/>
-                <line x1="42" y1="68" x2="318" y2="68" stroke="rgba(255,255,255,0.34)" stroke-width="1.35"/>
-                <line x1="42" y1="101" x2="318" y2="101" stroke="rgba(255,255,255,0.34)" stroke-width="1.35"/>
-                <path class="hero-msg-flow" d="M78 35 L154 65" stroke="#8af5c4" stroke-width="1.9" marker-end="url(#home-hero-arr-m)" fill="none"/>
-                <path d="M168 65 L220 38" stroke="rgba(255,255,255,0.9)" stroke-width="1.5" marker-end="url(#home-hero-arr-w)" fill="none"/>
-                <path d="M168 72 L274 98" stroke="rgba(255,255,255,0.9)" stroke-width="1.5" marker-end="url(#home-hero-arr-w)" fill="none"/>
-                <circle cx="78" cy="35" r="5" fill="#ffffff"/>
-                <circle cx="110" cy="68" r="4.8" fill="#ffffff" fill-opacity="0.92"/>
-                <circle cx="126" cy="101" r="4.8" fill="#ffffff" fill-opacity="0.92"/>
-                <circle class="hero-pulse-ring" cx="162" cy="68" r="13.5" fill="#8af5c4" fill-opacity="0.26"/>
-                <circle cx="162" cy="68" r="7.2" fill="#48c788" stroke="#ffffff" stroke-width="2.2"/>
-                <rect x="140" y="81" width="44" height="17" rx="8.5" fill="#ffffff"/>
-                <text x="162" y="92.5" text-anchor="middle" font-family="var(--mono)" font-size="9.5" font-weight="700" fill="#1565f2">C=2</text>
-                <circle cx="226" cy="35" r="5" fill="#ffffff"/>
-                <circle cx="280" cy="101" r="5" fill="#ffffff"/>
-                <path class="hero-spark" d="M312 15 L314 20.5 L319.5 22.5 L314 24.5 L312 30 L310 24.5 L304.5 22.5 L310 20.5 Z" fill="#8af5c4"/>
-                <path class="hero-spark hero-spark-alt" d="M296 112 L297.2 115 L300.2 116.2 L297.2 117.4 L296 120.4 L294.8 117.4 L291.8 116.2 L294.8 115 Z" fill="#ffffff" fill-opacity="0.88"/>
-              </svg>
-            </div>
+            <figure class="resume-figure hidden" id="resumeLessonFigure"></figure>
           </section>
 
           <div class="home-catalog">
@@ -2980,11 +2919,10 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
                 </div>
               </div>
               <div class="course-library" id="coursesCardsGrid"></div>
-              <div class="home-review-hint hidden" id="homeReviewHint"></div>
             </section>
-            <aside class="home-documents" aria-label="Appunti e archivio">
+            <aside class="home-documents" aria-label="Appunti e promemoria">
               <section class="desk-note-slot" id="deskNoteSlot" aria-labelledby="deskNoteTitle"></section>
-              <section class="home-archive" id="homeArchive" aria-labelledby="homeArchiveTitle"></section>
+              <section class="home-review-hint hidden" id="homeReviewHint" aria-labelledby="homeReviewTitle"></section>
             </aside>
           </div>
         </div>
@@ -3007,88 +2945,49 @@ mark.hl-green { background: rgba(56, 198, 134, 0.28); color: inherit; padding: 0
             <p id="wizardStepHint"></p>
           </header>
           <div class="card" id="wizStep1">
-            <div class="wizard-config">
-              <div class="wizard-setup">
-                <h3 tabindex="-1">Come vuoi studiare?</h3>
-                <label for="obCourseName" class="wizard-label">Nome del corso</label>
-                <div class="wizard-name-field">
-                  <input id="obCourseName" class="input-field" type="text" maxlength="90" placeholder="Es. Reti di Calcolatori" oninput="onCourseNameChange()">
-                  <span id="wizardNameLength" aria-hidden="true">0/90</span>
+            <div class="wizard-setup">
+              <h3 tabindex="-1">Come vuoi studiare?</h3>
+              <label for="obCourseName" class="wizard-label">Nome del corso</label>
+              <div class="wizard-name-field">
+                <input id="obCourseName" class="input-field" type="text" maxlength="90" placeholder="Es. Reti di Calcolatori" oninput="onCourseNameChange()">
+                <span id="wizardNameLength" aria-hidden="true">0/90</span>
+              </div>
+              <div class="wizard-presets">
+                <span>Suggeriti</span>
+                <button type="button" class="chip" aria-pressed="false" onclick="setCoursePreset('Reti di Calcolatori')">Reti di Calcolatori</button>
+                <button type="button" class="chip" aria-pressed="false" onclick="setCoursePreset('Analisi Matematica II')">Analisi Matematica II</button>
+                <button type="button" class="chip" aria-pressed="false" onclick="setCoursePreset('Basi di Dati')">Basi di Dati</button>
+              </div>
+              <span class="wizard-label" id="wizardPathLabel">Percorso di studio</span>
+              <div class="wizard-paths" role="group" aria-labelledby="wizardPathLabel">
+                <button type="button" class="mode-card on" id="obLezBtn" onclick="setOnboardingPath('lezione')" aria-pressed="true">
+                  <span class="mode-art">
+                    <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="5" width="17" height="23" rx="4" fill="#b9d2ff" transform="rotate(-10 13.5 16.5)"/><rect x="9" y="3" width="18" height="24" rx="4" fill="#1565f2"/><path d="M13 10h10m-10 5h10m-10 5h6" stroke="white" stroke-linecap="round" stroke-width="1.6"/><circle cx="26" cy="26" r="4" fill="#48c788" stroke="white" stroke-width="1.5"/></svg>
+                  </span>
+                  <span><b>Lezione per lezione</b><small>Parti da una lezione e aggiungi le successive.</small></span>
+                  <span class="mode-radio" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="mode-card" id="obExBtn" onclick="setOnboardingPath('esame')" aria-pressed="false">
+                  <span class="mode-art">
+                    <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="6" width="23" height="22" rx="6" fill="#fdf1dc" stroke="#c57f14" stroke-width="1.4"/><path d="M4 13h23M10 3v7m11-7v7" fill="none" stroke="#c57f14" stroke-linecap="round" stroke-width="1.5"/><circle cx="19" cy="20" r="3.8" fill="#e5484d"/><path d="M27 2c.4 2 1.3 2.9 3.3 3.3-2 .4-2.9 1.3-3.3 3.3-.4-2-1.3-2.9-3.3-3.3C25.7 4.9 26.6 4 27 2Z" fill="#c57f14"/></svg>
+                  </span>
+                  <span><b>Prepara un esame</b><small>Organizza il programma fino alla data dell’esame.</small></span>
+                  <span class="mode-radio" aria-hidden="true"></span>
+                </button>
+              </div>
+              <div id="obPathwayDetails"></div>
+              <div class="wizard-appearance">
+                <div>
+                  <span class="wizard-label" id="wizardIconLabel">Icona del corso</span>
+                  <div class="icon-picker" id="obIconPicker" role="group" aria-labelledby="wizardIconLabel"></div>
+                  <span class="wizard-choice-caption" id="wizardIconCaption"></span>
                 </div>
-                <div class="wizard-presets">
-                  <span>Suggeriti</span>
-                  <button type="button" class="chip" aria-pressed="false" onclick="setCoursePreset('Reti di Calcolatori')">Reti di Calcolatori</button>
-                  <button type="button" class="chip" aria-pressed="false" onclick="setCoursePreset('Analisi Matematica II')">Analisi Matematica II</button>
-                  <button type="button" class="chip" aria-pressed="false" onclick="setCoursePreset('Basi di Dati')">Basi di Dati</button>
-                </div>
-                <span class="wizard-label" id="wizardPathLabel">Percorso di studio</span>
-                <div class="wizard-paths" role="group" aria-labelledby="wizardPathLabel">
-                  <button type="button" class="mode-card on" id="obLezBtn" onclick="setOnboardingPath('lezione')" aria-pressed="true">
-                    <span class="mode-art">
-                      <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="5" width="17" height="23" rx="4" fill="#b9d2ff" transform="rotate(-10 13.5 16.5)"/><rect x="9" y="3" width="18" height="24" rx="4" fill="#1565f2"/><path d="M13 10h10m-10 5h10m-10 5h6" stroke="white" stroke-linecap="round" stroke-width="1.6"/><circle cx="26" cy="26" r="4" fill="#48c788" stroke="white" stroke-width="1.5"/></svg>
-                    </span>
-                    <span><b>Lezione per lezione</b><small>Parti da una lezione e aggiungi le successive.</small></span>
-                    <span class="mode-radio" aria-hidden="true"></span>
-                  </button>
-                  <button type="button" class="mode-card" id="obExBtn" onclick="setOnboardingPath('esame')" aria-pressed="false">
-                    <span class="mode-art">
-                      <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="6" width="23" height="22" rx="6" fill="#fdf1dc" stroke="#c57f14" stroke-width="1.4"/><path d="M4 13h23M10 3v7m11-7v7" fill="none" stroke="#c57f14" stroke-linecap="round" stroke-width="1.5"/><circle cx="19" cy="20" r="3.8" fill="#e5484d"/><path d="M27 2c.4 2 1.3 2.9 3.3 3.3-2 .4-2.9 1.3-3.3 3.3-.4-2-1.3-2.9-3.3-3.3C25.7 4.9 26.6 4 27 2Z" fill="#c57f14"/></svg>
-                    </span>
-                    <span><b>Prepara un esame</b><small>Organizza il programma fino alla data dell’esame.</small></span>
-                    <span class="mode-radio" aria-hidden="true"></span>
-                  </button>
-                </div>
-                <div id="obPathwayDetails"></div>
-                <div class="wizard-appearance">
-                  <div>
-                    <span class="wizard-label" id="wizardIconLabel">Icona del corso</span>
-                    <div class="icon-picker" id="obIconPicker" role="group" aria-labelledby="wizardIconLabel"></div>
-                    <span class="wizard-choice-caption" id="wizardIconCaption"></span>
-                  </div>
-                  <div>
-                    <span class="wizard-label" id="wizardColorLabel">Colore copertina</span>
-                    <div class="color-picker" id="obColorPicker" role="group" aria-labelledby="wizardColorLabel"></div>
-                    <span class="wizard-choice-caption" id="wizardColorCaption"></span>
-                  </div>
-                </div>
-                <div class="wizard-icon-hint hidden" id="wizardIconHint">
-                  <svg class="ic" aria-hidden="true"><use href="#i-study-spark"/></svg>
-                  <span id="wizardIconHintText"></span>
-                  <button type="button" onclick="document.querySelector('#obIconPicker .on')?.focus()">Cambia</button>
+                <div>
+                  <span class="wizard-label" id="wizardColorLabel">Colore del corso</span>
+                  <div class="color-picker" id="obColorPicker" role="group" aria-labelledby="wizardColorLabel"></div>
+                  <span class="wizard-choice-caption" id="wizardColorCaption"></span>
                 </div>
               </div>
-              <section class="wizard-preview" aria-labelledby="wizardPreviewLabel">
-                <div class="wizard-preview-heading">
-                  <span class="wizard-preview-label" id="wizardPreviewLabel">Anteprima dal vivo</span>
-                  <span>Come apparirà nella Home</span>
-                </div>
-                <div class="wizard-preview-stage" id="wizardPreviewStage">
-                  <div class="wizard-preview-orbit" aria-hidden="true">
-                    <svg class="ic"><use href="#i-study-spark"/></svg><svg class="ic"><use href="#i-study-spark"/></svg>
-                  </div>
-                  <div class="wizard-preview-card">
-                    <div class="wizard-preview-card-top">
-                      <span class="wizard-preview-badge" id="wizardPreviewIcon" aria-hidden="true"></span>
-                      <span class="wizard-preview-arrow" aria-hidden="true">↗</span>
-                    </div>
-                    <div class="wizard-preview-card-paper">
-                      <b id="wizardCoverName">Il tuo corso</b>
-                      <span id="wizardPreviewPath">Lezione per lezione</span>
-                      <span class="wizard-preview-segments" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-                      <span id="wizardPreviewUnits">Nessuna unità ancora</span>
-                      <span class="wizard-preview-card-status"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg> Bozza</span>
-                    </div>
-                  </div>
-                  <div class="wizard-preview-bindings">
-                    <span><span id="wizardBindingIcon" aria-hidden="true"></span> <span id="wizardBindingIconName"></span></span>
-                    <span><i aria-hidden="true"></i> <span id="wizardBindingColorName"></span></span>
-                  </div>
-                  <details class="wizard-cover-details">
-                    <summary>Mostra l’illustrazione del corso</summary>
-                    <div class="wizard-cover" id="wizardCover" aria-hidden="true"></div>
-                  </details>
-                </div>
-              </section>
             </div>
             <div class="wizard-foot">
               <span class="wizard-ready-hint"><span id="wizardReadyCheck" class="hidden" aria-hidden="true"><svg class="ic"><use href="#i-check"/></svg></span><span id="wizStep1Hint">Inserisci il nome del corso per continuare</span></span>
@@ -3653,10 +3552,10 @@ const COURSES_DATA = {
       { nome: 'Appunti_Manoscritti.pdf', info: 'Scansione senza testo (OCR non attivo)', pages: 6, ok: false }
     ],
     units: [
-      { id: 'u11', num: '1.1', short: 'Modello asincrono', titolo: '1.1 Modello di sistema asincrono', stato: 'dimostrato', prereqOk: true, src: 'Lezione_05_Tempo_Logico.pdf', slides: 28 },
-      { id: 'u12', num: '1.2', short: 'Happened-Before', titolo: '1.2 Relazione Happened-Before', stato: 'dimostrato', prereqOk: true, src: 'Dispensa_Cap2_Lamport.pdf', slides: 14 },
-      { id: 'u13', num: '1.3', short: 'Orologi Lamport', titolo: '1.3 Orologi Logici di Lamport', stato: 'in_corso', prereqOk: true, src: 'Lezione_05_Tempo_Logico.pdf', slides: 28 },
-      { id: 'u14', num: '1.4', short: 'Orologi Vettoriali', titolo: '1.4 Orologi Vettoriali', stato: 'non_studiato', prereqOk: false, src: 'Temi_Esame_2025.pdf', slides: 16 }
+      { id: 'u11', num: '1.1', short: 'Modello asincrono', titolo: '1.1 Modello di sistema asincrono', stato: 'dimostrato', prereqOk: true, src: 'Lezione_05_Tempo_Logico.pdf', slides: 28, studyDiagram: 'async-message' },
+      { id: 'u12', num: '1.2', short: 'Happened-Before', titolo: '1.2 Relazione Happened-Before', stato: 'dimostrato', prereqOk: true, src: 'Dispensa_Cap2_Lamport.pdf', slides: 14, studyDiagram: 'causal-chain' },
+      { id: 'u13', num: '1.3', short: 'Orologi Lamport', titolo: '1.3 Orologi Logici di Lamport', stato: 'in_corso', prereqOk: true, src: 'Lezione_05_Tempo_Logico.pdf', slides: 28, studyDiagram: 'lamport' },
+      { id: 'u14', num: '1.4', short: 'Orologi Vettoriali', titolo: '1.4 Orologi Vettoriali', stato: 'non_studiato', prereqOk: false, src: 'Temi_Esame_2025.pdf', slides: 16, studyDiagram: 'vector-clock' }
     ]
   },
   algoritmi: {
@@ -3667,9 +3566,9 @@ const COURSES_DATA = {
       { nome: 'Eserciziario_Grafi.pdf', info: '22 pagine · estratte', pages: 22, ok: true }
     ],
     units: [
-      { id: 'a1', num: '1.1', short: 'Master Theorem', titolo: '1.1 Alberi di ricorsione e Master Theorem', stato: 'dimostrato', prereqOk: true, src: 'Lezione_08_Programmazione_Dinamica.pdf', slides: 34 },
-      { id: 'a2', num: '1.2', short: 'Prog. Dinamica', titolo: '1.2 Programmazione Dinamica su sequenze', stato: 'da_ripassare', prereqOk: true, src: 'Lezione_08_Programmazione_Dinamica.pdf', slides: 34 },
-      { id: 'a3', num: '1.3', short: 'Cammini minimi', titolo: '1.3 Grafi pesati e cammini minimi', stato: 'non_studiato', prereqOk: true, src: 'Eserciziario_Grafi.pdf', slides: 22 }
+      { id: 'a1', num: '1.1', short: 'Master Theorem', titolo: '1.1 Alberi di ricorsione e Master Theorem', stato: 'dimostrato', prereqOk: true, src: 'Lezione_08_Programmazione_Dinamica.pdf', slides: 34, studyDiagram: 'recursion-tree' },
+      { id: 'a2', num: '1.2', short: 'Prog. Dinamica', titolo: '1.2 Programmazione Dinamica su sequenze', stato: 'da_ripassare', prereqOk: true, src: 'Lezione_08_Programmazione_Dinamica.pdf', slides: 34, studyDiagram: 'dp-dependencies' },
+      { id: 'a3', num: '1.3', short: 'Cammini minimi', titolo: '1.3 Grafi pesati e cammini minimi', stato: 'non_studiato', prereqOk: true, src: 'Eserciziario_Grafi.pdf', slides: 22, studyDiagram: 'weighted-paths' }
     ]
   },
   crypto: {
@@ -3679,8 +3578,8 @@ const COURSES_DATA = {
       { nome: 'Katz_Lindell_Cap3_IND_CPA.pdf', info: '26 slide · estratte', pages: 26, ok: true }
     ],
     units: [
-      { id: 'c0', num: '3.1', short: 'Cifrari a flusso', titolo: '3.1 Cifrari a flusso e PRG', stato: 'dimostrato', prereqOk: true, src: 'Katz_Lindell_Cap3_IND_CPA.pdf', slides: 26 },
-      { id: 'c1', num: '3.2', short: 'IND-CPA', titolo: '3.2 Sicurezza IND-CPA e cifrari probabilistici', stato: 'in_corso', prereqOk: true, src: 'Katz_Lindell_Cap3_IND_CPA.pdf', slides: 26 }
+      { id: 'c0', num: '3.1', short: 'Cifrari a flusso', titolo: '3.1 Cifrari a flusso e PRG', stato: 'dimostrato', prereqOk: true, src: 'Katz_Lindell_Cap3_IND_CPA.pdf', slides: 26, studyDiagram: 'stream-cipher' },
+      { id: 'c1', num: '3.2', short: 'IND-CPA', titolo: '3.2 Sicurezza IND-CPA e cifrari probabilistici', stato: 'in_corso', prereqOk: true, src: 'Katz_Lindell_Cap3_IND_CPA.pdf', slides: 26, studyDiagram: 'ind-cpa' }
     ]
   }
 };
@@ -3945,6 +3844,8 @@ function makeInitialState() {
     notePattern: 'plain',
     noteFont: 'serif',
     studyFontSize: 17,
+    startPage: 'corso',
+    noteSpellcheck: false,
     finderQuery: '',
     finderLayout: 'grid',
     finderType: 'all',
@@ -4108,20 +4009,6 @@ function softTint(accent) {
   return `color-mix(in srgb, ${accent || '#2f65d8'} 14%, var(--card))`;
 }
 
-const COURSE_COVERS = {
-  nodes: 'assets/course-covers/sistemi.webp',
-  wave: 'assets/course-covers/algoritmi.webp',
-  db: 'assets/course-covers/db.webp',
-  lock: 'assets/course-covers/crypto.webp',
-  matrix: 'assets/course-covers/algebra.webp',
-  atom: 'assets/course-covers/fisica.webp'
-};
-
-function courseCoverArt(course) {
-  const cover = COURSE_COVERS[course.kind];
-  return cover ? `<img src="${cover}" alt="" decoding="async">` : renderSubjectSvg(course.kind, course.accent);
-}
-
 function escapeCourseText(value) {
   return String(value ?? '').replace(/[&<>"']/g, char => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -4165,12 +4052,16 @@ function renderMath(el) {
   try {
     renderMathInElement(el, {
       delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }],
-      ignoredClasses: ['note-block-editing', 'note-edit-name', 'note-edit-code'],
+      ignoredClasses: ['katex', 'katex-display', 'note-flow', 'note-math', 'note-edit-name', 'note-edit-code'],
       throwOnError: false
     });
   } catch (_) {}
 }
-window.renderAllMathSafe = () => renderMath(document.body);
+window.renderAllMathSafe = () => {
+  renderMath(document.body);
+  const flow = document.getElementById('noteFlow');
+  if (flow && document.activeElement !== flow) renderNoteFlowMath(flow);
+};
 
 let toastTimer;
 function showToast(msg) {
@@ -4299,7 +4190,6 @@ function openWizard(keepState = false) {
     app.extractedUnits = [];
     const inp = document.getElementById('obCourseName');
     if (inp) inp.value = '';
-    document.querySelector('.wizard-cover-details').open = false;
     document.getElementById('realFileInput').value = '';
     setOnboardingPath('lezione');
   }
@@ -4323,6 +4213,7 @@ function setTheme(theme, pos) {
     s.querySelectorAll('button').forEach((b, i) => b.classList.toggle('on', i === pos));
   }
   syncAccountSettings();
+  saveStudyPreferences();
 }
 
 function cycleTheme() {
@@ -4369,6 +4260,52 @@ function setMobilePane(side) {
     const fraction = Number(sp.getAttribute('aria-valuenow')) / 100;
     resize(fraction + (event.key === 'ArrowRight' ? 0.03 : -0.03));
   });
+})();
+
+(() => {
+  const sidebar = document.getElementById('courseSidebar');
+  const splitter = document.getElementById('sidebarSplitter');
+  const desktop = matchMedia('(min-width: 961px)');
+  const minimum = Number(splitter.getAttribute('aria-valuemin'));
+  const widthLimit = () => Math.min(420, Math.floor(window.innerWidth * 0.3));
+  const setWidth = width => {
+    const limit = widthLimit();
+    const next = Math.max(minimum, Math.min(Math.round(width), limit));
+    sidebar.style.setProperty('--outline-width', next + 'px');
+    splitter.setAttribute('aria-valuemax', String(limit));
+    splitter.setAttribute('aria-valuenow', String(next));
+  };
+  let drag;
+  splitter.addEventListener('pointerdown', event => {
+    if (event.button !== 0 || drag) return;
+    drag = { id: event.pointerId, x: event.clientX, width: sidebar.getBoundingClientRect().width };
+    sidebar.classList.add('resizing');
+    splitter.classList.add('drag');
+    splitter.setPointerCapture(event.pointerId);
+  });
+  window.addEventListener('pointermove', event => {
+    if (drag?.id === event.pointerId) setWidth(drag.width + event.clientX - drag.x);
+  });
+  const finish = event => {
+    if (drag?.id !== event.pointerId) return;
+    drag = null;
+    sidebar.classList.remove('resizing');
+    splitter.classList.remove('drag');
+  };
+  window.addEventListener('pointerup', finish);
+  window.addEventListener('pointercancel', finish);
+  splitter.addEventListener('lostpointercapture', finish);
+  splitter.addEventListener('keydown', event => {
+    const width = Number(splitter.getAttribute('aria-valuenow'));
+    const targets = { ArrowLeft: width - 16, ArrowRight: width + 16, Home: minimum, End: widthLimit() };
+    if (!Object.hasOwn(targets, event.key)) return;
+    event.preventDefault();
+    setWidth(targets[event.key]);
+  });
+  window.addEventListener('resize', () => {
+    if (desktop.matches) setWidth(Number(splitter.getAttribute('aria-valuenow')));
+  });
+  if (desktop.matches) setWidth(Number(splitter.getAttribute('aria-valuenow')));
 })();
 
 /* ============================================================================
@@ -4538,11 +4475,20 @@ function submitAddLesson(forceSim) {
   }, 190);
 }
 
+function getHomeResumeLesson() {
+  const recent = app.lastStudied || { courseId: app.courseId, unitId: app.unitId };
+  const recentCourse = COURSES_DATA[recent.courseId];
+  const course = recentCourse || COURSES_DATA[app.courseId];
+  const unitId = recentCourse ? recent.unitId : app.unitId;
+  const unit = course?.units.find(lesson => lesson.id === unitId) || course?.units[0];
+  return { recent, course, unit };
+}
+
 function openLastStudiedInStudio() {
-  const ls = app.lastStudied || { courseId: app.courseId, unitId: app.unitId };
-  if (COURSES_DATA[ls.courseId]) selectCourse(ls.courseId);
-  const course = COURSES_DATA[app.courseId];
-  selectUnit(course.units.find(u => u.id === ls.unitId)?.id || app.unitId);
+  const { course, unit } = getHomeResumeLesson();
+  if (!unit) return;
+  selectCourse(course.id);
+  selectUnit(unit.id);
 }
 
 function openStudyHistoryModal() {
@@ -4558,22 +4504,32 @@ function renderHomeView() {
     return;
   }
 
-  const recent = app.lastStudied || { courseId: app.courseId, unitId: app.unitId };
-  const course = COURSES_DATA[recent.courseId] || COURSES_DATA[app.courseId];
-  const unit = course.units.find(u => u.id === recent.unitId) || course.units[0];
+  const { recent, course, unit } = getHomeResumeLesson();
   const today = new Date();
   const todayKey = recallDateKey(today);
   const dateLabel = document.getElementById('welcomeDate');
   dateLabel.dateTime = todayKey;
   dateLabel.textContent = today.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'short' });
   document.getElementById('welcomeTitle').textContent = `Bentornato, ${app.profileName || 'Luca'}`;
-  document.getElementById('resumeUnitTitle').textContent = unit.titolo;
-  document.getElementById('resumeCourseName').textContent = `${course.nome} · Lezione ${course.units.indexOf(unit) + 1} di ${course.units.length}`;
-  const progress = document.getElementById('resumeProgress');
-  progress.max = course.units.length;
-  progress.value = course.units.filter(lesson => lesson.stato === 'dimostrato').length;
-  document.getElementById('resumeProgressLabel').textContent = `${progress.value}/${progress.max}`;
-  document.getElementById('resumeLessonPreview').classList.toggle('hidden', course.id !== 'sistemi' || unit.id !== 'u13');
+  document.getElementById('homeHeroCard').classList.toggle('hidden', !unit);
+  if (unit) {
+    document.getElementById('resumeUnitTitle').textContent = unit.titolo;
+    document.getElementById('resumeCourseName').textContent = `${course.nome} · Lezione ${course.units.indexOf(unit) + 1} di ${course.units.length}`;
+    const progress = document.getElementById('resumeProgress');
+    progress.max = course.units.length;
+    progress.value = course.units.filter(lesson => lesson.stato === 'dimostrato').length;
+    document.getElementById('resumeProgressLabel').textContent = `${progress.value}/${progress.max}`;
+  }
+  const figure = document.getElementById('resumeLessonFigure');
+  const diagram = getUnitStudyDiagram(unit);
+  figure.classList.toggle('hidden', !diagram);
+  if (figure.dataset.diagram !== (diagram || '')) {
+    figure.dataset.diagram = diagram || '';
+    const title = diagram === 'lamport' ? 'Eventi e messaggi tra processi' : STUDY_DIAGRAMS[diagram]?.title;
+    figure.innerHTML = title
+      ? `${renderStudioDiagram(diagram, unit.num, 'home-study-arrow', 'e22')}<figcaption>${escapeCourseText(title)}</figcaption>`
+      : '';
+  }
 
   const upcoming = app.ripassoAgenda.filter(item => !item.completedBy && item.date >= todayKey &&
     COURSES_DATA[item.courseId]?.units.some(lesson => lesson.id === item.unitId))
@@ -4619,15 +4575,28 @@ function renderHomeView() {
       </button>`;
   }).join('') || '<p class="library-empty">Nessun corso corrisponde alla ricerca.</p>';
 
-  const reviewCourse = courses.find(c => c.units.some(lesson => lesson.stato === 'da_ripassare'));
+  const nextReminder = upcoming[0];
+  const reviewCourse = nextReminder
+    ? COURSES_DATA[nextReminder.courseId]
+    : Object.values(COURSES_DATA).find(c => c.units.some(lesson => lesson.stato === 'da_ripassare'));
   const hint = document.getElementById('homeReviewHint');
   hint.classList.toggle('hidden', !reviewCourse);
   if (reviewCourse) {
     const reviewCount = reviewCourse.units.filter(lesson => lesson.stato === 'da_ripassare').length;
+    const lesson = nextReminder && reviewCourse.units.find(unit => unit.id === nextReminder.unitId);
+    const reminderDate = nextReminder && (nextReminder.date === todayKey
+      ? 'Oggi'
+      : recallDateFromKey(nextReminder.date).toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'short' }));
+    const metadata = lesson
+      ? `${reviewCourse.nome} · ${reminderDate}`
+      : plural(reviewCount, 'unità da ripassare', 'unità da ripassare');
     hint.innerHTML = `<span class="home-tutor-icon" aria-hidden="true">${icon('i-study-spark')}</span>
-      <div><span class="home-hint-caption">Promemoria di studio</span>
-      <strong>${escapeCourseText(reviewCourse.nome)} · ${plural(reviewCount, 'unità da ripassare', 'unità da ripassare')}</strong></div>
-      <button type="button" class="btn ghost" onclick="openRipassoLobby('${reviewCourse.id}')">Apri Ripasso ${icon('i-course-arrow')}</button>`;
+      <div class="home-review-copy">
+        <h2 id="homeReviewTitle">Promemoria di studio</h2>
+        <strong>${escapeCourseText(lesson?.titolo || reviewCourse.nome)}</strong>
+        <p>${escapeCourseText(metadata)}</p>
+      </div>
+      <button type="button" class="btn ghost" onclick="openRipassoLobby('${reviewCourse.id}')${nextReminder ? `; selectRipassoDay('${nextReminder.date}')` : ''}">Apri Ripasso ${icon('i-course-arrow')}</button>`;
   }
 }
 
@@ -4637,21 +4606,12 @@ function noteExcerpt(note) {
 
 function renderDeskNote(recent) {
   const slot = document.getElementById('deskNoteSlot');
-  const archive = document.getElementById('homeArchive');
   const refs = [...app.studyHistory.filter(entry => entry.kind === 'appunti'), recent];
   const match = refs.find(({ courseId, unitId }) => {
     const note = app.unitNotes[courseId + ':' + unitId];
-    return note && !note.noteBlank && note.blocks.length > 0;
+    return COURSES_DATA[courseId]?.units.some(unit => unit.id === unitId) &&
+      note && !note.noteBlank && note.blocks.length > 0;
   });
-  const archiveCourse = COURSES_DATA[match?.courseId] || COURSES_DATA[recent.courseId] || COURSES_DATA[app.courseId];
-  archive.innerHTML = `<div class="home-archive-head">
-    <span class="home-archive-icon">${icon('i-study-folder')}</span>
-    <div><h2 id="homeArchiveTitle">Archivio</h2><p>${escapeCourseText(archiveCourse.nome)}</p></div>
-    ${match ? `<button type="button" class="btn pri home-archive-export" aria-label="Esporta ultimo appunto in Markdown" onclick="exportFinderMarkdown('${match.courseId}', '${match.unitId}', 'notes')">.md ↓</button>` : ''}
-  </div>
-  <div class="home-archive-folders">
-    ${FINDER_FOLDERS.map(folder => `<button type="button" onclick="openFileFinder('${archiveCourse.id}', '${folder.id}')">${icon('i-folder')} ${folder.title}</button>`).join('')}
-  </div>`;
 
   if (!match) {
     slot.classList.add('hidden');
@@ -4702,13 +4662,11 @@ function renderCourseDetailView() {
     studiato_da_verificare: 'Studiata', da_ripassare: 'Da ripassare', non_studiato: 'Da iniziare'
   };
   const ocrIssues = course.sources.filter(s => !s.ok).length;
-  const hasCover = Boolean(COURSE_COVERS[course.kind]);
   const verifiedCount = course.units.filter(unit => unit.stato === 'dimostrato').length;
 
   target.innerHTML = `
     <button type="button" class="btn ghost detail-back" onclick="openHomeHub()">← Corsi</button>
-    <header class="course-heading study-band${hasCover ? ' has-cover' : ''}">
-      ${hasCover ? `<div class="course-heading-cover" aria-hidden="true">${courseCoverArt(course)}</div>` : ''}
+    <header class="course-heading study-band">
       <svg class="study-band-waves" viewBox="0 0 1180 220" preserveAspectRatio="none" aria-hidden="true"><use href="#study-waves"/></svg>
       <span class="course-heading-badge" aria-hidden="true">${renderSubjectSvg(course.kind, course.accent)}</span>
       <div class="course-heading-copy">
@@ -5105,13 +5063,11 @@ function setOnboardingColor(hex) {
 }
 
 function renderOnboardingPickers() {
-  const preview = document.getElementById('wizardCover');
   const iconBox = document.getElementById('obIconPicker');
   const colorBox = document.getElementById('obColorPicker');
   if (!iconBox || !colorBox) return;
   const nameInput = document.getElementById('obCourseName');
   const name = getWizardCourseName();
-  document.getElementById('wizardCoverName').textContent = name || 'Il tuo corso';
   document.getElementById('wizardNameLength').textContent = `${nameInput.value.length}/${nameInput.maxLength}`;
   document.getElementById('btnWizTo2').disabled = !name;
   document.getElementById('wizardReadyCheck').classList.toggle('hidden', !name);
@@ -5119,44 +5075,17 @@ function renderOnboardingPickers() {
   document.querySelectorAll('.wizard-presets .chip').forEach(button => {
     button.setAttribute('aria-pressed', String(button.textContent.trim() === name));
   });
-  document.getElementById('wizardPreviewPath').textContent = app.onboardingPath === 'esame' ? 'Preparazione esame' : 'Lezione per lezione';
-  const unitCount = app.extractedUnits.length;
-  document.getElementById('wizardPreviewUnits').textContent = unitCount ? `${unitCount} unità in bozza` : 'Nessuna unità ancora';
-
   const col = app.onboardingColor || '#2f65d8';
   const kind = app.onboardingIcon || 'nodes';
   const iconName = STEM_ICONS.find(item => item.id === kind).label.split(' / ')[0];
-  document.getElementById('wizardIconHint').classList.toggle('hidden', !name || app.onboardingCustomLook);
-  document.getElementById('wizardIconHintText').textContent = `Icona suggerita · ${iconName}`;
   const appearance = `${kind}:${col}`;
-  if (preview.dataset.appearance === appearance) return;
-  const hadPrevAppearance = Boolean(preview.dataset.appearance);
-  preview.dataset.appearance = appearance;
+  if (iconBox.dataset.appearance === appearance) return;
+  iconBox.dataset.appearance = appearance;
   const colorNames = ['Cobalto', 'Smeraldo', 'Ambra', 'Viola', 'Corallo', 'Petrolio'];
   const colorName = colorNames[COURSE_COLORS.indexOf(col)];
-  document.getElementById('wizardPreviewStage').style.setProperty('--wizard-accent', col);
+  document.getElementById('wizStep1').style.setProperty('--wizard-accent', col);
   document.getElementById('wizardIconCaption').textContent = `${iconName} · selezionata`;
   document.getElementById('wizardColorCaption').textContent = colorName;
-  document.getElementById('wizardBindingIconName').textContent = `Icona ${iconName}`;
-  document.getElementById('wizardBindingColorName').textContent = `Colore ${colorName}`;
-  const subjectIcon = renderSubjectSvg(kind, col);
-  document.getElementById('wizardPreviewIcon').innerHTML = subjectIcon;
-  document.getElementById('wizardBindingIcon').innerHTML = subjectIcon;
-  preview.style.background = softTint(col);
-  if (preview.dataset.kind !== kind) {
-    preview.dataset.kind = kind;
-    preview.innerHTML = `${courseCoverArt({ kind, accent: col })}<span class="course-banner-icon wizard-cover-preview-badge"></span>`;
-  }
-  preview.querySelector('.wizard-cover-preview-badge').innerHTML = subjectIcon;
-  if (hadPrevAppearance) {
-    const previewCard = document.querySelector('#wizardPreviewStage .wizard-preview-card');
-    if (previewCard) {
-      previewCard.classList.remove('is-popping');
-      void previewCard.offsetWidth;
-      previewCard.classList.add('is-popping');
-      previewCard.addEventListener('animationend', () => previewCard.classList.remove('is-popping'), { once: true });
-    }
-  }
   iconBox.innerHTML = STEM_ICONS.map(ic => `
     <button type="button" class="icon-opt ${ic.id === kind ? 'on' : ''}" title="${ic.label}" aria-label="${ic.label}" aria-pressed="${ic.id === kind}" onclick="setOnboardingIcon('${ic.id}')">
       ${renderSubjectSvg(ic.id, ic.id === kind ? col : 'var(--mut)')}
@@ -5215,17 +5144,33 @@ function renderOnboardingDetails() {
   if (app.onboardingPath === 'lezione') {
     box.replaceChildren();
   } else {
+    const hours = app.onboardingHours;
+    const minHours = 4;
+    const maxHours = 24;
     box.innerHTML = `
-      <div class="grid-2" style="gap:10px;margin-top:10px">
+      <div class="wizard-exam-fields">
         <div>
-          <label for="obDateInp" style="display:block;font-size:12px;font-weight:600;color:var(--mut);margin-bottom:4px">Data esame</label>
+          <label for="obDateInp" class="wizard-label">Data esame</label>
           <input id="obDateInp" type="date" class="input-field" value="${app.onboardingExamDate}" onchange="app.onboardingExamDate=this.value">
         </div>
-        <div>
-          <label for="obHrsInp" class="wizard-label">Disponibilità · <output id="obHours" for="obHrsInp">${app.onboardingHours}</output> h / sett.</label>
-          <input id="obHrsInp" type="range" min="4" max="24" value="${app.onboardingHours}" oninput="app.onboardingHours=+this.value;document.getElementById('obHours').value=this.value" style="width:100%;margin-top:10px">
+        <div class="wizard-hours-field">
+          <div class="wizard-hours-heading">
+            <label for="obHrsInp" class="wizard-label">Disponibilità</label>
+            <output id="obHours" for="obHrsInp">${hours} h / sett.</output>
+          </div>
+          <input id="obHrsInp" type="range" min="${minHours}" max="${maxHours}" value="${hours}" aria-valuetext="${hours} ore alla settimana" style="--hour-fill:${100 * (hours - minHours) / (maxHours - minHours)}%">
+          <div class="wizard-hours-limits" aria-hidden="true"><span>${minHours} h</span><span>${maxHours} h</span></div>
         </div>
       </div>`;
+    const range = box.querySelector('#obHrsInp');
+    const output = box.querySelector('#obHours');
+    range.addEventListener('input', () => {
+      const value = range.valueAsNumber;
+      app.onboardingHours = value;
+      range.style.setProperty('--hour-fill', `${100 * (value - minHours) / (maxHours - minHours)}%`);
+      range.setAttribute('aria-valuetext', `${value} ore alla settimana`);
+      output.value = `${value} h / sett.`;
+    });
   }
 }
 
@@ -5628,6 +5573,7 @@ function syncRevSelect() {
 
 function renderSidebar() {
   const c = COURSES_DATA[app.courseId];
+  if (!c) return;
   const av = document.getElementById('sbCourseAvatar');
   if (av) {
     av.style.background = softTint(c.accent);
@@ -5711,6 +5657,7 @@ function stepStudySlide(page, direction) {
 
 function setDepth(d) {
   app.depth = d;
+  saveStudyPreferences();
   const menu = document.getElementById('studioReading');
   if (menu.open) {
     menu.open = false;
@@ -5725,6 +5672,7 @@ function adjustStudyFontSize(delta) {
   if (studioView) studioView.style.setProperty('--study-font-size', app.studyFontSize + 'px');
   const label = document.getElementById('studyFontSizeLabel');
   if (label) label.textContent = app.studyFontSize + 'px';
+  if (delta) saveStudyPreferences();
 }
 
 function selectDiagramEvent(evId, restoreFocus = false) {
@@ -5734,6 +5682,7 @@ function selectDiagramEvent(evId, restoreFocus = false) {
 }
 function toggleStudioSources() {
   app.showStudioSources = !app.showStudioSources;
+  saveStudyPreferences();
   const menu = document.getElementById('studioReading');
   menu.open = false;
   renderLeftPane();
@@ -6098,7 +6047,132 @@ function renderStudyTransfer(kind, className, content, headerLabel = '') {
   </div>`;
 }
 
-function renderStudioDiagram(kind, unitNumber, markerId, activeEvent, interactive = false) {
+const STUDY_DIAGRAMS = {
+  'async-message': {
+    title: 'Invio e ricezione in un sistema asincrono',
+    description: 'P1 invia un messaggio che P2 riceve dopo un ritardo di rete variabile.',
+    nodes: [
+      { x: 80, y: 62, label: 'Invio su P₁' },
+      { x: 280, y: 86, label: 'Rete', detail: 'Ritardo variabile' },
+      { x: 480, y: 110, label: 'Ricezione su P₂' }
+    ],
+    edges: [[0, 1], [1, 2]]
+  },
+  'causal-chain': {
+    title: 'Catena causale',
+    description: 'All’invio a segue la ricezione b. L’evento b precede c nello stesso processo, quindi a precede c.',
+    nodes: [
+      { x: 80, y: 86, label: 'a · Invio', detail: 'Processo P₁' },
+      { x: 280, y: 86, label: 'b · Ricezione', detail: 'Processo P₂' },
+      { x: 480, y: 86, label: 'c · Evento', detail: 'Processo P₂' }
+    ],
+    edges: [[0, 1, 'm'], [1, 2]]
+  },
+  'vector-clock': {
+    title: 'Aggiornamento all’arrivo di un messaggio',
+    description: 'P2 calcola il massimo componente per componente tra il proprio vettore e quello ricevuto, poi incrementa la seconda componente.',
+    nodes: [
+      { x: 80, y: 48, label: '[2, 1, 0]', detail: 'Ricevuto' },
+      { x: 80, y: 122, label: '[1, 2, 0]', detail: 'Locale su P₂' },
+      { x: 280, y: 85, label: '[2, 2, 0]', detail: 'Massimo' },
+      { x: 480, y: 85, label: '[2, 3, 0]', detail: '+1 su P₂' }
+    ],
+    edges: [[0, 2], [1, 2], [2, 3]]
+  },
+  'recursion-tree': {
+    title: 'Albero di una ricorrenza binaria',
+    description: 'Il problema T di n si divide in due sottoproblemi di taglia n diviso 2, ognuno dei quali si divide ancora in due problemi di taglia n diviso 4.',
+    nodes: [
+      { x: 80, y: 85, label: 'T(n)' },
+      { x: 280, y: 48, label: 'T(n/2)' },
+      { x: 280, y: 122, label: 'T(n/2)' },
+      { x: 480, y: 48, label: '2 × T(n/4)' },
+      { x: 480, y: 122, label: '2 × T(n/4)' }
+    ],
+    edges: [[0, 1], [0, 2], [1, 3], [2, 4]]
+  },
+  'dp-dependencies': {
+    title: 'Dipendenze tra stati',
+    description: 'Lo stato dp di i e w è il massimo tra saltare l’elemento i e includerlo quando il peso lo consente.',
+    nodes: [
+      { x: 80, y: 48, label: 'dp[i−1, w]', detail: 'Escludi i' },
+      { x: 80, y: 122, label: 'vᵢ + dp[i−1, w−wᵢ]', detail: 'Includi i' },
+      { x: 280, y: 85, label: 'max' },
+      { x: 480, y: 85, label: 'dp[i, w]', detail: 'Nuovo stato' }
+    ],
+    edges: [[0, 2], [1, 2], [2, 3]]
+  },
+  'weighted-paths': {
+    title: 'Confronto tra percorsi pesati',
+    description: 'Da A a C l’arco diretto costa 7. Passando per B il costo è 2 più 3, quindi 5.',
+    nodes: [
+      { x: 80, y: 48, label: 'A', detail: 'Partenza' },
+      { x: 280, y: 122, label: 'B' },
+      { x: 480, y: 48, label: 'C', detail: 'Arrivo' }
+    ],
+    edges: [[0, 2, '7'], [0, 1, '2'], [1, 2, '3']]
+  },
+  'stream-cipher': {
+    title: 'Come si cifra un flusso',
+    description: 'Il messaggio e il flusso di chiave entrano nell’operazione XOR, che produce il testo cifrato.',
+    nodes: [
+      { x: 80, y: 48, label: 'Messaggio' },
+      { x: 80, y: 122, label: 'Flusso di chiave' },
+      { x: 280, y: 85, label: 'XOR' },
+      { x: 480, y: 85, label: 'Testo cifrato' }
+    ],
+    edges: [[0, 2], [1, 2], [2, 3]]
+  },
+  'ind-cpa': {
+    title: 'La sfida di indistinguibilità',
+    description: 'Scelto un bit casuale b, si cifra il messaggio m con indice b usando casualità fresca. Chi osserva il testo cifrato prova a indovinare b.',
+    nodes: [
+      { x: 80, y: 85, label: 'm₀, m₁', detail: 'Due messaggi' },
+      { x: 280, y: 85, label: 'Encₖ(mᵦ; r)', detail: 'Cifra mᵦ' },
+      { x: 480, y: 85, label: 'b̂', detail: 'Stima di b' }
+    ],
+    edges: [[0, 1], [1, 2]]
+  }
+};
+
+function getUnitStudyDiagram(unit) {
+  const diagram = unit?.studyDiagram;
+  if (unit?.prereqOk === false) return null;
+  return diagram === 'lamport' || Object.hasOwn(STUDY_DIAGRAMS, diagram) ? diagram : null;
+}
+
+function renderTopicDiagram(diagram, markerId) {
+  const { description, nodes, edges } = diagram;
+  const halfNodeWidth = 72;
+  const connectors = edges.map(([from, to, label]) => {
+    const start = nodes[from];
+    const end = nodes[to];
+    return `<line x1="${start.x + halfNodeWidth + 4}" y1="${start.y}" x2="${end.x - halfNodeWidth - 6}" y2="${end.y}" stroke="var(--blue)" stroke-width="2" marker-end="url(#${markerId})"/>
+      ${label ? `<text x="${(start.x + end.x) / 2}" y="${(start.y + end.y) / 2 - 9}" text-anchor="middle" font-size="15" font-weight="700" fill="var(--ink)">${escapeCourseText(label)}</text>` : ''}`;
+  });
+  const anchors = nodes.map(({ x, y, label, detail }, index) => {
+    const isLast = index === nodes.length - 1;
+    return `<rect x="${x - halfNodeWidth}" y="${y - 23}" width="${halfNodeWidth * 2}" height="46" rx="12" fill="${isLast ? 'var(--green-s)' : 'var(--surface)'}" stroke="${isLast ? 'var(--green)' : 'var(--line)'}"/>
+      <text x="${x}" y="${y + (detail ? -2 : 5)}" text-anchor="middle" font-size="15" font-weight="650" fill="var(--ink)">${escapeCourseText(label)}</text>
+      ${detail ? `<text x="${x}" y="${y + 15}" text-anchor="middle" font-size="13" fill="var(--mut)">${escapeCourseText(detail)}</text>` : ''}`;
+  });
+  return `
+    <svg viewBox="0 0 560 170" width="100%" style="display:block" role="img" aria-label="${escapeCourseText(description)}">
+      <defs>
+        <pattern id="${markerId}-dots" width="15" height="15" patternUnits="userSpaceOnUse">
+          <circle cx="2" cy="2" r="0.95" fill="var(--blue)" fill-opacity="0.22"/>
+        </pattern>
+        <marker id="${markerId}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+          <path d="M1 1.2 9 5 1 8.8" fill="none" stroke="var(--blue)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <rect x="2" y="4" width="556" height="162" rx="14" fill="url(#${markerId}-dots)"/>
+      ${connectors.join('')}
+      ${anchors.join('')}
+    </svg>`;
+}
+
+function renderStudioDiagram(kind, unitNumber, markerId = 'studio-study-arrow', activeEvent, interactive = false) {
   if (kind === 'lamport') return `
     <svg viewBox="0 0 580 186" width="100%" style="display:block" role="${interactive ? 'group' : 'img'}" aria-label="Messaggi ed eventi nei processi P1, P2 e P3">
       <defs>
@@ -6126,6 +6200,7 @@ function renderStudioDiagram(kind, unitNumber, markerId, activeEvent, interactiv
       <text x="384" y="84" text-anchor="middle" font-size="10" font-weight="700" font-family="var(--mono)" fill="var(--blue-i)">m₂ (t=2)</text>
       ${LAMPORT_STUDY_EVENTS.map(([id, x, y, label]) => renderSvgNode(id, x, y, label, activeEvent, interactive)).join('')}
     </svg>`;
+  if (STUDY_DIAGRAMS[kind]) return renderTopicDiagram(STUDY_DIAGRAMS[kind], markerId);
   return `
     <svg viewBox="0 0 540 92" width="100%" style="display:block" role="img" aria-label="Ipotesi, regola e caso limite">
       <defs>
@@ -6238,6 +6313,7 @@ function renderLeftPane() {
 
   if (!isLamport) {
     const stepLabels = prof.steps;
+    const diagram = getUnitStudyDiagram(u) || 'flow';
     const formula = prof.formula.startsWith('$$')
       ? renderStudyTransfer('formula', 'callout', `<div>${prof.formula}</div>`, 'Formula chiave')
       : `<div class="callout"><div>${prof.formula}</div></div>`;
@@ -6250,7 +6326,7 @@ function renderLeftPane() {
         <h1 class="doc-title">${u.titolo}</h1>
       </header>
       ${formula}
-      ${app.depth !== 'sintesi' ? renderStudyTransfer('diagram', 'diagram-box', renderStudioDiagram('flow', u.num), 'Schema concettuale') : ''}
+      ${app.depth !== 'sintesi' ? renderStudyTransfer('diagram', 'diagram-box', renderStudioDiagram(diagram, u.num), STUDY_DIAGRAMS[diagram]?.title || 'Schema concettuale') : ''}
       ${renderPara('p-custom-' + u.id, paragraph, unitFile, 1, unitFile)}
       ${renderStudioWritingAid(writingMode, stepLabels, example)}
       ${app.depth === 'completa' && !['diretta', 'passaggi'].includes(writingMode) ? `<div class="code-block"><span class="cm"># Traccia di ragionamento (${u.short})</span>\n${stepLabels.join('\n')}</div>` : ''}
@@ -6393,9 +6469,10 @@ function renderNoteAppearance() {
 }
 
 function changeNoteAppearance(input) {
-  if (!input.checked || !NOTE_APPEARANCE_OPTIONS[input.name]?.includes(input.value)) return;
+  if ((input.type === 'radio' && !input.checked) || !NOTE_APPEARANCE_OPTIONS[input.name]?.includes(input.value)) return;
   app[input.name] = input.value;
   renderNoteAppearance();
+  saveStudyPreferences();
 }
 
 function buildActiveNoteMarkdown() {
@@ -6435,7 +6512,7 @@ function selectedNoteBlock() {
   if (!selection?.rangeCount) return null;
   const container = selection.getRangeAt(0).commonAncestorContainer;
   const element = container.nodeType === Node.ELEMENT_NODE ? container : container.parentElement;
-  return element?.closest('.note-block[contenteditable="true"]:not(.note-edit-code):not([data-kind="formula"])');
+  return element?.closest('.note-flow[contenteditable] > .note-block:not(.note-edit-code):not([data-kind="formula"])');
 }
 
 function handleNoteTextSelection() {
@@ -6486,7 +6563,7 @@ function highlightNoteSelection(color) {
       range.insertNode(mark);
     }
   }
-  updateNoteBlock(blockEl);
+  updateNoteFlow(blockEl.parentElement);
   hideNoteSelectionPop();
 }
 
@@ -6509,9 +6586,9 @@ function toggleNoteTools() {
   });
 }
 
-function insertFromNoteDock(kind, atEnd = false) {
+function insertFromNoteDock(kind) {
   document.getElementById('noteInsert').open = false;
-  insertNoteBlock(kind, atEnd);
+  insertNoteBlock(kind);
 }
 
 function renderNoteTools() {
@@ -6540,13 +6617,17 @@ function sanitizeNoteHtml(html) {
   const walk = (node) => {
     [...node.childNodes].forEach(ch => {
       if (ch.nodeType !== Node.ELEMENT_NODE) return;
+      if (ch.matches('span.note-math[data-note-math-source]')) {
+        ch.replaceWith(document.createTextNode(ch.dataset.noteMathSource));
+        return;
+      }
       if (excluded.has(ch.tagName) || ch.namespaceURI !== 'http://www.w3.org/1999/xhtml') {
         ch.remove();
         return;
       }
       walk(ch);
       if (!allowed.has(ch.tagName)) {
-        if (/^(DIV|P|LI)$/.test(ch.tagName) && ch.previousSibling && ch.previousSibling.nodeName !== 'BR') {
+        if (/^(DIV|P|LI|H2)$/.test(ch.tagName) && ch.previousSibling && ch.previousSibling.nodeName !== 'BR') {
           node.insertBefore(document.createElement('br'), ch);
         }
         ch.replaceWith(...ch.childNodes);
@@ -6577,11 +6658,10 @@ function findEditableNote(el) {
 
 function setNoteCaret(el, atEnd) {
   const selection = window.getSelection();
-  const range = document.createRange();
-  range.selectNodeContents(el);
-  range.collapse(!atEnd);
-  selection.removeAllRanges();
-  selection.addRange(range);
+  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+  let text = walker.nextNode();
+  if (atEnd) for (let next = walker.nextNode(); next; next = walker.nextNode()) text = next;
+  selection.collapse(text || el, atEnd && text ? text.length : 0);
 }
 
 function noteFormula(text) {
@@ -6591,50 +6671,193 @@ function noteFormula(text) {
 }
 
 function noteBlockContent(block, editing = false) {
-  const text = !editing && block.kind === 'formula' ? noteFormula(block.text) : block.text;
+  if (!editing && block.kind === 'formula') return escapeCourseText(noteFormula(block.text));
   return block.richHtml && block.kind !== 'formula' && block.kind !== 'code'
-    ? block.richHtml : escapeCourseText(text).replace(/\n/g, '<br>');
+    ? block.richHtml : escapeCourseText(block.text).replace(/\n/g, '<br>');
 }
 
-function beginEditNoteBlock(el) {
-  const note = findEditableNote(el);
+function renderNoteFlowMath(flow) {
+  const note = findEditableNote(flow);
+  if (!note || typeof renderMathInElement !== 'function') return;
+  for (const asset of flow.querySelectorAll(':scope > .note-transfer-block')) renderMath(asset);
+  const blocks = new Map(note.blocks.map(block => [block.id, block]));
+  for (const line of flow.querySelectorAll(':scope > .note-block:not(.note-edit-code)')) {
+    const block = blocks.get(line.dataset.blockId);
+    if (!block || (block.kind !== 'formula' && !block.text.includes('$'))) continue;
+    const draftFormula = block.kind === 'formula' && block.text.trim() && !line.querySelector('.note-math');
+    if (draftFormula) line.innerHTML = noteBlockContent(block);
+    renderMath(line);
+    for (const katex of line.querySelectorAll('.katex')) {
+      if (katex.closest('.note-math')) continue;
+      const expression = katex.querySelector('annotation[encoding="application/x-tex"]');
+      if (!expression) continue;
+      const display = katex.closest('.katex-display');
+      const delimiters = display ? '$$' : '$';
+      const rendered = display || katex;
+      const math = document.createElement('span');
+      math.className = 'note-math';
+      math.contentEditable = 'false';
+      math.spellcheck = false;
+      math.title = 'Modifica formula (F2 con il cursore accanto)';
+      math.dataset.noteMathSource = block.kind === 'formula'
+        ? block.text : delimiters + expression.textContent + delimiters;
+      rendered.replaceWith(math);
+      math.append(rendered);
+    }
+    if (draftFormula && !line.querySelector('.note-math')) line.innerHTML = noteBlockContent(block, true);
+  }
+}
+
+function editNoteMath(flow, math) {
+  if (!math || !findEditableNote(flow)) return false;
+  flow.focus({ preventScroll: true });
+  const source = document.createTextNode(math.dataset.noteMathSource);
+  math.replaceWith(source);
+  window.getSelection().collapse(source, source.length);
+  rememberNoteCursor(flow);
+  return true;
+}
+
+function handleNoteMathPointer(event) {
+  const math = event.target.closest('.note-math');
+  if (event.button === 0 && editNoteMath(event.currentTarget, math)) event.preventDefault();
+}
+
+function handleNoteMathKeydown(event) {
+  if (event.key !== 'F2') return;
+  const selection = window.getSelection();
+  if (!selection?.isCollapsed || !selection.focusNode) return;
+  const node = selection.focusNode;
+  const offset = selection.focusOffset;
+  const after = node.nodeType === Node.TEXT_NODE ? offset === node.length && node.nextSibling : node.childNodes[offset];
+  const before = node.nodeType === Node.TEXT_NODE ? offset === 0 && node.previousSibling : node.childNodes[offset - 1];
+  const flow = event.currentTarget;
+  const line = noteFlowLine(flow, node);
+  const nearbyMath = [after, before].find(sibling => sibling?.nodeType === Node.ELEMENT_NODE && sibling.matches('.note-math'));
+  const lineFormula = line?.dataset.kind === 'formula' ? line.querySelector('.note-math') : null;
+  if (editNoteMath(flow, nearbyMath || lineFormula)) event.preventDefault();
+}
+
+function noteFlowLine(flow, node) {
+  const el = node?.nodeType === Node.ELEMENT_NODE ? node : node?.parentElement;
+  const line = el?.closest('.note-flow > *');
+  return line?.parentElement === flow ? line : null;
+}
+
+function rememberNoteCursor(flow) {
+  const line = noteFlowLine(flow, window.getSelection()?.focusNode);
+  if (line?.dataset.blockId) {
+    app.noteWriteCursor = { key: flow.closest('.note-page').dataset.noteKey, id: line.dataset.blockId };
+  }
+}
+
+function prepareNoteFlowInput(event) {
+  const flow = event.currentTarget;
+  const selection = window.getSelection();
+  const line = noteFlowLine(flow, selection?.focusNode);
+  if (event.inputType !== 'insertParagraph' || !selection?.isCollapsed) return;
+  if (['formula', 'code'].includes(line?.dataset.kind)) {
+    event.preventDefault();
+    document.execCommand('insertLineBreak');
+  } else if (line?.dataset.kind === 'bullet' && !line.textContent.trim()) {
+    event.preventDefault();
+    line.dataset.kind = 'paragraph';
+    updateNoteFlow(flow);
+  }
+}
+
+// Browsers can create direct text nodes or clone a line when inserting a paragraph.
+// Preserve the caret while grouping standalone inline nodes and give each line a unique model ID.
+function normalizeNoteFlow(flow) {
+  const selection = window.getSelection();
+  const anchor = selection?.anchorNode;
+  const focus = selection?.focusNode;
+  const anchorOffset = selection?.anchorOffset;
+  const focusOffset = selection?.focusOffset;
+  let paragraph;
+  for (const node of [...flow.childNodes]) {
+    if (node.nodeType === Node.ELEMENT_NODE && (node.matches('div, p, h2, [contenteditable="false"]'))) {
+      paragraph = null;
+    } else {
+      if (!paragraph) {
+        paragraph = document.createElement('div');
+        flow.insertBefore(paragraph, node);
+      }
+      paragraph.append(node);
+    }
+  }
+  if (anchor && focus && anchor !== flow && focus !== flow && flow.contains(anchor) && flow.contains(focus) &&
+    (selection.anchorNode !== anchor || selection.focusNode !== focus)) {
+    selection.setBaseAndExtent(anchor, anchorOffset, focus, focusOffset);
+  }
+}
+
+const noteFlowRecords = new WeakMap();
+
+function updateNoteFlow(flow, inputType) {
+  const note = findEditableNote(flow);
   if (!note) return;
-  const id = el.dataset.blockId;
-  app.noteWriteCursor = { key: el.closest('.note-page').dataset.noteKey, id };
-  el.classList.add('note-block-editing');
-  const block = note.blocks.find(item => item.id === id);
-  if (block && (el.querySelector('.katex') || block.kind === 'formula')) {
-    el.innerHTML = noteBlockContent(block, true);
-    setNoteCaret(el, true);
+  normalizeNoteFlow(flow);
+  if (inputType === 'insertParagraph') {
+    const line = noteFlowLine(flow, window.getSelection()?.focusNode);
+    const preceding = line?.previousElementSibling;
+    if (line?.matches('div, p') && preceding?.classList.contains('note-block') &&
+      (preceding.dataset.kind === 'bullet' || /^•(?:\s|$)/.test(preceding.textContent))) {
+      line.dataset.kind = 'bullet';
+    }
   }
-}
-
-function finishEditNoteBlock(el) {
-  el.classList.remove('note-block-editing');
-  const note = findEditableNote(el);
-  const block = note?.blocks.find(item => item.id === el.dataset.blockId);
-  if (block && block.kind !== 'code' && (block.kind === 'formula' || block.text.includes('$'))) {
-    el.innerHTML = noteBlockContent(block);
-    renderMath(el);
+  const records = noteFlowRecords.get(flow) || new Map();
+  if (!note.noteBlank) for (const block of note.blocks) records.set(block.id, block);
+  noteFlowRecords.set(flow, records);
+  const used = new Set();
+  const sectionIds = new Set();
+  const blocks = [];
+  let section = { sec: 'Appunti' };
+  for (const el of flow.children) {
+    if (el.matches('h2.note-sec')) {
+      if (!el.dataset.sectionId || sectionIds.has(el.dataset.sectionId)) el.dataset.sectionId = nextNoteBlockId();
+      sectionIds.add(el.dataset.sectionId);
+      section = { sec: el.textContent.replace(/\s+/g, ' ').trim() || 'Nuova sezione', sectionId: el.dataset.sectionId };
+      continue;
+    }
+    if (el.classList.contains('note-inline-review')) continue;
+    const id = el.dataset.blockId || el.dataset.noteTransferId;
+    const previous = used.has(id) ? undefined : records.get(id);
+    if (el.matches('[contenteditable="false"]')) {
+      if (previous) {
+        used.add(previous.id);
+        el.dataset.noteIndex = String(blocks.length);
+        blocks.push({ ...previous, ...section });
+      }
+      continue;
+    }
+    const kind = previous && previous.kind !== 'bullet'
+      ? previous.kind || 'paragraph'
+      : el.dataset.kind === 'bullet' ? 'bullet' : 'paragraph';
+    const content = readNoteBlock(el);
+    if (el.hasAttribute('data-note-tail') && !content.text && el === flow.lastElementChild) continue;
+    el.removeAttribute('data-note-tail');
+    const nextId = previous?.id || nextNoteBlockId();
+    used.add(nextId);
+    el.classList.add('note-block');
+    el.classList.toggle('has-obs', Boolean(previous?.isTargetErr && content.text.trim()));
+    el.classList.toggle('rev-merged', Boolean(previous?.merged));
+    el.classList.toggle('note-edit-code', kind === 'code');
+    el.dataset.blockId = nextId;
+    el.dataset.kind = kind;
+    el.dataset.noteIndex = String(blocks.length);
+    blocks.push({ ...previous, ...section, ...content, id: nextId, kind });
   }
-}
-
-function updateNoteBlock(el) {
-  const note = findEditableNote(el);
-  if (!note || el.querySelector('.katex')) return;
-  const id = el.dataset.blockId;
-  const content = readNoteBlock(el);
-  let block = note.noteBlank ? null : note.blocks.find(item => item.id === id);
-  const starting = !block && id === 'note-first-block' && Boolean(content.text.trim());
+  for (const button of flow.querySelectorAll(':scope > .note-inline-review')) {
+    button.hidden = !blocks.some(block => block.id === button.dataset.reviewId && block.text.trim());
+  }
+  rememberNoteCursor(flow);
+  if (note.noteBlank && !blocks.some(block => block.text.trim())) return;
+  const starting = flow.closest('.note-page').classList.contains('is-empty');
+  note.noteBlank = false;
+  note.blocks = blocks;
   if (starting) {
-    block = { id, sec: 'Appunti', kind: 'paragraph', text: '' };
-    note.blocks = [block];
-    note.noteBlank = false;
-  }
-  if (!block || (block.text === content.text && block.richHtml === content.richHtml)) return;
-  Object.assign(block, content);
-  if (starting) {
-    el.closest('.note-page').classList.remove('is-empty');
+    flow.closest('.note-page').classList.remove('is-empty');
     document.getElementById('btnBlankToggle').textContent = 'Svuota foglio';
     renderNoteFooter(note, 'write');
   }
@@ -6648,10 +6871,46 @@ function pasteNotebookText(event, singleLine = false) {
   document.execCommand('insertText', false, singleLine ? text.replace(/[\r\n]+/g, ' ') : text);
 }
 
+function pasteNoteFlow(event) {
+  const line = noteFlowLine(event.currentTarget, window.getSelection()?.focusNode);
+  if (!['code', 'formula'].includes(line?.dataset.kind)) {
+    pasteNotebookText(event);
+    return;
+  }
+  const text = event.clipboardData?.getData('text/plain');
+  if (text === undefined) return;
+  event.preventDefault();
+  document.execCommand('insertHTML', false, escapeCourseText(text).replace(/\r?\n/g, '<br>'));
+}
+
+function copyNoteFlowMath(event) {
+  const selection = window.getSelection();
+  if (!event.clipboardData || !selection?.rangeCount || selection.isCollapsed) return;
+  const range = selection.getRangeAt(0);
+  if (!event.currentTarget.contains(range.commonAncestorContainer)) return;
+  const fragment = range.cloneContents();
+  if (!fragment.querySelector('.note-math')) return;
+  fragment.querySelectorAll('.note-inline-review').forEach(button => button.remove());
+  const text = document.createElement('div');
+  text.append(fragment);
+  event.clipboardData.setData('text/plain', readNoteBlock(text).text);
+  event.preventDefault();
+  if (event.type === 'cut') document.execCommand('delete');
+}
+
+function syncNoteSpellcheck() {
+  document.querySelectorAll('#noteFlow, #noteScrollArea .note-h1[contenteditable]').forEach(field => {
+    field.spellcheck = app.noteSpellcheck === true;
+  });
+}
+
 function formatNote(cmd) {
   const sel = window.getSelection();
   const blockEl = selectedNoteBlock();
-  if (!blockEl || sel.isCollapsed) {
+  const flow = document.getElementById('noteFlow');
+  const range = sel?.rangeCount ? sel.getRangeAt(0) : null;
+  const insideFlow = range && flow?.contains(range.commonAncestorContainer);
+  if (!insideFlow || sel.isCollapsed || (cmd === 'code' && !blockEl)) {
     if (cmd === 'code') insertFromNoteDock('code');
     else showToast('Seleziona il testo da formattare');
     return;
@@ -6669,7 +6928,7 @@ function formatNote(cmd) {
     range.deleteContents();
     range.insertNode(codeEl);
   }
-  updateNoteBlock(blockEl);
+  updateNoteFlow(flow);
 }
 
 let noteBlockSequence = 0;
@@ -6685,96 +6944,36 @@ function noteSectionKey(block) {
 function updateNoteHeading(el) {
   const note = findEditableNote(el);
   if (!note) return;
-  const title = el.textContent.replace(/\s+/g, ' ').trim();
-  if (el.dataset.noteSectionStart === undefined) {
-    if (note.title === (title || 'Appunti')) return;
-    note.title = title || 'Appunti';
-  } else {
-    const start = Number(el.dataset.noteSectionStart);
-    const first = note.blocks[start];
-    const next = title || 'Nuova sezione';
-    if (!first || first.sec === next) return;
-    const section = noteSectionKey(first);
-    for (let i = start; i < note.blocks.length && noteSectionKey(note.blocks[i]) === section; i++) {
-      note.blocks[i].sec = next;
-    }
-  }
+  const title = el.textContent.replace(/\s+/g, ' ').trim() || 'Appunti';
+  if (note.title === title) return;
+  note.title = title;
   showSaveFeedback();
 }
 
 function handleNoteHeadingKeydown(event) {
   if (event.key === 'Enter' && !event.isComposing) {
     event.preventDefault();
-    event.currentTarget.blur();
+    document.getElementById('noteFlow')?.focus();
   }
 }
 
 function finishNoteHeading(el) {
   const note = findEditableNote(el);
   if (!note) return;
-  const sectionStart = el.dataset.noteSectionStart;
-  el.textContent = sectionStart === undefined ? note.title : note.blocks[Number(sectionStart)]?.sec || 'Nuova sezione';
+  el.textContent = note.title;
 }
 
 function focusWrittenBlock(id, atEnd = false) {
-  const el = document.querySelector(`#noteScrollArea .note-block[data-block-id="${CSS.escape(id)}"][contenteditable="true"]`);
-  if (el) {
-    el.focus();
+  const flow = document.getElementById('noteFlow');
+  const el = flow?.querySelector(`.note-block[data-block-id="${CSS.escape(id)}"]`);
+  if (flow && el) {
+    flow.focus();
     setNoteCaret(el, atEnd);
+    rememberNoteCursor(flow);
+    el.scrollIntoView({ block: 'nearest' });
   } else {
     document.getElementById('noteScrollArea').focus({ preventScroll: true });
   }
-}
-
-function handleBlockKeydown(event) {
-  if (event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
-  const el = event.currentTarget;
-  const note = findEditableNote(el);
-  if (!note) return;
-  const index = note.blocks.findIndex(block => block.id === el.dataset.blockId);
-  const block = note.noteBlank ? null : note.blocks[index];
-  if (event.key === 'Backspace' && block && index > 0 && !block.text.trim()) {
-    event.preventDefault();
-    note.blocks.splice(index, 1);
-    renderRightPane();
-    focusWrittenBlock(note.blocks[index - 1].id, true);
-    showSaveFeedback();
-    return;
-  }
-  if (event.key !== 'Enter') return;
-  event.preventDefault();
-  if (event.shiftKey || ['formula', 'code'].includes(block?.kind)) {
-    document.execCommand('insertLineBreak');
-    updateNoteBlock(el);
-    return;
-  }
-  if (!block) return;
-  const bullet = block.kind === 'bullet' || /^•(?:\s|$)/.test(block.text);
-  if (bullet && !block.text.replace(/^•/, '').trim()) {
-    block.kind = 'paragraph';
-    block.text = '';
-    delete block.richHtml;
-    renderRightPane();
-    focusWrittenBlock(block.id);
-    showSaveFeedback();
-    return;
-  }
-  const trailing = document.createElement('div');
-  const selection = window.getSelection();
-  if (selection?.rangeCount && el.contains(selection.getRangeAt(0).commonAncestorContainer)) {
-    const caret = selection.getRangeAt(0);
-    caret.deleteContents();
-    const rest = document.createRange();
-    rest.selectNodeContents(el);
-    rest.setStart(caret.startContainer, caret.startOffset);
-    trailing.append(rest.extractContents());
-    updateNoteBlock(el);
-  }
-  const next = { ...readNoteBlock(trailing), id: nextNoteBlockId(), sec: block.sec, sectionId: block.sectionId, kind: bullet ? 'bullet' : 'paragraph' };
-  note.blocks.splice(index + 1, 0, next);
-  renderRightPane();
-  focusWrittenBlock(next.id);
-  showSaveFeedback();
 }
 
 function recalcWords() {
@@ -6799,7 +6998,7 @@ function showSaveFeedback() {
   }
 }
 
-function insertNoteBlock(kind, atEnd = false) {
+function insertNoteBlock(kind) {
   const note = getActiveUnitNote();
   if (!canInsertStudyAsset(note)) return;
   if (note.noteBlank) note.blocks = [];
@@ -6807,7 +7006,7 @@ function insertNoteBlock(kind, atEnd = false) {
   const cursor = app.noteWriteCursor;
   const cursorIndex = cursor?.key === app.courseId + ':' + app.unitId ? note.blocks.findIndex(block => block.id === cursor.id) : -1;
   const heading = kind === 'heading';
-  const index = heading || atEnd || cursorIndex === -1 ? note.blocks.length : cursorIndex + 1;
+  const index = heading || cursorIndex === -1 ? note.blocks.length : cursorIndex + 1;
   const previous = note.blocks[index - 1];
   const id = nextNoteBlockId();
   const block = { id, sec: heading ? 'Nuova sezione' : previous?.sec || 'Appunti', sectionId: heading ? id : previous?.sectionId, kind: heading ? 'paragraph' : kind, text: '' };
@@ -6815,9 +7014,11 @@ function insertNoteBlock(kind, atEnd = false) {
   note.blocks.splice(index, 0, block);
   renderRightPane();
   if (heading) {
-    const el = document.querySelector(`#noteScrollArea [data-note-section-start="${index}"]`);
-    el?.focus();
-    if (el) window.getSelection().selectAllChildren(el);
+    const el = document.querySelector(`#noteFlow h2[data-section-id="${id}"]`);
+    if (el) {
+      el.parentElement.focus();
+      window.getSelection().selectAllChildren(el);
+    }
   } else {
     focusWrittenBlock(id);
   }
@@ -6838,12 +7039,14 @@ function studioAssetForCurrentUnit(kind) {
     return formula.startsWith('$$') ? { studyKind: 'formula', text: formula } : null;
   }
   if (kind !== 'diagram' || app.depth === 'sintesi') return null;
+  const diagram = getUnitStudyDiagram(unit) || 'flow';
   return {
     studyKind: 'diagram',
-    diagram: isLamport ? 'lamport' : 'flow',
+    diagram,
     unitNumber: unit.num,
     activeEvent: isLamport ? app.activeDiagramEvent : '',
-    text: isLamport ? 'Diagramma degli orologi logici · Processi P1, P2 e P3' : 'Schema · Ipotesi, regola e caso limite'
+    text: isLamport ? 'Diagramma degli orologi logici · Processi P1, P2 e P3'
+      : STUDY_DIAGRAMS[diagram]?.title || 'Schema · Ipotesi, regola e caso limite'
   };
 }
 
@@ -6983,6 +7186,14 @@ function serializeNoteBlockMarkdown(block) {
   if (block.kind === 'bullet') return '- ' + block.text.replace(/\n/g, '\n  ');
   if (block.kind === 'quote') return '> ' + block.text.replace(/\n/g, '\n> ');
   if (block.studyKind !== 'diagram') return block.text;
+  const topic = STUDY_DIAGRAMS[block.diagram];
+  if (topic) {
+    const nodes = topic.nodes.map(({ label, detail }, index) =>
+      `  n${index}["${detail ? `${label} · ${detail}` : label}"]`);
+    const edges = topic.edges.map(([from, to, label]) =>
+      `  n${from} -->${label ? `|${label}|` : ''} n${to}`);
+    return [block.text, '', '```mermaid', 'flowchart LR', ...nodes, ...edges, '```'].join('\n');
+  }
   const graph = block.diagram === 'lamport'
     ? 'sequenceDiagram\n  participant P1\n  participant P2\n  participant P3\n  Note over P1: Evento locale C=1\n  P1->>P2: m₁ (t=1)\n  Note over P2: Ricezione C=2\n  P2->>P1: m₂ (t=2)\n  Note over P1: Ricezione C=3\n  Note over P3: Evento isolato C=1'
     : 'flowchart LR\n  model[Ipotesi / Modello] --> rule[Regola] --> edge[Caso limite]';
@@ -7099,28 +7310,18 @@ function switchRevision(v) {
 
 function renderNotebookBlock(block, editable, phase) {
   const kind = block.kind || 'paragraph';
-  const placeholders = {
-    paragraph: 'Scrivi qui…', bullet: 'Voce dell’elenco…', quote: 'Dubbio o passaggio da rivedere…',
-    code: 'Scrivi il codice…', formula: 'Scrivi una formula in LaTeX…'
-  };
-  const placeholder = block.id === 'note-first-block' ? 'Scrivi i tuoi appunti…' : placeholders[kind];
-  const attrs = editable && !block.studyKind
-    ? `contenteditable="true" role="textbox" aria-multiline="true" aria-label="${placeholder}" data-placeholder="${placeholder}"
-       onfocus="beginEditNoteBlock(this)" oninput="updateNoteBlock(this)" onkeydown="handleBlockKeydown(event)"
-       onpaste="pasteNotebookText(event)" onblur="finishEditNoteBlock(this)"`
-    : '';
   const flagged = block.isTargetErr && phase !== 'diff' && Boolean(block.text.trim());
   const body = block.studyKind === 'diagram'
     ? renderStudioDiagram(block.diagram, block.unitNumber, block.id + '-arrow', block.activeEvent)
     : `<div class="note-block ${flagged ? 'has-obs' : ''} ${block.merged ? 'rev-merged' : ''} ${kind === 'code' ? 'note-edit-code' : ''}"
-        data-block-id="${block.id}" data-note-index="${block.flatIdx}" data-kind="${kind}" ${attrs}>${noteBlockContent(block)}</div>`;
+        data-block-id="${block.id}" data-note-index="${block.flatIdx}" data-kind="${kind}" ${['code', 'formula'].includes(kind) ? 'spellcheck="false"' : ''}>${noteBlockContent(block, editable && !block.studyKind) || (editable ? '<br>' : '')}</div>`;
   if (!block.studyKind) {
     return body + (flagged && editable
-      ? `<button type="button" class="note-inline-review" onclick="startNoteReview('${block.id}')">${icon('i-study-spark')} Rivedi passaggio</button>`
+      ? `<button type="button" class="note-inline-review" contenteditable="false" data-review-id="${block.id}" onclick="startNoteReview('${block.id}')">${icon('i-study-spark')} Rivedi passaggio</button>`
       : '');
   }
   const label = block.studyKind === 'formula' ? 'Formula' : 'Diagramma';
-  return `<div class="note-transfer-block" data-note-transfer-id="${block.id}" data-note-index="${block.flatIdx}">
+  return `<div class="note-transfer-block" contenteditable="false" data-note-transfer-id="${block.id}" data-note-index="${block.flatIdx}">
     <div class="note-transfer-header">
       <span>${label}</span>
       ${editable ? `<button type="button" aria-label="Rimuovi ${label.toLowerCase()}" title="Rimuovi ${label.toLowerCase()}" onclick="removeStudyAsset('${block.id}')">${icon('i-trash')}</button>` : ''}
@@ -7144,7 +7345,7 @@ function renderRightPane() {
   const groups = [];
   if (!empty) blocks.forEach((block, index) => {
     const key = noteSectionKey(block);
-    if (groups.at(-1)?.key !== key) groups.push({ key, title: block.sec, start: index, items: [] });
+    if (groups.at(-1)?.key !== key) groups.push({ key, id: block.sectionId || block.id, title: block.sec, items: [] });
     groups.at(-1).items.push({ ...block, flatIdx: index });
   });
 
@@ -7161,25 +7362,33 @@ function renderRightPane() {
   const unit = course?.units.find(item => item.id === app.unitId);
   const eyebrow = course && unit ? `<div class="note-eyebrow">${escapeCourseText(course.nome)} / ${escapeCourseText(unit.num)}</div>` : '';
   const title = history && un.snapshotTitle ? un.snapshotTitle : un.title;
+  const content = empty ? renderNotebookBlock({ id: 'note-first-block', flatIdx: 0, text: '' }, true, phase) : groups.map(group =>
+    `<h2 class="note-sec note-edit-name" data-section-id="${escapeCourseText(group.id)}">${escapeCourseText(group.title)}</h2>` +
+    group.items.map(block => renderNotebookBlock(block, editable, phase) +
+      (block.flatIdx === reviewIndex && phase === 'review' ? renderSocraticCardHtml() : '') +
+      (block.flatIdx === reviewIndex && phase === 'diff' ? renderDiffCardHtml(block.text) : '')
+    ).join('')
+  ).join('');
+  const lastBlock = blocks.at(-1);
+  const tail = !empty && (lastBlock?.studyKind || lastBlock?.isTargetErr || ['formula', 'code'].includes(lastBlock?.kind))
+    ? '<div class="note-block" data-note-tail><br></div>' : '';
   scrollEl.innerHTML = `<div class="note-page ${empty ? 'is-empty' : ''}" data-note-key="${escapeCourseText(app.courseId + ':' + app.unitId)}">
     <header class="note-page-heading">
       ${eyebrow}
       <h1 class="note-h1 note-edit-name" aria-label="Titolo degli appunti" ${headingAttrs}>${escapeCourseText(title)}</h1>
     </header>
-    ${empty ? renderNotebookBlock({ id: 'note-first-block', flatIdx: 0, text: '' }, true, phase) : groups.map(group => `
-      <h2 class="note-sec note-edit-name" aria-label="Titolo della sezione" data-note-section-start="${group.start}" ${headingAttrs}>${escapeCourseText(group.title)}</h2>
-      ${group.items.map(block => `
-        ${renderNotebookBlock(block, editable, phase)}
-        ${block.flatIdx === reviewIndex && phase === 'review' ? renderSocraticCardHtml() : ''}
-        ${block.flatIdx === reviewIndex && phase === 'diff' ? renderDiffCardHtml(block.text) : ''}
-      `).join('')}
-    `).join('')}
-    ${editable ? `<button type="button" class="note-continue-writing" onclick="insertFromNoteDock('paragraph', true)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-7-7v14"/></svg> Continua a scrivere</button>` : ''}
+    ${editable ? `<div id="noteFlow" class="note-flow" contenteditable="true" role="textbox" aria-label="Testo degli appunti" aria-multiline="true"
+      onblur="renderNoteFlowMath(this)" onpointerdown="handleNoteMathPointer(event)" onkeydown="handleNoteMathKeydown(event)" onbeforeinput="prepareNoteFlowInput(event)"
+      oninput="updateNoteFlow(this, event.inputType)" onpaste="pasteNoteFlow(event)" oncopy="copyNoteFlowMath(event)" oncut="copyNoteFlowMath(event)"
+      onmouseup="rememberNoteCursor(this)" onkeyup="rememberNoteCursor(this)">${content}${tail}</div>` : content}
   </div>`;
 
   renderNoteFooter(un, phase);
   const reply = document.getElementById('dpopReplyArea');
   if (reply) reply.value = un.reply1 || '';
+  const flow = document.getElementById('noteFlow');
+  if (flow) renderNoteFlowMath(flow);
+  syncNoteSpellcheck();
   renderMath(scrollEl);
 }
 
@@ -8262,6 +8471,40 @@ function openAuthPortal(mode = 'login') {
   }
 }
 
+const STUDY_PREFERENCES_KEY = 'tutorai.preferenze.v1';
+const STUDY_PREFERENCE_VALUES = {
+  startPage: ['corso', 'studio', 'ripasso'],
+  theme: ['light', 'sepia', 'dark'],
+  depth: ['sintesi', 'guidata', 'completa'],
+  studyFontSize: Array.from({length: 10}, (_, i) => i + 13),
+  showStudioSources: [false, true],
+  noteSpellcheck: [false, true],
+  ...NOTE_APPEARANCE_OPTIONS
+};
+
+function saveStudyPreferences() {
+  const values = Object.fromEntries(Object.keys(STUDY_PREFERENCE_VALUES).map(key => [key, app[key]]));
+  try { localStorage.setItem(STUDY_PREFERENCES_KEY, JSON.stringify(values)); } catch (_) {}
+}
+
+function restoreStudyPreferences() {
+  try {
+    const values = JSON.parse(localStorage.getItem(STUDY_PREFERENCES_KEY));
+    for (const [key, options] of Object.entries(STUDY_PREFERENCE_VALUES)) {
+      if (options.includes(values?.[key])) app[key] = values[key];
+    }
+  } catch (_) {}
+}
+
+function setStudyPreference(input) {
+  const value = input.type === 'checkbox' ? input.checked : input.value;
+  if (!STUDY_PREFERENCE_VALUES[input.name]?.includes(value)) return;
+  app[input.name] = value;
+  if (input.name === 'noteSpellcheck') syncNoteSpellcheck();
+  if (input.name === 'showStudioSources') renderLeftPane();
+  saveStudyPreferences();
+}
+
 function syncAccountSettings() {
   document.querySelectorAll('[data-profile-theme]').forEach(button => {
     button.setAttribute('aria-pressed', String(button.dataset.profileTheme === app.theme));
@@ -8275,12 +8518,11 @@ function renderProfileWaves() {
   </svg>`;
 }
 
-function renderProfileScreenHeader(title, symbol, backPage, backLabel) {
+function renderProfileScreenHeader(title, backPage, backLabel) {
   return `<button type="button" class="btn profile-back" onclick="openAccountPage('${backPage}')">← ${backLabel}</button>
     <header class="profile-screen-hero">
       ${renderProfileWaves()}
       <h1 id="accountHeading" tabindex="-1">${title}</h1>
-      <span class="profile-hero-badge" aria-hidden="true">${icon(symbol)}</span>
     </header>`;
 }
 
@@ -8291,7 +8533,7 @@ function renderAccountScreen(page) {
     const origin = app.profileEditOrigin;
     return `
       <div class="profile-screen">
-        ${renderProfileScreenHeader('Modifica profilo', 'i-pencil', origin, origin === 'settings' ? 'Impostazioni' : 'Profilo')}
+        ${renderProfileScreenHeader('Modifica profilo', origin, origin === 'settings' ? 'Impostazioni' : 'Profilo')}
         <form class="profile-edit-form" onsubmit="saveProfile(event)">
           <div class="profile-edit-preview" aria-hidden="true">
             <span id="profilePreviewAvatar"></span>
@@ -8360,10 +8602,32 @@ function renderAccountScreen(page) {
 
   return `
     <div class="profile-screen">
-      ${renderProfileScreenHeader('Impostazioni', 'i-settings', 'activity', 'Profilo')}
+      ${renderProfileScreenHeader('Impostazioni', 'activity', 'Profilo')}
       <div class="profile-settings">
         <section class="profile-settings-section profile-settings-preferences" aria-labelledby="profileStudioTitle">
-          <h2 id="profileStudioTitle"><span class="profile-section-icon">${icon('i-book')}</span> Preferenze</h2>
+          <h2 id="profileStudioTitle"><span class="profile-section-icon">${icon('i-book')}</span> Il tuo spazio di studio</h2>
+          <div class="profile-settings-row">
+            <label for="profileStartPage">Quando apro TutorAI</label>
+            <select class="btn" name="startPage" id="profileStartPage" onchange="setStudyPreference(this)">
+              ${[['corso','I miei corsi'],['studio','Studio'],['ripasso','Ripasso di oggi']].map(([id,label]) => `<option value="${id}"${app.startPage === id ? ' selected' : ''}>${label}</option>`).join('')}
+            </select>
+          </div>
+          <div class="profile-settings-row">
+            <label for="profileReadingDepth">Dettaglio spiegazione</label>
+            <select class="btn" id="profileReadingDepth" onchange="setDepth(this.value)">
+              ${depths.map(([id, label]) => `<option value="${id}"${app.depth === id ? ' selected' : ''}>${label}</option>`).join('')}
+            </select>
+          </div>
+          ${[
+            ['showStudioSources','Fonti accanto al testo','Mostra il riferimento alla slide nei paragrafi della spiegazione.'],
+            ['noteSpellcheck','Correttore negli appunti','Sottolinea le parole da controllare mentre scrivi.']
+          ].map(([key, label, hint]) => `
+            <label class="preference-switch-row">
+              <span><strong>${label}</strong><small id="${key}Hint">${hint}</small></span>
+              <input type="checkbox" role="switch" aria-label="${label}" aria-describedby="${key}Hint" name="${key}" ${app[key] ? 'checked' : ''} onchange="setStudyPreference(this)">
+            </label>`).join('')}
+          <details class="preference-appearance">
+            <summary>Aspetto e leggibilità</summary>
           <div class="profile-settings-row profile-settings-themes">
             <span id="profileThemeLabel">Tema dell’interfaccia</span>
             <div class="profile-theme-options" role="group" aria-labelledby="profileThemeLabel">
@@ -8375,11 +8639,22 @@ function renderAccountScreen(page) {
             </div>
           </div>
           <div class="profile-settings-row">
-            <label for="profileReadingDepth">Dettaglio spiegazione</label>
-            <select class="btn" id="profileReadingDepth" onchange="setDepth(this.value)">
-              ${depths.map(([id, label]) => `<option value="${id}"${app.depth === id ? ' selected' : ''}>${label}</option>`).join('')}
+            <label for="profileStudySize">Dimensione del testo in Studio</label>
+            <select class="btn" id="profileStudySize" onchange="adjustStudyFontSize(Number(this.value) - app.studyFontSize)">
+              ${Array.from({length: 10}, (_, i) => i + 13).map(size => `<option value="${size}"${size === app.studyFontSize ? ' selected' : ''}>${size} px</option>`).join('')}
             </select>
           </div>
+          ${[
+            ['noteFont', 'Carattere degli appunti', ['Serif', 'Sans', 'Mono']],
+            ['notePattern', 'Trama del foglio', ['Pulito', 'Griglia']]
+          ].map(([field, label, names]) => `
+            <div class="profile-settings-row">
+              <label for="profile-${field}">${label}</label>
+              <select class="btn" id="profile-${field}" name="${field}" onchange="changeNoteAppearance(this)">
+                ${NOTE_APPEARANCE_OPTIONS[field].map((value, i) => `<option value="${value}"${value === app[field] ? ' selected' : ''}>${names[i]}</option>`).join('')}
+              </select>
+            </div>`).join('')}
+          </details>
         </section>
         <section class="profile-settings-section" aria-labelledby="profileAccountTitle">
           <h2 id="profileAccountTitle"><span class="profile-section-icon">${icon('i-pencil')}</span> Account</h2>
@@ -8483,7 +8758,7 @@ const PROFILE_BRAIN_STATES = {
   da_ripassare: { tone: 'review', label: 'Da ripassare' },
   non_studiato: { tone: 'unstarted', label: 'Da iniziare' }
 };
-const PROFILE_BRAIN_POINTS = [[92, 80], [66, 170], [120, 232], [100, 316], [236, 70], [260, 160], [222, 250], [274, 260], [210, 338]];
+const PROFILE_BRAIN_POINTS = [[97, 69], [57, 136], [116, 153], [100, 216], [230, 69], [270, 127], [209, 157], [270, 185], [217, 220]];
 const PROFILE_BRAIN_SPREAD = [0, 4, 2, 5, 1, 7, 3, 6, 8].map(index => PROFILE_BRAIN_POINTS[index]);
 
 function renderProfileBrain(entries, selectedIndex) {
@@ -8505,7 +8780,7 @@ function renderProfileBrain(entries, selectedIndex) {
     const active = entry === selected;
     const label = escapeCourseText(entry.course.nome + ' · ' + entry.unit.titolo + ' · ' + entry.state.label);
     return `<button type="button" class="profile-brain-node ${entry.state.tone}" data-brain-node="${entry.index}"
-      style="--node-x:${100 * x / 328}%;--node-y:${100 * y / 400}%" tabindex="${active ? 0 : -1}" aria-pressed="${active}"
+      style="--node-x:${100 * x / 328}%;--node-y:${100 * y / 280}%" tabindex="${active ? 0 : -1}" aria-pressed="${active}"
       aria-label="${label}" title="${label}">${active ? '<span class="brain-node-ring" aria-hidden="true"></span>' : ''}</button>`;
   }).join('');
   const links = visibleEntries.slice(1).map((entry, from) => {
@@ -8538,7 +8813,7 @@ function renderProfileBrain(entries, selectedIndex) {
     </div>
     <div class="profile-brain-figure" role="group" aria-label="Unità sulla mappa, seleziona con le frecce">
       <img src="assets/profile-brain.svg" alt="">
-      <svg class="profile-brain-links" viewBox="0 0 328 400" aria-hidden="true">${links}</svg>
+      <svg class="profile-brain-links" viewBox="0 0 328 280" aria-hidden="true">${links}</svg>
       ${nodeButtons}
     </div>
     <div class="profile-brain-selection ${selected.state.tone}">
@@ -8938,7 +9213,12 @@ window.addEventListener('resize', () => {
   hideExplainSelPop();
   requestAnimationFrame(() => { moveRailTind(); syncSegKnobs(); renderSidebar(); });
 });
-window.addEventListener('load', () => renderMath(document.body));
+window.addEventListener('load', window.renderAllMathSafe);
+const noteFocusArea = document.getElementById('noteScrollArea');
+document.addEventListener('pointerdown', () => noteFocusArea.classList.remove('is-keyboard-navigation'), true);
+document.addEventListener('keydown', event => {
+  if (event.key === 'Tab') noteFocusArea.classList.add('is-keyboard-navigation');
+}, true);
 document.addEventListener('click', event => {
   const insert = document.getElementById('noteInsert');
   if (insert.open && !insert.contains(event.target)) insert.open = false;
@@ -8977,6 +9257,8 @@ document.addEventListener('keydown', e => {
 
 window.addEventListener('DOMContentLoaded', () => {
   app = makeInitialState();
+  restoreStudyPreferences();
+  setTheme(app.theme, STUDY_PREFERENCE_VALUES.theme.indexOf(app.theme));
   renderNoteAppearance();
   adjustStudyFontSize(0);
   if (window.TutorAuth) {
@@ -9029,7 +9311,8 @@ window.addEventListener('DOMContentLoaded', () => {
     adz.addEventListener('dragleave', () => adz.classList.remove('dragover'));
     adz.addEventListener('drop', e => { e.preventDefault(); adz.classList.remove('dragover'); handleAddLessonFileInput(e.dataTransfer.files); });
   }
-  renderAll();
+  if (app.startPage === 'corso') renderAll();
+  else setView(app.startPage);
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(() => { moveRailTind(); syncSegKnobs(); });
   }

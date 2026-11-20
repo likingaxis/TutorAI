@@ -330,16 +330,7 @@
   color: #e4ecff;
 }
 
-/* Note blocks, focus states & observation/merged highlights */
-:root[data-theme="sepia"] #view-studio .paper-pane:not([data-note-tone="contrast"]) :is(.note-h1, .note-block):focus {
-  background: rgba(120, 92, 54, 0.08);
-}
-
-:root[data-theme="dark"] #view-studio :is(.note-h1, .note-block):focus,
-#view-studio .paper-pane[data-note-tone="contrast"] .note-scroll :is(.note-h1, .note-block):focus {
-  background: rgba(130, 155, 255, 0.09);
-}
-
+/* Observation and merged highlights */
 :root[data-theme="sepia"] #view-studio .paper-pane:not([data-note-tone="contrast"]) .note-block.has-obs {
   background: #f5e5be;
   border-left-color: #b57409;
@@ -570,6 +561,34 @@
 /* Course outline and secondary Studio layers */
 #courseSidebar { background: var(--paper); border: 1px solid var(--line); }
 #courseSidebar.collapsed { border-width: 0; }
+.sidebar-splitter { display: none; }
+@media (min-width: 961px) {
+  #courseSidebar:not(.collapsed) { width: var(--outline-width, 248px); }
+  #courseSidebar.resizing { transition: none; }
+  body:has(#courseSidebar.resizing) { cursor: col-resize; user-select: none; }
+  .main-wrap:has(> #view-studio.active) { position: relative; }
+  body:has(#courseSidebar:not(.collapsed)) .main-wrap:has(> #view-studio.active) > .sidebar-splitter {
+    display: grid;
+    position: absolute;
+    inset: 4px auto 4px -12px;
+    width: 12px;
+    z-index: 2;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+  }
+  .sidebar-splitter::before {
+    width: 8px;
+    height: 40px;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    opacity: 1;
+  }
+  .sidebar-splitter:is(:hover, :focus-visible, .drag)::before {
+    border-color: var(--blue);
+    background: var(--blue-s);
+  }
+}
 #courseSidebar .sb-top { padding: 12px 11px 0; border: 0; gap: 5px; align-items: flex-start; }
 #courseSidebar .sb-course-btn {
   padding: 10px;
@@ -1063,18 +1082,28 @@
 .note-page-heading .note-h1 { margin-bottom: 0; }
 #view-studio .pane[data-note-font="serif"] .note-sec { font: 700 15.5px/1.35 var(--font); }
 
-#view-studio .note-page :is(.note-edit-name, .note-block)[contenteditable] {
+#view-studio .note-page :is(.note-edit-name[contenteditable], .note-flow) {
+  position: relative;
   caret-color: var(--paper-ink);
   cursor: text;
 }
-#view-studio .note-sec[contenteditable] {
-  border-radius: 5px;
-  margin-inline: -4px;
-  padding-inline: 4px;
+#view-studio .note-page :is(.note-edit-name[contenteditable], .note-flow):focus {
+  outline: none;
 }
-#view-studio .note-page :is(.note-edit-name, .note-block)[contenteditable]:focus {
-  outline: 1px solid var(--paper-line);
-  outline-offset: 1px;
+#view-studio .is-keyboard-navigation .note-page :is(.note-edit-name[contenteditable], .note-flow):focus-visible::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 5px;
+  inset-inline-start: -10px;
+  width: 2px;
+  height: 1.2em;
+  border-radius: 2px;
+  background: var(--blue-i);
+  pointer-events: none;
+}
+#view-studio .note-flow {
+  min-height: 8rem;
+  border-radius: 8px;
 }
 #view-studio .note-page .note-block[data-kind="bullet"] {
   margin-left: 7px;
@@ -1093,19 +1122,29 @@
   border-radius: 12px;
 }
 #view-studio .note-page .note-block[data-kind="code"],
-#view-studio .note-page .note-block[data-kind="formula"].note-block-editing {
+#view-studio .note-flow .note-block[data-kind="formula"]:not(:has(.note-math)) {
   font: 13px/1.65 var(--mono, monospace);
   white-space: pre-wrap;
   background: color-mix(in srgb, var(--paper-line) 38%, transparent);
   min-height: 42px;
 }
-#view-studio .note-page.is-empty .note-block[data-block-id="note-first-block"] {
-  min-height: 194px;
-  margin-top: 19px;
+#view-studio .note-flow .note-math {
+  cursor: text;
 }
-#view-studio .note-page.is-empty .note-continue-writing { display: none; }
-#view-studio .note-page :is(.note-continue-writing, .note-inline-review) {
-  display: inline-flex;
+#view-studio .note-flow .note-math:has(> .katex-display) {
+  display: block;
+}
+#view-studio .note-page.is-empty .note-flow { min-height: 194px; margin-top: 19px; }
+#view-studio .note-page.is-empty .note-flow .note-block:has(> br:only-child)::before {
+  content: 'Scrivi i tuoi appunti…';
+  position: absolute;
+  color: var(--paper-mut);
+  pointer-events: none;
+}
+#view-studio .note-page .note-inline-review {
+  display: flex;
+  width: max-content;
+  margin-left: auto;
   align-items: center;
   gap: 6px;
   color: var(--paper-mut);
@@ -1115,22 +1154,17 @@
   padding: 6px 8px;
   font: 600 12px/1.35 var(--font);
 }
-#view-studio .note-page .note-continue-writing { margin: 16px 0 0 -8px; }
-#view-studio .note-page .note-inline-review {
-  display: flex;
-  width: max-content;
-  margin-left: auto;
-}
-#view-studio .note-page :is(.note-continue-writing, .note-inline-review):hover {
+#view-studio .note-page .note-inline-review[hidden] { display: none; }
+#view-studio .note-page .note-inline-review:hover {
   color: var(--paper-ink);
   background: color-mix(in srgb, var(--paper-line) 38%, transparent);
 }
-#view-studio .note-page :is(.note-continue-writing, .note-inline-review) .ic { width: 14px; height: 14px; }
+#view-studio .note-page .note-inline-review .ic { width: 14px; height: 14px; }
 #view-studio #noteMenuPop [data-note-write]:disabled { display: none; }
 #view-studio #noteMenuPop:not(:has([data-note-write]:enabled)) .note-menu-sep { display: none; }
 
 @media (max-width: 900px) {
-  #view-studio .note-page :is(.note-continue-writing, .note-inline-review) { min-height: 35px; }
+  #view-studio .note-page .note-inline-review { min-height: 35px; }
 }
 
 .dock-btn.accent { gap: 4px; }
